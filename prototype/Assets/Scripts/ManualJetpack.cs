@@ -160,22 +160,27 @@ public class ManualJetpack : MonoBehaviour {
 		}
 	}
 
+	public void FlipJetpackToAlign(Vector3 alignTo, Vector3 up, float degreesPerSecond) {
+		Quaternion targetRotation = Quaternion.LookRotation(alignTo, up);
+		StartCoroutine("RotateOverTime", new RotateOverTimeInfo(transform, targetRotation, degreesPerSecond));
+	}
+
 	private IEnumerator RotateOverTime(RotateOverTimeInfo info) {
 		while(info.rotatee.rotation != info.targetRotation) {
-			info.rotatee.rotation = Quaternion.RotateTowards(info.rotatee.rotation, info.targetRotation, info.degreesPerStep);
+			info.rotatee.rotation = Quaternion.RotateTowards(info.rotatee.rotation, info.targetRotation, info.degreesPerSecond * Time.deltaTime);
 			yield return new WaitForSeconds(0);
 		}
 	}
 
 	private class RotateOverTimeInfo {
-		public RotateOverTimeInfo(Transform rotatee, Quaternion targetRotation, float degreesPerStep) {
+		public RotateOverTimeInfo(Transform rotatee, Quaternion targetRotation, float degreesPerSecond) {
 			this.rotatee = rotatee;
 			this.targetRotation = targetRotation;
-			this.degreesPerStep = degreesPerStep;
+			this.degreesPerSecond = degreesPerSecond;
 		}
 		public Transform rotatee;
 		public Quaternion targetRotation;
-		public float degreesPerStep;
+		public float degreesPerSecond;
 	}
 }
 
