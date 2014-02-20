@@ -32,6 +32,33 @@ public class MouseLook : MonoBehaviour {
 	float rotationX = 0F;
 	float rotationY = 0F;
 
+	public int ClampingY {
+		get { 	
+			if (clampY) { 
+				if (rotationY <= minimumY) {
+					return -1;
+				} else if (rotationY >= maximumY) {
+					return 1;
+				}
+			}
+				return 0;
+		}
+	}
+
+	public int ClampingX {
+		get { 	
+			if (clampX) { 
+				if (rotationX <= minimumX) {
+					return -1;
+				} else if (rotationX >= maximumX) {
+					return 1;
+				}
+			}
+			return 0;
+		}
+	}
+
+
 
 	void Update ()
 	{

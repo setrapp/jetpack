@@ -20,8 +20,10 @@ public class ManualJetpack : MonoBehaviour {
 	public MouseLook cameraLook = null;
 	public float speedScale = 1;
 	public float jetpackSpeed;
-	public float pitchSpeed, rollSpeed;
-	private bool flipping = false;
+	public float pitchSpeed, yawSpeed, rollSpeed;
+	public float airFriction;
+	private bool forcingRotate = false;
+	public Shifter shifter = null;
 	
 	void Start() {
 		characterMotor = gameObject.GetComponent<CharacterMotor>();
@@ -31,13 +33,13 @@ public class ManualJetpack : MonoBehaviour {
 	void Update () {
 		if (characterMotor != null) {
 			characterMotor.movement.velocity -= oldUp * jetpackSpeed * speedScale;
-			if (Input.GetAxis("ShiftGears") > 0) {
+			/*if (Input.GetAxis("ShiftGears") > 0) {
 				ShiftGears(1);
 			} else if (Input.GetAxis("ShiftGears") < 0) {
 				ShiftGears(-1);
 			} else {
 				readyToShift = true;
-			}
+			}*/
 
 			if (characterMotor.grounded) {
 				nextJumpActivates = false;
@@ -45,34 +47,56 @@ public class ManualJetpack : MonoBehaviour {
 			} else {
 				if (Input.GetAxis("Jump") > 0) {
 					if (nextJumpActivates) {
-						float acceleration = gears[inGear].acceleration;
-						if (Input.GetButton("ChangeSpeed")) {
-							acceleration = -gears[inGear].deceleration;
-						}
-						ApplyJetPackAcceleration(acceleration);
 						activated = true;
+						if (inGear ==0) {
+							jetpackSpeed = gears[inGear].maxSpeed;
+						} 
 					}
 				} else {
 					nextJumpActivates = true;
+
 					if (inGear == 0) {
 						ForceStopJetpack();
 					} else {
-						ApplyJetPackAcceleration(0);
+						activated = false;
+						jetpackSpeed *= airFriction;
 					}
+				}
+
+				if (activated && Input.GetAxis("Vertical") != 0) {
+					float acceleration = gears[inGear].acceleration * Input.GetAxis("Vertical");
+					ApplyJetPackAcceleration(acceleration);
 				}
 
 				if (inGear >= 0) {
 					float verticalInput = Input.GetAxis("Vertical");
 					float horizontalInput = Input.GetAxis("Horizontal");
-					if (!Input.GetButton("Vertical") && !Input.GetButton("Horizontal")) {
-						readyToRotateBody = true;
-					} else if (readyToRotateBody) {
-						if(verticalInput != 0) {
-							transform.Rotate(-Vector3.right, pitchSpeed * verticalInput * speedScale);
+					if (readyToRotateBody) {
+						float verticalChange = 0;//verticalInput;
+						if (cameraLook.ClampingY > 0) {
+							verticalChange = pitchSpeed * Time.deltaTime;
+						} else if(cameraLook.ClampingY < 0) {
+							verticalChange = -pitchSpeed * Time.deltaTime;
 						}
-						if(horizontalInput != 0) {
+						if(verticalChange != 0) {
+							transform.Rotate(-Vector3.right, pitchSpeed * verticalChange * speedScale);
+						}
+
+						float horizontalChange = 0;//horizontalInput;
+						if (cameraLook.ClampingX > 0) {
+							horizontalChange = yawSpeed * Time.deltaTime;
+						} else if(cameraLook.ClampingX < 0) {
+							horizontalChange = -yawSpeed * Time.deltaTime;
+						}
+						if(horizontalChange != 0) {
+							transform.Rotate(-Vector3.forward, rollSpeed * horizontalChange * speedScale);
+						}
+
+						if (horizontalInput != 0) {
 							transform.Rotate(-Vector3.up, rollSpeed * horizontalInput * speedScale);
 						}
+					} else if (true) {//!Input.GetButton("Vertical") && !Input.GetButton("Horizontal")) {
+						readyToRotateBody = !forcingRotate;
 					}
 				}
 			}
@@ -135,10 +159,12 @@ public class ManualJetpack : MonoBehaviour {
 		Transform cameraHolder = cameraLook.transform.parent;
 		if (flightMode) {
 			readyToRotateBody = false;
+			shifter.look = cameraLook;
 			cameraLook.ResetLook();
 			Quaternion targetRotation = Quaternion.LookRotation(flightFocalPoint.transform.position - cameraHolder.position, -characterLook.transform.forward);
 			StartCoroutine("RotateOverTime", new RotateOverTimeInfo(cameraHolder, targetRotation, cameraSwitchSpeed));
 		} else {
+			shifter.look = characterLook;
 			Quaternion targetRotation = Quaternion.LookRotation(normalFocalPoint.transform.position - cameraHolder.position, characterLook.transform.up);
 			StartCoroutine("RotateOverTime", new RotateOverTimeInfo(cameraHolder, targetRotation, cameraSwitchSpeed / 2));
 			StartCoroutine("RotateOverTime", new RotateOverTimeInfo(cameraLook.transform, targetRotation, cameraSwitchSpeed / 2));
@@ -167,20 +193,27 @@ public class ManualJetpack : MonoBehaviour {
 
 	private IEnumerator RotateOverTime(RotateOverTimeInfo info) {
 		while(info.rotatee.rotation != info.targetRotation) {
-			info.rotatee.rotation = Quaternion.RotateTowards(info.rotatee.rotation, info.targetRotation, info.degreesPerSecond * Time.deltaTime);
+			if (info.rotatee.transform == cameraLook.transform.parent) {
+				forcingRotate = true;
+			}
+			info.rotatee.rotation = Quaternion.RotateTowards(info.rotatee.rotation, info.targetRotation, info.degreesPerStep);
 			yield return new WaitForSeconds(0);
+		}
+
+		if (info.rotatee.transform == cameraLook.transform.parent) {
+			forcingRotate = false;
 		}
 	}
 
 	private class RotateOverTimeInfo {
-		public RotateOverTimeInfo(Transform rotatee, Quaternion targetRotation, float degreesPerSecond) {
+		public RotateOverTimeInfo(Transform rotatee, Quaternion targetRotation, float degreesPerStep) {
 			this.rotatee = rotatee;
 			this.targetRotation = targetRotation;
-			this.degreesPerSecond = degreesPerSecond;
+			this.degreesPerStep = degreesPerStep;
 		}
 		public Transform rotatee;
 		public Quaternion targetRotation;
-		public float degreesPerSecond;
+		public float degreesPerStep;
 	}
 }
 
