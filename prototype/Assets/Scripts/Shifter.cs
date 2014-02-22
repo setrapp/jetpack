@@ -12,7 +12,7 @@ public class Shifter : MonoBehaviour {
 
 	void Update() {
 		//ShiftGears
-		if (Input.GetAxis("ShiftGears") != 0) {
+		/*if (Input.GetAxis("ShiftGears") != 0) {
 			if (!shifting) {
 				hpattern.SetActive(true);
 				Vector3 hpatternToStick = stick.transform.position - hpattern.transform.position;
@@ -29,7 +29,7 @@ public class Shifter : MonoBehaviour {
 			shifting = false;
 		}
 
-		look.enabled = !shifting;
+		look.enabled = !shifting;*/
 	}
 
 	private void PutStickAtMouse(bool keepInBox) {
