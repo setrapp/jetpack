@@ -35,22 +35,27 @@ public class Shifter : MonoBehaviour {
 				*/
 				shifting = true;
 			} else {
-				//PutStickAtMouse (true);
-				if (Input.mousePosition.x - oldMousePos.x < -mouseMoveThreshold) {
-					shifterSpots.MoveShifter(ShifterSpots.ShifterDirection.LEFT, stick);
-					oldMousePos = Input.mousePosition;
-				} else if (Input.mousePosition.x - oldMousePos.x > mouseMoveThreshold) {
-					shifterSpots.MoveShifter(ShifterSpots.ShifterDirection.RIGHT, stick);
-					oldMousePos = Input.mousePosition;
+				if (Input.mousePosition.y - oldMousePos.y < -mouseMoveThreshold) {
+					if (shifterSpots.MoveShifter(ShifterSpots.ShifterDirection.DOWN, stick)) {
+						oldMousePos = Input.mousePosition;
+					}
+				} else if (Input.mousePosition.y - oldMousePos.y > mouseMoveThreshold) {
+					if (shifterSpots.MoveShifter(ShifterSpots.ShifterDirection.UP, stick)) {
+						oldMousePos = Input.mousePosition;
+					}
 				}
 
-				if (Input.mousePosition.y - oldMousePos.y < -mouseMoveThreshold) {
-					shifterSpots.MoveShifter(ShifterSpots.ShifterDirection.UP, stick);
-					oldMousePos = Input.mousePosition;
-				} else if (Input.mousePosition.y - oldMousePos.y > mouseMoveThreshold) {
-					shifterSpots.MoveShifter(ShifterSpots.ShifterDirection.DOWN, stick);
-					oldMousePos = Input.mousePosition;
+				if (Input.mousePosition.x - oldMousePos.x < -mouseMoveThreshold) {
+					if (shifterSpots.MoveShifter(ShifterSpots.ShifterDirection.LEFT, stick)) {
+						oldMousePos = Input.mousePosition;
+					}
+				} else if (Input.mousePosition.x - oldMousePos.x > mouseMoveThreshold) {
+					if (shifterSpots.MoveShifter(ShifterSpots.ShifterDirection.RIGHT, stick)) {
+						oldMousePos = Input.mousePosition;
+					}
 				}
+
+
 			}
 		} else if (shifting){
 			hpattern.SetActive(false);
@@ -142,35 +147,41 @@ public class ShifterSpots {
 		spots[8] = gearH;
 	}
 
-	public void MoveShifter(ShifterDirection direction, GameObject shifter) {
+	public bool MoveShifter(ShifterDirection direction, GameObject shifter) {
+		bool shifted = false;
 		switch (direction) {
 		case ShifterDirection.LEFT:
 			// Only shift left if in neutral and not all the way left.
 			if (spotIndex == 4 || spotIndex == 7) {
 				spotIndex -= 3;
+				shifted = true;
 			}
 			break;
-		case ShifterDirection.UP:
+		case ShifterDirection.DOWN:
 			// Only shift down if not at the bottom.
 			if (spotIndex != 2 && spotIndex != 5 && spotIndex != 8) {
 				spotIndex += 1;
+				shifted = true;
 			}
 			break;
 		case ShifterDirection.RIGHT:
 			// Only shift right if in neutral and not all the way right.
 			if (spotIndex == 1 || spotIndex == 4) {
 				spotIndex += 3;
+				shifted = true;
 			}
 			break;
-		case ShifterDirection.DOWN:
+		case ShifterDirection.UP:
 			// Only shift up if not at the top.
 			if (spotIndex != 0 && spotIndex != 3 && spotIndex != 6) {
 				spotIndex -= 1;
+				shifted = true;
 			}
 			break;
 		}
 
 		shifter.transform.position = spots[spotIndex].transform.position;
+		return shifted;
 	}
 
 	public int GetGear() {

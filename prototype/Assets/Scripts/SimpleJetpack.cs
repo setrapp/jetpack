@@ -27,7 +27,7 @@ public class SimpleJetpack : MonoBehaviour
 	private void InitJetpack() {
 		characterMotor = gameObject.GetComponent<CharacterMotor>();
 		oldUp = transform.up;
-		Screen.showCursor = false;
+		//Screen.showCursor = false;
 		initComplete = true;
 	}
 
