@@ -3,13 +3,16 @@ using System.Collections;
 
 public class Shifter : MonoBehaviour {
 	private bool shifting = false;
+	public Camera camera;
 	public GameObject hpattern = null;
 	public GameObject stick = null;
 	public MouseLook look = null;
 	private bool blocked = false;
-	private Vector2 oldMousePos;
+	private Vector3 oldMousePos;
 	public float mouseMoveThreshold;
 	public ShifterSpots shifterSpots;
+	private Vector3 handPos;
+	public Texture2D handTexture;
 
 	void Start() {
 		shifterSpots.PopulateSpotsArray();
@@ -20,27 +23,16 @@ public class Shifter : MonoBehaviour {
 		if (Input.GetAxis("ShiftGears") != 0) {
 			if (!shifting) {
 				oldMousePos = Input.mousePosition;
+				Vector2 handPos2D = camera.WorldToScreenPoint(stick.transform.position);
+				handPos = new Vector3(handPos2D.x, Screen.height - handPos2D.y, 0);
+				shifterSpots.UpdateShifter(handPos, stick);
 				hpattern.SetActive(true);
-				shifterSpots.MoveShifter(ShifterSpots.ShifterDirection.NONE, stick);
 				shifting = true;
 			} else {
-				if (Input.mousePosition.y - oldMousePos.y < -mouseMoveThreshold) {
-					shifterSpots.MoveShifter(ShifterSpots.ShifterDirection.DOWN, stick);
-					oldMousePos.y = Input.mousePosition.y;
-				} else if (Input.mousePosition.y - oldMousePos.y > mouseMoveThreshold) {
-					shifterSpots.MoveShifter(ShifterSpots.ShifterDirection.UP, stick);
-					oldMousePos.y = Input.mousePosition.y;
-				}
-
-				if (Input.mousePosition.x - oldMousePos.x < -mouseMoveThreshold) {
-					shifterSpots.MoveShifter(ShifterSpots.ShifterDirection.LEFT, stick);
-					oldMousePos.x = Input.mousePosition.x;
-				} else if (Input.mousePosition.x - oldMousePos.x > mouseMoveThreshold) {
-					shifterSpots.MoveShifter(ShifterSpots.ShifterDirection.RIGHT, stick);
-					oldMousePos.x = Input.mousePosition.x;
-				}
-
-
+				handPos.x += Input.mousePosition.x - oldMousePos.x;
+				handPos.y -= Input.mousePosition.y - oldMousePos.y;
+				oldMousePos = Input.mousePosition;
+				shifterSpots.UpdateShifter(handPos, stick);
 			}
 		} else if (shifting){
 			hpattern.SetActive(false);
@@ -48,6 +40,10 @@ public class Shifter : MonoBehaviour {
 		}
 
 		look.enabled = !shifting;
+	}
+
+	void OnGUI() {
+		GUI.DrawTexture (new Rect (handPos.x - 10, handPos.y - 10, 20, 20), handTexture);
 	}
 }
 
@@ -97,41 +93,48 @@ public class ShifterSpots {
 		spots[8] = gearH;
 	}
 
-	public bool MoveShifter(ShifterDirection direction, GameObject shifter) {
-		bool shifted = false;
-		switch (direction) {
-		case ShifterDirection.LEFT:
-			// Only shift left if in neutral and not all the way left.
-			if (spotIndex == 4 || spotIndex == 7) {
-				spotIndex -= 3;
-				shifted = true;
+	public void UpdateShifter(Vector3 handPos, GameObject shifter) {
+		if (handPos.x < Screen.width / 3)
+		{	
+			if (handPos.y < Screen.height / 3) {
+				if (spotIndex != 0 && spotIndex != 3 && spotIndex != 6) {
+					spotIndex = 0;
+				}
+			} else if (handPos.y < Screen.height * 2 / 3) {
+				spotIndex = 1;
+			} else {
+				if (spotIndex != 2 && spotIndex != 5 && spotIndex != 8) {
+
+					spotIndex = 2;
+				}
 			}
-			break;
-		case ShifterDirection.DOWN:
-			// Only shift down if not at the bottom.
-			if (spotIndex != 2 && spotIndex != 5 && spotIndex != 8) {
-				spotIndex += 1;
-				shifted = true;
+		} else if (handPos.x < Screen.width * 2 / 3) {
+			if (handPos.y < Screen.height / 3) {
+				if (spotIndex != 0 && spotIndex != 3 && spotIndex != 6) {
+					spotIndex = 3;
+				}
+			} else if (handPos.y < Screen.height * 2 / 3) {
+				spotIndex = 4;
+			} else {
+				if (spotIndex != 2 && spotIndex != 5 && spotIndex != 8) {
+					spotIndex = 5;
+				}
 			}
-			break;
-		case ShifterDirection.RIGHT:
-			// Only shift right if in neutral and not all the way right.
-			if (spotIndex == 1 || spotIndex == 4) {
-				spotIndex += 3;
-				shifted = true;
+		} else {
+			if (handPos.y < Screen.height / 3) {
+				if (spotIndex != 0 && spotIndex != 3 && spotIndex != 6) {
+					spotIndex = 6;
+				}
+			} else if (handPos.y < Screen.height * 2 / 3) {
+				spotIndex = 7;
+			} else {
+				if (spotIndex != 2 && spotIndex != 5 && spotIndex != 8) {
+					spotIndex = 8;
+				}
 			}
-			break;
-		case ShifterDirection.UP:
-			// Only shift up if not at the top.
-			if (spotIndex != 0 && spotIndex != 3 && spotIndex != 6) {
-				spotIndex -= 1;
-				shifted = true;
-			}
-			break;
 		}
 
 		shifter.transform.position = spots[spotIndex].transform.position;
-		return shifted;
 	}
 
 	public int GetGear() {
