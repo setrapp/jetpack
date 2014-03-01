@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class ManualJetpack : SimpleJetpack {
-	private bool readyToShift = false;
 	public bool readyToRotateBody = false;
 	private bool wasInFlight = false;
 	public GameObject normalFocalPoint = null;
@@ -30,13 +29,6 @@ public class ManualJetpack : SimpleJetpack {
 			}
 			shifting = false;
 		}
-		/*if (Input.GetAxis("ShiftGears") ! 0) {
-			ShiftGears(shifter.shifterSpots.GetGear());
-		} else if (Input.GetAxis("ShiftGears") < 0) {
-			ShiftGears(-1);
-		} else {
-			readyToShift = true;
-		}*/
 
 		// Update jetpack speed parameters based on current gear.
 		acceleration = 0;
@@ -83,7 +75,7 @@ public class ManualJetpack : SimpleJetpack {
 			}
 
 			// Hard stop if the jetpack is not moving at the correct speed for the current gear.
-			if (jetpackSpeed <= minSpeed || jetpackSpeed >= maxSpeed) {
+			if (jetpackSpeed < minSpeed || jetpackSpeed >= maxSpeed) {
 				ForceStopJetpack(true);
 			}
 		}
@@ -96,11 +88,7 @@ public class ManualJetpack : SimpleJetpack {
 	}
 	
 	private void ShiftGears(int newGear) {
-		int oldGear = inGear;
-		//if (readyToShift) {
-			inGear = newGear;
-			//readyToShift = false;
-		//}
+		inGear = newGear;
 		inGear = (int)Mathf.Clamp(inGear, 0, gears.Length - 1);
 
 		// Toggle flight mode based on change to/from a non-hover gear.
