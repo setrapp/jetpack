@@ -16,6 +16,7 @@ public class SimpleJetpack : MonoBehaviour
 	public float maxSpeed = 0;
 	private bool initComplete = false;
 	protected bool deactivateOnRelease = true;
+	public bool handleManuevers = true;
 	protected bool extendGroundControls = true;
 	public float airFriction;
 
@@ -79,7 +80,7 @@ public class SimpleJetpack : MonoBehaviour
 			}
 		}
 
-		if (activated) {
+		if (activated && handleManuevers) {
 			if (extendGroundControls) {
 				if (Input.GetAxis("Vertical") != 0) {
 					float extendedAccleration = (characterMotor.movement.maxGroundAcceleration / 2) * Input.GetAxis("Vertical") * Time.deltaTime;
