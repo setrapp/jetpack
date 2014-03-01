@@ -16,6 +16,7 @@ public class SimpleJetpack : MonoBehaviour
 	public float maxSpeed = 0;
 	private bool initComplete = false;
 	protected bool deactivateOnRelease = true;
+	protected bool extendGroundControls = true;
 	public float airFriction;
 
 	void Update () {
@@ -74,6 +75,29 @@ public class SimpleJetpack : MonoBehaviour
 			if (!characterMotor.grounded) {
 				if (activated && Input.GetAxis ("Jump") > 0) {
 					ApplyJetPackAcceleration (acceleration);
+				}
+			}
+		}
+
+		if (activated) {
+			if (extendGroundControls) {
+				if (Input.GetAxis("Vertical") != 0) {
+					float extendedAccleration = (characterMotor.movement.maxGroundAcceleration / 2) * Input.GetAxis("Vertical") * Time.deltaTime;
+					if (characterMotor.movement.velocity.z + extendedAccleration > characterMotor.movement.maxForwardSpeed) {
+						extendedAccleration = Mathf.Max(characterMotor.movement.maxForwardSpeed - characterMotor.movement.velocity.z, 0);
+					} else if (characterMotor.movement.velocity.z + extendedAccleration < -characterMotor.movement.maxForwardSpeed) {
+						extendedAccleration = Mathf.Min(-characterMotor.movement.maxForwardSpeed - characterMotor.movement.velocity.z, 0);
+					}
+					characterMotor.movement.velocity += transform.TransformDirection(new Vector3(0, 0, extendedAccleration));
+				}
+				if (Input.GetAxis("Horizontal") != 0) {
+					float extendedAccleration = (characterMotor.movement.maxGroundAcceleration / 2) * Input.GetAxis("Horizontal") * Time.deltaTime;
+					if (characterMotor.movement.velocity.x + extendedAccleration > characterMotor.movement.maxForwardSpeed) {
+						extendedAccleration = Mathf.Max(characterMotor.movement.maxForwardSpeed - characterMotor.movement.velocity.x, 0);
+					} else if (characterMotor.movement.velocity.x + extendedAccleration < -characterMotor.movement.maxForwardSpeed) {
+						extendedAccleration = Mathf.Min(-characterMotor.movement.maxForwardSpeed - characterMotor.movement.velocity.x, 0);
+					}
+					characterMotor.movement.velocity += transform.TransformDirection(new Vector3(extendedAccleration, 0, 0));
 				}
 			}
 		}

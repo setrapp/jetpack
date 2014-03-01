@@ -43,7 +43,9 @@ public class Shifter : MonoBehaviour {
 	}
 
 	void OnGUI() {
-		GUI.DrawTexture (new Rect (handPos.x - 10, handPos.y - 10, 20, 20), handTexture);
+		if (shifting) {
+				GUI.DrawTexture (new Rect (handPos.x - 10, handPos.y - 10, 20, 20), handTexture);
+		}
 	}
 }
 
