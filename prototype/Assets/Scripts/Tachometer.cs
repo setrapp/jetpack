@@ -17,6 +17,8 @@ public class Tachometer : MonoBehaviour
 	void OnGUI() {
 		string gear = "" + jetpack.inGear;
 		if (jetpack.inGear == 0) {
+			gear = "Neutral";
+		} else if (jetpack.inGear == 6) {
 			gear = "Hover";
 		}
 		//GUI.Box(new Rect (150, 10, 200, 20));

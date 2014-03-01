@@ -9,28 +9,38 @@ public class ManualJetpack : SimpleJetpack {
 	public GameObject flightFocalPoint = null;
 	public float cameraSwitchSpeed;
 	public JetpackGear[] gears = null;
-	public int inGear = 0;	//Gear 0 is hover
+	public int inGear = 0;	//Gear 0 is neutral and Gear 6 is hover
 	public MouseLook characterLook = null;
 	public MouseLook cameraLook = null;
 	public float pitchSpeed, yawSpeed, rollSpeed;
 	private bool forcingRotate = false;
 	public Shifter shifter = null;
+	private bool shifting = false;
 
 	void Update () {
 		EnterJetpackFrame();
 
 		// Shift
-		if (Input.GetAxis("ShiftGears") > 0) {
-			ShiftGears(1);
+		if (Input.GetAxis ("ShiftGears") != 0) {
+			shifting = true;
+		} else if (shifting){
+			int newGear = shifter.shifterSpots.GetGear();
+			if (newGear != inGear) {
+				ShiftGears(newGear);
+			}
+			shifting = false;
+		}
+		/*if (Input.GetAxis("ShiftGears") ! 0) {
+			ShiftGears(shifter.shifterSpots.GetGear());
 		} else if (Input.GetAxis("ShiftGears") < 0) {
 			ShiftGears(-1);
 		} else {
 			readyToShift = true;
-		}
+		}*/
 
 		// Update jetpack speed parameters based on current gear.
 		acceleration = 0;
-		if (inGear == 0 || Input.GetAxis("Vertical") != 0) {
+		if (inGear == 6 || Input.GetAxis("Vertical") != 0) {
 			acceleration = gears[inGear].acceleration;
 			if (Input.GetAxis("Vertical") < 0) {
 				acceleration = -gears[inGear].deceleration;
@@ -40,7 +50,7 @@ public class ManualJetpack : SimpleJetpack {
 		maxSpeed = gears[inGear].maxSpeed;
 
 		// Rotation
-		if (inGear > 0) {
+		if (InManualGear()) {
 			if (readyToRotateBody) {
 				// Pitch
 				float pitchChange = 0;
@@ -80,20 +90,26 @@ public class ManualJetpack : SimpleJetpack {
 
 		ExitJetpackFrame();
 	}
+
+	public bool InManualGear() {
+		return inGear > 0 && inGear < 6;
+	}
 	
-	private void ShiftGears(int change) {
+	private void ShiftGears(int newGear) {
 		int oldGear = inGear;
-		if (readyToShift) {
-			inGear += change;
-			readyToShift = false;
-		}
+		//if (readyToShift) {
+			inGear = newGear;
+			//readyToShift = false;
+		//}
 		inGear = (int)Mathf.Clamp(inGear, 0, gears.Length - 1);
 
 		// Toggle flight mode based on change to/from a non-hover gear.
-		if (oldGear == 0 && inGear > 0) {
-			ToggleFlightMode(true);
-		} else if (oldGear > 0 && inGear == 0) {
-			ToggleFlightMode(false);
+		if (inGear != 0) {
+			if (!wasInFlight && inGear != 6) {
+				ToggleFlightMode (true);
+			} else if (wasInFlight && inGear == 6) {
+				ToggleFlightMode (false);
+			}
 		}
 	}
 
