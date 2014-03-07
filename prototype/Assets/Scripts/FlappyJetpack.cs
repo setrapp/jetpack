@@ -9,12 +9,15 @@ public class FlappyJetpack : MonoBehaviour {
 	float timeSinceThrust = 0.0f;
 	bool gameStarted= false;
 	bool gameOver= false;
+
+	Vector3 startingPoint;
 	JetpackScript j;
 	// Use this for initialization
 	void Start () {
 		flappyCamera= GameObject.Find("flappyCamera");
 		flappyJetpack= GameObject.Find("flappyJetpack");
 		j=flappyJetpack.GetComponent<JetpackScript>();
+		startingPoint=transform.position;
 	}
 	
 	// Update is called once per frame
@@ -46,7 +49,7 @@ public class FlappyJetpack : MonoBehaviour {
 			}
 			 
 			if(Input.GetKey(KeyCode.Space)){
-				if(jetpackPos.y<=50.0f){
+				if(jetpackPos.y<=+50.0f){
 					timeSinceThrust=0.0f;
 					jetpackPos.y+=Time.deltaTime * 70.0f;
 				}
@@ -68,7 +71,7 @@ public class FlappyJetpack : MonoBehaviour {
 		else{
 			if(Input.GetKey(KeyCode.Space) && gameStarted==false){
 				j.collided=false;
-				this.transform.position= new Vector3(1000,60,200);
+				this.transform.position= startingPoint;
 				flappyJetpack.transform.localPosition= new Vector3(0,30,100);
 				gameStarted=true;
 
