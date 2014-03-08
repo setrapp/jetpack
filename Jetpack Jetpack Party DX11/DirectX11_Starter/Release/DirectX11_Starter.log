@@ -1,0 +1,1587 @@
+﻿Build started 3/7/2014 8:01:34 PM.
+     1>Project "\\banner.main.ad.rit.edu\students\rug4133\IGMProfile\Desktop\DX 11 Ass 3\DirectX11_Starter\DirectX11_Starter.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"\\banner.main.ad.rit.edu\students\rug4133\IGMProfile\Desktop\DX 11 Ass 3\\DirectXTK\inc" /I"\\banner.main.ad.rit.edu\students\rug4133\IGMProfile\Desktop\DX 11 Ass 3\\Toolkit\inc" /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /AI"C:\Program Files (x86)\Windows Kits\8.0\References\CommonConfiguration\Neutral" /Zi /clr /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D _MBCS /EHa /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc110.pdb" /TP /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\mscorlib.dll" /analyze- /errorReport:prompt /clr:nostdlib DemoGame.cpp DXGame.cpp Entity.cpp Material.cpp Mesh.cpp
+         DemoGame.cpp
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(64): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(68): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(69): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(70): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(73): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(74): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(75): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(78): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(79): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\Toolkit\Inc\SpriteFont.h(34): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\Toolkit\Inc\SpriteFont.h(35): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\Toolkit\Inc\SpriteFont.h(36): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\Toolkit\Inc\SpriteFont.h(37): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>DemoGame.cpp(291): warning C4269: 'pos' : 'const' automatic data initialized with compiler generated default constructor produces unreliable results
+     1>DemoGame.cpp(291): warning C4101: 'pos' : unreferenced local variable
+         DXGame.cpp
+     1>DXGame.cpp(113): error C2440: '=' : cannot convert from 'const wchar_t [16]' to 'LPCSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>DXGame.cpp(117): error C2664: 'MessageBox' : cannot convert parameter 2 from 'const wchar_t [22]' to 'LPCTSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>DXGame.cpp(128): error C2664: 'CreateWindowExA' : cannot convert parameter 2 from 'const wchar_t [16]' to 'LPCSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>DXGame.cpp(131): error C2664: 'MessageBox' : cannot convert parameter 2 from 'const wchar_t [21]' to 'LPCTSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>DXGame.cpp(168): error C2664: 'MessageBox' : cannot convert parameter 2 from 'const wchar_t [25]' to 'LPCTSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>DXGame.cpp(384): error C2664: 'SetWindowTextA' : cannot convert parameter 2 from 'const wchar_t *' to 'LPCSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+         Entity.cpp
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(64): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(68): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(69): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(70): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(73): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(74): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(75): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(78): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\toolkit\inc\SpriteBatch.h(79): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\Toolkit\Inc\SpriteFont.h(34): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\Toolkit\Inc\SpriteFont.h(35): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\Toolkit\Inc\SpriteFont.h(36): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\Toolkit\Inc\SpriteFont.h(37): warning C4561: '__fastcall' incompatible with the '/clr' option: converting to '__stdcall'
+         Material.cpp
+         Mesh.cpp
+         Generating Code...
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\entity.cpp(51): warning C4793: 'Entity::Update' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3382): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3383): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3384): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3385): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3387): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3388): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3389): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3390): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3393): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1080): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1080): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1081): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1081): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1082): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1082): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1083): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1083): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1084): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1087): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1080): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1080): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1081): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1081): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1082): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1082): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1083): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1083): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1084): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1087): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1080): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1080): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1081): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1081): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1082): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1082): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1083): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1083): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1084): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1087): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3103): warning C4793: 'DirectX::XMMATRIX::operator*' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3103): warning C4793: 'DirectX::XMMATRIX::operator*' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(615): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(615): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(617): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(617): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(619): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(619): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(621): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(621): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(625): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(625): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(627): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(627): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(629): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(629): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(631): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(631): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(632): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(635): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\entity.cpp(15): warning C4793: 'Entity::Entity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\entity.cpp(16): warning C4793: 'Entity::Entity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\entity.cpp(17): warning C4793: 'Entity::Entity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1070): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1071): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1072): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1073): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1074): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1078): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1070): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1071): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1072): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1073): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1074): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1078): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1070): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1071): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1072): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1073): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1074): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1078): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3382): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3383): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3384): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3385): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3387): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3388): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3389): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3390): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3393): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1599): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1599): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1602): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1599): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1599): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1602): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1599): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1599): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1602): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1599): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1599): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1602): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1080): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1080): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1081): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1081): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1082): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1082): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1083): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1083): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1084): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1087): warning C4793: 'DirectX::XMLoadFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(320): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(322): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(322): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(323): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(323): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(324): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(324): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(325): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(325): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(327): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(327): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(328): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(328): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(329): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(329): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(330): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(330): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(332): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(332): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(333): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(333): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(334): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(334): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(335): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(337): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(338): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(338): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(339): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(339): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(340): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(340): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(341): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(341): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(342): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(342): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(343): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(343): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(344): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(344): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(345): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(345): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(346): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(346): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(347): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(347): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(348): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(348): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(349): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(350): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(351): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(351): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(352): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(352): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(353): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(353): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(354): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(354): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(355): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(355): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(356): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(356): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(357): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(357): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(358): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(358): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(359): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(359): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(360): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(360): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(361): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(361): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(362): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(363): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(364): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(364): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(365): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(365): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(366): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(366): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(367): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(367): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(368): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(368): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(369): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(369): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(370): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(370): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(371): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(371): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(372): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(372): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(373): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(373): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(374): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(374): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(375): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(376): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(379): warning C4793: 'DirectX::XMMatrixMultiply' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(615): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(615): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(617): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(617): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(619): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(619): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(621): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(621): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(625): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(625): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(627): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(627): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(629): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(629): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(631): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(631): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(632): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(635): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1070): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1071): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1072): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1073): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1074): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1078): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\demogame.cpp(235): warning C4793: 'DemoGame::OnResize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\demogame.cpp(236): warning C4793: 'DemoGame::OnResize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2279): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2280): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2280): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2282): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2282): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2285): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2287): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2288): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2288): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2289): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2291): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2291): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2292): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2292): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2294): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2294): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2295): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2297): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2297): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2298): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2299): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2302): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(271): warning C4793: 'DirectX::XMVECTORI32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(255): warning C4793: 'DirectX::XMVECTORF32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(615): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(615): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(617): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(617): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(619): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(619): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(621): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(621): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(625): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(625): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(627): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(627): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(629): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(629): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(631): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(631): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(632): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(635): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\demogame.cpp(322): warning C4793: 'DemoGame::DrawScene' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\demogame.cpp(98): warning C4793: 'DemoGame::Init' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\demogame.cpp(99): warning C4793: 'DemoGame::Init' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\demogame.cpp(100): warning C4793: 'DemoGame::Init' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\demogame.cpp(101): warning C4793: 'DemoGame::Init' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\demogame.cpp(102): warning C4793: 'DemoGame::Init' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\demogame.cpp(107): warning C4793: 'DemoGame::Init' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\demogame.cpp(111): warning C4793: 'DemoGame::Init' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(64): warning C4793: 'DirectX::XMVectorSet' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(64): warning C4793: 'DirectX::XMVectorSet' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(64): warning C4793: 'DirectX::XMVectorSet' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(64): warning C4793: 'DirectX::XMVectorSet' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(64): warning C4793: 'DirectX::XMVectorSet' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(64): warning C4793: 'DirectX::XMVectorSet' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1953): warning C4793: 'DirectX::XMMatrixLookAtLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1954): warning C4793: 'DirectX::XMMatrixLookAtLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1955): warning C4793: 'DirectX::XMMatrixLookAtLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(2835): warning C4793: 'DirectX::XMVectorSubtract' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(2835): warning C4793: 'DirectX::XMVectorSubtract' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(2838): warning C4793: 'DirectX::XMVectorSubtract' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(615): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(615): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(617): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(617): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(619): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(619): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(621): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(621): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(625): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(625): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(627): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(627): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(629): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(629): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(631): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(631): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(632): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(635): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1070): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1071): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1072): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1073): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1074): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1078): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(615): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(615): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(617): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(617): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(619): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(619): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(621): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(621): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(625): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(625): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(627): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(627): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(629): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(629): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(631): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(631): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(632): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(635): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2279): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2280): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2280): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2282): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2282): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2285): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2287): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2288): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2288): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2289): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2291): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2291): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2292): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2292): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2294): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2294): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2295): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2297): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2297): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2298): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2299): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2302): warning C4793: 'DirectX::XMMatrixPerspectiveFovLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(271): warning C4793: 'DirectX::XMVECTORI32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(255): warning C4793: 'DirectX::XMVECTORF32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(615): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(615): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(617): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(617): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(619): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(619): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(621): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(621): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(625): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(625): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(627): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(627): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(629): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(629): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(631): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(631): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(632): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(635): warning C4793: 'DirectX::XMMatrixTranspose' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>\\banner.main.ad.rit.edu\students\rug4133\igmprofile\desktop\dx 11 ass 3\directx11_starter\transform.h(30): warning C4793: 'Transform::Translate' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1140): warning C4793: 'DirectX::XMMatrixTranslation' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1141): warning C4793: 'DirectX::XMMatrixTranslation' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1142): warning C4793: 'DirectX::XMMatrixTranslation' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1143): warning C4793: 'DirectX::XMMatrixTranslation' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1144): warning C4793: 'DirectX::XMMatrixTranslation' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1147): warning C4793: 'DirectX::XMMatrixTranslation' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(64): warning C4793: 'DirectX::XMVectorSet' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(64): warning C4793: 'DirectX::XMVectorSet' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1909): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1910): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1911): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1912): warning C4793: 'DirectX::XMStoreFloat4x4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3382): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3383): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3384): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3385): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3387): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3388): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3389): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3390): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(3393): warning C4793: 'DirectX::XMFLOAT4X4::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(717): warning C4793: 'DirectX::XMLoadFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1599): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1599): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1602): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1599): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1599): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1602): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1599): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1599): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1602): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1599): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1599): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathconvert.inl(1602): warning C4793: 'DirectX::XMStoreFloat4' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1979): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1980): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1981): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1982): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1986): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1988): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1989): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1991): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1993): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1995): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1996): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1997): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2000): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2001): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2002): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2003): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2005): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2007): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(2011): warning C4793: 'DirectX::XMMatrixLookToLH' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(41): warning C4793: 'DirectX::XMVectorZero' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(41): warning C4793: 'DirectX::XMVectorZero' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7066): warning C4793: 'DirectX::XMVector3Equal' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7066): warning C4793: 'DirectX::XMVector3Equal' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7067): warning C4793: 'DirectX::XMVector3Equal' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7067): warning C4793: 'DirectX::XMVector3Equal' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7071): warning C4793: 'DirectX::XMVector3Equal' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7592): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7592): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7594): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7594): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7596): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7596): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7599): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(271): warning C4793: 'DirectX::XMVECTORI32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(271): warning C4793: 'DirectX::XMVECTORI32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(41): warning C4793: 'DirectX::XMVectorZero' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(41): warning C4793: 'DirectX::XMVectorZero' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7066): warning C4793: 'DirectX::XMVector3Equal' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7066): warning C4793: 'DirectX::XMVector3Equal' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7067): warning C4793: 'DirectX::XMVector3Equal' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7067): warning C4793: 'DirectX::XMVector3Equal' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7071): warning C4793: 'DirectX::XMVector3Equal' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7592): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7592): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7594): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7594): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7596): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7596): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7599): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(271): warning C4793: 'DirectX::XMVECTORI32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(271): warning C4793: 'DirectX::XMVECTORI32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8019): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8019): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8020): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8020): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8021): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8021): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8022): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8022): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8023): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8023): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8024): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8024): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8026): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8026): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8028): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8028): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8030): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8030): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8033): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8033): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8035): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8035): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8037): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8037): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8039): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8039): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8040): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8040): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8041): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8041): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8042): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8045): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(271): warning C4793: 'DirectX::XMVECTORI32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(271): warning C4793: 'DirectX::XMVECTORI32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7681): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7681): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7683): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7683): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7685): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7685): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7687): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7687): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7689): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7689): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7691): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7691): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7693): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7693): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7695): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7695): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7698): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(271): warning C4793: 'DirectX::XMVECTORI32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8019): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8019): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8020): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8020): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8021): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8021): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8022): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8022): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8023): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8023): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8024): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8024): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8026): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8026): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8028): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8028): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8030): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8030): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8033): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8033): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8035): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8035): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8037): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8037): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8039): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8039): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8040): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8040): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8041): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8041): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8042): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8045): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(271): warning C4793: 'DirectX::XMVECTORI32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(271): warning C4793: 'DirectX::XMVECTORI32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(2723): warning C4793: 'DirectX::XMVectorNegate' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(2723): warning C4793: 'DirectX::XMVectorNegate' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(2725): warning C4793: 'DirectX::XMVectorNegate' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(2725): warning C4793: 'DirectX::XMVectorNegate' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(2728): warning C4793: 'DirectX::XMVectorNegate' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7633): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7633): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7635): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7635): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7637): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7637): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7639): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7639): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7641): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7641): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7643): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7643): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7646): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1070): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1071): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1072): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1073): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1074): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1078): warning C4793: 'DirectX::XMMatrixIdentity' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1140): warning C4793: 'DirectX::XMMatrixTranslation' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1141): warning C4793: 'DirectX::XMMatrixTranslation' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1142): warning C4793: 'DirectX::XMMatrixTranslation' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1143): warning C4793: 'DirectX::XMMatrixTranslation' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1144): warning C4793: 'DirectX::XMMatrixTranslation' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathmatrix.inl(1147): warning C4793: 'DirectX::XMMatrixTranslation' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(64): warning C4793: 'DirectX::XMVectorSet' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(64): warning C4793: 'DirectX::XMVectorSet' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7592): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7592): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7594): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7594): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7596): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7596): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7599): warning C4793: 'DirectX::XMVector3IsInfinite' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(271): warning C4793: 'DirectX::XMVECTORI32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(271): warning C4793: 'DirectX::XMVECTORI32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8019): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8019): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8020): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8020): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8021): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8021): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8022): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8022): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8023): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8023): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8024): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8024): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8026): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8026): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8028): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8028): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8030): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8030): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8033): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8033): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8035): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8035): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8037): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8037): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8039): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8039): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8040): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8040): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8041): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8041): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8042): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(8045): warning C4793: 'DirectX::XMVector3Normalize' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(271): warning C4793: 'DirectX::XMVECTORI32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(271): warning C4793: 'DirectX::XMVECTORI32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7681): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7681): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7683): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7683): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7685): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7685): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7687): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7687): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7689): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7689): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7691): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7691): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7693): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7693): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7695): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7695): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7698): warning C4793: 'DirectX::XMVector3Cross' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(271): warning C4793: 'DirectX::XMVECTORI32::operator __m128' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7633): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7633): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7635): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7635): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7637): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7637): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7639): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7639): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7641): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7641): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7643): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7643): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(7646): warning C4793: 'DirectX::XMVector3Dot' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(1444): warning C4793: 'DirectX::XMVectorSelect' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(1444): warning C4793: 'DirectX::XMVectorSelect' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(1445): warning C4793: 'DirectX::XMVectorSelect' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(1445): warning C4793: 'DirectX::XMVectorSelect' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(1446): warning C4793: 'DirectX::XMVectorSelect' : function compiled as native :
+         	Found an intrinsic not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(1446): warning C4793: 'DirectX::XMVectorSelect' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmathvector.inl(1449): warning C4793: 'DirectX::XMVectorSelect' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(377): warning C4793: 'DirectX::XMMATRIX::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(377): warning C4793: 'DirectX::XMMATRIX::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(377): warning C4793: 'DirectX::XMMATRIX::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>c:\program files (x86)\windows kits\8.0\include\um\directxmath.h(377): warning C4793: 'DirectX::XMMATRIX::operator=' : function compiled as native :
+         	Aligned data types not supported in managed code
+     1>Done Building Project "\\banner.main.ad.rit.edu\students\rug4133\IGMProfile\Desktop\DX 11 Ass 3\DirectX11_Starter\DirectX11_Starter.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:17.37
