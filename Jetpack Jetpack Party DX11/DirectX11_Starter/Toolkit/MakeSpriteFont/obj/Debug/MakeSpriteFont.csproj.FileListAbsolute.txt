@@ -1,0 +1,5 @@
+\\banner.main.ad.rit.edu\students\rug4133\IGMProfile\Desktop\DX 11 Ass 3\DirectX11_Starter\Toolkit\MakeSpriteFont\bin\Debug\MakeSpriteFont.exe
+\\banner.main.ad.rit.edu\students\rug4133\IGMProfile\Desktop\DX 11 Ass 3\DirectX11_Starter\Toolkit\MakeSpriteFont\bin\Debug\MakeSpriteFont.pdb
+\\banner.main.ad.rit.edu\students\rug4133\IGMProfile\Desktop\DX 11 Ass 3\DirectX11_Starter\Toolkit\MakeSpriteFont\obj\Debug\MakeSpriteFont.csprojResolveAssemblyReference.cache
+\\banner.main.ad.rit.edu\students\rug4133\IGMProfile\Desktop\DX 11 Ass 3\DirectX11_Starter\Toolkit\MakeSpriteFont\obj\Debug\MakeSpriteFont.exe
+\\banner.main.ad.rit.edu\students\rug4133\IGMProfile\Desktop\DX 11 Ass 3\DirectX11_Starter\Toolkit\MakeSpriteFont\obj\Debug\MakeSpriteFont.pdb
