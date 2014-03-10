@@ -55,9 +55,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 {
-	windowCaption = L"Demo DX11 Game";
+	windowCaption = L"Jetpack Jetpack Party!";
 	windowWidth = 800;
 	windowHeight = 600;
+	currState = GameState::Started;
+	trans = XMFLOAT3(0, 0, 0);
 }
 
 DemoGame::~DemoGame()
@@ -83,13 +85,11 @@ bool DemoGame::Init()
 
 	spriteRenderer = new SpriteRenderer(deviceContext);
 	spriteRenderer->SetColor(color);	
+
+	LoadEntities();
 //	fontRenderer = new FontRenderer(device, L"font1.spritefont");	
 //	fontRenderer->setSpriteBatch(spriteRenderer->GetSpriteBatch());
 
-	entity = new Entity(device);
-	entity->LoadTexture(L"RedGift.png", device, deviceContext);
-
-	// Set up buffers and such
 	CreateGeometryBuffers();
 	LoadShadersAndInputLayout();
 	this->deltaTime = 0;
@@ -100,19 +100,17 @@ bool DemoGame::Init()
 	XMVECTOR up			= XMVectorSet(0, 1, 0, 0);
 	XMMATRIX V			= XMMatrixLookAtLH(position, target, up);
 	XMStoreFloat4x4(&viewMatrix, XMMatrixTranspose(V));
-
-	// Set up world matrix
-	// In an actual game, update this when the object moves (so every frame)
-	XMMATRIX W = XMMatrixIdentity();
-	XMStoreFloat4x4(&entity->GetWorldMatrix(), XMMatrixTranspose(W));
 	
-
+	
+	
+	currState = GameState::Playing;
 	return true;
 }
 
-// Creates the vertex and index buffers for a single triangle
-void DemoGame::CreateGeometryBuffers()
+void DemoGame::LoadEntities()
 {
+	Entity* entity = new Entity(device);
+	entity->LoadTexture(L"RedGift.png", device, deviceContext);
 	XMFLOAT4 red	= XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
 	XMFLOAT4 green	= XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT4 blue	= XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
@@ -127,11 +125,15 @@ void DemoGame::CreateGeometryBuffers()
 		{ XMFLOAT3(-1.0f, +1.0f, +0.0f), mid, XMFLOAT2(1, 0) },
 	};
 
-	UINT indices[] = { 0, 2, 1, 3, 0, 1 };	
-	//for(long i = 0 ; i < 10000; i++)
+	UINT indices[] = { 0, 2, 1, 3, 0, 1 };		
 	entity->AddQuad(vertices, indices);
-	
-	
+	entities.push_back(entity);
+}
+
+// Creates the vertex and index buffers for a single triangle
+void DemoGame::CreateGeometryBuffers()
+{
+
 }
 
 // Loads shaders from compiled shader object (.cso) files, and uses the
@@ -238,62 +240,56 @@ void DemoGame::OnResize()
 
 #pragma region Game Loop
 
-// Updates the local constant buffer and 
-// push it to the buffer on the device
-float x = 0;
-XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
+
 void DemoGame::UpdateScene(float dt)
 {
-	this->deltaTime = dt;
-	
-	x = x + dt;
-	//entity.Rotate(XMFLOAT3(0, 0, x));
-	dt *= 5;
-	if(GetAsyncKeyState(VK_UP))
+	if(currState == GameState::Playing)
 	{
-		trans.y += dt;
-	}
-	if(GetAsyncKeyState(VK_DOWN))
-	{
-		trans.y -= dt;
-	}
-	if(GetAsyncKeyState(VK_LEFT))
-	{
-		trans.x -= dt;
-	}
-	if(GetAsyncKeyState(VK_RIGHT))
-	{
-		trans.x += dt;
-	}	
-	entity->transform->Translate(trans);
-	vsConstantBufferData.view		= viewMatrix;
-	vsConstantBufferData.projection	= projectionMatrix;
+		this->deltaTime = dt;
 
-	entity->Update(
-		dt, 
-		&vsConstantBufferData);
+		dt *= 5;
+		if(GetAsyncKeyState(VK_UP))
+		{
+			trans.y += dt;
+		}
+		if(GetAsyncKeyState(VK_DOWN))
+		{
+			trans.y -= dt;
+		}
+		if(GetAsyncKeyState(VK_LEFT))
+		{
+			trans.x -= dt;
+		}
+		if(GetAsyncKeyState(VK_RIGHT))
+		{
+			trans.x += dt;
+		}	
+		for(Entity* e : entities)
+		{
+			e->transform->Translate(trans);
 
-	deviceContext->UpdateSubresource(
-		vsConstantBuffer,
-		0,			
-		NULL,		
-		&vsConstantBufferData,
-		0,
-		0);
+			e->Update(
+			dt, 
+			&vsConstantBufferData);
+		}
+
+		vsConstantBufferData.view		= viewMatrix;
+		vsConstantBufferData.projection	= projectionMatrix;
+		deviceContext->UpdateSubresource(
+			vsConstantBuffer,
+			0,			
+			NULL,		
+			&vsConstantBufferData,
+			0,
+			0);
+	}
 }
 
 // Clear the screen, redraw everything, present
 void DemoGame::DrawScene()
 {
 	spriteRenderer->ClearScreen(deviceContext, renderTargetView, depthStencilView);
-
-	spriteRenderer->Begin();
-	FXMVECTOR pos;
-	//fontRenderer->font->DrawString(spriteRenderer->GetSpriteBatch(), L"HEY THERE!", pos);
-	spriteRenderer->End();
-
-
-
+	
 #ifndef OPTIMIZATION
 	deviceContext->IASetInputLayout(inputLayout);
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -313,11 +309,15 @@ void DemoGame::DrawScene()
 		NULL, 
 		0);
 #endif
-
-	spriteRenderer->Begin();
-	
-	entity->Draw(deviceContext);
-	// Present the buffer
+	if(currState == GameState::Playing)
+	{
+		spriteRenderer->Begin();
+		for(Entity* e : entities)
+		{
+			e->Draw(deviceContext);
+		}	
+		spriteRenderer->End();
+	}
 	HR(swapChain->Present(0, 0));
 }
 

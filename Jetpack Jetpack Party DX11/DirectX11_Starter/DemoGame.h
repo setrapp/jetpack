@@ -11,6 +11,7 @@
 #include "Mesh.h"
 #include "Entity.h"
 #include "Camera.h"
+#include "GameState.h"
 
 using namespace DirectX;
 
@@ -42,7 +43,7 @@ private:
 	// Initialization for our "game" demo
 	void CreateGeometryBuffers();
 	void LoadShadersAndInputLayout();
-
+	void LoadEntities();
 private:
 	float deltaTime;
 	// Our basic shaders for this example
@@ -58,10 +59,13 @@ private:
 	// determining how far the mouse moved in a single frame.
 	POINT prevMousePos;
 	//Camera* camera;
-	Entity* entity;
+	std::vector<Entity*> entities;
 	SpriteRenderer* spriteRenderer;
 	//FontRenderer* fontRenderer;
 
 	DirectX::XMFLOAT4X4 viewMatrix;
 	DirectX::XMFLOAT4X4 projectionMatrix;
+	XMFLOAT3 trans;
+
+public: GameState currState;
 };

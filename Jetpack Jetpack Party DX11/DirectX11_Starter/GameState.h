@@ -1,9 +1,10 @@
+#include <iostream>
 
 enum GameState
 {
-	Started,
-	Playing,
-	Paused,
-	Won,
-	Lost
+	Started = 1,
+	Playing = 2,
+	Paused = 1,
+	Won = 1,
+	Lost = 1
 };
