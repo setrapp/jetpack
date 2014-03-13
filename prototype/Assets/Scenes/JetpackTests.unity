@@ -306,7 +306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7aaf08c03b58ed418e08e0b9c0798e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manualJet: {fileID: 100026, guid: f97b8dddd8214f34ca56a6bf45307b60, type: 2}
+  manualJet: {fileID: 100000, guid: 86584601ffea23e4095343db5c540eb6, type: 2}
   qwopJet: {fileID: 100006, guid: 249df9369dea47c4bb8acaa015fc6f9e, type: 2}
   flappyJet: {fileID: 100002, guid: dce1601b72f829d4db1c2502c149ec76, type: 2}
   flappyObstacles: {fileID: 100022, guid: 2900d2b72adbcd544b941ff3578f84c3, type: 2}
@@ -600,7 +600,7 @@ Prefab:
     - target: {fileID: 11400000, guid: 67a945bf69357984c9a54ebc68fba63a, type: 2}
       propertyPath: manualJet
       value: 
-      objectReference: {fileID: 100026, guid: f97b8dddd8214f34ca56a6bf45307b60, type: 2}
+      objectReference: {fileID: 100000, guid: 86584601ffea23e4095343db5c540eb6, type: 2}
     - target: {fileID: 11400000, guid: 67a945bf69357984c9a54ebc68fba63a, type: 2}
       propertyPath: flappyObstacles
       value: 
