@@ -1082,12 +1082,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f8edc6bd2b4c964585ec14b8820a981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shifting: 0
   camera: {fileID: 2124603023}
   hpattern: {fileID: 2124603021}
   stick: {fileID: 1435741911}
-  looks:
-  - {fileID: 1083087426}
-  - {fileID: 1953789604}
   mouseMoveThreshold: 50
   shifterSpots:
     gear1: {fileID: 121491326}
@@ -1174,7 +1172,6 @@ MonoBehaviour:
   readyToRotateBody: 0
   normalFocalPoint: {fileID: 619637401}
   flightFocalPoint: {fileID: 915352477}
-  cameraFocalPoint: {fileID: 1990802894}
   cameraSwitchSpeed: 10
   gears:
   - minSpeed: 0
@@ -1182,8 +1179,8 @@ MonoBehaviour:
     acceleration: 20
     deceleration: 0
     cameraFollower:
-      behind: 10
-      above: 5
+      behind: 5
+      above: 2
       minDistance: 5
       maxDistance: 10
       lerpSpeed: 5
@@ -1193,10 +1190,10 @@ MonoBehaviour:
     deceleration: 5
     cameraFollower:
       behind: 10
-      above: 15
+      above: 12
       minDistance: 5
       maxDistance: 14
-      lerpSpeed: 10
+      lerpSpeed: 12
   - minSpeed: 25
     maxSpeed: 160
     acceleration: 40
@@ -1242,15 +1239,15 @@ MonoBehaviour:
     acceleration: 20
     deceleration: 0
     cameraFollower:
-      behind: 10
-      above: 5
+      behind: 5
+      above: 2
       minDistance: 5
       maxDistance: 10
       lerpSpeed: 5
   inGear: 6
   character: {fileID: 1083087416}
-  characterLook: {fileID: 0}
-  cameraLook: {fileID: 1016705729}
+  looks:
+  - {fileID: 1083087426}
   pitchSpeed: 90
   yawSpeed: 90
   rollSpeed: 90
@@ -1358,8 +1355,8 @@ MonoBehaviour:
   minimumX: 0
   maximumX: 0
   clampY: 1
-  minimumY: -70
-  maximumY: 70
+  minimumY: 0
+  maximumY: 0
 --- !u!1 &1170593296
 GameObject:
   m_ObjectHideFlags: 0
@@ -1963,7 +1960,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1953789597}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68ec2fe99d1108b9d0006a298d76c639, type: 3}
   m_Name: 

@@ -1,18 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ManualJetpack : SimpleJetpack {
 	public bool readyToRotateBody = false;
 	private bool wasInFlight = false;
 	public GameObject normalFocalPoint = null;
 	public GameObject flightFocalPoint = null;
-	public GameObject cameraFocalPoint = null;
 	public float cameraSwitchSpeed;
 	public JetpackGear[] gears = null;
 	public int inGear = 6;	//Gear 0 is neutral and Gear 6 is hover
 	public GameObject character = null;
-	public MouseLook characterLook = null;
-	public MouseLook cameraLook = null;
+	public List<MouseLook> looks = null;
+	//public MouseLook characterLook = null;
+	//public MouseLook cameraLook = null;
 	public float pitchSpeed, yawSpeed, rollSpeed;
 	private bool forcingRotate = false;
 	public Shifter shifter = null;
@@ -87,20 +88,24 @@ public class ManualJetpack : SimpleJetpack {
 			ForceStopJetpack(true);
 			ToggleFlightMode(false);
 			ShiftGears(6);
+
+			// Why does this need to be hardcoded. Shift gears if messed up here.
+			jetpackerCamera.behind = 5;
+			jetpackerCamera.above = 2;
+			jetpackerCamera.minDistance = 5;
+			jetpackerCamera.maxDistance = 10;
+			jetpackerCamera.lerpSpeed = 5;
 			//characterLook.transform.rotation = Quaternion.identity;
 			//characterLook.transform.forward = Vector3.Cross(Vector3.up, characterLook.transform.right);
 			//characterLook.transform.up = -Vector3.up;
 			//characterLook.ResetLook();
 		}
 
+		for (int i = 0; i < looks.Count; i++) {
+			looks[i].enabled = !shifter.shifting && !jetpackerCamera.IsLerping();
+		}
 
 		ExitJetpackFrame();
-
-		// Temporary test
-		if (wasInFlight) {
-			//cameraLook.transform.LookAt (normalFocalPoint.transform.position);
-			//cameraLook.transform.Translate((cameraLook.transform.InverseTransformDirection(-characterMotor.movement.velocity)) * Time.deltaTime);
-		}
 	}
 
 	public bool InManualGear() {
@@ -148,15 +153,17 @@ public class ManualJetpack : SimpleJetpack {
 		//cameraLook.enabled = false;
 
 		// Retrieve the parent of the camera so that the camera rotation does not conflict with MouseLook later.
-		Transform cameraHolder = cameraLook.transform.parent;
+		//Transform cameraHolder = cameraLook.transform.parent;
 
 		// Prepare for mode switch.
 		if (flightMode) {
 			deactivateOnRelease = false;
 			readyToRotateBody = false;
 
-			// Rotate camera's focal point to point up.
-			cameraFocalPoint.transform.forward = transform.up;
+			//TODO This might not be needed if the camera look ever works.
+			//looks[0].clampY = false;
+			looks[0].minimumY = -90;
+			looks[0].maximumY = 90;
 
 			// Start using MouseLook attached camera.
 			//shifter.look = cameraLook;
@@ -168,8 +175,9 @@ public class ManualJetpack : SimpleJetpack {
 		} else {
 			deactivateOnRelease = false;
 
-			// Rotate camera's focal point to point forward.
-			cameraFocalPoint.transform.forward = transform.forward;
+			//looks[0].clampY = true;
+			looks[0].minimumY = 0;
+			looks[0].maximumY = 0;
 
 			// Start using MouseLook attached character.
 			//shifter.look = characterLook;
@@ -196,16 +204,16 @@ public class ManualJetpack : SimpleJetpack {
 	// Rotate to a target orientation overtime.
 	private IEnumerator RotateOverTime(RotateOverTimeInfo info) {
 		while(info.rotatee.rotation != info.targetRotation) {
-			if (info.rotatee.transform == cameraLook.transform.parent) {
+			/*if (info.rotatee.transform == cameraLook.transform.parent) {
 				forcingRotate = true;
-			}
+			}*/
 			info.rotatee.rotation = Quaternion.RotateTowards(info.rotatee.rotation, info.targetRotation, info.degreesPerStep);
 			yield return new WaitForSeconds(0);
 		}
 
-		if (info.rotatee.transform == cameraLook.transform.parent) {
+		/*if (info.rotatee.transform == cameraLook.transform.parent) {
 			forcingRotate = false;
-		}
+		}*/
 	}
 
 	private class RotateOverTimeInfo {

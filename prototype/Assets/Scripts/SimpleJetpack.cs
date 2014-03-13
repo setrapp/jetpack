@@ -41,7 +41,6 @@ public class SimpleJetpack : MonoBehaviour
 		if (characterMotor != null) {
 			// Remove jetpack speed from character to fiddle with in isolation.
 			characterMotor.movement.velocity -= transform.up * jetpackSpeed * speedScale;
-
 			if (characterMotor.grounded) {
 				// NO JETPACKS ON THE GROUND.
 				nextJumpActivates = false;
@@ -114,6 +113,15 @@ public class SimpleJetpack : MonoBehaviour
 		}
 		wasActivated = activated;
 
+		//TODO This should not rely on ignoredGravity.
+		// Destroy velocity in not primary direction.
+		if (ignoredGravity > 0 && activated) {
+			Vector3 fixedVelocity = transform.InverseTransformDirection(characterMotor.movement.velocity);
+			fixedVelocity.x *= 0.75f;//airFriction;
+			fixedVelocity.y *= 0.75f;//airFriction;
+			characterMotor.movement.velocity = transform.TransformDirection(fixedVelocity);
+		}
+
 		// Add jetpack speed to character velocity to actually apply speed to character.
 		if (characterMotor != null) {
 			characterMotor.movement.velocity += transform.up * jetpackSpeed * speedScale;
@@ -137,7 +145,7 @@ public class SimpleJetpack : MonoBehaviour
 	// Hard stopping causes the jetpack to stall.
 	protected void ForceStopJetpack(bool hardStop = false) {
 		// Transfer all of the jetpack's speed into the character
-		characterMotor.movement.velocity += transform.up * jetpackSpeed;
+		characterMotor.movement.velocity += transform.up * jetpackSpeed * speedScale;
 		jetpackSpeed = 0;
 		activated = false;
 		if (hardStop) {

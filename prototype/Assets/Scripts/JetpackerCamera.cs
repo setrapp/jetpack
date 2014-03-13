@@ -80,19 +80,22 @@ public class JetpackerCamera : MonoBehaviour {
 		// Move towards desired follow position.
 		if (lerpSpeed > 0 && (fromCharacterDist * fromCharacterDist) < (behind * behind) + (above * above) && toDesiredDist > lerpSpeedDT) {
 			transform.position += toDesiredDir * lerpSpeedDT;
-			Debug.Log("lerp");
 		} else {
 			transform.position = character.position + follow;
 			lerpSpeed = 0;
-			Debug.Log("no lerp");
 		}
 
 		// Look at focal point.
-		transform.LookAt(character);
+		Vector3 lookAtUp = Vector3.Cross(character.right, followDir);
+		transform.LookAt(character, lookAtUp);
 
 		// TODO Figure out how to add in control of vertical rotation.
 		if (look != null) {
 			//look.ForceRotation(false, true);
 		}
+	}
+
+	public bool IsLerping() {
+		return lerpSpeed > 0;
 	}
 }

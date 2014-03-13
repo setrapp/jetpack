@@ -3,11 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Shifter : MonoBehaviour {
-	private bool shifting = false;
+	public bool shifting = false;
 	public Camera camera;
 	public GameObject hpattern = null;
 	public GameObject stick = null;
-	public List<MouseLook> looks = null;
 	private bool blocked = false;
 	private Vector3 oldMousePos;
 	public float mouseMoveThreshold;
@@ -38,10 +37,6 @@ public class Shifter : MonoBehaviour {
 		} else if (shifting){
 			hpattern.SetActive(false);
 			shifting = false;
-		}
-
-		for (int i = 0; i < looks.Count; i++) {
-			looks[0].enabled = !shifting;
 		}
 	}
 
