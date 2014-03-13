@@ -9,9 +9,9 @@ public class ManualJetpack : SimpleJetpack {
 	public GameObject cameraFocalPoint = null;
 	public float cameraSwitchSpeed;
 	public JetpackGear[] gears = null;
-	public int inGear = 0;	//Gear 0 is neutral and Gear 6 is hover
+	public int inGear = 6;	//Gear 0 is neutral and Gear 6 is hover
 	public GameObject character = null;
-	//public MouseLook characterLook = null;
+	public MouseLook characterLook = null;
 	public MouseLook cameraLook = null;
 	public float pitchSpeed, yawSpeed, rollSpeed;
 	private bool forcingRotate = false;
@@ -84,7 +84,9 @@ public class ManualJetpack : SimpleJetpack {
 		}
 
 		if (wasInFlight && characterMotor.grounded) {
-			//ToggleFlightMode(false);
+			ForceStopJetpack(true);
+			ToggleFlightMode(false);
+			ShiftGears(6);
 			//characterLook.transform.rotation = Quaternion.identity;
 			//characterLook.transform.forward = Vector3.Cross(Vector3.up, characterLook.transform.right);
 			//characterLook.transform.up = -Vector3.up;
@@ -109,12 +111,22 @@ public class ManualJetpack : SimpleJetpack {
 		inGear = newGear;
 		inGear = (int)Mathf.Clamp(inGear, 0, gears.Length - 1);
 
-		// Toggle flight mode based on change to/from a non-hover gear.
+
 		if (inGear != 0) {
+			// Toggle flight mode based on change to/from a non-hover gear.
 			if (!wasInFlight && inGear != 6) {
 				ToggleFlightMode (true);
 			} else if (wasInFlight && inGear == 6) {
 				ToggleFlightMode (false);
+			}
+
+			// Update following camera to keep up with jetpack
+			if (!characterMotor.grounded) {
+				jetpackerCamera.behind = gears[inGear].cameraFollower.behind;
+				jetpackerCamera.above = gears[inGear].cameraFollower.above;
+				jetpackerCamera.minDistance = gears[inGear].cameraFollower.minDistance;
+				jetpackerCamera.maxDistance = gears[inGear].cameraFollower.maxDistance;
+				jetpackerCamera.lerpSpeed = gears[inGear].cameraFollower.lerpSpeed;
 			}
 		}
 	}
@@ -126,9 +138,9 @@ public class ManualJetpack : SimpleJetpack {
 		wasInFlight = flightMode;
 		extendGroundControls = !flightMode;
 
-		float behind = jetpackerCamera.behind;
-		jetpackerCamera.behind = jetpackerCamera.above;
-		jetpackerCamera.above = behind;
+		//float behind = jetpackerCamera.behind;
+		//jetpackerCamera.behind = jetpackerCamera.above;
+		//jetpackerCamera.above = behind;
 		jetpackerCamera.negateAbove = flightMode;
 
 		// Disable mouse looks temporarily, to avoid unwanted corrections.
@@ -214,4 +226,15 @@ public class JetpackGear {
 	public float maxSpeed;	//should be taken out once 'RPM' is a thing
 	public float acceleration;
 	public float deceleration;
+	public CameraFollower cameraFollower;
 }
+
+[System.Serializable]
+public class CameraFollower {
+	public float behind = 5.0f;
+	public float above = 3.0f;
+	public float minDistance = 5.0f;
+	public float maxDistance = 10.0f;
+	public float lerpSpeed = 5.0f;
+}
+

@@ -992,7 +992,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 0}
-  focalPoint: {fileID: 0}
   look: {fileID: 0}
   negateBehind: 0
   behind: 10
@@ -1002,8 +1001,10 @@ MonoBehaviour:
   above: 5
   minAbove: 2.5
   maxAbove: 10
+  minDistance: 5
   maxDistance: 20
   lerpSpeed: 1
+  snapAbove: 1
 --- !u!1 &1068374610
 GameObject:
   m_ObjectHideFlags: 0
@@ -1084,7 +1085,9 @@ MonoBehaviour:
   camera: {fileID: 2124603023}
   hpattern: {fileID: 2124603021}
   stick: {fileID: 1435741911}
-  look: {fileID: 11400008, guid: f97b8dddd8214f34ca56a6bf45307b60, type: 2}
+  looks:
+  - {fileID: 1083087426}
+  - {fileID: 1953789604}
   mouseMoveThreshold: 50
   shifterSpots:
     gear1: {fileID: 121491326}
@@ -1178,32 +1181,75 @@ MonoBehaviour:
     maxSpeed: 20
     acceleration: 20
     deceleration: 0
+    cameraFollower:
+      behind: 10
+      above: 5
+      minDistance: 5
+      maxDistance: 10
+      lerpSpeed: 5
   - minSpeed: 0
     maxSpeed: 80
-    acceleration: 20
+    acceleration: 10
     deceleration: 5
+    cameraFollower:
+      behind: 10
+      above: 15
+      minDistance: 5
+      maxDistance: 14
+      lerpSpeed: 10
   - minSpeed: 25
     maxSpeed: 160
     acceleration: 40
     deceleration: 10
+    cameraFollower:
+      behind: 10
+      above: 15
+      minDistance: 5
+      maxDistance: 18
+      lerpSpeed: 5
   - minSpeed: 50
     maxSpeed: 320
     acceleration: 80
     deceleration: 20
+    cameraFollower:
+      behind: 10
+      above: 15
+      minDistance: 5
+      maxDistance: 22
+      lerpSpeed: 5
   - minSpeed: 100
     maxSpeed: 640
     acceleration: 160
     deceleration: 40
+    cameraFollower:
+      behind: 10
+      above: 15
+      minDistance: 5
+      maxDistance: 26
+      lerpSpeed: 5
   - minSpeed: 200
     maxSpeed: 960
     acceleration: 480
     deceleration: 80
+    cameraFollower:
+      behind: 10
+      above: 5
+      minDistance: 5
+      maxDistance: 30
+      lerpSpeed: 5
   - minSpeed: 0
     maxSpeed: 20
     acceleration: 20
     deceleration: 0
-  inGear: 0
+    cameraFollower:
+      behind: 10
+      above: 5
+      minDistance: 5
+      maxDistance: 10
+      lerpSpeed: 5
+  inGear: 6
   character: {fileID: 1083087416}
+  characterLook: {fileID: 0}
   cameraLook: {fileID: 1016705729}
   pitchSpeed: 90
   yawSpeed: 90
@@ -1312,8 +1358,8 @@ MonoBehaviour:
   minimumX: 0
   maximumX: 0
   clampY: 1
-  minimumY: 0
-  maximumY: 0
+  minimumY: -70
+  maximumY: 70
 --- !u!1 &1170593296
 GameObject:
   m_ObjectHideFlags: 0
@@ -1732,75 +1778,6 @@ Transform:
   m_LocalScale: {x: .5, y: .5, z: .5}
   m_Children: []
   m_Father: {fileID: 991674139}
---- !u!1 &1664996101
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1664996102}
-  - 33: {fileID: 1664996105}
-  - 65: {fileID: 1664996104}
-  - 23: {fileID: 1664996103}
-  m_Layer: 0
-  m_Name: Focal Point
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1664996102
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1664996101}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2}
-  m_LocalScale: {x: .200000003, y: .200000003, z: .200000003}
-  m_Children: []
-  m_Father: {fileID: 1848371272}
---- !u!23 &1664996103
-Renderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1664996101}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_LightmapIndex: 255
-  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
-  m_Materials:
-  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortingLayerID: 0
---- !u!65 &1664996104
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1664996101}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!33 &1664996105
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1664996101}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1739350958
 GameObject:
   m_ObjectHideFlags: 0
@@ -1872,54 +1849,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jetpack: {fileID: 1083087422}
---- !u!1 &1848371271
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1848371272}
-  - 114: {fileID: 1848371273}
-  m_Layer: 0
-  m_Name: Sight
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1848371272
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1848371271}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.083190918, y: -2.18346405, z: 5.5188446}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1664996102}
-  m_Father: {fileID: 1953789603}
---- !u!114 &1848371273
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1848371271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68ec2fe99d1108b9d0006a298d76c639, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  axes: 0
-  sensitivityX: 15
-  sensitivityY: 15
-  clampX: 1
-  minimumX: 0
-  maximumX: 0
-  clampY: 1
-  minimumY: -30
-  maximumY: 90
 --- !u!1 &1953789597
 GameObject:
   m_ObjectHideFlags: 0
@@ -1953,18 +1882,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 1083087417}
-  focalPoint: {fileID: 1664996102}
   look: {fileID: 1953789604}
   negateBehind: 0
   behind: 5
-  minBehind: 5
-  maxBehind: 20
+  minBehind: 2.5
+  maxBehind: 10
   negateAbove: 0
   above: 2
-  minAbove: 2.5
-  maxAbove: 10
+  minAbove: 1
+  maxAbove: 4
+  minDistance: 5
   maxDistance: 10
   lerpSpeed: 5
+  snapAbove: 0
 --- !u!81 &1953789599
 AudioListener:
   m_ObjectHideFlags: 0
@@ -2026,7 +1956,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2124603022}
-  - {fileID: 1848371272}
   m_Father: {fileID: 0}
 --- !u!114 &1953789604
 MonoBehaviour:
@@ -2046,8 +1975,8 @@ MonoBehaviour:
   minimumX: 0
   maximumX: 0
   clampY: 1
-  minimumY: -30
-  maximumY: 30
+  minimumY: 0
+  maximumY: 35
 --- !u!1 &1990802894
 GameObject:
   m_ObjectHideFlags: 0

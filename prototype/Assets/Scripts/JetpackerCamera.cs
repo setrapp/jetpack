@@ -3,7 +3,6 @@ using System.Collections;
 
 public class JetpackerCamera : MonoBehaviour {
 	public Transform character;
-	public Transform focalPoint;
 	public MouseLook look;
 	public bool negateBehind = false;
 	public float behind = 10.0f;
@@ -13,8 +12,10 @@ public class JetpackerCamera : MonoBehaviour {
 	public float above = 5.0f;
 	public float minAbove = 2.5f;
 	public float maxAbove = 10.0f;
+	public float minDistance = 5.0f;
 	public float maxDistance = 20.0f;
-	public float lerpSpeed = 1.0f;
+	public float lerpSpeed = 5.0f;
+	public bool snapAbove = false;
 
 	// Update is called once per frame
 	void Update () {
@@ -36,6 +37,9 @@ public class JetpackerCamera : MonoBehaviour {
 		// Stay directly above and behind the character, within a distance range.
 		Vector3 characterSpacePos = character.InverseTransformPoint(transform.position);
 		characterSpacePos.x = 0;
+		if (snapAbove) {
+			//characterSpacePos.y = above;
+		}
 		// TODO Make above and behind limits work.
 		/*if (Mathf.Abs(characterSpacePos.z) > Mathf.Abs(maxBehind)) {
 			characterSpacePos.z = maxBehind * (negateBehind ? 1 : -1);
@@ -64,22 +68,29 @@ public class JetpackerCamera : MonoBehaviour {
 		float toDesiredDist = toDesired.magnitude;
 		Vector3 toDesiredDir = toDesired / toDesiredDist;
 
-		// Stay within a maximum range from the character.
+		// Stay within a distance range from the character.
 		// TODO Take this out when behind and above limits work.
+		/*if (fromCharacterDist < minDistance) {
+			transform.position = character.position + (fromCharacterDir * minDistance);
+		}
 		if (fromCharacterDist > maxDistance) {
 			transform.position = character.position + (fromCharacterDir * maxDistance);
-		}
+		}*/
 
 		// Move towards desired follow position.
-		if (toDesiredDist > lerpSpeedDT) {
+		if (lerpSpeed > 0 && (fromCharacterDist * fromCharacterDist) < (behind * behind) + (above * above) && toDesiredDist > lerpSpeedDT) {
 			transform.position += toDesiredDir * lerpSpeedDT;
+			Debug.Log("lerp");
 		} else {
 			transform.position = character.position + follow;
+			lerpSpeed = 0;
+			Debug.Log("no lerp");
 		}
 
 		// Look at focal point.
 		transform.LookAt(character);
 
+		// TODO Figure out how to add in control of vertical rotation.
 		if (look != null) {
 			//look.ForceRotation(false, true);
 		}

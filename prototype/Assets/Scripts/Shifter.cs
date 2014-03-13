@@ -41,7 +41,7 @@ public class Shifter : MonoBehaviour {
 		}
 
 		for (int i = 0; i < looks.Count; i++) {
-			//looks[i].enabled = !shifting;
+			looks[0].enabled = !shifting;
 		}
 	}
 
