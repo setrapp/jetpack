@@ -3,7 +3,7 @@ using System.Collections;
 
 public class SimpleJetpack : MonoBehaviour
 {
-	private CharacterMotor characterMotor = null;
+	protected CharacterMotor characterMotor = null;
 	private bool nextJumpActivates = false;
 	public bool activated = false;
 	private bool wasActivated = false;

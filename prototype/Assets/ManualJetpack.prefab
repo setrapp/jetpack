@@ -1141,6 +1141,7 @@ MonoBehaviour:
   readyToRotateBody: 0
   normalFocalPoint: {fileID: 100042}
   flightFocalPoint: {fileID: 100004}
+  cameraFocalPoint: {fileID: 0}
   cameraSwitchSpeed: 10
   gears:
   - minSpeed: 0
@@ -1172,12 +1173,13 @@ MonoBehaviour:
     acceleration: 20
     deceleration: 0
   inGear: 0
-  characterLook: {fileID: 11400008}
+  character: {fileID: 0}
   cameraLook: {fileID: 11400002}
   pitchSpeed: 90
   yawSpeed: 90
   rollSpeed: 90
   shifter: {fileID: 11400022}
+  jetpackerCamera: {fileID: 0}
 --- !u!114 &11400016
 MonoBehaviour:
   m_ObjectHideFlags: 1

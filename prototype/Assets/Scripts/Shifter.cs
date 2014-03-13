@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Shifter : MonoBehaviour {
 	private bool shifting = false;
 	public Camera camera;
 	public GameObject hpattern = null;
 	public GameObject stick = null;
-	public MouseLook look = null;
+	public List<MouseLook> looks = null;
 	private bool blocked = false;
 	private Vector3 oldMousePos;
 	public float mouseMoveThreshold;
@@ -39,12 +40,14 @@ public class Shifter : MonoBehaviour {
 			shifting = false;
 		}
 
-		look.enabled = !shifting;
+		for (int i = 0; i < looks.Count; i++) {
+			//looks[i].enabled = !shifting;
+		}
 	}
 
 	void OnGUI() {
 		if (shifting) {
-				GUI.DrawTexture (new Rect (handPos.x - 10, handPos.y - 10, 20, 20), handTexture);
+			GUI.DrawTexture (new Rect (handPos.x - 10, handPos.y - 10, 20, 20), handTexture);
 		}
 	}
 }

@@ -88,6 +88,15 @@ public class MouseLook : MonoBehaviour {
 			transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
 		}
 	}
+
+	public void ForceRotation(bool forceX, bool forceY) {
+		if (forceX) {
+			transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
+		}
+		if (forceY) {
+			transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
+		}
+	}
 	
 	void Start ()
 	{

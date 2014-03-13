@@ -6,15 +6,18 @@ public class ManualJetpack : SimpleJetpack {
 	private bool wasInFlight = false;
 	public GameObject normalFocalPoint = null;
 	public GameObject flightFocalPoint = null;
+	public GameObject cameraFocalPoint = null;
 	public float cameraSwitchSpeed;
 	public JetpackGear[] gears = null;
 	public int inGear = 0;	//Gear 0 is neutral and Gear 6 is hover
-	public MouseLook characterLook = null;
+	public GameObject character = null;
+	//public MouseLook characterLook = null;
 	public MouseLook cameraLook = null;
 	public float pitchSpeed, yawSpeed, rollSpeed;
 	private bool forcingRotate = false;
 	public Shifter shifter = null;
 	private bool shifting = false;
+	public JetpackerCamera jetpackerCamera = null;
 
 	void Update () {
 		EnterJetpackFrame();
@@ -45,7 +48,7 @@ public class ManualJetpack : SimpleJetpack {
 		if (InManualGear()) {
 			if (readyToRotateBody) {
 				// Pitch
-				float pitchChange = 0;
+				/*float pitchChange = 0;
 				if (cameraLook.ClampingY > 0) {
 					pitchChange = pitchSpeed * Time.deltaTime;
 				} else if(cameraLook.ClampingY < 0) {
@@ -69,7 +72,7 @@ public class ManualJetpack : SimpleJetpack {
 				// Roll
 				if (Input.GetAxis("Horizontal") != 0) {
 					transform.Rotate(-Vector3.up, rollSpeed * Input.GetAxis("Horizontal") * Time.deltaTime * speedScale);
-				}
+				}*/
 			} else if(Input.GetAxis("Horizontal") == 0) {
 				readyToRotateBody = !forcingRotate;
 			}
@@ -80,7 +83,22 @@ public class ManualJetpack : SimpleJetpack {
 			}
 		}
 
+		if (wasInFlight && characterMotor.grounded) {
+			//ToggleFlightMode(false);
+			//characterLook.transform.rotation = Quaternion.identity;
+			//characterLook.transform.forward = Vector3.Cross(Vector3.up, characterLook.transform.right);
+			//characterLook.transform.up = -Vector3.up;
+			//characterLook.ResetLook();
+		}
+
+
 		ExitJetpackFrame();
+
+		// Temporary test
+		if (wasInFlight) {
+			//cameraLook.transform.LookAt (normalFocalPoint.transform.position);
+			//cameraLook.transform.Translate((cameraLook.transform.InverseTransformDirection(-characterMotor.movement.velocity)) * Time.deltaTime);
+		}
 	}
 
 	public bool InManualGear() {
@@ -106,10 +124,16 @@ public class ManualJetpack : SimpleJetpack {
 			return;
 		}
 		wasInFlight = flightMode;
+		extendGroundControls = !flightMode;
+
+		float behind = jetpackerCamera.behind;
+		jetpackerCamera.behind = jetpackerCamera.above;
+		jetpackerCamera.above = behind;
+		jetpackerCamera.negateAbove = flightMode;
 
 		// Disable mouse looks temporarily, to avoid unwanted corrections.
-		characterLook.enabled = false;
-		cameraLook.enabled = false;
+		//characterLook.enabled = false;
+		//cameraLook.enabled = false;
 
 		// Retrieve the parent of the camera so that the camera rotation does not conflict with MouseLook later.
 		Transform cameraHolder = cameraLook.transform.parent;
@@ -119,30 +143,36 @@ public class ManualJetpack : SimpleJetpack {
 			deactivateOnRelease = false;
 			readyToRotateBody = false;
 
+			// Rotate camera's focal point to point up.
+			cameraFocalPoint.transform.forward = transform.up;
+
 			// Start using MouseLook attached camera.
-			shifter.look = cameraLook;
-			cameraLook.ResetLook();
+			//shifter.look = cameraLook;
+			//cameraLook.ResetLook();
 
 			//Rotate towards flight focal point.
-			Quaternion targetRotation = Quaternion.LookRotation(flightFocalPoint.transform.position - cameraHolder.position, -characterLook.transform.forward);
-			StartCoroutine("RotateOverTime", new RotateOverTimeInfo(cameraHolder, targetRotation, cameraSwitchSpeed));
+			//Quaternion targetRotation = Quaternion.LookRotation(flightFocalPoint.transform.position - cameraHolder.position, -character.transform.forward);
+			//StartCoroutine("RotateOverTime", new RotateOverTimeInfo(cameraHolder, targetRotation, cameraSwitchSpeed));
 		} else {
 			deactivateOnRelease = false;
 
+			// Rotate camera's focal point to point forward.
+			cameraFocalPoint.transform.forward = transform.forward;
+
 			// Start using MouseLook attached character.
-			shifter.look = characterLook;
+			//shifter.look = characterLook;
 
 			//Rotate towards non-flight focal point and reset crosshairs to center
-			Quaternion targetRotation = Quaternion.LookRotation(normalFocalPoint.transform.position - cameraHolder.position, characterLook.transform.up);
-			StartCoroutine("RotateOverTime", new RotateOverTimeInfo(cameraHolder, targetRotation, cameraSwitchSpeed / 2));
-			StartCoroutine("RotateOverTime", new RotateOverTimeInfo(cameraLook.transform, targetRotation, cameraSwitchSpeed / 2));
+			//Quaternion targetRotation = Quaternion.LookRotation(normalFocalPoint.transform.position - cameraHolder.position, character.transform.up);
+			//StartCoroutine("RotateOverTime", new RotateOverTimeInfo(cameraHolder, targetRotation, cameraSwitchSpeed / 2));
+			//StartCoroutine("RotateOverTime", new RotateOverTimeInfo(cameraLook.transform, targetRotation, cameraSwitchSpeed / 2));
 		}
 
 		// Actually determine which MouseLook should be used.
-		if (characterLook != null && cameraLook != null) {
-			characterLook.enabled = !flightMode;
-			cameraLook.enabled = flightMode;
-		}
+		/*if (characterLook != null && cameraLook != null) {
+			//characterLook.enabled = !flightMode;
+			//cameraLook.enabled = flightMode;
+		}*/
 	}
 
 	// Rotate to align with given vector overtime.
