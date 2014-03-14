@@ -1,0 +1,718 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+    <Node Id="(@1 @120)" Category="CodeSchema_ProjectItem" Bounds="525.442266057798,886.404114529651,111.252233181116,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\alignednew.h" Label="alignednew.h" />
+    <Node Id="(@1 @132)" Category="CodeSchema_ProjectItem" Bounds="119.618899847783,886.404114529651,100.15556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\shaders\lighting.fxh" Label="lighting.fxh" />
+    <Node Id="(@1 @133)" Category="CodeSchema_ProjectItem" Bounds="249.774466362232,886.404114529651,106.722233181116,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\shaders\common.fxh" Label="common.fxh" />
+    <Node Id="(@1 @134)" Category="CodeSchema_ProjectItem" Bounds="666.694499238914,886.404114529651,111.722233181116,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\shaders\structures.fxh" Label="structures.fxh" />
+    <Node Id="(@1 @137)" Category="CodeSchema_ProjectItem" Bounds="1244.77343196338,886.404114529651,118.078899847783,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\inc\simplemath.inl" Label="simplemath.inl" />
+    <Node Id="(@1 @17)" Category="CodeSchema_ProjectItem" Bounds="1549.17789832561,886.404114529651,126.478899847783,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\demandcreate.h" Label="demandcreate.h" />
+    <Node Id="(@1 @26)" Category="CodeSchema_ProjectItem" Bounds="1392.85233181116,886.404114529651,126.32556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\inc\primitivebatch.h" Label="primitivebatch.h" />
+    <Node Id="(@1 @49)" Category="CodeSchema_ProjectItem" Bounds="358.567799695566,942.406347710767,155.27556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\sharedresourcepool.h" Label="sharedresourcepool.h" />
+    <Node Id="(@1 @5)" Category="CodeSchema_ProjectItem" Bounds="950.682298934481,886.404114529651,116.788899847783,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\teapotdata.inc" Label="teapotdata.inc" />
+    <Node Id="(@1 @72)" Category="CodeSchema_ProjectItem" Bounds="1097.47119878226,886.404114529651,117.302233181116,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\binaryreader.h" Label="binaryreader.h" />
+    <Node Id="(@1 @73)" Category="CodeSchema_ProjectItem" Bounds="20,942.406347710767,138.232233181116,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\inc\wictextureloader.h" Label="wictextureloader.h" />
+    <Node Id="(@1 @74)" Category="CodeSchema_ProjectItem" Bounds="188.232233181116,942.406347710767,140.33556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\inc\ddstextureloader.h" Label="ddstextureloader.h" />
+    <Node Id="(@1 @75)" Category="CodeSchema_ProjectItem" Bounds="1705.6567981734,886.404114529651,127.68556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\constantbuffer.h" Label="constantbuffer.h" />
+    <Node Id="(@1 @8)" Category="CodeSchema_ProjectItem" Bounds="386.496699543349,886.404114529651,108.94556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\inc\screengrab.h" Label="screengrab.h" />
+    <Node Id="(@1 @86)" Category="CodeSchema_ProjectItem" Bounds="20,886.404114529651,69.6188998477829,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\dds.h" Label="dds.h" />
+    <Node Id="(@1 @89)" Category="CodeSchema_ProjectItem" Bounds="1863.34236468784,886.404114529651,128.162233181116,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\inc\commonstates.h" Label="commonstates.h" />
+    <Node Id="(@1 @98)" Category="CodeSchema_ProjectItem" Bounds="2021.50459786896,886.404114529651,134.392233181116,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\platformhelpers.h" Label="platformhelpers.h" />
+    <Node Id="(@3 @115)" Category="CodeSchema_ProjectItem" Bounds="1325.88716622796,432.015632267814,127.475566514449,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\keyboardinput.h" Label="keyboardinput.h" />
+    <Node Id="(@3 @116)" Category="CodeSchema_ProjectItem" Bounds="729.464900170159,432.015632267814,113.52556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\mouseinput.h" Label="mouseinput.h" />
+    <Node Id="(@3 @117)" Category="CodeSchema_ProjectItem" Bounds="793.863800017942,376.013399086698,77.9988998477829,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\input.h" Label="input.h" />
+    <Node Id="(@3 @123)" Category="CodeSchema_ProjectItem" Bounds="591.526000322376,376.013399086698,64.7488998477829,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\sfx.h" Label="sfx.h" />
+    <Node Id="(@3 @16)" Category="CodeSchema_ProjectItem" Bounds="1257.87273274241,376.013399086698,98.1788998477832,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\response.h" Label="response.h" />
+    <Node Id="(@3 @18)" Category="CodeSchema_ProjectItem" Bounds="1386.05163259019,376.013399086698,105.788899847783,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\gamestate.h" Label="gamestate.h" />
+    <Node Id="(@3 @19)" Category="CodeSchema_ProjectItem" Bounds="901.862699865725,376.013399086698,79.9622331811163,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\sprite.h" Label="sprite.h" />
+    <Node Id="(@3 @192)" Category="CodeSchema_ProjectItem" Bounds="1020.23269986573,432.015632267814,120.798899847783,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\gametimer.cpp" Label="gametimer.cpp" />
+    <Node Id="(@3 @193)" Category="CodeSchema_ProjectItem" Bounds="1011.82493304684,376.013399086698,90.4488998477832,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\dxerr.cpp" Label="dxerr.cpp" />
+    <Node Id="(@3 @76)" Category="CodeSchema_ProjectItem" Bounds="1483.36273274241,432.015632267814,130.018899847783,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\soundmanager.h" Label="soundmanager.h" />
+    <Node Id="(@3 @77)" Category="CodeSchema_ProjectItem" Bounds="1171.03159971351,432.015632267814,124.855566514449,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\inputmanager.h" Label="inputmanager.h" />
+    <Node Id="(@3 @80)" Category="CodeSchema_ProjectItem" Bounds="591.526000322376,432.015632267814,107.938899847783,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\gametimer.h" Label="gametimer.h" />
+    <Node Id="(@3 @81)" Category="CodeSchema_ProjectItem" Bounds="872.990466684609,432.015632267814,117.242233181116,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\fontrenderer.h" Label="fontrenderer.h" />
+    <Node Id="(@3 @82)" Category="CodeSchema_ProjectItem" Bounds="1132.27383289462,376.013399086698,95.5988998477831,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\renderer.h" Label="renderer.h" />
+    <Node Id="(@3 @85)" Category="CodeSchema_ProjectItem" Bounds="686.274900170159,376.013399086698,77.588899847783,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\dxerr.h" Label="dxerr.h" />
+    <Node Id="@100" Category="CodeSchema_ProjectItem" FilePath="$(ProgramFiles)\windows kits\8.0\include\um\directxcolors.h" Label="directxcolors.h" />
+    <Node Id="@102" Category="CodeSchema_ProjectItem" Bounds="1449.55491675623,774.39962405837,85.1622331811163,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\inc\effects.h" Label="effects.h" />
+    <Node Id="@104" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\float.h" Label="float.h" />
+    <Node Id="@106" Category="CodeSchema_ProjectItem" Bounds="1067.87266698904,152.004466362233,113.05556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\gameobject.h" Label="gameobject.h" />
+    <Node Id="@108" Category="CodeSchema_ProjectItem" Bounds="1269.17433365571,208.006699543349,70.4522331811163,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\rect.h" Label="rect.h" />
+    <Node Id="@11" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\malloc.h" Label="malloc.h" />
+    <Node Id="@110" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\stdint.h" Label="stdint.h" />
+    <Node Id="@112" Category="CodeSchema_ProjectItem" Bounds="456.494202744446,774.39964974894,101.60556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\inc\spritefont.h" Label="spritefont.h" />
+    <Node Id="@114" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\assert.h" Label="assert.h" />
+    <Node Id="@119" Category="CodeSchema_ProjectItem" Bounds="1284.10766698904,152.004466362233,80.5855665144497,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\menu.h" Label="menu.h" />
+    <Node Id="@122" Category="CodeSchema_ProjectItem" FilePath="$(VsSolution)\directx11_starter\vertex.h" Label="vertex.h" />
+    <Node Id="@125" Category="CodeSchema_ProjectItem" Bounds="1147.66600032238,264.008932724465,101.468899847783,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\rigidbody.h" Label="rigidbody.h" />
+    <Node Id="@127" Category="CodeSchema_ProjectItem" FilePath="$(ProgramFiles)\windows kits\8.0\include\shared\winapifamily.h" Label="winapifamily.h" />
+    <Node Id="@129" Category="CodeSchema_ProjectItem" Bounds="1158.24766698904,208.006699543349,80.3055665144498,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\entity.h" Label="entity.h" />
+    <Node Id="@13" Category="CodeSchema_ProjectItem" Bounds="873.956000322376,96.0022331811164,110.888899847783,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\demogame.h" Label="demogame.h" />
+    <Node Id="@131" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\cmath" Label="cmath" />
+    <Node Id="@136" Category="CodeSchema_ProjectItem" FilePath="$(ProgramFiles)\windows kits\8.0\include\um\directxmathmisc.inl" Label="directxmathmisc.inl" />
+    <Node Id="@139" Category="CodeSchema_ProjectItem" FilePath="$(ProgramFiles)\windows kits\8.0\include\um\directxmathvector.inl" Label="directxmathvector.inl" />
+    <Node Id="@141" Category="CodeSchema_ProjectItem" FilePath="$(ProgramFiles)\windows kits\8.0\include\um\directxmathconvert.inl" Label="directxmathconvert.inl" />
+    <Node Id="@143" Category="CodeSchema_ProjectItem" FilePath="$(ProgramFiles)\windows kits\8.0\include\um\directxmathmatrix.inl" Label="directxmathmatrix.inl" />
+    <Node Id="@145" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\xtr1common" Label="xtr1common" />
+    <Node Id="@147" Category="CodeSchema_ProjectItem" Bounds="606.452666057798,718.397419808684,121.80556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\screengrab.cpp" Label="screengrab.cpp" />
+    <Node Id="@149" Category="CodeSchema_ProjectItem" FilePath="$(VsSolution)\directx11_starter\toolkit\audio\dynamicsoundeffectinstance.cpp" Label="dynamicsoundeffectinstance.cpp" />
+    <Node Id="@15" Category="CodeSchema_ProjectItem" Bounds="716.02433365571,264.008932724465,92.7522331811163,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\dxgame.h" Label="dxgame.h" />
+    <Node Id="@151" Category="CodeSchema_ProjectItem" FilePath="$(VsSolution)\directx11_starter\toolkit\audio\soundeffectinstance.cpp" Label="soundeffectinstance.cpp" />
+    <Node Id="@153" Category="CodeSchema_ProjectItem" Bounds="591.526000322376,40.0000000000001,123.748899847783,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\demogame.cpp" Label="demogame.cpp" />
+    <Node Id="@155" Category="CodeSchema_ProjectItem" Bounds="748.59433365571,208.006699543349,105.612233181116,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\dxgame.cpp" Label="dxgame.cpp" />
+    <Node Id="@157" Category="CodeSchema_ProjectItem" FilePath="$(VsSolution)\directx11_starter\toolkit\audio\audioengine.cpp" Label="audioengine.cpp" />
+    <Node Id="@159" Category="CodeSchema_ProjectItem" Bounds="1905.09133150673,718.397388191781,163.302233181116,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\geometricprimitive.cpp" Label="geometricprimitive.cpp" />
+    <Node Id="@161" Category="CodeSchema_ProjectItem" Bounds="20,718.397388971234,82.6388998477829,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\pch.cpp" Label="pch.cpp" />
+    <Node Id="@163" Category="CodeSchema_ProjectItem" Bounds="758.258332572248,718.397407669099,122.382233181116,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\spritebatch.cpp" Label="spritebatch.cpp" />
+    <Node Id="@165" Category="CodeSchema_ProjectItem" Bounds="437.266999543349,718.397407691211,139.185566514449,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\primitivebatch.cpp" Label="primitivebatch.cpp" />
+    <Node Id="@167" Category="CodeSchema_ProjectItem" Bounds="1581.62333181116,718.397369811783,166.598899847783,26.0022331811164" FilePath="$(VsSolution)\directx11_starter\toolkit\src\modelloadsdkmesh.cpp" Label="modelloadsdkmesh.cpp" />
+    <Node Id="@169" Category="CodeSchema_ProjectItem" Bounds="1035.52600032238,208.006699543349,91.7488998477829,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\mesh.cpp" Label="mesh.cpp" />
+    <Node Id="@171" Category="CodeSchema_ProjectItem" FilePath="$(VsSolution)\directx11_starter\toolkit\audio\wavebank.cpp" Label="wavebank.cpp" />
+    <Node Id="@173" Category="CodeSchema_ProjectItem" Bounds="1433.33433365571,264.008932724465,106.132233181116,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\material.cpp" Label="material.cpp" />
+    <Node Id="@175" Category="CodeSchema_ProjectItem" Bounds="1778.22233165895,718.397386346716,96.8688998477828,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\model.cpp" Label="model.cpp" />
+    <Node Id="@177" Category="CodeSchema_ProjectItem" FilePath="$(VsSolution)\directx11_starter\toolkit\audio\soundcommon.cpp" Label="soundcommon.cpp" />
+    <Node Id="@179" Category="CodeSchema_ProjectItem" Bounds="1002.06001387813,606.39294648898,139.99556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\effectcommon.cpp" Label="effectcommon.cpp" />
+    <Node Id="@181" Category="CodeSchema_ProjectItem" Bounds="1408.73433196338,718.397390877254,142.888899847783,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\modelloadcmo.cpp" Label="modelloadcmo.cpp" />
+    <Node Id="@183" Category="CodeSchema_ProjectItem" FilePath="$(VsSolution)\directx11_starter\toolkit\audio\wavfilereader.cpp" Label="wavfilereader.cpp" />
+    <Node Id="@185" Category="CodeSchema_ProjectItem" FilePath="$(VsSolution)\directx11_starter\toolkit\audio\wavebankreader.cpp" Label="wavebankreader.cpp" />
+    <Node Id="@187" Category="CodeSchema_ProjectItem" Bounds="132.638999847783,718.397369811783,130.162233181116,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\binaryreader.cpp" Label="binaryreader.cpp" />
+    <Node Id="@189" Category="CodeSchema_ProjectItem" Bounds="507.652094817692,662.395114122923,151.092233181116,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\wictextureloader.cpp" Label="wictextureloader.cpp" />
+    <Node Id="@191" Category="CodeSchema_ProjectItem" Bounds="153.434095122126,662.395136630667,153.19556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\ddstextureloader.cpp" Label="ddstextureloader.cpp" />
+    <Node Id="@195" Category="CodeSchema_ProjectItem" Bounds="852.560094513257,662.395148864944,123.59556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\vertextypes.cpp" Label="vertextypes.cpp" />
+    <Node Id="@197" Category="CodeSchema_ProjectItem" Bounds="336.629761636575,662.395174510095,141.022233181116,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\commonstates.cpp" Label="commonstates.cpp" />
+    <Node Id="@199" Category="CodeSchema_ProjectItem" Bounds="1189.11142754216,662.395142021409,119.632233181116,26.0022331811164" FilePath="$(VsSolution)\directx11_starter\toolkit\src\basiceffect.cpp" Label="basiceffect.cpp" />
+    <Node Id="@2" Category="CodeSchema_PoundIncludeFile" Bounds="0,566.39286544893,2208.5625671592,422.015715442953" FilePath="$(VsSolution)\directx11_starter\toolkit\directxtk_desktop_2012.vcxproj" Group="Expanded" Label="directxtk_desktop_2012.vcxproj" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" />
+    <Node Id="@201" Category="CodeSchema_ProjectItem" Bounds="688.744427998808,662.395174487983,133.81556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\skinnedeffect.cpp" Label="skinnedeffect.cpp" />
+    <Node Id="@203" Category="CodeSchema_ProjectItem" FilePath="$(VsSolution)\directx11_starter\toolkit\audio\soundeffect.cpp" Label="soundeffect.cpp" />
+    <Node Id="@205" Category="CodeSchema_ProjectItem" Bounds="1006.15576102771,662.395215267147,152.95556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\dualtextureeffect.cpp" Label="dualtextureeffect.cpp" />
+    <Node Id="@207" Category="CodeSchema_ProjectItem" Bounds="1338.74376072327,662.395157696138,115.062233181116,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\dgsleffect.cpp" Label="dgsleffect.cpp" />
+    <Node Id="@209" Category="CodeSchema_ProjectItem" Bounds="788.451067800877,606.39286544893,183.608899847783,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\environmentmapeffect.cpp" Label="environmentmapeffect.cpp" />
+    <Node Id="@21" Category="CodeSchema_ProjectItem" Bounds="2038.12033397809,774.399621372898,150.442233181117,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\inc\geometricprimitive.h" Label="geometricprimitive.h" />
+    <Node Id="@211" Category="CodeSchema_ProjectItem" Bounds="1483.80609390439,662.395136630667,141.39556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\alphatesteffect.cpp" Label="alphatesteffect.cpp" />
+    <Node Id="@213" Category="CodeSchema_ProjectItem" Bounds="292.801333028899,718.397427137659,114.46556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\spritefont.cpp" Label="spritefont.cpp" />
+    <Node Id="@215" Category="CodeSchema_ProjectItem" Bounds="1277.67766698904,96.0022331811163,93.4455665144496,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\menu.cpp" Label="menu.cpp" />
+    <Node Id="@217" Category="CodeSchema_ProjectItem" Bounds="1067.77633226781,718.397449082433,151.54556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\dgsleffectfactory.cpp" Label="dgsleffectfactory.cpp" />
+    <Node Id="@219" Category="CodeSchema_ProjectItem" Bounds="1249.32199878226,718.397433491982,129.412233181116,26.0022331811164" FilePath="$(VsSolution)\directx11_starter\toolkit\src\effectfactory.cpp" Label="effectfactory.cpp" />
+    <Node Id="@221" Category="CodeSchema_ProjectItem" Bounds="1165.81766698904,40,93.1655665144497,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\entity.cpp" Label="entity.cpp" />
+    <Node Id="@23" Category="CodeSchema_ProjectItem" Bounds="919.514068909535,774.3996029929,69.7788998477829,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\pch.h" Label="pch.h" />
+    <Node Id="@25" Category="CodeSchema_ProjectItem" Bounds="608.887472927248,830.401881348535,109.522233181116,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\inc\spritebatch.h" Label="spritebatch.h" />
+    <Node Id="@28" Category="CodeSchema_ProjectItem" Bounds="1037.95600032238,264.008932724465,78.888899847783,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\mesh.h" Label="mesh.h" />
+    <Node Id="@30" Category="CodeSchema_ProjectItem" Bounds="808.416732420031,886.404114529651,112.26556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\inc\simplemath.h" Label="simplemath.h" />
+    <Node Id="@32" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\xtgmath.h" Label="xtgmath.h" />
+    <Node Id="@34" Category="CodeSchema_ProjectItem" FilePath="$(ProgramFiles)\Windows Kits\8.0\Include\um\DirectXMath.h" Label="DirectXMath.h" />
+    <Node Id="@36" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\math.h" Label="math.h" />
+    <Node Id="@38" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\use_ansi.h" Label="use_ansi.h" />
+    <Node Id="@4" Category="CodeSchema_PoundIncludeFile" Bounds="571.526000322376,0,1065.51056651445,478.01786544893" FilePath="$(VsSolution)\directx11_starter\directx11_starter.vcxproj" Group="Expanded" Label="directx11_starter.vcxproj" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" />
+    <Node Id="@40" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\xkeycheck.h" Label="xkeycheck.h" />
+    <Node Id="@42" Category="CodeSchema_ProjectItem" Bounds="1523.76433365571,320.011165905581,93.2722331811165,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\material.h" Label="material.h" />
+    <Node Id="@44" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\concurrencysal.h" Label="concurrencysal.h" />
+    <Node Id="@46" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\sal.h" Label="sal.h" />
+    <Node Id="@48" Category="CodeSchema_ProjectItem" Bounds="1614.5198567418,774.399627869297,84.0088998477829,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\inc\model.h" Label="model.h" />
+    <Node Id="@51" Category="CodeSchema_ProjectItem" Bounds="905.441000322376,264.008932724465,101.918899847783,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\transform.h" Label="transform.h" />
+    <Node Id="@53" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\emmintrin.h" Label="emmintrin.h" />
+    <Node Id="@55" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\xmmintrin.h" Label="xmmintrin.h" />
+    <Node Id="@57" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\mmintrin.h" Label="mmintrin.h" />
+    <Node Id="@59" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\arm_neon.h" Label="arm_neon.h" />
+    <Node Id="@61" Category="CodeSchema_ProjectItem" FilePath="$(ProgramFiles)\windows kits\8.0\include\um\directxcollision.h" Label="directxcollision.h" />
+    <Node Id="@63" Category="CodeSchema_ProjectItem" Bounds="910.640665753364,718.39738204606,127.13556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\effectcommon.h" Label="effectcommon.h" />
+    <Node Id="@65" Category="CodeSchema_ProjectItem" Bounds="1028.67100032238,320.011165905581,97.458899847783,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\common.h" Label="common.h" />
+    <Node Id="@67" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\crtwrn.h" Label="crtwrn.h" />
+    <Node Id="@69" Category="CodeSchema_ProjectItem" FilePath="$(ProgramFiles)\windows kits\8.0\include\um\x3daudio.h" Label="x3daudio.h" />
+    <Node Id="@7" Category="CodeSchema_ProjectItem" Bounds="884.932666989043,208.006699543349,88.9355665144496,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\camera.h" Label="camera.h" />
+    <Node Id="@71" Category="CodeSchema_ProjectItem" FilePath="$(VsSolution)\directx11_starter\toolkit\inc\audio.h" Label="audio.h" />
+    <Node Id="@79" Category="CodeSchema_ProjectItem" Bounds="1925.61454064687,796.35053300708,82.5055665144496,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\src\bezier.h" Label="bezier.h" />
+    <Node Id="@84" Category="CodeSchema_ProjectItem" FilePath="$(ProgramFiles)\windows kits\8.0\include\um\directxpackedvector.h" Label="directxpackedvector.h" />
+    <Node Id="@88" Category="CodeSchema_ProjectItem" Bounds="1278.54360534638,774.399640850216,110.73556651445,26.0022331811163" FilePath="$(VsSolution)\directx11_starter\toolkit\inc\vertextypes.h" Label="vertextypes.h" />
+    <Node Id="@91" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\vadefs.h" Label="vadefs.h" />
+    <Node Id="@93" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\crtdefs.h" Label="crtdefs.h" />
+    <Node Id="@95" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\yvals.h" Label="yvals.h" />
+    <Node Id="@97" Category="CodeSchema_ProjectItem" FilePath="$(VsInstallDir)\vc\include\codeanalysis\sourceannotations.h" Label="sourceannotations.h" />
+    <Node Id="C/C++ Standard Library Indirectly Included" Category="CodeSchema_PoundIncludeGroup" Group="Collapsed" Label="Indirectly Included" />
+    <Node Id="G2" Category="CodeSchema_PoundIncludeGroup" Group="Collapsed" Label="C/C++ Standard Library" />
+    <Node Id="G4" Category="CodeSchema_PoundIncludeGroup" Group="Collapsed" Label="Windows SDK" />
+    <Node Id="OthersGroup" Category="CodeSchema_PoundIncludeGroup" Group="Collapsed" Label="Others" />
+    <Node Id="PoundIncludeGraphExternalsGroup" Category="Externals" Bounds="1060.7862835796,509.70536544893,86.99,25" Group="Collapsed" Label="Externals" />
+    <Node Id="Windows SDK Indirectly Included" Category="CodeSchema_PoundIncludeGroup" Group="Collapsed" Label="Indirectly Included" />
+  </Nodes>
+  <Links>
+    <Link Source="@100" Target="@34" Category="PoundInclude" />
+    <Link Source="@102" Target="@34" Category="PoundInclude" />
+    <Link Source="@104" Target="@67" Category="PoundInclude" />
+    <Link Source="@104" Target="@93" Category="PoundInclude" />
+    <Link Source="@106" Target="@129" Category="PoundInclude" Bounds="1141.57983398438,178.006698608398,32.4647216796875,24.5688781738281" />
+    <Link Source="@108" Target="@34" Category="PoundInclude" />
+    <Link Source="@11" Target="@93" Category="PoundInclude" />
+    <Link Source="@110" Target="@93" Category="PoundInclude" />
+    <Link Source="@112" Target="@25" Category="PoundInclude" Bounds="543.594565015446,800.401882930056,75.2835589551394,26.9651683093377" />
+    <Link Source="@114" Target="@93" Category="PoundInclude" />
+    <Link Source="@119" Target="@108" Category="PoundInclude" Bounds="1312.07043457031,178.006698608398,7.6868896484375,21.5242919921875" />
+    <Link Source="@119" Target="@129" Category="PoundInclude" Bounds="1235.87609863281,178.006698608398,59.27294921875,26.3446350097656" />
+    <Link Source="@119" Target="@34" Category="PoundInclude" />
+    <Link Source="@119" Target="@65" Category="PoundInclude" Bounds="1134.96984863281,178.006698608398,235.430541992188,144.00212097168" />
+    <Link Source="@122" Target="@34" Category="PoundInclude" />
+    <Link Source="@125" Target="@34" Category="PoundInclude" />
+    <Link Source="@129" Target="@122" Category="PoundInclude" />
+    <Link Source="@129" Target="@125" Category="PoundInclude" Bounds="1198.400390625,234.008926391602,0,21" />
+    <Link Source="@129" Target="@28" Category="PoundInclude" Bounds="1113.65869140625,234.008926391602,56.651123046875,26.2198028564453" />
+    <Link Source="@129" Target="@42" Category="PoundInclude" Bounds="1238.55322265625,230.8486328125,323.99755859375,80.7105407714844" />
+    <Link Source="@129" Target="@51" Category="PoundInclude" Bounds="1015.61798095703,230.299743652344,142.629699707031,33.0065307617188" />
+    <Link Source="@129" Target="@65" Category="PoundInclude" Bounds="1134.912109375,234.008926391602,134.656005859375,86.7759552001953" />
+    <Link Source="@13" Target="@119" Category="PoundInclude" Bounds="984.844909667969,116.864143371582,290.351867675781,41.1654586791992" />
+    <Link Source="@13" Target="@122" Category="PoundInclude" />
+    <Link Source="@13" Target="@129" Category="PoundInclude" Bounds="954.240905761719,122.004463195801,195.926452636719,84.716178894043" />
+    <Link Source="@13" Target="@15" Category="PoundInclude" Bounds="717.400451660156,122.004463195801,162.783447265625,134.988792419434" />
+    <Link Source="@13" Target="@28" Category="PoundInclude" Bounds="946.811950683594,122.004463195801,106.500549316406,136.526390075684" />
+    <Link Source="@13" Target="@34" Category="PoundInclude" />
+    <Link Source="@13" Target="@65" Category="PoundInclude" Bounds="685.400451660156,118.734893798828,334.306396484375,209.112548828125" />
+    <Link Source="@13" Target="@7" Category="PoundInclude" Bounds="929.400451660156,122.004463195801,0,77.0022354125977" />
+    <Link Source="@131" Target="@32" Category="PoundInclude" />
+    <Link Source="@131" Target="@36" Category="PoundInclude" />
+    <Link Source="@131" Target="@95" Category="PoundInclude" />
+    <Link Source="@145" Target="@95" Category="PoundInclude" />
+    <Link Source="@147" Target="@23" Category="PoundInclude" Bounds="727.68165579989,743.167991153084,182.998956158461,35.70252565189" />
+    <Link Source="@149" Target="@23" Category="PoundInclude" />
+    <Link Source="@15" Target="@65" Category="PoundInclude" Bounds="808.776550292969,285.255035400391,211.033386230469,37.5185241699219" />
+    <Link Source="@151" Target="@23" Category="PoundInclude" />
+    <Link Source="@153" Target="@13" Category="PoundInclude" Bounds="714.166259765625,65.3309020996094,151.219177246094,30.6833724975586" />
+    <Link Source="@153" Target="@65" Category="PoundInclude" Bounds="653.400451660156,66.0022354125977,366.304565429688,261.98104095459" />
+    <Link Source="@155" Target="@15" Category="PoundInclude" Bounds="776.597717285156,234.008926391602,15.7487182617188,22.6144561767578" />
+    <Link Source="@157" Target="@23" Category="PoundInclude" />
+    <Link Source="@157" Target="@71" Category="PoundInclude" />
+    <Link Source="@159" Target="@102" Category="PoundInclude" Bounds="1543.66235351563,744.399597167969,386.031616210938,37.2909545898438" />
+    <Link Source="@159" Target="@21" Category="PoundInclude" Bounds="2016.13285447725,744.399621372898,59.5875285038173,26.3590913104721" />
+    <Link Source="@159" Target="@23" Category="PoundInclude" Bounds="998.279602050781,744.399597167969,931.414367675781,40.609375" />
+    <Link Source="@159" Target="@79" Category="PoundInclude" Bounds="1972.4056489653,744.399621372898,11.0220026924064,43.2299070780101" />
+    <Link Source="@159" Target="@88" Category="PoundInclude" Bounds="1398.18701171875,744.399597167969,531.506958007813,33.7293701171875" />
+    <Link Source="@161" Target="@23" Category="PoundInclude" Bounds="101.805313110352,743.474853515625,808.720687866211,41.6653442382813" />
+    <Link Source="@163" Target="@23" Category="PoundInclude" Bounds="850.779535135567,744.399640850215,63.9812134712822,26.5504287689706" />
+    <Link Source="@163" Target="@25" Category="PoundInclude" Bounds="689.041084573123,744.399640850215,112.323505346014,80.7488169627264" />
+    <Link Source="@163" Target="@88" Category="PoundInclude" Bounds="875.267395019531,744.399658203125,394.315490722656,36.9698486328125" />
+    <Link Source="@165" Target="@23" Category="PoundInclude" Bounds="576.44189453125,741.652770996094,334.131713867188,40.6810302734375" />
+    <Link Source="@167" Target="@102" Category="PoundInclude" Bounds="1540.71307020765,744.399602992899,84.0966715914099,27.2567383071015" />
+    <Link Source="@167" Target="@23" Category="PoundInclude" Bounds="998.272583007813,744.399597167969,593.810302734375,40.0428466796875" />
+    <Link Source="@167" Target="@48" Category="PoundInclude" Bounds="1659.80881590805,744.399602992899,3.16423098867813,21.0995542545515" />
+    <Link Source="@167" Target="@88" Category="PoundInclude" Bounds="1398.15306616244,744.399602992899,189.924301358041,32.1324051743868" />
+    <Link Source="@169" Target="@122" Category="PoundInclude" />
+    <Link Source="@169" Target="@28" Category="PoundInclude" Bounds="1078.97021484375,234.008926391602,1.5015869140625,21.0228729248047" />
+    <Link Source="@171" Target="@23" Category="PoundInclude" />
+    <Link Source="@171" Target="@71" Category="PoundInclude" />
+    <Link Source="@173" Target="@42" Category="PoundInclude" Bounds="1505.9013671875,290.011169433594,37.509765625,25.007568359375" />
+    <Link Source="@173" Target="@65" Category="PoundInclude" Bounds="1135.05786132813,286.168334960938,298.276489257813,39.5043334960938" />
+    <Link Source="@175" Target="@102" Category="PoundInclude" Bounds="1543.59362244042,739.506931464873,234.628709218528,39.2792758503663" />
+    <Link Source="@175" Target="@23" Category="PoundInclude" Bounds="998.280334472656,743.66845703125,780.979309082031,41.406005859375" />
+    <Link Source="@175" Target="@48" Category="PoundInclude" Bounds="1704.48533117388,744.399619527832,82.6746002454486,27.2138692685403" />
+    <Link Source="@177" Target="@23" Category="PoundInclude" />
+    <Link Source="@179" Target="@23" Category="PoundInclude" Bounds="904.527282714844,632.395202636719,137.453063964844,137.706787109375" />
+    <Link Source="@179" Target="@63" Category="PoundInclude" Bounds="980.18359375,632.395202636719,61.7967529296875,77.3257446289063" />
+    <Link Source="@181" Target="@102" Category="PoundInclude" Bounds="1482.95470012298,744.39962405837,4.52614923839269,21.1983887701193" />
+    <Link Source="@181" Target="@23" Category="PoundInclude" Bounds="998.254699707031,744.399597167969,420.780334472656,38.9427490234375" />
+    <Link Source="@181" Target="@48" Category="PoundInclude" Bounds="1521.11801665736,744.39962405837,86.6468346084744,27.5165279779641" />
+    <Link Source="@181" Target="@88" Category="PoundInclude" Bounds="1376.27287088984,744.39962405837,69.9494282776095,26.7819455855847" />
+    <Link Source="@183" Target="@23" Category="PoundInclude" />
+    <Link Source="@185" Target="@23" Category="PoundInclude" />
+    <Link Source="@185" Target="@71" Category="PoundInclude" />
+    <Link Source="@187" Target="@23" Category="PoundInclude" Bounds="260.751373291016,744.245178222656,649.780059814453,40.426025390625" />
+    <Link Source="@189" Target="@23" Category="PoundInclude" Bounds="644.588012695313,688.397338867188,266.038146972656,92.0282592773438" />
+    <Link Source="@191" Target="@23" Category="PoundInclude" Bounds="306.629669189453,685.196105957031,603.996490478516,95.2294921875" />
+    <Link Source="@195" Target="@23" Category="PoundInclude" Bounds="905.604675292969,688.397399902344,25.1882934570313,80.4347534179688" />
+    <Link Source="@195" Target="@84" Category="PoundInclude" />
+    <Link Source="@195" Target="@88" Category="PoundInclude" Bounds="967.186950683594,688.397399902344,302.419616699219,91.3532104492188" />
+    <Link Source="@197" Target="@23" Category="PoundInclude" Bounds="477.652008056641,684.954711914063,432.974151611328,95.4708862304688" />
+    <Link Source="@199" Target="@23" Category="PoundInclude" Bounds="997.023681640625,685.671813964844,192.100341796875,86.7470092773438" />
+    <Link Source="@199" Target="@63" Category="PoundInclude" Bounds="1045.02479839731,687.428460138109,144.878758228231,29.5339317027236" />
+    <Link Source="@2" Target="(@1 @120)" Category="Contains" />
+    <Link Source="@2" Target="(@1 @132)" Category="Contains" />
+    <Link Source="@2" Target="(@1 @133)" Category="Contains" />
+    <Link Source="@2" Target="(@1 @134)" Category="Contains" />
+    <Link Source="@2" Target="(@1 @137)" Category="Contains" />
+    <Link Source="@2" Target="(@1 @17)" Category="Contains" />
+    <Link Source="@2" Target="(@1 @26)" Category="Contains" />
+    <Link Source="@2" Target="(@1 @49)" Category="Contains" />
+    <Link Source="@2" Target="(@1 @5)" Category="Contains" />
+    <Link Source="@2" Target="(@1 @72)" Category="Contains" />
+    <Link Source="@2" Target="(@1 @73)" Category="Contains" />
+    <Link Source="@2" Target="(@1 @74)" Category="Contains" />
+    <Link Source="@2" Target="(@1 @75)" Category="Contains" />
+    <Link Source="@2" Target="(@1 @8)" Category="Contains" />
+    <Link Source="@2" Target="(@1 @86)" Category="Contains" />
+    <Link Source="@2" Target="(@1 @89)" Category="Contains" />
+    <Link Source="@2" Target="(@1 @98)" Category="Contains" />
+    <Link Source="@2" Target="@102" Category="Contains" />
+    <Link Source="@2" Target="@112" Category="Contains" />
+    <Link Source="@2" Target="@147" Category="Contains" />
+    <Link Source="@2" Target="@159" Category="Contains" />
+    <Link Source="@2" Target="@161" Category="Contains" />
+    <Link Source="@2" Target="@163" Category="Contains" />
+    <Link Source="@2" Target="@165" Category="Contains" />
+    <Link Source="@2" Target="@167" Category="Contains" />
+    <Link Source="@2" Target="@175" Category="Contains" />
+    <Link Source="@2" Target="@179" Category="Contains" />
+    <Link Source="@2" Target="@181" Category="Contains" />
+    <Link Source="@2" Target="@187" Category="Contains" />
+    <Link Source="@2" Target="@189" Category="Contains" />
+    <Link Source="@2" Target="@191" Category="Contains" />
+    <Link Source="@2" Target="@195" Category="Contains" />
+    <Link Source="@2" Target="@197" Category="Contains" />
+    <Link Source="@2" Target="@199" Category="Contains" />
+    <Link Source="@2" Target="@201" Category="Contains" />
+    <Link Source="@2" Target="@205" Category="Contains" />
+    <Link Source="@2" Target="@207" Category="Contains" />
+    <Link Source="@2" Target="@209" Category="Contains" />
+    <Link Source="@2" Target="@21" Category="Contains" />
+    <Link Source="@2" Target="@211" Category="Contains" />
+    <Link Source="@2" Target="@213" Category="Contains" />
+    <Link Source="@2" Target="@217" Category="Contains" />
+    <Link Source="@2" Target="@219" Category="Contains" />
+    <Link Source="@2" Target="@23" Category="Contains" />
+    <Link Source="@2" Target="@25" Category="Contains" />
+    <Link Source="@2" Target="@30" Category="Contains" />
+    <Link Source="@2" Target="@48" Category="Contains" />
+    <Link Source="@2" Target="@63" Category="Contains" />
+    <Link Source="@2" Target="@79" Category="Contains" />
+    <Link Source="@2" Target="@88" Category="Contains" />
+    <Link Source="@201" Target="@23" Category="PoundInclude" Bounds="809.102416992188,688.397399902344,125.144104003906,79.79296875" />
+    <Link Source="@201" Target="@63" Category="PoundInclude" Bounds="806.390838402007,688.397407669099,108.360645490341,27.7660130967861" />
+    <Link Source="@203" Target="@23" Category="PoundInclude" />
+    <Link Source="@205" Target="@23" Category="PoundInclude" Bounds="997.024047851563,688.3974609375,79.905029296875,84.0224609375" />
+    <Link Source="@205" Target="@63" Category="PoundInclude" Bounds="1007.37610676632,688.397448448263,50.0861381549798,25.8697698643444" />
+    <Link Source="@207" Target="@23" Category="PoundInclude" Bounds="998.229370117188,687.292297363281,341.188598632813,94.8715209960938" />
+    <Link Source="@207" Target="@63" Category="PoundInclude" Bounds="1024.22937011719,688.397399902344,328.551513671875,27.357421875" />
+    <Link Source="@209" Target="@23" Category="PoundInclude" Bounds="842.425903320313,632.395080566406,91.8206176757813,135.795288085938" />
+    <Link Source="@209" Target="@63" Category="PoundInclude" Bounds="922.199279785156,632.395080566406,60.91552734375,77.1054077148438" />
+    <Link Source="@21" Target="@100" Category="PoundInclude" />
+    <Link Source="@21" Target="@34" Category="PoundInclude" />
+    <Link Source="@211" Target="@23" Category="PoundInclude" Bounds="998.229370117188,686.032287597656,485.644653320313,96.1315307617188" />
+    <Link Source="@211" Target="@63" Category="PoundInclude" Bounds="1024.23779296875,688.397399902344,479.372924804688,27.385009765625" />
+    <Link Source="@213" Target="@112" Category="PoundInclude" Bounds="386.543254838166,744.399660318775,75.7661340373214,26.9807610177088" />
+    <Link Source="@213" Target="@23" Category="PoundInclude" Bounds="405.148864746094,744.26708984375,505.392822265625,39.6890869140625" />
+    <Link Source="@215" Target="@119" Category="PoundInclude" Bounds="1324.400390625,122.004463195801,0,21.0000076293945" />
+    <Link Source="@215" Target="@34" Category="PoundInclude" />
+    <Link Source="@217" Target="@102" Category="PoundInclude" Bounds="1218.5186537374,743.442784724782,222.150206932313,35.6895056111244" />
+    <Link Source="@217" Target="@23" Category="PoundInclude" Bounds="997.905140707834,744.399682263549,101.733093119514,30.1210942169374" />
+    <Link Source="@219" Target="@102" Category="PoundInclude" Bounds="1355.37653020913,744.399666673098,87.491559582287,27.509832512858" />
+    <Link Source="@219" Target="@23" Category="PoundInclude" Bounds="998.185789390934,741.474697239501,251.137147802414,39.1080734036144" />
+    <Link Source="@221" Target="@129" Category="PoundInclude" Bounds="1203.83337402344,66.0022354125977,8.5670166015625,133.273155212402" />
+    <Link Source="@221" Target="@13" Category="PoundInclude" Bounds="993.522399902344,62.2192802429199,172.295227050781,34.0951271057129" />
+    <Link Source="@221" Target="@65" Category="PoundInclude" Bounds="1135.06481933594,63.8550300598145,267.335571289063,262.183879852295" />
+    <Link Source="@23" Target="@34" Category="PoundInclude" />
+    <Link Source="@25" Target="@100" Category="PoundInclude" />
+    <Link Source="@25" Target="@34" Category="PoundInclude" />
+    <Link Source="@28" Target="@122" Category="PoundInclude" />
+    <Link Source="@28" Target="@34" Category="PoundInclude" />
+    <Link Source="@28" Target="@65" Category="PoundInclude" Bounds="1077.400390625,290.011169433594,0,21" />
+    <Link Source="@30" Target="@34" Category="PoundInclude" />
+    <Link Source="@30" Target="@61" Category="PoundInclude" />
+    <Link Source="@30" Target="@84" Category="PoundInclude" />
+    <Link Source="@32" Target="@145" Category="PoundInclude" />
+    <Link Source="@34" Target="@104" Category="PoundInclude" />
+    <Link Source="@34" Target="@11" Category="PoundInclude" />
+    <Link Source="@34" Target="@110" Category="PoundInclude" />
+    <Link Source="@34" Target="@114" Category="PoundInclude" />
+    <Link Source="@34" Target="@131" Category="PoundInclude" />
+    <Link Source="@34" Target="@136" Category="PoundInclude" />
+    <Link Source="@34" Target="@139" Category="PoundInclude" />
+    <Link Source="@34" Target="@141" Category="PoundInclude" />
+    <Link Source="@34" Target="@143" Category="PoundInclude" />
+    <Link Source="@34" Target="@46" Category="PoundInclude" />
+    <Link Source="@34" Target="@53" Category="PoundInclude" />
+    <Link Source="@34" Target="@55" Category="PoundInclude" />
+    <Link Source="@34" Target="@59" Category="PoundInclude" />
+    <Link Source="@36" Target="@93" Category="PoundInclude" />
+    <Link Source="@4" Target="(@3 @115)" Category="Contains" />
+    <Link Source="@4" Target="(@3 @116)" Category="Contains" />
+    <Link Source="@4" Target="(@3 @117)" Category="Contains" />
+    <Link Source="@4" Target="(@3 @123)" Category="Contains" />
+    <Link Source="@4" Target="(@3 @16)" Category="Contains" />
+    <Link Source="@4" Target="(@3 @18)" Category="Contains" />
+    <Link Source="@4" Target="(@3 @19)" Category="Contains" />
+    <Link Source="@4" Target="(@3 @192)" Category="Contains" />
+    <Link Source="@4" Target="(@3 @193)" Category="Contains" />
+    <Link Source="@4" Target="(@3 @76)" Category="Contains" />
+    <Link Source="@4" Target="(@3 @77)" Category="Contains" />
+    <Link Source="@4" Target="(@3 @80)" Category="Contains" />
+    <Link Source="@4" Target="(@3 @81)" Category="Contains" />
+    <Link Source="@4" Target="(@3 @82)" Category="Contains" />
+    <Link Source="@4" Target="(@3 @85)" Category="Contains" />
+    <Link Source="@4" Target="@106" Category="Contains" />
+    <Link Source="@4" Target="@108" Category="Contains" />
+    <Link Source="@4" Target="@119" Category="Contains" />
+    <Link Source="@4" Target="@125" Category="Contains" />
+    <Link Source="@4" Target="@129" Category="Contains" />
+    <Link Source="@4" Target="@13" Category="Contains" />
+    <Link Source="@4" Target="@15" Category="Contains" />
+    <Link Source="@4" Target="@153" Category="Contains" />
+    <Link Source="@4" Target="@155" Category="Contains" />
+    <Link Source="@4" Target="@169" Category="Contains" />
+    <Link Source="@4" Target="@173" Category="Contains" />
+    <Link Source="@4" Target="@215" Category="Contains" />
+    <Link Source="@4" Target="@221" Category="Contains" />
+    <Link Source="@4" Target="@28" Category="Contains" />
+    <Link Source="@4" Target="@42" Category="Contains" />
+    <Link Source="@4" Target="@51" Category="Contains" />
+    <Link Source="@4" Target="@65" Category="Contains" />
+    <Link Source="@4" Target="@7" Category="Contains" />
+    <Link Source="@42" Target="@122" Category="PoundInclude" />
+    <Link Source="@42" Target="@34" Category="PoundInclude" />
+    <Link Source="@46" Target="@44" Category="PoundInclude" />
+    <Link Source="@46" Target="@97" Category="PoundInclude" />
+    <Link Source="@48" Target="@34" Category="PoundInclude" />
+    <Link Source="@48" Target="@61" Category="PoundInclude" />
+    <Link Source="@51" Target="@34" Category="PoundInclude" />
+    <Link Source="@53" Target="@55" Category="PoundInclude" />
+    <Link Source="@55" Target="@11" Category="PoundInclude" />
+    <Link Source="@55" Target="@57" Category="PoundInclude" />
+    <Link Source="@57" Target="@93" Category="PoundInclude" />
+    <Link Source="@59" Target="@110" Category="PoundInclude" />
+    <Link Source="@61" Target="@34" Category="PoundInclude" />
+    <Link Source="@63" Target="@102" Category="PoundInclude" Bounds="1021.0947265625,744.399597167969,425.536010742188,27.0576171875" />
+    <Link Source="@65" Target="@34" Category="PoundInclude" />
+    <Link Source="@67" Target="@93" Category="PoundInclude" />
+    <Link Source="@69" Target="@34" Category="PoundInclude" />
+    <Link Source="@7" Target="@34" Category="PoundInclude" />
+    <Link Source="@7" Target="@51" Category="PoundInclude" Bounds="935.668579101563,234.008926391602,10.55517578125,21.8930206298828" />
+    <Link Source="@7" Target="@65" Category="PoundInclude" Bounds="883.937927246094,234.008926391602,135.946350097656,86.8110198974609" />
+    <Link Source="@71" Target="@34" Category="PoundInclude" />
+    <Link Source="@71" Target="@69" Category="PoundInclude" />
+    <Link Source="@79" Target="@34" Category="PoundInclude" />
+    <Link Source="@84" Target="@34" Category="PoundInclude" />
+    <Link Source="@88" Target="@34" Category="PoundInclude" />
+    <Link Source="@93" Target="@127" Category="PoundInclude" />
+    <Link Source="@93" Target="@46" Category="PoundInclude" />
+    <Link Source="@93" Target="@91" Category="PoundInclude" />
+    <Link Source="@95" Target="@38" Category="PoundInclude" />
+    <Link Source="@95" Target="@40" Category="PoundInclude" />
+    <Link Source="@95" Target="@67" Category="PoundInclude" />
+    <Link Source="@95" Target="@93" Category="PoundInclude" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@104" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@11" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@110" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@114" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@131" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@145" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@32" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@36" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@38" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@40" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@44" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@46" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@53" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@55" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@57" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@59" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@67" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@91" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@93" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@95" Category="Contains" />
+    <Link Source="C/C++ Standard Library Indirectly Included" Target="@97" Category="Contains" />
+    <Link Source="G2" Target="C/C++ Standard Library Indirectly Included" Category="Contains" />
+    <Link Source="G4" Target="@100" Category="Contains" />
+    <Link Source="G4" Target="@34" Category="Contains" />
+    <Link Source="G4" Target="@61" Category="Contains" />
+    <Link Source="G4" Target="@69" Category="Contains" />
+    <Link Source="G4" Target="@84" Category="Contains" />
+    <Link Source="G4" Target="Windows SDK Indirectly Included" Category="Contains" />
+    <Link Source="OthersGroup" Target="@122" Category="Contains" />
+    <Link Source="OthersGroup" Target="@149" Category="Contains" />
+    <Link Source="OthersGroup" Target="@151" Category="Contains" />
+    <Link Source="OthersGroup" Target="@157" Category="Contains" />
+    <Link Source="OthersGroup" Target="@171" Category="Contains" />
+    <Link Source="OthersGroup" Target="@177" Category="Contains" />
+    <Link Source="OthersGroup" Target="@183" Category="Contains" />
+    <Link Source="OthersGroup" Target="@185" Category="Contains" />
+    <Link Source="OthersGroup" Target="@203" Category="Contains" />
+    <Link Source="OthersGroup" Target="@71" Category="Contains" />
+    <Link Source="PoundIncludeGraphExternalsGroup" Target="G2" Category="Contains" />
+    <Link Source="PoundIncludeGraphExternalsGroup" Target="G4" Category="Contains" />
+    <Link Source="PoundIncludeGraphExternalsGroup" Target="OthersGroup" Category="Contains" />
+    <Link Source="Windows SDK Indirectly Included" Target="@127" Category="Contains" />
+    <Link Source="Windows SDK Indirectly Included" Target="@136" Category="Contains" />
+    <Link Source="Windows SDK Indirectly Included" Target="@139" Category="Contains" />
+    <Link Source="Windows SDK Indirectly Included" Target="@141" Category="Contains" />
+    <Link Source="Windows SDK Indirectly Included" Target="@143" Category="Contains" />
+  </Links>
+  <Categories>
+    <Category Id="CodeSchema_PoundIncludeFile" Label="C++ Project File" BasedOn="File" CanBeDataDriven="True" IsProviderRoot="False" NavigationActionLabel="C++ Project File" />
+    <Category Id="CodeSchema_PoundIncludeGroup" Label="#include Group" BasedOn="Group" CanBeDataDriven="True" IsProviderRoot="False" NavigationActionLabel="#include Group" />
+    <Category Id="CodeSchema_ProjectItem" Label="Project Item" BasedOn="File" CanBeDataDriven="True" DefaultAction="Node:Both:CodeSchema_Type" Icon="File" NavigationActionLabel="Project Items" />
+    <Category Id="Contains" Label="Contains" Description="Whether the source of the link contains the target object" CanBeDataDriven="False" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="Contained By" IsContainment="True" OutgoingActionLabel="Contains" />
+    <Category Id="Externals" Label="Externals" CanBeDataDriven="True" IsProviderRoot="False" NavigationActionLabel="Externals" />
+    <Category Id="File" Label="File" CanBeDataDriven="True" DefaultAction="Microsoft.Contains" Icon="File" NavigationActionLabel="Files" />
+    <Category Id="Group" Label="Group" CanBeDataDriven="True" DefaultAction="Microsoft.Contains" IsProviderRoot="False" NavigationActionLabel="Groups" />
+    <Category Id="PoundInclude" Label="#include" CanBeDataDriven="True" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="#include By" OutgoingActionLabel="#include" />
+  </Categories>
+  <Properties>
+    <Property Id="Bounds" DataType="System.Windows.Rect" />
+    <Property Id="CanBeDataDriven" Label="CanBeDataDriven" Description="CanBeDataDriven" DataType="System.Boolean" />
+    <Property Id="CanLinkedNodesBeDataDriven" Label="CanLinkedNodesBeDataDriven" Description="CanLinkedNodesBeDataDriven" DataType="System.Boolean" />
+    <Property Id="DefaultAction" Label="DefaultAction" Description="DefaultAction" DataType="System.String" />
+    <Property Id="Expression" DataType="System.String" />
+    <Property Id="FilePath" Label="File Path" Description="File Path" DataType="System.String" />
+    <Property Id="Group" Label="Group" Description="Display the node as a group" DataType="Microsoft.VisualStudio.GraphModel.GraphGroupStyle" />
+    <Property Id="GroupLabel" DataType="System.String" />
+    <Property Id="Icon" DataType="System.String" />
+    <Property Id="IncomingActionLabel" Label="IncomingActionLabel" Description="IncomingActionLabel" DataType="System.String" />
+    <Property Id="IsContainment" DataType="System.Boolean" />
+    <Property Id="IsEnabled" DataType="System.Boolean" />
+    <Property Id="IsProviderRoot" Label="IsProviderRoot" Description="IsProviderRoot" DataType="System.Boolean" />
+    <Property Id="Label" Label="Label" Description="Displayable label of an Annotatable object" DataType="System.String" />
+    <Property Id="Language" Label="Language" Description="Language" DataType="System.String" />
+    <Property Id="NavigationActionLabel" Label="NavigationActionLabel" Description="NavigationActionLabel" DataType="System.String" />
+    <Property Id="OutgoingActionLabel" Label="OutgoingActionLabel" Description="OutgoingActionLabel" DataType="System.String" />
+    <Property Id="TargetType" DataType="System.Type" />
+    <Property Id="Value" DataType="System.String" />
+    <Property Id="ValueLabel" DataType="System.String" />
+  </Properties>
+  <QualifiedNames>
+    <Name Id="Assembly" Label="Assembly" ValueType="Uri" />
+    <Name Id="File" Label="File" ValueType="Uri" />
+  </QualifiedNames>
+  <IdentifierAliases>
+    <Alias n="1" Uri="Assembly=$(VsSolutionUri)/directx11_starter/toolkit/directxtk_desktop_2012.vcxproj" />
+    <Alias n="2" Id="(@1)" />
+    <Alias n="3" Uri="Assembly=$(VsSolutionUri)/DirectX11_Starter/DirectX11_Starter.vcxproj" />
+    <Alias n="4" Id="(@3)" />
+    <Alias n="5" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/teapotdata.inc" />
+    <Alias n="6" Uri="File=$(VsSolutionUri)/DirectX11_Starter/Camera.h" />
+    <Alias n="7" Id="(@3 @6)" />
+    <Alias n="8" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/inc/screengrab.h" />
+    <Alias n="9" Uri="Assembly=" />
+    <Alias n="10" Uri="File=$(VsInstallDirUri)/vc/include/malloc.h" />
+    <Alias n="11" Id="(@9 @10)" />
+    <Alias n="12" Uri="File=$(VsSolutionUri)/DirectX11_Starter/DemoGame.h" />
+    <Alias n="13" Id="(@3 @12)" />
+    <Alias n="14" Uri="File=$(VsSolutionUri)/DirectX11_Starter/DXGame.h" />
+    <Alias n="15" Id="(@3 @14)" />
+    <Alias n="16" Uri="File=$(VsSolutionUri)/directx11_starter/response.h" />
+    <Alias n="17" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/demandcreate.h" />
+    <Alias n="18" Uri="File=$(VsSolutionUri)/directx11_starter/gamestate.h" />
+    <Alias n="19" Uri="File=$(VsSolutionUri)/directx11_starter/sprite.h" />
+    <Alias n="20" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/inc/geometricprimitive.h" />
+    <Alias n="21" Id="(@1 @20)" />
+    <Alias n="22" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/pch.h" />
+    <Alias n="23" Id="(@1 @22)" />
+    <Alias n="24" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/inc/spritebatch.h" />
+    <Alias n="25" Id="(@1 @24)" />
+    <Alias n="26" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/inc/primitivebatch.h" />
+    <Alias n="27" Uri="File=$(VsSolutionUri)/directx11_starter/mesh.h" />
+    <Alias n="28" Id="(@3 @27)" />
+    <Alias n="29" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/inc/simplemath.h" />
+    <Alias n="30" Id="(@1 @29)" />
+    <Alias n="31" Uri="File=$(VsInstallDirUri)/vc/include/xtgmath.h" />
+    <Alias n="32" Id="(@9 @31)" />
+    <Alias n="33" Uri="File=$(ProgramFilesUri)/Windows Kits/8.0/Include/um/DirectXMath.h" />
+    <Alias n="34" Id="(@9 @33)" />
+    <Alias n="35" Uri="File=$(VsInstallDirUri)/vc/include/math.h" />
+    <Alias n="36" Id="(@9 @35)" />
+    <Alias n="37" Uri="File=$(VsInstallDirUri)/vc/include/use_ansi.h" />
+    <Alias n="38" Id="(@9 @37)" />
+    <Alias n="39" Uri="File=$(VsInstallDirUri)/vc/include/xkeycheck.h" />
+    <Alias n="40" Id="(@9 @39)" />
+    <Alias n="41" Uri="File=$(VsSolutionUri)/directx11_starter/material.h" />
+    <Alias n="42" Id="(@3 @41)" />
+    <Alias n="43" Uri="File=$(VsInstallDirUri)/vc/include/concurrencysal.h" />
+    <Alias n="44" Id="(@9 @43)" />
+    <Alias n="45" Uri="File=$(VsInstallDirUri)/vc/include/sal.h" />
+    <Alias n="46" Id="(@9 @45)" />
+    <Alias n="47" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/inc/model.h" />
+    <Alias n="48" Id="(@1 @47)" />
+    <Alias n="49" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/sharedresourcepool.h" />
+    <Alias n="50" Uri="File=$(VsSolutionUri)/directx11_starter/transform.h" />
+    <Alias n="51" Id="(@3 @50)" />
+    <Alias n="52" Uri="File=$(VsInstallDirUri)/vc/include/emmintrin.h" />
+    <Alias n="53" Id="(@9 @52)" />
+    <Alias n="54" Uri="File=$(VsInstallDirUri)/vc/include/xmmintrin.h" />
+    <Alias n="55" Id="(@9 @54)" />
+    <Alias n="56" Uri="File=$(VsInstallDirUri)/vc/include/mmintrin.h" />
+    <Alias n="57" Id="(@9 @56)" />
+    <Alias n="58" Uri="File=$(VsInstallDirUri)/vc/include/arm_neon.h" />
+    <Alias n="59" Id="(@9 @58)" />
+    <Alias n="60" Uri="File=$(ProgramFilesUri)/windows kits/8.0/include/um/directxcollision.h" />
+    <Alias n="61" Id="(@9 @60)" />
+    <Alias n="62" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/effectcommon.h" />
+    <Alias n="63" Id="(@1 @62)" />
+    <Alias n="64" Uri="File=$(VsSolutionUri)/DirectX11_Starter/Common.h" />
+    <Alias n="65" Id="(@3 @64)" />
+    <Alias n="66" Uri="File=$(VsInstallDirUri)/vc/include/crtwrn.h" />
+    <Alias n="67" Id="(@9 @66)" />
+    <Alias n="68" Uri="File=$(ProgramFilesUri)/windows kits/8.0/include/um/x3daudio.h" />
+    <Alias n="69" Id="(@9 @68)" />
+    <Alias n="70" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/inc/audio.h" />
+    <Alias n="71" Id="(@9 @70)" />
+    <Alias n="72" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/binaryreader.h" />
+    <Alias n="73" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/inc/wictextureloader.h" />
+    <Alias n="74" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/inc/ddstextureloader.h" />
+    <Alias n="75" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/constantbuffer.h" />
+    <Alias n="76" Uri="File=$(VsSolutionUri)/DirectX11_Starter/SoundManager.h" />
+    <Alias n="77" Uri="File=$(VsSolutionUri)/directx11_starter/inputmanager.h" />
+    <Alias n="78" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/bezier.h" />
+    <Alias n="79" Id="(@1 @78)" />
+    <Alias n="80" Uri="File=$(VsSolutionUri)/DirectX11_Starter/GameTimer.h" />
+    <Alias n="81" Uri="File=$(VsSolutionUri)/directx11_starter/fontrenderer.h" />
+    <Alias n="82" Uri="File=$(VsSolutionUri)/directx11_starter/renderer.h" />
+    <Alias n="83" Uri="File=$(ProgramFilesUri)/windows kits/8.0/include/um/directxpackedvector.h" />
+    <Alias n="84" Id="(@9 @83)" />
+    <Alias n="85" Uri="File=$(VsSolutionUri)/DirectX11_Starter/dxerr.h" />
+    <Alias n="86" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/dds.h" />
+    <Alias n="87" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/inc/vertextypes.h" />
+    <Alias n="88" Id="(@1 @87)" />
+    <Alias n="89" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/inc/commonstates.h" />
+    <Alias n="90" Uri="File=$(VsInstallDirUri)/vc/include/vadefs.h" />
+    <Alias n="91" Id="(@9 @90)" />
+    <Alias n="92" Uri="File=$(VsInstallDirUri)/vc/include/crtdefs.h" />
+    <Alias n="93" Id="(@9 @92)" />
+    <Alias n="94" Uri="File=$(VsInstallDirUri)/vc/include/yvals.h" />
+    <Alias n="95" Id="(@9 @94)" />
+    <Alias n="96" Uri="File=$(VsInstallDirUri)/vc/include/codeanalysis/sourceannotations.h" />
+    <Alias n="97" Id="(@9 @96)" />
+    <Alias n="98" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/platformhelpers.h" />
+    <Alias n="99" Uri="File=$(ProgramFilesUri)/windows kits/8.0/include/um/directxcolors.h" />
+    <Alias n="100" Id="(@9 @99)" />
+    <Alias n="101" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/inc/effects.h" />
+    <Alias n="102" Id="(@1 @101)" />
+    <Alias n="103" Uri="File=$(VsInstallDirUri)/vc/include/float.h" />
+    <Alias n="104" Id="(@9 @103)" />
+    <Alias n="105" Uri="File=$(VsSolutionUri)/directx11_starter/gameobject.h" />
+    <Alias n="106" Id="(@3 @105)" />
+    <Alias n="107" Uri="File=$(VsSolutionUri)/directx11_starter/rect.h" />
+    <Alias n="108" Id="(@3 @107)" />
+    <Alias n="109" Uri="File=$(VsInstallDirUri)/vc/include/stdint.h" />
+    <Alias n="110" Id="(@9 @109)" />
+    <Alias n="111" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/inc/spritefont.h" />
+    <Alias n="112" Id="(@1 @111)" />
+    <Alias n="113" Uri="File=$(VsInstallDirUri)/vc/include/assert.h" />
+    <Alias n="114" Id="(@9 @113)" />
+    <Alias n="115" Uri="File=$(VsSolutionUri)/directx11_starter/keyboardinput.h" />
+    <Alias n="116" Uri="File=$(VsSolutionUri)/directx11_starter/mouseinput.h" />
+    <Alias n="117" Uri="File=$(VsSolutionUri)/directx11_starter/input.h" />
+    <Alias n="118" Uri="File=$(VsSolutionUri)/DirectX11_Starter/Menu.h" />
+    <Alias n="119" Id="(@3 @118)" />
+    <Alias n="120" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/alignednew.h" />
+    <Alias n="121" Uri="File=$(VsSolutionUri)/directx11_starter/vertex.h" />
+    <Alias n="122" Id="(@9 @121)" />
+    <Alias n="123" Uri="File=$(VsSolutionUri)/DirectX11_Starter/Sfx.h" />
+    <Alias n="124" Uri="File=$(VsSolutionUri)/directx11_starter/rigidbody.h" />
+    <Alias n="125" Id="(@3 @124)" />
+    <Alias n="126" Uri="File=$(ProgramFilesUri)/windows kits/8.0/include/shared/winapifamily.h" />
+    <Alias n="127" Id="(@9 @126)" />
+    <Alias n="128" Uri="File=$(VsSolutionUri)/directx11_starter/entity.h" />
+    <Alias n="129" Id="(@3 @128)" />
+    <Alias n="130" Uri="File=$(VsInstallDirUri)/vc/include/cmath" />
+    <Alias n="131" Id="(@9 @130)" />
+    <Alias n="132" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/shaders/lighting.fxh" />
+    <Alias n="133" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/shaders/common.fxh" />
+    <Alias n="134" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/shaders/structures.fxh" />
+    <Alias n="135" Uri="File=$(ProgramFilesUri)/windows kits/8.0/include/um/directxmathmisc.inl" />
+    <Alias n="136" Id="(@9 @135)" />
+    <Alias n="137" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/inc/simplemath.inl" />
+    <Alias n="138" Uri="File=$(ProgramFilesUri)/windows kits/8.0/include/um/directxmathvector.inl" />
+    <Alias n="139" Id="(@9 @138)" />
+    <Alias n="140" Uri="File=$(ProgramFilesUri)/windows kits/8.0/include/um/directxmathconvert.inl" />
+    <Alias n="141" Id="(@9 @140)" />
+    <Alias n="142" Uri="File=$(ProgramFilesUri)/windows kits/8.0/include/um/directxmathmatrix.inl" />
+    <Alias n="143" Id="(@9 @142)" />
+    <Alias n="144" Uri="File=$(VsInstallDirUri)/vc/include/xtr1common" />
+    <Alias n="145" Id="(@9 @144)" />
+    <Alias n="146" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/screengrab.cpp" />
+    <Alias n="147" Id="(@1 @146)" />
+    <Alias n="148" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/audio/dynamicsoundeffectinstance.cpp" />
+    <Alias n="149" Id="(@9 @148)" />
+    <Alias n="150" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/audio/soundeffectinstance.cpp" />
+    <Alias n="151" Id="(@9 @150)" />
+    <Alias n="152" Uri="File=$(VsSolutionUri)/DirectX11_Starter/DemoGame.cpp" />
+    <Alias n="153" Id="(@3 @152)" />
+    <Alias n="154" Uri="File=$(VsSolutionUri)/DirectX11_Starter/DXGame.cpp" />
+    <Alias n="155" Id="(@3 @154)" />
+    <Alias n="156" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/audio/audioengine.cpp" />
+    <Alias n="157" Id="(@9 @156)" />
+    <Alias n="158" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/geometricprimitive.cpp" />
+    <Alias n="159" Id="(@1 @158)" />
+    <Alias n="160" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/pch.cpp" />
+    <Alias n="161" Id="(@1 @160)" />
+    <Alias n="162" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/spritebatch.cpp" />
+    <Alias n="163" Id="(@1 @162)" />
+    <Alias n="164" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/primitivebatch.cpp" />
+    <Alias n="165" Id="(@1 @164)" />
+    <Alias n="166" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/modelloadsdkmesh.cpp" />
+    <Alias n="167" Id="(@1 @166)" />
+    <Alias n="168" Uri="File=$(VsSolutionUri)/DirectX11_Starter/Mesh.cpp" />
+    <Alias n="169" Id="(@3 @168)" />
+    <Alias n="170" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/audio/wavebank.cpp" />
+    <Alias n="171" Id="(@9 @170)" />
+    <Alias n="172" Uri="File=$(VsSolutionUri)/DirectX11_Starter/Material.cpp" />
+    <Alias n="173" Id="(@3 @172)" />
+    <Alias n="174" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/model.cpp" />
+    <Alias n="175" Id="(@1 @174)" />
+    <Alias n="176" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/audio/soundcommon.cpp" />
+    <Alias n="177" Id="(@9 @176)" />
+    <Alias n="178" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/effectcommon.cpp" />
+    <Alias n="179" Id="(@1 @178)" />
+    <Alias n="180" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/modelloadcmo.cpp" />
+    <Alias n="181" Id="(@1 @180)" />
+    <Alias n="182" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/audio/wavfilereader.cpp" />
+    <Alias n="183" Id="(@9 @182)" />
+    <Alias n="184" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/audio/wavebankreader.cpp" />
+    <Alias n="185" Id="(@9 @184)" />
+    <Alias n="186" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/binaryreader.cpp" />
+    <Alias n="187" Id="(@1 @186)" />
+    <Alias n="188" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/wictextureloader.cpp" />
+    <Alias n="189" Id="(@1 @188)" />
+    <Alias n="190" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/ddstextureloader.cpp" />
+    <Alias n="191" Id="(@1 @190)" />
+    <Alias n="192" Uri="File=$(VsSolutionUri)/DirectX11_Starter/GameTimer.cpp" />
+    <Alias n="193" Uri="File=$(VsSolutionUri)/DirectX11_Starter/dxerr.cpp" />
+    <Alias n="194" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/vertextypes.cpp" />
+    <Alias n="195" Id="(@1 @194)" />
+    <Alias n="196" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/commonstates.cpp" />
+    <Alias n="197" Id="(@1 @196)" />
+    <Alias n="198" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/basiceffect.cpp" />
+    <Alias n="199" Id="(@1 @198)" />
+    <Alias n="200" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/skinnedeffect.cpp" />
+    <Alias n="201" Id="(@1 @200)" />
+    <Alias n="202" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/audio/soundeffect.cpp" />
+    <Alias n="203" Id="(@9 @202)" />
+    <Alias n="204" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/dualtextureeffect.cpp" />
+    <Alias n="205" Id="(@1 @204)" />
+    <Alias n="206" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/dgsleffect.cpp" />
+    <Alias n="207" Id="(@1 @206)" />
+    <Alias n="208" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/environmentmapeffect.cpp" />
+    <Alias n="209" Id="(@1 @208)" />
+    <Alias n="210" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/alphatesteffect.cpp" />
+    <Alias n="211" Id="(@1 @210)" />
+    <Alias n="212" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/spritefont.cpp" />
+    <Alias n="213" Id="(@1 @212)" />
+    <Alias n="214" Uri="File=$(VsSolutionUri)/DirectX11_Starter/Menu.cpp" />
+    <Alias n="215" Id="(@3 @214)" />
+    <Alias n="216" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/dgsleffectfactory.cpp" />
+    <Alias n="217" Id="(@1 @216)" />
+    <Alias n="218" Uri="File=$(VsSolutionUri)/directx11_starter/toolkit/src/effectfactory.cpp" />
+    <Alias n="219" Id="(@1 @218)" />
+    <Alias n="220" Uri="File=$(VsSolutionUri)/DirectX11_Starter/Entity.cpp" />
+    <Alias n="221" Id="(@3 @220)" />
+  </IdentifierAliases>
+  <Styles>
+    <Style TargetType="Node" GroupLabel="C++ Project File" ValueLabel="Has category">
+      <Condition Expression="HasCategory('CodeSchema_PoundIncludeFile')" />
+      <Setter Property="Background" Value="#FFEFEFEF" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Externals" ValueLabel="Has category">
+      <Condition Expression="HasCategory('Externals')" />
+      <Setter Property="Background" Value="#FFA08080" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Source File" ValueLabel="Has category">
+      <Condition Expression="HasCategory('CodeSchema_ProjectItem')" />
+      <Setter Property="Background" Value="#FFC0C0C0" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="#include Group" ValueLabel="Has category">
+      <Condition Expression="HasCategory('CodeSchema_PoundIncludeGroup')" />
+      <Setter Property="Background" Value="#FFEFEFEF" />
+    </Style>
+  </Styles>
+  <Paths>
+    <Path Id="ProgramFiles" Value="C:\Program Files (x86)" />
+    <Path Id="ProgramFilesUri" Value="file:///C:/Program Files (x86)" />
+    <Path Id="VsInstallDir" Value="C:\Program Files (x86)\Microsoft Visual Studio 11.0" />
+    <Path Id="VsInstallDirUri" Value="file:///C:/Program Files (x86)/Microsoft Visual Studio 11.0" />
+    <Path Id="VsSolution" Value="D:\Jetpackparty\Jetpack Jetpack Party DX11" />
+    <Path Id="VsSolutionUri" Value="file:///D:/Jetpackparty/Jetpack Jetpack Party DX11" />
+  </Paths>
+</DirectedGraph>

@@ -41,14 +41,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>D:\Jetpack\Jetpack Jetpack Party DX11\Additional Packages;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\inc;$(SolutionDir)\Toolkit\inc;D:\Jetpack\Jetpack Jetpack Party DX11\DirectX11_Starter\Toolkit\Audio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\inc;$(SolutionDir)\Toolkit\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
@@ -85,6 +85,7 @@
     <ClCompile Include="Mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="DemoGame.h" />
     <ClInclude Include="dxerr.h" />
@@ -126,9 +127,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Toolkit\Audio\DirectXTKAudio_Desktop_2012_DXSDK.vcxproj">
-      <Project>{4f150a30-cecb-49d1-8283-6a3f57438cf5}</Project>
-    </ProjectReference>
     <ProjectReference Include="Toolkit\DirectXTK_Desktop_2012.vcxproj">
       <Project>{e0b52ae7-e160-4d32-bf3f-910b785e5a8e}</Project>
       <Private>false</Private>

@@ -146,6 +146,9 @@
     <ClInclude Include="MouseInput.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\PixelShader.hlsl">

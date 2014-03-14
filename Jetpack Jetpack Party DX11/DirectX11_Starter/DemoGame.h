@@ -13,6 +13,7 @@
 #include "GameState.h"
 #include "Menu.h"
 #include "Sfx.h"
+#include "Camera.h"
 
 using namespace DirectX;
 
@@ -60,16 +61,18 @@ private:
 	// determining how far the mouse moved in a single frame.
 	POINT prevMousePos;
 	//Camera* camera;
-	Entity* entity;
+	std::vector<Entity*> entities;
 	SpriteRenderer* spriteRenderer;
 	FontRenderer* fontRenderer;
 
-	DirectX::XMFLOAT4X4 viewMatrix;
-	DirectX::XMFLOAT4X4 projectionMatrix;
+	//DirectX::XMFLOAT4X4 viewMatrix;
+	//DirectX::XMFLOAT4X4 projectionMatrix;
 
+
+	Camera* camera;
 	GameState currentState;
 	Menu* menu;
-	Sfx* sfx;
+	//Sfx* sfx;
 };
 
 #endif

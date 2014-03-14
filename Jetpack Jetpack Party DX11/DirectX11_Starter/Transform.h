@@ -1,3 +1,6 @@
+#ifndef _TRANSFORM_H_
+#define _TRANSFORM_H_
+
 #include <DirectXMath.h>
 #include <d3d11.h>
 
@@ -36,3 +39,4 @@ public :
 		XMStoreFloat4x4(&this->scale, XMMatrixScaling(scale.x, scale.y, scale.z));
 	}
 };
+#endif

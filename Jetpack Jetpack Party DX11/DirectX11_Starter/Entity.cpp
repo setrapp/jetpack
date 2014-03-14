@@ -54,8 +54,11 @@ void Entity::Update(float dt, VertexShaderConstantBuffer* vsConstantBuffer)
 
 void Entity::Draw(ID3D11DeviceContext* deviceContext)
 {
-	deviceContext->PSSetShaderResources(0, 1, &material->resourceView);
-	deviceContext->PSSetSamplers(0, 1, &material->samplerState);
+	if(material)
+	{
+		deviceContext->PSSetShaderResources(0, 1, &material->resourceView);
+		deviceContext->PSSetSamplers(0, 1, &material->samplerState);
+	}
 	for(LONG i = 0; i < totalMeshes; i++)
 	{		
 		meshes[i]->Draw(deviceContext);

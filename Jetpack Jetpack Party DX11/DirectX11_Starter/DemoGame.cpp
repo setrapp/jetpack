@@ -60,7 +60,8 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	windowHeight = 600;
 	currentState = GameState::Started;
 	menu = new Menu(device, deviceContext);
-	sfx = new Sfx();
+	camera = new Camera();
+	//sfx = new Sfx();
 }
 
 DemoGame::~DemoGame()
@@ -89,30 +90,26 @@ bool DemoGame::Init()
 	fontRenderer = new FontRenderer(device, L"font.spritefont");	
 	fontRenderer->setSpriteBatch(spriteRenderer->GetSpriteBatch());
 
-	entity = new Entity(device);
-	entity->LoadTexture(L"RedGift.png", device, deviceContext);
-
 	// Set up buffers and such
 	CreateGeometryBuffers();
 	LoadShadersAndInputLayout();
 	this->deltaTime = 0;
-	// Set up view matrix (camera)
-	// In an actual game, update this when the camera moves (so every frame)
+
 	XMVECTOR position	= XMVectorSet(0, 0, -5, 0);
 	XMVECTOR target		= XMVectorSet(0, 0, 0, 0);
 	XMVECTOR up			= XMVectorSet(0, 1, 0, 0);
 	XMMATRIX V			= XMMatrixLookAtLH(position, target, up);
-	XMStoreFloat4x4(&viewMatrix, XMMatrixTranspose(V));
 
-	// Set up world matrix
-	// In an actual game, update this when the object moves (so every frame)
+	XMStoreFloat4x4(&camera->view, XMMatrixTranspose(V));
+
 	XMMATRIX W = XMMatrixIdentity();
-	XMStoreFloat4x4(&entity->GetWorldMatrix(), XMMatrixTranspose(W));	
+	for( Entity* e : entities)
+		XMStoreFloat4x4(&e->GetWorldMatrix(), XMMatrixTranspose(W));	
 
 	return true;
 }
 
-// Creates the vertex and index buffers for a single triangle
+
 void DemoGame::CreateGeometryBuffers()
 {
 	XMFLOAT4 red	= XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
@@ -129,8 +126,32 @@ void DemoGame::CreateGeometryBuffers()
 	};
 
 	UINT indices[] = { 0, 2, 1, 3, 0, 1 };	
-	entity->AddQuad(vertices, indices);	
+
 	
+	for(int i = 0 ; i < 5; i ++)
+	{	
+		Entity* entity = new Entity(device);
+
+		for(Vertex v : vertices)
+		{
+			int w;
+			if(rand() < 500)
+				w = -1;
+			else
+				w = 1;
+			v.Position.x += w * rand() % 2;
+			v.Position.y += w * rand() % 2;
+			v.Position.z += w * rand() %2;
+			v.Color.x += rand() % 5;
+			v.Color.y += rand() % 5;
+			v.Color.z += rand() % 5;
+		}
+		entity->AddQuad(vertices, indices);
+		//if(rand() % 10 < 5)
+			//entity->LoadTexture(L"tex1.jpg", device, deviceContext);
+		entities.push_back(entity);
+	}
+
 }
 
 // Loads shaders from compiled shader object (.cso) files, and uses the
@@ -197,7 +218,7 @@ void DemoGame::LoadShadersAndInputLayout()
 		NULL,
 		&vsConstantBuffer));
 
-
+	
 	menu->setRenderers(fontRenderer);
 
 #ifdef OPTIMIZATION
@@ -221,19 +242,14 @@ void DemoGame::LoadShadersAndInputLayout()
 // Handles resizing the window and updating our projection matrix to match
 void DemoGame::OnResize()
 {
-	// Handle base-level DX resize stuff
 	DXGame::OnResize();
-	//if(!camera)
-	//	camera = new Camera();
-
-	//camera->Resize(AspectRatio());
 		XMMATRIX P = XMMatrixPerspectiveFovLH(
 			0.25f * 3.1415926535f,
 			AspectRatio(),
 			0.1f,
 			100.0f);
-
-		XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P));
+	
+	XMStoreFloat4x4(&camera->projection, XMMatrixTranspose(P));
 }
 #pragma endregion
 
@@ -245,7 +261,7 @@ float x = 0;
 XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
 void DemoGame::UpdateScene(float dt)
 {
-	sfx->Update(dt);
+	//sfx->Update(dt);
 	if(currentState == GameState::Playing)
 	{
 	this->deltaTime = dt;
@@ -253,7 +269,7 @@ void DemoGame::UpdateScene(float dt)
 	x = x + dt;
 	//entity.Rotate(XMFLOAT3(0, 0, x));
 	dt *= 5;
-	if(GetAsyncKeyState(VK_UP))
+	/*if(GetAsyncKeyState(VK_UP))
 	{
 		trans.y += dt;
 	}
@@ -268,15 +284,24 @@ void DemoGame::UpdateScene(float dt)
 	if(GetAsyncKeyState(VK_RIGHT))
 	{
 		trans.x += dt;
-	}	
-	entity->transform->Translate(trans);
-	vsConstantBufferData.view		= viewMatrix;
-	vsConstantBufferData.projection	= projectionMatrix;
+	}	*/
+	for(Entity* e: entities)
+		{
+			auto p = rand() % 2;
+			p++;
+			if(p <4 )
+				e->transform->Translate(XMFLOAT3(rand() % p * 0.1f, rand() % p * 0.1f, rand() % p * 0.1f));
+			else
+				e->transform->Rotate(XMFLOAT3(rand() % p * 0.1f, rand() % p * 0.1f, rand() % p * 0.1f));
 
-	entity->Update(
-		dt, 
-		&vsConstantBufferData);
+		
+			e->Update(
+				dt, 
+				&vsConstantBufferData);
+		}
 	}
+
+	camera->Update(dt, &vsConstantBufferData);	
 
 	if(currentState == GameState::Started)
 	{
@@ -297,7 +322,16 @@ void DemoGame::UpdateScene(float dt)
 void DemoGame::DrawScene()
 {
 	spriteRenderer->ClearScreen(deviceContext, renderTargetView, depthStencilView);
-	
+	FLOAT color[4] = {0.4f, 0.6f, 0.75f, 0.0f};
+	deviceContext->ClearRenderTargetView(
+		renderTargetView,
+		color);
+
+	deviceContext->ClearDepthStencilView(
+		depthStencilView, 
+		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
+		1.0f,
+		0);
 	if(currentState == GameState::Started)
 	{	
 		spriteRenderer->Begin();
@@ -324,8 +358,8 @@ void DemoGame::DrawScene()
 		NULL, 
 		0);
 #endif
-
-	entity->Draw(deviceContext);
+	for(Entity* e :entities)
+		e->Draw(deviceContext);
 
 	HR(swapChain->Present(0, 0));
 }
