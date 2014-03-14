@@ -1,9 +1,32 @@
-﻿Build started 3/13/2014 11:00:44 PM.
-     1>Project "\\banner.main.ad.rit.edu\students\rug4133\IGMProfile\Desktop\DX 11 Ass 3\Jetpack Jetpack Party DX11\DirectX11_Starter\DirectX11_Starter.vcxproj" on node 2 (Build target(s)).
-     1>Link:
-         DirectX11_Starter.vcxproj -> \\banner.main.ad.rit.edu\students\rug4133\IGMProfile\Desktop\DX 11 Ass 3\Jetpack Jetpack Party DX11\Debug\DirectX11_Starter.exe
-     1>Done Building Project "\\banner.main.ad.rit.edu\students\rug4133\IGMProfile\Desktop\DX 11 Ass 3\Jetpack Jetpack Party DX11\DirectX11_Starter\DirectX11_Starter.vcxproj" (Build target(s)).
+﻿Build started 3/14/2014 3:16:30 PM.
+     1>Project "D:\Jetpack\Jetpack Jetpack Party DX11\DirectX11_Starter\DirectX11_Starter.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"D:\Jetpack\Jetpack Jetpack Party DX11\\DirectXTK\inc" /I"D:\Jetpack\Jetpack Jetpack Party DX11\\Toolkit\inc" /I"D:\Jetpack\Jetpack Jetpack Party DX11\DirectX11_Starter\Toolkit\Audio" /ZI /nologo /W0 /WX- /sdl /Od /Oy- /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /FR"Debug\\" /Gd /TP /analyze- /errorReport:prompt DemoGame.cpp dxerr.cpp DXGame.cpp Entity.cpp GameTimer.cpp Material.cpp Menu.cpp Mesh.cpp
+         Mesh.cpp
+         Menu.cpp
+         Material.cpp
+         GameTimer.cpp
+         Entity.cpp
+         DXGame.cpp
+         dxerr.cpp
+         DemoGame.cpp
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Jetpack\Jetpack Jetpack Party DX11\Debug\DirectX11_Starter.exe" /INCREMENTAL /NOLOGO d3d11.lib d3dcompiler.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Jetpack\Jetpack Jetpack Party DX11\Debug\DirectX11_Starter.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Jetpack\Jetpack Jetpack Party DX11\Debug\DirectX11_Starter.lib" /MACHINE:X86 Debug\DemoGame.obj
+         Debug\dxerr.obj
+         Debug\DXGame.obj
+         Debug\Entity.obj
+         Debug\GameTimer.obj
+         Debug\Material.obj
+         Debug\Menu.obj
+         Debug\Mesh.obj
+         "D:\Jetpack\Jetpack Jetpack Party DX11\DirectX11_Starter\Toolkit\Audio\Bin\Desktop_2012\Win32\Debug\DirectXTKAudioDX.lib"
+         "D:\Jetpack\Jetpack Jetpack Party DX11\DirectX11_Starter\Toolkit\Bin\Desktop_2012\Win32\Debug\DirectXTK.lib"
+         DirectX11_Starter.vcxproj -> D:\Jetpack\Jetpack Jetpack Party DX11\Debug\DirectX11_Starter.exe
+       BscMake:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\bscmake.exe /nologo /o"D:\Jetpack\Jetpack Jetpack Party DX11\Debug\DirectX11_Starter.bsc" /n Debug\DemoGame.sbr Debug\dxerr.sbr Debug\DXGame.sbr Debug\Entity.sbr Debug\GameTimer.sbr Debug\Material.sbr Debug\Menu.sbr Debug\Mesh.sbr
+     1>Done Building Project "D:\Jetpack\Jetpack Jetpack Party DX11\DirectX11_Starter\DirectX11_Starter.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.08
+Time Elapsed 00:00:19.94

@@ -60,6 +60,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	windowHeight = 600;
 	currentState = GameState::Started;
 	menu = new Menu(device, deviceContext);
+	sfx = new Sfx();
 }
 
 DemoGame::~DemoGame()
@@ -244,6 +245,7 @@ float x = 0;
 XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
 void DemoGame::UpdateScene(float dt)
 {
+	sfx->Update(dt);
 	if(currentState == GameState::Playing)
 	{
 	this->deltaTime = dt;

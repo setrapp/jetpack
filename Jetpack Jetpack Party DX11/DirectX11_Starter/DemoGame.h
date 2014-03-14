@@ -12,6 +12,7 @@
 #include "Camera.h"
 #include "GameState.h"
 #include "Menu.h"
+#include "Sfx.h"
 
 using namespace DirectX;
 
@@ -68,6 +69,7 @@ private:
 
 	GameState currentState;
 	Menu* menu;
+	Sfx* sfx;
 };
 
 #endif
