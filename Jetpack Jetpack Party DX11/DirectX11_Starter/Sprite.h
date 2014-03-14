@@ -1,13 +1,19 @@
 
 #include <d3d11.h>
 #include "Toolkit\Inc\SpriteBatch.h"
+#include "Renderer.h"
 
-class SpriteRenderer
+class SpriteRenderer: Renderer
 {
 public:
 	SpriteRenderer::SpriteRenderer(ID3D11DeviceContext* deviceContext)
 	{
 		spriteBatch = new DirectX::SpriteBatch(deviceContext);
+	}
+
+	~SpriteRenderer(void)
+	{
+		
 	}
 
 	void SpriteRenderer::SetColor(FLOAT* color)
@@ -35,12 +41,12 @@ public:
 
 	void SpriteRenderer::Begin()
 	{
-		//this->spriteBatch->Begin(DirectX::SpriteSortMode::SpriteSortMode_FrontToBack, nullptr,nullptr,nullptr,nullptr,nullptr, DirectX::XMMatrixIdentity());
+		this->spriteBatch->Begin(DirectX::SpriteSortMode::SpriteSortMode_FrontToBack, nullptr,nullptr,nullptr,nullptr,nullptr, DirectX::XMMatrixIdentity());
 	}
 
 	void SpriteRenderer::End()
 	{
-		//this->spriteBatch->End();
+		this->spriteBatch->End();
 	}
 
 private: 

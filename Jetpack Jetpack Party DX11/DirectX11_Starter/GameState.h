@@ -1,10 +1,11 @@
-#include <iostream>
-
+#ifndef _GAMESTATE_H
+#define _GAMESTATE_H
 enum GameState
 {
-	Started = 1,
-	Playing = 2,
-	Paused = 1,
-	Won = 1,
-	Lost = 1
+	Started,
+	Playing,
+	Paused,
+	Won,
+	Lost
 };
+#endif

@@ -1,6 +1,5 @@
+#ifndef _DEMOGAME_H
 #pragma once
-
-
 
 #include "FontRenderer.h"
 #include "Sprite.h"
@@ -12,6 +11,7 @@
 #include "Entity.h"
 #include "Camera.h"
 #include "GameState.h"
+#include "Menu.h"
 
 using namespace DirectX;
 
@@ -43,7 +43,7 @@ private:
 	// Initialization for our "game" demo
 	void CreateGeometryBuffers();
 	void LoadShadersAndInputLayout();
-	void LoadEntities();
+
 private:
 	float deltaTime;
 	// Our basic shaders for this example
@@ -59,13 +59,15 @@ private:
 	// determining how far the mouse moved in a single frame.
 	POINT prevMousePos;
 	//Camera* camera;
-	std::vector<Entity*> entities;
+	Entity* entity;
 	SpriteRenderer* spriteRenderer;
-	//FontRenderer* fontRenderer;
+	FontRenderer* fontRenderer;
 
 	DirectX::XMFLOAT4X4 viewMatrix;
 	DirectX::XMFLOAT4X4 projectionMatrix;
-	XMFLOAT3 trans;
 
-public: GameState currState;
+	GameState currentState;
+	Menu* menu;
 };
+
+#endif

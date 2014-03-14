@@ -15,7 +15,6 @@ Entity::Entity(ID3D11Device* device)
 	XMStoreFloat4x4(&transform->trans, XMMatrixIdentity());
 	XMStoreFloat4x4(&transform->scale, XMMatrixIdentity());
 	XMStoreFloat4x4(&transform->rot, XMMatrixIdentity());
-	XMStoreFloat4x4(&transform->worldMatrix, XMMatrixTranspose(XMMatrixIdentity()));
 	this->device = device;
 }
 
