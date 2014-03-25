@@ -12,6 +12,7 @@
 #include "Entity.h"
 #include "Camera.h"
 #include "GameState.h"
+#include "AssetManager.h"
 
 using namespace DirectX;
 
@@ -46,8 +47,10 @@ private:
 	void LoadEntities();
 private:
 	float deltaTime;
+	AssetManager* assetManager;
 	// Our basic shaders for this example
 	ID3D11PixelShader* pixelShader;
+	ID3D11PixelShader* texturePixelShader;
 	ID3D11VertexShader* vertexShader;
 
 	// A few more odds and ends we'll need

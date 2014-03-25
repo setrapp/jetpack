@@ -64,6 +64,8 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 
 DemoGame::~DemoGame()
 {
+	delete assetManager;
+	assetManager = 0;
 	ReleaseMacro(vertexShader);
 	ReleaseMacro(pixelShader);
 	ReleaseMacro(vsConstantBuffer);
@@ -80,8 +82,10 @@ bool DemoGame::Init()
 {
 	if( !DXGame::Init() )
 		return false;
-
+	
 	FLOAT color[4] = {0.4f, 0.6f, 0.75f, 0.0f};
+
+	AssetManager* assetManager = new AssetManager();
 
 	spriteRenderer = new SpriteRenderer(deviceContext);
 	spriteRenderer->SetColor(color);	
@@ -125,9 +129,21 @@ void DemoGame::LoadEntities()
 		{ XMFLOAT3(-1.0f, +1.0f, +0.0f), mid, XMFLOAT2(1, 0) },
 	};
 
+	Vertex vertices1[] = 
+	{
+		{ XMFLOAT3(2.0f, 1.0f, 0.0f), red, XMFLOAT2(0, 0) },
+		{ XMFLOAT3(1.5f, -1.0f, 0.0f), green, XMFLOAT2(1, 1) },
+		{ XMFLOAT3(2.0f, -1.0f, 0.0f), blue, XMFLOAT2(0, 1) },		
+		{ XMFLOAT3(1.5f, 1.0f, 0.0f), mid, XMFLOAT2(1, 0) },
+	};
+
 	UINT indices[] = { 0, 2, 1, 3, 0, 1 };		
 	entity->AddQuad(vertices, indices);
 	entities.push_back(entity);
+
+	Entity* entity1 = new Entity(device);
+	entity->AddQuad(vertices, indices);
+	//entities.push_back(entity1);
 }
 
 // Creates the vertex and index buffers for a single triangle
@@ -152,40 +168,11 @@ void DemoGame::LoadShadersAndInputLayout()
 	};
 
 	// Load Vertex Shader --------------------------------------
-	ID3DBlob* vsBlob;
-	D3DReadFileToBlob(L"VertexShader.cso", &vsBlob);
+	vertexShader = AssetManager::Instance()->CreateAndStoreVertexShader("SimpleVertexShader.cso", vertexDesc, ARRAYSIZE(vertexDesc), &inputLayout);
 
-	// Create the shader on the device
-	HR(device->CreateVertexShader(
-		vsBlob->GetBufferPointer(),
-		vsBlob->GetBufferSize(),
-		NULL,
-		&vertexShader));
-
-	// Before cleaning up the data, create the input layout
-	HR(device->CreateInputLayout(
-		vertexDesc,
-		ARRAYSIZE(vertexDesc),
-		vsBlob->GetBufferPointer(),
-		vsBlob->GetBufferSize(),
-		&inputLayout));
-
-	// Clean up
-	ReleaseMacro(vsBlob);
-
-	// Load Pixel Shader ---------------------------------------
-	ID3DBlob* psBlob;
-	D3DReadFileToBlob(L"PixelShader.cso", &psBlob);
-
-	// Create the shader on the device
-	HR(device->CreatePixelShader(
-		psBlob->GetBufferPointer(),
-		psBlob->GetBufferSize(),
-		NULL,
-		&pixelShader));
-
-	// Clean up
-	ReleaseMacro(psBlob);
+	// Load Pixel Shaders ---------------------------------------
+	pixelShader = AssetManager::Instance()->CreateAndStorePixelShader("SimplePixelShader.cso");
+	texturePixelShader = AssetManager::Instance()->CreateAndStorePixelShader("TexturePixelShader.cso", "texture");
 
 	// Constant buffers ----------------------------------------
 	D3D11_BUFFER_DESC cBufferDesc;
@@ -305,10 +292,12 @@ void DemoGame::DrawScene()
 		&vsConstantBuffer);
 
 	deviceContext->PSSetShader(
-		pixelShader, 
+		texturePixelShader, 
 		NULL, 
 		0);
 #endif
+
+	// Draw Entities
 	if(currState == GameState::Playing)
 	{
 		spriteRenderer->Begin();

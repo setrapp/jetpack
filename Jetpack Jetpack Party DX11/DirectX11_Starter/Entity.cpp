@@ -16,12 +16,15 @@ Entity::Entity(ID3D11Device* device)
 	XMStoreFloat4x4(&transform->scale, XMMatrixIdentity());
 	XMStoreFloat4x4(&transform->rot, XMMatrixIdentity());
 	XMStoreFloat4x4(&transform->worldMatrix, XMMatrixTranspose(XMMatrixIdentity()));
+	material = new Material();
 	this->device = device;
 }
 
-
 Entity::~Entity(void)
 {
+	delete transform;
+
+	// TODO Do should we track materials and meshes globally so no one owns them?
 }
 
 XMFLOAT4X4 Entity::GetWorldMatrix()
@@ -63,15 +66,15 @@ void Entity::Draw(ID3D11DeviceContext* deviceContext)
 	}
 }
 
-
 void Entity::LoadTexture(wchar_t* path, ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 {	
-	Material* w = new Material(device, deviceContext, path);
-	Material m(device, deviceContext, path);
+	//Material* w = new Material(device, deviceContext, path);
+	/*Material m(device, deviceContext, path);
 	this->material = (Material*)malloc(sizeof(Material*));
 	this->material->resourceView = m.resourceView;
 	this->material->samplerState = m.samplerState;
-	this->material->texture = m.texture;
+	this->material->texture = m.texture;*/
+	this->material->ApplyTexture(device, deviceContext, path);
 }
 
 

@@ -7,8 +7,23 @@
 
 using namespace DirectX;
 
+Material::Material()
+{
+	this->color = XMFLOAT4(0.7f, 0.3f, 0.0f, 1.0f);
+}
+
+Material::Material(XMFLOAT4 color)
+{	
+	this->color = color;
+}
+
 Material::Material(ID3D11Device* device, ID3D11DeviceContext* deviceContext, wchar_t* path)
 {	
+	ApplyTexture(device, deviceContext, path);
+}
+
+void Material::ApplyTexture(ID3D11Device* device, ID3D11DeviceContext* deviceContext, wchar_t* path)
+{
 	HR (CreateWICTextureFromFile(
 		device, 
 		deviceContext, 
@@ -27,7 +42,6 @@ Material::Material(ID3D11Device* device, ID3D11DeviceContext* deviceContext, wch
 		&sBufferDesc,
 		&this->samplerState);
 }
-
 
 Material::~Material(void)
 {
