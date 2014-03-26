@@ -28,6 +28,8 @@
 #include "Common.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <comdef.h>
+#include <iostream>
 
 #pragma region Win32 Entry Point (WinMain)
 
@@ -172,12 +174,11 @@ void DemoGame::LoadShadersAndInputLayout()
 	};
 
 	// Load Vertex Shader --------------------------------------
-	AssetManager* a = AssetManager::Instance();
-	vertexShader = AssetManager::Instance()->CreateAndStoreVertexShader("SimpleVertexShader.cso", vertexDesc, ARRAYSIZE(vertexDesc), &inputLayout);
+	vertexShader = AssetManager::Instance()->CreateAndStoreVertexShader("../Debug/SimpleVertexShader.cso", vertexDesc, ARRAYSIZE(vertexDesc), &inputLayout);
 
 	// Load Pixel Shaders ---------------------------------------
-	pixelShader = AssetManager::Instance()->CreateAndStorePixelShader("SimplePixelShader.cso");
-	texturePixelShader = AssetManager::Instance()->CreateAndStorePixelShader("TexturePixelShader.cso", "texture");
+	pixelShader = AssetManager::Instance()->CreateAndStorePixelShader("../Debug/SimplePixelShader.cso");
+	texturePixelShader = AssetManager::Instance()->CreateAndStorePixelShader("../Debug/TexturePixelShader.cso", "texture");
 
 	// Constant buffers ----------------------------------------
 	D3D11_BUFFER_DESC cBufferDesc;

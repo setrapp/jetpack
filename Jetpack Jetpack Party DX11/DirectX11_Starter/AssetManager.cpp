@@ -77,7 +77,7 @@ ID3D11VertexShader* AssetManager::CreateAndStoreVertexShader(string shaderPath, 
 	wchar_t* widePath = new wchar_t[shaderPath.length() + 1];
 	copy(shaderPath.begin(), shaderPath.end(), widePath);
 	widePath[shaderPath.length()] = '\0';
-	
+
 	// Create the shader on the device.
 	ID3DBlob* vsBlob;
 	D3DReadFileToBlob(widePath, &vsBlob);
