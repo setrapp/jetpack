@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <comdef.h>
 #include <iostream>
+#include "ModelLoad\MLModelViewer.h"
 
 #pragma region Win32 Entry Point (WinMain)
 
@@ -132,7 +133,7 @@ void DemoGame::CreateGeometryBuffers()
 	UINT indices[] = { 0, 2, 1, 3, 0, 1 };	
 
 	
-	for(int i = 0 ; i < 5; i ++)
+	/*for(int i = 0 ; i < 5; i ++)
 	{	
 		Entity* entity = new Entity();
 
@@ -154,8 +155,43 @@ void DemoGame::CreateGeometryBuffers()
 		//if(rand() % 10 < 5)
 			//entity->LoadTexture(L"tex1.jpg", device, deviceContext);
 		entities.push_back(entity);
-	}
+	}*/
 
+	// Attempt to load model
+	MLModel3D* model = mlModel3DLoadOBJ("../Assets/cube.obj");
+	/*unsigned int count = mlModel3DGetVertexCount(model);
+	for (int i = 0; i < count; i++) {
+		MLVertex3D const* vert = mlModel3DGetVertex(model, i);
+		int wer = 0;
+	}*/
+	Entity* modelEnt = new Entity();
+	unsigned int faceCount = mlModel3DGetFaceCount(model);
+	for (int i = 0; i < faceCount; i++) {
+		MLFace3D const* face = mlModel3DGetFace(model, i);
+		// Vertex 1
+		unsigned short mlIndex = mlFace3DGetVertex1(face);
+		MLVertex3D const* mlVertex = mlModel3DGetVertex(model, mlIndex);
+		GUPoint3D guPoint = mlVertex3DGetPosition(mlVertex);
+		Vertex vertex1;
+		vertex1.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
+		// Vertex 2
+		mlIndex = mlFace3DGetVertex1(face);
+		mlVertex = mlModel3DGetVertex(model, mlIndex);
+		guPoint = mlVertex3DGetPosition(mlVertex);
+		Vertex vertex2;
+		vertex2.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
+		// Vertex 3
+		mlIndex = mlFace3DGetVertex1(face);
+		mlVertex = mlModel3DGetVertex(model, mlIndex);
+		guPoint = mlVertex3DGetPosition(mlVertex);
+		Vertex vertex3;
+		vertex3.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
+		Vertex vertices[] = {vertex1, vertex2, vertex3};
+		UINT indices[] = {0, 1, 2};
+		modelEnt->AddTraingle(vertices, indices);
+	}
+	modelEnt->LoadTexture(L"../Assets/RedGift.png");
+	entities.push_back(modelEnt);
 }
 
 // Loads shaders from compiled shader object (.cso) files, and uses the
@@ -262,7 +298,7 @@ void DemoGame::UpdateScene(float dt)
 	}	*/
 	for(Entity* e: entities)
 		{
-			auto p = rand() % 2;
+			/*auto p = rand() % 2;
 			p++;
 			if(p <4 )
 				e->transform->Translate(XMFLOAT3(rand() % p * 0.1f, rand() % p * 0.1f, rand() % p * 0.1f));
@@ -270,7 +306,7 @@ void DemoGame::UpdateScene(float dt)
 				e->transform->Rotate(XMFLOAT3(rand() % p * 0.1f, rand() % p * 0.1f, rand() % p * 0.1f));
 
 		
-			e->Update(dt);
+			e->Update(dt);*/
 		}
 	}
 

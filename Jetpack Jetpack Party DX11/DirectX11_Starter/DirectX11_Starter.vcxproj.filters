@@ -46,6 +46,12 @@
     <Filter Include="Header Files\Input">
       <UniqueIdentifier>{b5caec15-6297-4e70-a5eb-14040a8543c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ModelLoading">
+      <UniqueIdentifier>{98d47a7d-e4bb-4e53-9f40-4fb559444154}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ModelLoading">
+      <UniqueIdentifier>{8832b5cd-f068-4934-acc7-29ceeaa143c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXGame.cpp">
@@ -77,6 +83,18 @@
     </ClCompile>
     <ClCompile Include="DXConnection.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelLoad\MLMaterialLoader.c">
+      <Filter>Source Files\ModelLoading</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralUtility\GUMathUtility.cpp">
+      <Filter>Source Files\ModelLoading</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralUtility\GUParseUtility.cpp">
+      <Filter>Source Files\ModelLoading</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelLoad\MLModelViewer.c">
+      <Filter>Source Files\ModelLoading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +178,18 @@
     </ClInclude>
     <ClInclude Include="DXConnection.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelLoad\MLMaterialLoader.h">
+      <Filter>Header Files\ModelLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralUtility\GUMathUtility.h">
+      <Filter>Header Files\ModelLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralUtility\GUParseUtility.h">
+      <Filter>Header Files\ModelLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelLoad\MLModelViewer.h">
+      <Filter>Header Files\ModelLoading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

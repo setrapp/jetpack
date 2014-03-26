@@ -82,9 +82,13 @@
     <ClCompile Include="DXGame.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="GeneralUtility\GUMathUtility.cpp" />
+    <ClCompile Include="GeneralUtility\GUParseUtility.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="ModelLoad\MLMaterialLoader.c" />
+    <ClCompile Include="ModelLoad\MLModelViewer.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />
@@ -99,12 +103,16 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="GeneralUtility\GUMathUtility.h" />
+    <ClInclude Include="GeneralUtility\GUParseUtility.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="KeyboardInput.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="ModelLoad\MLMaterialLoader.h" />
+    <ClInclude Include="ModelLoad\MLModelViewer.h" />
     <ClInclude Include="MouseInput.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Renderer.h" />
