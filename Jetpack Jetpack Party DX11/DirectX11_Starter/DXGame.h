@@ -19,6 +19,7 @@
 #include "GameTimer.h"
 #include "DXConnection.h"
 
+
 class DXGame
 {
 public:

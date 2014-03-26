@@ -71,7 +71,7 @@ DXGame::~DXGame(void)
 	ReleaseMacro(depthStencilView);
 	ReleaseMacro(swapChain);
 	ReleaseMacro(depthStencilBuffer);
-	
+
 	// Delete Exposed connection to DirectX
 	delete dxConnection;
 	dxConnection = 0;

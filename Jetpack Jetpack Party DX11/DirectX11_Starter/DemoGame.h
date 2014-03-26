@@ -1,6 +1,5 @@
+#ifndef _DEMOGAME_H
 #pragma once
-
-
 
 #include "FontRenderer.h"
 #include "Sprite.h"
@@ -12,6 +11,9 @@
 #include "Entity.h"
 #include "Camera.h"
 #include "GameState.h"
+#include "Menu.h"
+#include "Sfx.h"
+#include "Camera.h"
 #include "AssetManager.h"
 
 using namespace DirectX;
@@ -44,7 +46,7 @@ private:
 	// Initialization for our "game" demo
 	void CreateGeometryBuffers();
 	void LoadShadersAndInputLayout();
-	void LoadEntities();
+
 private:
 	float deltaTime;
 	AssetManager* assetManager;
@@ -64,11 +66,16 @@ private:
 	//Camera* camera;
 	std::vector<Entity*> entities;
 	SpriteRenderer* spriteRenderer;
-	//FontRenderer* fontRenderer;
+	FontRenderer* fontRenderer;
 
-	DirectX::XMFLOAT4X4 viewMatrix;
-	DirectX::XMFLOAT4X4 projectionMatrix;
-	XMFLOAT3 trans;
+	//DirectX::XMFLOAT4X4 viewMatrix;
+	//DirectX::XMFLOAT4X4 projectionMatrix;
 
-public: GameState currState;
+
+	Camera* camera;
+	GameState currentState;
+	Menu* menu;
+	//Sfx* sfx;
 };
+
+#endif

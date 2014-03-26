@@ -82,7 +82,6 @@ ID3D11VertexShader* AssetManager::CreateAndStoreVertexShader(string shaderPath, 
 	ID3DBlob* vsBlob;
 	D3DReadFileToBlob(widePath, &vsBlob);
 	ID3D11VertexShader* vertexShader;
-	DXConnection* a = DXConnection::Instance();
 	HR(DXConnection::Instance()->device->CreateVertexShader(
 		vsBlob->GetBufferPointer(),
 		vsBlob->GetBufferSize(),

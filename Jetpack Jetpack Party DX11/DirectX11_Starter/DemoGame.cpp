@@ -55,17 +55,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 {
-	windowCaption = L"Jetpack Jetpack Party!";
+	windowCaption = L"Demo DX11 Game";
 	windowWidth = 800;
 	windowHeight = 600;
-	currState = GameState::Started;
-	trans = XMFLOAT3(0, 0, 0);
+	currentState = GameState::Started;
+	menu = new Menu(device, deviceContext);
+	camera = new Camera();
+	//sfx = new Sfx();
 }
 
 DemoGame::~DemoGame()
 {
-	delete assetManager;
-	assetManager = 0;
 	ReleaseMacro(vertexShader);
 	ReleaseMacro(pixelShader);
 	ReleaseMacro(vsConstantBuffer);
@@ -82,45 +82,43 @@ bool DemoGame::Init()
 {
 	if( !DXGame::Init() )
 		return false;
-	
+
 	FLOAT color[4] = {0.4f, 0.6f, 0.75f, 0.0f};
 
 	AssetManager* assetManager = new AssetManager();
 
 	spriteRenderer = new SpriteRenderer(deviceContext);
 	spriteRenderer->SetColor(color);	
+	fontRenderer = new FontRenderer(device, L"../Assets/font.spritefont");	
+	fontRenderer->setSpriteBatch(spriteRenderer->GetSpriteBatch());
 
-	LoadEntities();
-//	fontRenderer = new FontRenderer(device, L"font1.spritefont");	
-//	fontRenderer->setSpriteBatch(spriteRenderer->GetSpriteBatch());
-
+	// Set up buffers and such
 	CreateGeometryBuffers();
 	LoadShadersAndInputLayout();
 	this->deltaTime = 0;
-	// Set up view matrix (camera)
-	// In an actual game, update this when the camera moves (so every frame)
+
 	XMVECTOR position	= XMVectorSet(0, 0, -5, 0);
 	XMVECTOR target		= XMVectorSet(0, 0, 0, 0);
 	XMVECTOR up			= XMVectorSet(0, 1, 0, 0);
 	XMMATRIX V			= XMMatrixLookAtLH(position, target, up);
-	XMStoreFloat4x4(&viewMatrix, XMMatrixTranspose(V));
-	
-	
-	
-	currState = GameState::Playing;
+
+	XMStoreFloat4x4(&camera->view, XMMatrixTranspose(V));
+
+	XMMATRIX W = XMMatrixIdentity();
+	for( Entity* e : entities)
+		XMStoreFloat4x4(&e->GetWorldMatrix(), XMMatrixTranspose(W));	
+
 	return true;
 }
 
-void DemoGame::LoadEntities()
+
+void DemoGame::CreateGeometryBuffers()
 {
-	Entity* entity = new Entity(device);
-	entity->LoadTexture(L"../Assets/RedGift.png", device, deviceContext);
 	XMFLOAT4 red	= XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
 	XMFLOAT4 green	= XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT4 blue	= XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 	
-	// Set up the vertices
 	Vertex vertices[] = 
 	{
 		{ XMFLOAT3(+1.0f, +1.0f, +0.0f), red, XMFLOAT2(0, 0) },
@@ -129,26 +127,32 @@ void DemoGame::LoadEntities()
 		{ XMFLOAT3(-1.0f, +1.0f, +0.0f), mid, XMFLOAT2(1, 0) },
 	};
 
-	Vertex vertices1[] = 
-	{
-		{ XMFLOAT3(2.0f, 1.0f, 0.0f), red, XMFLOAT2(0, 0) },
-		{ XMFLOAT3(1.5f, -1.0f, 0.0f), green, XMFLOAT2(1, 1) },
-		{ XMFLOAT3(2.0f, -1.0f, 0.0f), blue, XMFLOAT2(0, 1) },		
-		{ XMFLOAT3(1.5f, 1.0f, 0.0f), mid, XMFLOAT2(1, 0) },
-	};
+	UINT indices[] = { 0, 2, 1, 3, 0, 1 };	
 
-	UINT indices[] = { 0, 2, 1, 3, 0, 1 };		
-	entity->AddQuad(vertices, indices);
-	entities.push_back(entity);
+	
+	for(int i = 0 ; i < 5; i ++)
+	{	
+		Entity* entity = new Entity(device);
 
-	Entity* entity1 = new Entity(device);
-	entity->AddQuad(vertices, indices);
-	//entities.push_back(entity1);
-}
-
-// Creates the vertex and index buffers for a single triangle
-void DemoGame::CreateGeometryBuffers()
-{
+		for(Vertex v : vertices)
+		{
+			int w;
+			if(rand() < 500)
+				w = -1;
+			else
+				w = 1;
+			v.Position.x += w * rand() % 2;
+			v.Position.y += w * rand() % 2;
+			v.Position.z += w * rand() %2;
+			v.Color.x += rand() % 5;
+			v.Color.y += rand() % 5;
+			v.Color.z += rand() % 5;
+		}
+		entity->AddQuad(vertices, indices);
+		//if(rand() % 10 < 5)
+			//entity->LoadTexture(L"tex1.jpg", device, deviceContext);
+		entities.push_back(entity);
+	}
 
 }
 
@@ -168,6 +172,7 @@ void DemoGame::LoadShadersAndInputLayout()
 	};
 
 	// Load Vertex Shader --------------------------------------
+	AssetManager* a = AssetManager::Instance();
 	vertexShader = AssetManager::Instance()->CreateAndStoreVertexShader("SimpleVertexShader.cso", vertexDesc, ARRAYSIZE(vertexDesc), &inputLayout);
 
 	// Load Pixel Shaders ---------------------------------------
@@ -187,6 +192,8 @@ void DemoGame::LoadShadersAndInputLayout()
 		NULL,
 		&vsConstantBuffer));
 
+	
+	menu->setRenderers(fontRenderer);
 
 #ifdef OPTIMIZATION
 	deviceContext->IASetInputLayout(inputLayout);
@@ -209,74 +216,103 @@ void DemoGame::LoadShadersAndInputLayout()
 // Handles resizing the window and updating our projection matrix to match
 void DemoGame::OnResize()
 {
-	// Handle base-level DX resize stuff
 	DXGame::OnResize();
-	//if(!camera)
-	//	camera = new Camera();
-
-	//camera->Resize(AspectRatio());
 		XMMATRIX P = XMMatrixPerspectiveFovLH(
 			0.25f * 3.1415926535f,
 			AspectRatio(),
 			0.1f,
 			100.0f);
-
-		XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P));
+	
+	XMStoreFloat4x4(&camera->projection, XMMatrixTranspose(P));
 }
 #pragma endregion
 
 #pragma region Game Loop
 
-
+// Updates the local constant buffer and 
+// push it to the buffer on the device
+float x = 0;
+XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
 void DemoGame::UpdateScene(float dt)
 {
-	if(currState == GameState::Playing)
+	//sfx->Update(dt);
+	if(currentState == GameState::Playing)
 	{
-		this->deltaTime = dt;
-
-		dt *= 5;
-		if(GetAsyncKeyState(VK_UP))
-		{
-			trans.y += dt;
-		}
-		if(GetAsyncKeyState(VK_DOWN))
-		{
-			trans.y -= dt;
-		}
-		if(GetAsyncKeyState(VK_LEFT))
-		{
-			trans.x -= dt;
-		}
-		if(GetAsyncKeyState(VK_RIGHT))
-		{
-			trans.x += dt;
-		}	
-		for(Entity* e : entities)
-		{
-			e->transform->Translate(trans);
-
-			e->Update(
-			dt, 
-			&vsConstantBufferData);
-		}
-
-		vsConstantBufferData.view		= viewMatrix;
-		vsConstantBufferData.projection	= projectionMatrix;
-		deviceContext->UpdateSubresource(
-			vsConstantBuffer,
-			0,			
-			NULL,		
-			&vsConstantBufferData,
-			0,
-			0);
+	this->deltaTime = dt;
+	
+	x = x + dt;
+	//entity.Rotate(XMFLOAT3(0, 0, x));
+	dt *= 5;
+	/*if(GetAsyncKeyState(VK_UP))
+	{
+		trans.y += dt;
 	}
+	if(GetAsyncKeyState(VK_DOWN))
+	{
+		trans.y -= dt;
+	}
+	if(GetAsyncKeyState(VK_LEFT))
+	{
+		trans.x -= dt;
+	}
+	if(GetAsyncKeyState(VK_RIGHT))
+	{
+		trans.x += dt;
+	}	*/
+	for(Entity* e: entities)
+		{
+			auto p = rand() % 2;
+			p++;
+			if(p <4 )
+				e->transform->Translate(XMFLOAT3(rand() % p * 0.1f, rand() % p * 0.1f, rand() % p * 0.1f));
+			else
+				e->transform->Rotate(XMFLOAT3(rand() % p * 0.1f, rand() % p * 0.1f, rand() % p * 0.1f));
+
+		
+			e->Update(
+				dt, 
+				&vsConstantBufferData);
+		}
+	}
+
+	camera->Update(dt, &vsConstantBufferData);	
+
+	if(currentState == GameState::Started)
+	{
+		currentState = menu->Update(dt);
+	}
+
+
+	deviceContext->UpdateSubresource(
+	vsConstantBuffer,
+	0,			
+	NULL,		
+	&vsConstantBufferData,
+	0,
+	0);
 }
 
 // Clear the screen, redraw everything, present
 void DemoGame::DrawScene()
 {
 	spriteRenderer->ClearScreen(deviceContext, renderTargetView, depthStencilView);
-	
+	FLOAT color[4] = {0.4f, 0.6f, 0.75f, 0.0f};
+	deviceContext->ClearRenderTargetView(
+		renderTargetView,
+		color);
+
+	deviceContext->ClearDepthStencilView(
+		depthStencilView, 
+		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
+		1.0f,
+		0);
+	if(currentState == GameState::Started)
+	{	
+		spriteRenderer->Begin();
+		menu->Render(deviceContext);
+		spriteRenderer->End();
+	}
+
 #ifndef OPTIMIZATION
 	deviceContext->IASetInputLayout(inputLayout);
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -296,17 +332,9 @@ void DemoGame::DrawScene()
 		NULL, 
 		0);
 #endif
+	for(Entity* e :entities)
+		e->Draw(deviceContext);
 
-	// Draw Entities
-	if(currState == GameState::Playing)
-	{
-		spriteRenderer->Begin();
-		for(Entity* e : entities)
-		{
-			e->Draw(deviceContext);
-		}	
-		spriteRenderer->End();
-	}
 	HR(swapChain->Present(0, 0));
 }
 
@@ -320,7 +348,7 @@ void DemoGame::OnMouseDown(WPARAM btnState, int x, int y)
 {
 	prevMousePos.x = x;
 	prevMousePos.y = y;
-
+	menu->ProcessMouseInput(btnState, x, y);
 	SetCapture(hMainWnd);
 }
 
@@ -339,9 +367,9 @@ void DemoGame::OnMouseWheel(WPARAM btnState, int x, int y)
 {
 	float rot = (float)GET_WHEEL_DELTA_WPARAM(btnState);
 	if (rot <= 0)
-		rot = -0.085f;
+		rot = +0.085f;
 	else
-		rot = 0.085f;
+		rot = -0.085f;
 
 	trans.z += rot;
 }
