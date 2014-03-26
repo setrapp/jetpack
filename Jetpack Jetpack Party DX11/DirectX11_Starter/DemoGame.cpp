@@ -114,7 +114,7 @@ bool DemoGame::Init()
 void DemoGame::LoadEntities()
 {
 	Entity* entity = new Entity(device);
-	entity->LoadTexture(L"RedGift.png", device, deviceContext);
+	entity->LoadTexture(L"../Assets/RedGift.png", device, deviceContext);
 	XMFLOAT4 red	= XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
 	XMFLOAT4 green	= XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT4 blue	= XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
