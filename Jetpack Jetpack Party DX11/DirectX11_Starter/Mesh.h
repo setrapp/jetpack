@@ -10,11 +10,11 @@ using namespace DirectX;
 class Mesh
 {
 public:
-	Mesh(Vertex* v, UINT* i, int noOfIndices, int noOfVertices, ID3D11Device* device);
+	Mesh(Vertex* v, UINT* i, int noOfIndices, int noOfVertices);
 	~Mesh(void);
-	void Initialize(Vertex* v, UINT* i, int noOfIndices, int noOfVertices, ID3D11Device* device);
+	void Initialize(Vertex* v, UINT* i, int noOfIndices, int noOfVertices);
 	void Update(float dt);
-	void Draw(ID3D11DeviceContext* deviceContext);
+	void Draw();
 
 private:
 	ID3D11Buffer* indexBuffer;

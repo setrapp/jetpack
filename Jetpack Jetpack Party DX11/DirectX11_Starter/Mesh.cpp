@@ -2,7 +2,7 @@
 #include "Vertex.h"
 #include <stdio.h>
 
-Mesh::Mesh(Vertex* v, UINT* i, int noOfIndices, int noOfVertices, ID3D11Device* device)
+Mesh::Mesh(Vertex* v, UINT* i, int noOfIndices, int noOfVertices)
 {
 	D3D11_BUFFER_DESC vbd;
     vbd.Usage					= D3D11_USAGE_IMMUTABLE;
@@ -15,7 +15,7 @@ Mesh::Mesh(Vertex* v, UINT* i, int noOfIndices, int noOfVertices, ID3D11Device* 
     D3D11_SUBRESOURCE_DATA initialVertexData;
     initialVertexData.pSysMem	= v;
 
-    HR(device->CreateBuffer(
+    HR(DXConnection::Instance()->device->CreateBuffer(
 		&vbd,
 		&initialVertexData,
 		&vertexBuffer));
@@ -32,7 +32,7 @@ Mesh::Mesh(Vertex* v, UINT* i, int noOfIndices, int noOfVertices, ID3D11Device* 
     D3D11_SUBRESOURCE_DATA initialIndexData;
     initialIndexData.pSysMem	= i;
 
-    HR(device->CreateBuffer(
+    HR(DXConnection::Instance()->device->CreateBuffer(
 		&ibd,
 		&initialIndexData,
 		&indexBuffer));
@@ -48,15 +48,15 @@ Mesh::~Mesh(void)
 
 void Update(float dt);
 
-void Mesh::Draw(ID3D11DeviceContext* deviceContext)
+void Mesh::Draw()
 {	
 	const UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 
-	deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-	deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	DXConnection::Instance()->deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	DXConnection::Instance()->deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-	deviceContext->DrawIndexed(
+	DXConnection::Instance()->deviceContext->DrawIndexed(
 		this->totalIndices,	// The number of indices we're using in this draw
 		0,
 		0);

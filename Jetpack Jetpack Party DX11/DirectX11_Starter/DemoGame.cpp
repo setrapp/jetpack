@@ -132,7 +132,7 @@ void DemoGame::CreateGeometryBuffers()
 	
 	for(int i = 0 ; i < 5; i ++)
 	{	
-		Entity* entity = new Entity(device);
+		Entity* entity = new Entity();
 
 		for(Vertex v : vertices)
 		{
@@ -269,9 +269,7 @@ void DemoGame::UpdateScene(float dt)
 				e->transform->Rotate(XMFLOAT3(rand() % p * 0.1f, rand() % p * 0.1f, rand() % p * 0.1f));
 
 		
-			e->Update(
-				dt, 
-				&vsConstantBufferData);
+			e->Update(dt);
 		}
 	}
 
@@ -332,8 +330,11 @@ void DemoGame::DrawScene()
 		NULL, 
 		0);
 #endif
-	for(Entity* e :entities)
-		e->Draw(deviceContext);
+	for(Entity* e :entities) 
+	{
+		vsConstantBufferData.world = e->transform->worldMatrix;
+		e->Draw();
+	}
 
 	HR(swapChain->Present(0, 0));
 }

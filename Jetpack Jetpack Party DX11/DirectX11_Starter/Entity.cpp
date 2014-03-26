@@ -8,14 +8,13 @@
 #include <stdlib.h>
 using namespace DirectX;
 
-Entity::Entity(ID3D11Device* device)
+Entity::Entity()
 {
 	totalMeshes = 0;
 	transform = new Transform();
 	XMStoreFloat4x4(&transform->trans, XMMatrixIdentity());
 	XMStoreFloat4x4(&transform->scale, XMMatrixIdentity());
 	XMStoreFloat4x4(&transform->rot, XMMatrixIdentity());
-	this->device = device;
 }
 
 
@@ -30,21 +29,20 @@ XMFLOAT4X4 Entity::GetWorldMatrix()
 
 void Entity::AddQuad(Vertex* v, UINT* i)
 {
-	Mesh* m = new Mesh(v, i, 6, 4, this->device);
+	Mesh* m = new Mesh(v, i, 6, 4);
 	meshes.push_back(m);
 	totalMeshes ++;
 }
 
 void Entity::AddTraingle(Vertex* v, UINT* i)
 {
-	Mesh* m = new Mesh(v, i, 3, 3, this->device);
+	Mesh* m = new Mesh(v, i, 3, 3);
 	meshes.push_back(m);
 	totalMeshes ++;
 }
 
-void Entity::Update(float dt, VertexShaderConstantBuffer* vsConstantBuffer)
+void Entity::Update(float dt)
 {
-	vsConstantBuffer->world = this->transform->worldMatrix;
 	if(this->transform->changed)
 	{
 		this->transform->changed = false;
@@ -52,29 +50,23 @@ void Entity::Update(float dt, VertexShaderConstantBuffer* vsConstantBuffer)
 	}
 }
 
-void Entity::Draw(ID3D11DeviceContext* deviceContext)
+void Entity::Draw()
 {
 	if(material)
 	{
-		deviceContext->PSSetShaderResources(0, 1, &material->resourceView);
-		deviceContext->PSSetSamplers(0, 1, &material->samplerState);
+		DXConnection::Instance()->deviceContext->PSSetShaderResources(0, 1, &material->resourceView);
+		DXConnection::Instance()->deviceContext->PSSetSamplers(0, 1, &material->samplerState);
 	}
 	for(LONG i = 0; i < totalMeshes; i++)
 	{		
-		meshes[i]->Draw(deviceContext);
+		meshes[i]->Draw();
 	}
 }
 
 
-void Entity::LoadTexture(wchar_t* path, ID3D11Device* device, ID3D11DeviceContext* deviceContext)
+void Entity::LoadTexture(wchar_t* path)
 {	
-	/*Material* w = new Material(device, deviceContext, path);
-	Material m(device, deviceContext, path);
-	this->material = (Material*)malloc(sizeof(Material*));
-	this->material->resourceView = m.resourceView;
-	this->material->samplerState = m.samplerState;
-	this->material->texture = m.texture;*/
-	this->material->ApplyTexture(device, deviceContext, path);
+	this->material->ApplyTexture(path);
 }
 
 

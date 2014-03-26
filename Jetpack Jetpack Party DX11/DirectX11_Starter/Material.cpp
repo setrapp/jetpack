@@ -17,16 +17,16 @@ Material::Material(XMFLOAT4 color)
 	this->color = color;
 }
 
-Material::Material(ID3D11Device* device, ID3D11DeviceContext* deviceContext, wchar_t* path)
+Material::Material(wchar_t* path)
 {	
-	ApplyTexture(device, deviceContext, path);
+	ApplyTexture(path);
 }
 
-void Material::ApplyTexture(ID3D11Device* device, ID3D11DeviceContext* deviceContext, wchar_t* path)
+void Material::ApplyTexture(wchar_t* path)
 {
 	HR (CreateWICTextureFromFile(
-		device, 
-		deviceContext, 
+		DXConnection::Instance()->device, 
+		DXConnection::Instance()->deviceContext, 
 		path, 
 		&texture, 
 		&this->resourceView));
@@ -38,7 +38,7 @@ void Material::ApplyTexture(ID3D11Device* device, ID3D11DeviceContext* deviceCon
 	sBufferDesc.Filter = D3D11_FILTER_COMPARISON_ANISOTROPIC;
 	sBufferDesc.MaxAnisotropy = 16;
 
-	device->CreateSamplerState(
+	DXConnection::Instance()->device->CreateSamplerState(
 		&sBufferDesc,
 		&this->samplerState);
 }
