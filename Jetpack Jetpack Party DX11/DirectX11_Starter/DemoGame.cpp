@@ -159,20 +159,32 @@ void DemoGame::CreateGeometryBuffers()
 	// Attempt to load model
 	MLModel3D* model = mlModel3DLoadOBJ("../Assets/video_camera.obj");
 	Entity* modelEnt = new Entity();
+	bool hasUVs = mlModel3DGetTextureVertexCount(model) > 1;
 	unsigned int faceCount = mlModel3DGetFaceCount(model);
 	for (int i = 0; i < faceCount; i++) {
+		// Retrieve current face.
 		MLFace3D const* face = mlModel3DGetFace(model, i);
+
+		// Retrieve vertices that make up current face.
+		unsigned short mlIndex;
+		MLVertex3D const* mlVertex;
+		MLTexelXY const* mlTexel;
+		GUPoint3D guPoint;
+		GUPoint2D guUV;
 		// Vertex 1
-		unsigned short mlIndex = mlFace3DGetVertex1(face);
-		MLVertex3D const* mlVertex = mlModel3DGetVertex(model, mlIndex);
-		//MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(model, mlIndex);
-		GUPoint3D guPoint = mlVertex3DGetPosition(mlVertex);
-		//GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
+		mlIndex = mlFace3DGetVertex1(face);
+		mlVertex = mlModel3DGetVertex(model, mlIndex);
+		guPoint = mlVertex3DGetPosition(mlVertex);
 		Vertex vertex1;
 		vertex1.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
 		vertex1.Color = red;
-		vertex1.UV = XMFLOAT2(0,0);
-		//vertex1.UV = XMFLOAT2(guUV.x, guUV.y);
+		if (hasUVs) {
+			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(model, mlIndex);
+			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
+			vertex1.UV = XMFLOAT2(guUV.x, guUV.y);
+		} else {
+			vertex1.UV = XMFLOAT2(0, 0);
+		}
 		// Vertex 2
 		mlIndex = mlFace3DGetVertex2(face);
 		mlVertex = mlModel3DGetVertex(model, mlIndex);
@@ -180,7 +192,13 @@ void DemoGame::CreateGeometryBuffers()
 		Vertex vertex2;
 		vertex2.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
 		vertex2.Color = red;
-		vertex2.UV = XMFLOAT2(0,0);
+		if (hasUVs) {
+			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(model, mlIndex);
+			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
+			vertex2.UV = XMFLOAT2(guUV.x, guUV.y);
+		} else {
+			vertex2.UV = XMFLOAT2(0, 0);
+		}
 		// Vertex 3
 		mlIndex = mlFace3DGetVertex3(face);
 		mlVertex = mlModel3DGetVertex(model, mlIndex);
@@ -189,6 +207,15 @@ void DemoGame::CreateGeometryBuffers()
 		vertex3.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
 		vertex3.Color = red;
 		vertex3.UV = XMFLOAT2(0,0);
+		if (hasUVs) {
+			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(model, mlIndex);
+			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
+			vertex3.UV = XMFLOAT2(guUV.x, guUV.y);
+		} else {
+			vertex3.UV = XMFLOAT2(0, 0);
+		}
+
+		// Create usable mesh.
 		Vertex vertices[] = {vertex1, vertex2, vertex3};
 		UINT indices[] = {0, 1, 2};
 		modelEnt->AddTriangle(vertices, indices);
@@ -273,6 +300,7 @@ void DemoGame::OnResize()
 // push it to the buffer on the device
 float x = 0;
 XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
+bool scaleSmall = true;
 void DemoGame::UpdateScene(float dt)
 {
 	//sfx->Update(dt);
@@ -299,18 +327,33 @@ void DemoGame::UpdateScene(float dt)
 	{
 		trans.x += dt;
 	}	*/
+
+	
 	for(Entity* e: entities)
 		{
-			/*auto p = rand() % 2;
+			// Reset entity translation back to origin. This is not need, just preserving the jitter effect.
+			XMFLOAT4X4 eTrans = e->transform->trans;
+			e->transform->Translate(XMFLOAT3(-eTrans._41, -eTrans._42, -eTrans._43));
+
+			auto p = rand() % 2;
 			p++;
 			if(p <4 )
 				e->transform->Translate(XMFLOAT3(rand() % p * 0.1f, rand() % p * 0.1f, rand() % p * 0.1f));
 			else
 				e->transform->Rotate(XMFLOAT3(rand() % p * 0.1f, rand() % p * 0.1f, rand() % p * 0.1f));
-			*/
-			e->transform->Translate(XMFLOAT3(0.0f, 0.0f, 0.0f));
 			
-		
+			// Move entity away the screen a bit
+			e->transform->Translate(XMFLOAT3(0.0f, 0.0f, 5.0f));
+			
+			e->transform->Rotate(XMFLOAT3(0, 0.001f, 0));
+
+			if (scaleSmall) {
+				e->transform->Scale(XMFLOAT3(0.90f, 0.90f, 0.90f));
+			} else {
+				e->transform->Scale(XMFLOAT3(1.11111f, 1.11111f, 1.11111f));
+			}
+			scaleSmall = !scaleSmall;
+
 			e->Update(dt);
 		}
 	}
@@ -372,10 +415,12 @@ void DemoGame::DrawScene()
 		NULL, 
 		0);
 #endif
-	for(Entity* e :entities) 
-	{
-		vsConstantBufferData.world = e->transform->worldMatrix;
-		e->Draw();
+	if (currentState == GameState::Playing) {
+		for(Entity* e :entities) 
+		{
+			vsConstantBufferData.world = e->transform->worldMatrix;
+			e->Draw();
+		}
 	}
 
 	HR(swapChain->Present(0, 0));
