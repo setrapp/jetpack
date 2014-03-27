@@ -35,7 +35,7 @@ void Entity::AddQuad(Vertex* v, UINT* i)
 	totalMeshes ++;
 }
 
-void Entity::AddTraingle(Vertex* v, UINT* i)
+void Entity::AddTriangle(Vertex* v, UINT* i)
 {
 	Mesh* m = new Mesh(v, i, 3, 3);
 	meshes.push_back(m);

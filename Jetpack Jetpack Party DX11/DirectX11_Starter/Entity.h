@@ -13,7 +13,7 @@ class Entity
 public:
 	Entity();
 	~Entity(void);
-	void AddTraingle(Vertex* v, UINT* u);
+	void AddTriangle(Vertex* v, UINT* u);
 	void AddQuad(Vertex* v, UINT* u);
 	void Update(float dt);
 	void Draw();	

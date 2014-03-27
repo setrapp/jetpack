@@ -151,13 +151,13 @@ void DemoGame::CreateGeometryBuffers()
 			v.Color.y += rand() % 5;
 			v.Color.z += rand() % 5;
 		}
-		entity->AddQuad(vertices, indices);
-		if(rand() % 10 < 5)
-			entity->LoadTexture(L"../Assets/RedGift.png");
-		entities.push_back(entity);
+		//entity->AddQuad(vertices, indices);
+		//if(rand() % 10 < 5)
+		//	entity->LoadTexture(L"../Assets/RedGift.png");
+		//entities.push_back(entity);
 	}
 	// Attempt to load model
-	MLModel3D* model = mlModel3DLoadOBJ("../Assets/cube.obj");
+	MLModel3D* model = mlModel3DLoadOBJ("../Assets/video_camera.obj");
 	Entity* modelEnt = new Entity();
 	unsigned int faceCount = mlModel3DGetFaceCount(model);
 	for (int i = 0; i < faceCount; i++) {
@@ -165,24 +165,33 @@ void DemoGame::CreateGeometryBuffers()
 		// Vertex 1
 		unsigned short mlIndex = mlFace3DGetVertex1(face);
 		MLVertex3D const* mlVertex = mlModel3DGetVertex(model, mlIndex);
+		//MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(model, mlIndex);
 		GUPoint3D guPoint = mlVertex3DGetPosition(mlVertex);
+		//GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
 		Vertex vertex1;
 		vertex1.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
+		vertex1.Color = red;
+		vertex1.UV = XMFLOAT2(0,0);
+		//vertex1.UV = XMFLOAT2(guUV.x, guUV.y);
 		// Vertex 2
-		mlIndex = mlFace3DGetVertex1(face);
+		mlIndex = mlFace3DGetVertex2(face);
 		mlVertex = mlModel3DGetVertex(model, mlIndex);
 		guPoint = mlVertex3DGetPosition(mlVertex);
 		Vertex vertex2;
 		vertex2.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
+		vertex2.Color = red;
+		vertex2.UV = XMFLOAT2(0,0);
 		// Vertex 3
-		mlIndex = mlFace3DGetVertex1(face);
+		mlIndex = mlFace3DGetVertex3(face);
 		mlVertex = mlModel3DGetVertex(model, mlIndex);
 		guPoint = mlVertex3DGetPosition(mlVertex);
 		Vertex vertex3;
 		vertex3.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
+		vertex3.Color = red;
+		vertex3.UV = XMFLOAT2(0,0);
 		Vertex vertices[] = {vertex1, vertex2, vertex3};
 		UINT indices[] = {0, 1, 2};
-		modelEnt->AddTraingle(vertices, indices);
+		modelEnt->AddTriangle(vertices, indices);
 	}
 	//modelEnt->LoadTexture(L"../Assets/RedGift.png");
 	entities.push_back(modelEnt);
@@ -292,12 +301,14 @@ void DemoGame::UpdateScene(float dt)
 	}	*/
 	for(Entity* e: entities)
 		{
-			auto p = rand() % 2;
+			/*auto p = rand() % 2;
 			p++;
 			if(p <4 )
 				e->transform->Translate(XMFLOAT3(rand() % p * 0.1f, rand() % p * 0.1f, rand() % p * 0.1f));
 			else
 				e->transform->Rotate(XMFLOAT3(rand() % p * 0.1f, rand() % p * 0.1f, rand() % p * 0.1f));
+			*/
+			e->transform->Translate(XMFLOAT3(0.0f, 0.0f, 0.0f));
 			
 		
 			e->Update(dt);
@@ -357,7 +368,7 @@ void DemoGame::DrawScene()
 		&vsConstantBuffer);
 
 	deviceContext->PSSetShader(
-		texturePixelShader, 
+		pixelShader, 
 		NULL, 
 		0);
 #endif
