@@ -73,6 +73,9 @@ ipch/
 *.vsp
 *.vspx
 
+# Do not ignore our folders
+!/Assets/*
+
 # TFS 2012 Local Workspace
 $tf/
 
