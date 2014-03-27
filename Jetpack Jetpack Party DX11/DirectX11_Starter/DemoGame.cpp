@@ -31,6 +31,7 @@
 #include <comdef.h>
 #include <iostream>
 #include "ModelLoad\MLModelViewer.h"
+#include "Player.h"
 
 #pragma region Win32 Entry Point (WinMain)
 
@@ -132,8 +133,21 @@ void DemoGame::CreateGeometryBuffers()
 
 	UINT indices[] = { 0, 2, 1, 3, 0, 1 };	
 
+	Vertex floorVertices[] = 
+	{
+		{ XMFLOAT3(40.0f, -1.0f, 40.0f), red, XMFLOAT2(0, 0) },
+		{ XMFLOAT3(-40.0f, -1.0f, -40.0f), green, XMFLOAT2(1, 1) },
+		{ XMFLOAT3(40.0f, -1.0f, -40.0f), blue, XMFLOAT2(0, 1) },		
+		{ XMFLOAT3(-40.0f, -1.0f, 40.0f), mid, XMFLOAT2(1, 0) },
+	};
+
+	UINT floorIndices[] = { 0, 2, 1, 3, 0, 1 };	
+
+	Entity* floor = new Entity();
+	floor->AddQuad(floorVertices, floorIndices);
+	entities.push_back(floor);
 	
-	for(int i = 0 ; i < 5; i ++)
+	/*for(int i = 0 ; i < 5; i ++)
 	{	
 		Entity* entity = new Entity();
 
@@ -155,10 +169,11 @@ void DemoGame::CreateGeometryBuffers()
 		//if(rand() % 10 < 5)
 		//	entity->LoadTexture(L"../Assets/RedGift.png");
 		//entities.push_back(entity);
-	}
+	}*/
+
 	// Attempt to load model
 	MLModel3D* model = mlModel3DLoadOBJ("../Assets/video_camera.obj");
-	Entity* modelEnt = new Entity();
+	Player* modelEnt = new Player();
 	bool hasUVs = mlModel3DGetTextureVertexCount(model) > 1;
 	unsigned int faceCount = mlModel3DGetFaceCount(model);
 	for (int i = 0; i < faceCount; i++) {
@@ -298,7 +313,6 @@ void DemoGame::OnResize()
 
 // Updates the local constant buffer and 
 // push it to the buffer on the device
-float x = 0;
 XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
 bool scaleSmall = true;
 void DemoGame::UpdateScene(float dt)
@@ -308,31 +322,14 @@ void DemoGame::UpdateScene(float dt)
 	{
 	this->deltaTime = dt;
 	
-	x = x + dt;
 	//entity.Rotate(XMFLOAT3(0, 0, x));
-	dt *= 5;
-	/*if(GetAsyncKeyState(VK_UP))
-	{
-		trans.y += dt;
-	}
-	if(GetAsyncKeyState(VK_DOWN))
-	{
-		trans.y -= dt;
-	}
-	if(GetAsyncKeyState(VK_LEFT))
-	{
-		trans.x -= dt;
-	}
-	if(GetAsyncKeyState(VK_RIGHT))
-	{
-		trans.x += dt;
-	}	*/
+	//dt *= 5;
 
 	
 	for(Entity* e: entities)
 		{
 			// Reset entity translation back to origin. This is not need, just preserving the jitter effect.
-			XMFLOAT4X4 eTrans = e->transform->trans;
+			/*XMFLOAT4X4 eTrans = e->transform->trans;
 			e->transform->Translate(XMFLOAT3(-eTrans._41, -eTrans._42, -eTrans._43));
 
 			auto p = rand() % 2;
@@ -352,7 +349,7 @@ void DemoGame::UpdateScene(float dt)
 			} else {
 				e->transform->Scale(XMFLOAT3(1.11111f, 1.11111f, 1.11111f));
 			}
-			scaleSmall = !scaleSmall;
+			scaleSmall = !scaleSmall;*/
 
 			e->Update(dt);
 		}
@@ -418,7 +415,15 @@ void DemoGame::DrawScene()
 	if (currentState == GameState::Playing) {
 		for(Entity* e :entities) 
 		{
-			vsConstantBufferData.world = e->transform->worldMatrix;
+			// Create per primitive vertex shader constant buffer to hold world matrix.
+			VertexShaderConstantBuffer perPrimitiveVSConstantBuffer;
+			perPrimitiveVSConstantBuffer.world = e->transform->worldMatrix;
+			perPrimitiveVSConstantBuffer.view = vsConstantBufferData.view;
+			perPrimitiveVSConstantBuffer.projection = vsConstantBufferData.projection;
+			
+			// Update vertex shader constant buffer with per primitive buffer.
+			DXConnection::Instance()->deviceContext->UpdateSubresource(vsConstantBuffer, 0, nullptr, &perPrimitiveVSConstantBuffer, 0, 0);
+			
 			e->Draw();
 		}
 	}

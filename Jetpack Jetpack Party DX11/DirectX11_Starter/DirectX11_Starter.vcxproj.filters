@@ -96,6 +96,9 @@
     <ClCompile Include="ModelLoad\MLModelViewer.c">
       <Filter>Source Files\ModelLoading</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXGame.h">
@@ -190,6 +193,9 @@
     </ClInclude>
     <ClInclude Include="ModelLoad\MLModelViewer.h">
       <Filter>Header Files\ModelLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
