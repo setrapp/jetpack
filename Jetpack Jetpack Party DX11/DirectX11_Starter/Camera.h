@@ -37,6 +37,7 @@ public:
 	void LookAt(FXMVECTOR lookAt, FXMVECTOR eye, FXMVECTOR up)
 	{
 		XMMATRIX viewNew = XMMatrixLookAtLH(eye, lookAt, up);
+		XMStoreFloat4x4(&view, XMMatrixTranspose(viewNew));
 	}
 
 	_inline void Update(float dt, VertexShaderConstantBuffer* vsConstantBufferdata)
