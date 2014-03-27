@@ -12,6 +12,7 @@ Entity::Entity()
 {
 	totalMeshes = 0;
 	transform = new Transform();
+	material = new Material();
 	XMStoreFloat4x4(&transform->trans, XMMatrixIdentity());
 	XMStoreFloat4x4(&transform->scale, XMMatrixIdentity());
 	XMStoreFloat4x4(&transform->rot, XMMatrixIdentity());

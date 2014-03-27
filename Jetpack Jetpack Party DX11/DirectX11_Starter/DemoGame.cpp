@@ -133,7 +133,7 @@ void DemoGame::CreateGeometryBuffers()
 	UINT indices[] = { 0, 2, 1, 3, 0, 1 };	
 
 	
-	/*for(int i = 0 ; i < 5; i ++)
+	for(int i = 0 ; i < 5; i ++)
 	{	
 		Entity* entity = new Entity();
 
@@ -152,18 +152,12 @@ void DemoGame::CreateGeometryBuffers()
 			v.Color.z += rand() % 5;
 		}
 		entity->AddQuad(vertices, indices);
-		//if(rand() % 10 < 5)
-			//entity->LoadTexture(L"tex1.jpg", device, deviceContext);
+		if(rand() % 10 < 5)
+			entity->LoadTexture(L"../Assets/RedGift.png");
 		entities.push_back(entity);
-	}*/
-
+	}
 	// Attempt to load model
 	MLModel3D* model = mlModel3DLoadOBJ("../Assets/cube.obj");
-	/*unsigned int count = mlModel3DGetVertexCount(model);
-	for (int i = 0; i < count; i++) {
-		MLVertex3D const* vert = mlModel3DGetVertex(model, i);
-		int wer = 0;
-	}*/
 	Entity* modelEnt = new Entity();
 	unsigned int faceCount = mlModel3DGetFaceCount(model);
 	for (int i = 0; i < faceCount; i++) {
@@ -190,7 +184,7 @@ void DemoGame::CreateGeometryBuffers()
 		UINT indices[] = {0, 1, 2};
 		modelEnt->AddTraingle(vertices, indices);
 	}
-	modelEnt->LoadTexture(L"../Assets/RedGift.png");
+	//modelEnt->LoadTexture(L"../Assets/RedGift.png");
 	entities.push_back(modelEnt);
 }
 
@@ -298,15 +292,15 @@ void DemoGame::UpdateScene(float dt)
 	}	*/
 	for(Entity* e: entities)
 		{
-			/*auto p = rand() % 2;
+			auto p = rand() % 2;
 			p++;
 			if(p <4 )
 				e->transform->Translate(XMFLOAT3(rand() % p * 0.1f, rand() % p * 0.1f, rand() % p * 0.1f));
 			else
 				e->transform->Rotate(XMFLOAT3(rand() % p * 0.1f, rand() % p * 0.1f, rand() % p * 0.1f));
-
+			
 		
-			e->Update(dt);*/
+			e->Update(dt);
 		}
 	}
 

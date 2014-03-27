@@ -24,6 +24,7 @@ Material::Material(wchar_t* path)
 
 void Material::ApplyTexture(wchar_t* path)
 {
+	ID3D11Resource* tex = texture;
 	HR (CreateWICTextureFromFile(
 		DXConnection::Instance()->device, 
 		DXConnection::Instance()->deviceContext, 
