@@ -12,6 +12,8 @@ Mesh::Mesh(Vertex* v, UINT* i, int noOfIndices, int noOfVertices)
     vbd.MiscFlags				= 0;
 	vbd.StructureByteStride		= 0;
 
+	size_t a = sizeof(Vertex);
+
     D3D11_SUBRESOURCE_DATA initialVertexData;
     initialVertexData.pSysMem	= v;
 
