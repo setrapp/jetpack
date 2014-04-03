@@ -65,7 +65,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	currentState = GameState::Started;
 	menu = new Menu(device, deviceContext);
 	camera = new Camera();
-	//sfx = new Sfx();
+	sfx = new Sfx();
 }
 
 DemoGame::~DemoGame()

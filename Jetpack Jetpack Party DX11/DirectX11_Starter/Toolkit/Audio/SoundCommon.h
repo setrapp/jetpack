@@ -14,7 +14,7 @@
 #pragma once
 
 #include "Audio.h"
-#include "PlatformHelpers.h"
+#include "../Src/PlatformHelpers.h"
 
 
 namespace DirectX
