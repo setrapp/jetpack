@@ -123,7 +123,7 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 blue	= XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 	
-	/*Vertex vertices[] = 
+	Vertex vertices[] = 
 	{
 		{ XMFLOAT3(+1.0f, +1.0f, +0.0f), XMFLOAT3(0, 0 , 1), red, XMFLOAT2(0, 0) },
 		{ XMFLOAT3(-1.0f, -1.0f, +0.0f), XMFLOAT3(0, 0 , 1), green, XMFLOAT2(1, 1) },
@@ -135,17 +135,17 @@ void DemoGame::CreateGeometryBuffers()
 
 	Vertex floorVertices[] = 
 	{
-		{ XMFLOAT3(40.0f, -1.0f, 40.0f), XMFLOAT3(0, 0 , 1), red, XMFLOAT2(0, 0) },
-		{ XMFLOAT3(-40.0f, -1.0f, -40.0f), XMFLOAT3(0, 0 , 1), green, XMFLOAT2(1, 1) },
-		{ XMFLOAT3(40.0f, -1.0f, -40.0f), XMFLOAT3(0, 0 , 1), blue, XMFLOAT2(0, 1) },		
-		{ XMFLOAT3(-40.0f, -1.0f, 40.0f), XMFLOAT3(0, 0 , 1), mid, XMFLOAT2(1, 0) },
+		{ XMFLOAT3(40.0f, -1.0f, 40.0f), XMFLOAT3(0, 1, 0), red, XMFLOAT2(0, 0) },
+		{ XMFLOAT3(-40.0f, -1.0f, -40.0f), XMFLOAT3(0, 1, 0), green, XMFLOAT2(1, 1) },
+		{ XMFLOAT3(40.0f, -1.0f, -40.0f), XMFLOAT3(0, 1, 0), blue, XMFLOAT2(0, 1) },		
+		{ XMFLOAT3(-40.0f, -1.0f, 40.0f), XMFLOAT3(0, 1, 0), mid, XMFLOAT2(1, 0) },
 	};
 
 	UINT floorIndices[] = { 0, 2, 1, 3, 0, 1 };	
 
 	Entity* floor = new Entity();
 	floor->AddQuad(floorVertices, floorIndices);
-	entities.push_back(floor);*/
+	entities.push_back(floor);
 	
 	/*for(int i = 0 ; i < 5; i ++)
 	{	
@@ -194,7 +194,7 @@ void DemoGame::CreateGeometryBuffers()
 		guNormal = mlVertex3DGetNormal(mlVertex);
 		Vertex vertex1;
 		vertex1.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
-		//vertex1.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
+		vertex1.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
 		vertex1.Color = red;
 		if (hasUVs) {
 			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(model, mlIndex);
@@ -210,7 +210,7 @@ void DemoGame::CreateGeometryBuffers()
 		guNormal = mlVertex3DGetNormal(mlVertex);
 		Vertex vertex2;
 		vertex2.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
-		//vertex2.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
+		vertex2.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
 		vertex2.Color = red;
 		if (hasUVs) {
 			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(model, mlIndex);
@@ -226,7 +226,7 @@ void DemoGame::CreateGeometryBuffers()
 		guNormal = mlVertex3DGetNormal(mlVertex);
 		Vertex vertex3;
 		vertex3.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
-		//vertex3.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
+		vertex3.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
 		vertex3.Color = red;
 		vertex3.UV = XMFLOAT2(0,0);
 		if (hasUVs) {
