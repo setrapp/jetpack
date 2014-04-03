@@ -4,6 +4,7 @@
 #include <d3dcompiler.h>
 #include "dxerr.h"
 #include "DXConnection.h"
+#include "Light.h"
 
 using namespace DirectX;
 
@@ -37,6 +38,11 @@ struct VertexShaderConstantBuffer
 	XMFLOAT4X4 world;
 	XMFLOAT4X4 view;
 	XMFLOAT4X4 projection;
+};
+
+struct PixelShaderConstantBuffer
+{
+	Light light;
 };
 
 struct Vertex

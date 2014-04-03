@@ -65,6 +65,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	currentState = GameState::Started;
 	menu = new Menu(device, deviceContext);
 	camera = new Camera();
+	//light = new Light(XMFLOAT3(0, 0 ,1), XMFLOAT4(1, 1, 1, 1), true);
 	//sfx = new Sfx();
 }
 
@@ -73,7 +74,10 @@ DemoGame::~DemoGame()
 	ReleaseMacro(vertexShader);
 	ReleaseMacro(pixelShader);
 	ReleaseMacro(vsConstantBuffer);
+	ReleaseMacro(psConstantBuffer);
 	ReleaseMacro(inputLayout);
+
+	delete light;
 }
 
 #pragma endregion
@@ -262,6 +266,7 @@ void DemoGame::LoadShadersAndInputLayout()
 	texturePixelShader = AssetManager::Instance()->CreateAndStorePixelShader("../Debug/TexturePixelShader.cso", "texture");
 
 	// Constant buffers ----------------------------------------
+	// Vertex Shader Per Model Constant Buffer
 	D3D11_BUFFER_DESC cBufferDesc;
 	cBufferDesc.ByteWidth			= sizeof(vsConstantBufferData);
 	cBufferDesc.Usage				= D3D11_USAGE_DEFAULT;
@@ -273,6 +278,18 @@ void DemoGame::LoadShadersAndInputLayout()
 		&cBufferDesc,
 		NULL,
 		&vsConstantBuffer));
+
+	// Pixel Shader Per Frame Constant Buffer
+	/*cBufferDesc.ByteWidth			= sizeof(psConstantBufferData);
+	cBufferDesc.Usage				= D3D11_USAGE_DEFAULT;
+	cBufferDesc.BindFlags			= D3D11_BIND_CONSTANT_BUFFER;
+	cBufferDesc.CPUAccessFlags		= 0;
+	cBufferDesc.MiscFlags			= 0;
+	cBufferDesc.StructureByteStride = 0;
+	HR(device->CreateBuffer(
+		&cBufferDesc,
+		NULL,
+		&psConstantBuffer));*/
 
 	
 	menu->setRenderers(fontRenderer);
@@ -329,24 +346,22 @@ void DemoGame::UpdateScene(float dt)
 	for(Entity* e: entities)
 		{
 			// Reset entity translation back to origin. This is not need, just preserving the jitter effect.
-			/*XMFLOAT4X4 eTrans = e->transform->trans;
-			e->transform->Translate(XMFLOAT3(-eTrans._41, -eTrans._42, -eTrans._43));
+			//XMFLOAT4X4 eTrans = e->transform->trans;
+			//e->transform->Translate(XMFLOAT3(-eTrans._41, -eTrans._42, -eTrans._43));
 
-			auto p = rand() % 2;
-			p++;
-			if(p <4 )
+			//auto p = rand() % 2;
+			//p++;
+			/*if(p <4 )
 				e->transform->Translate(XMFLOAT3(rand() % p * 0.1f, rand() % p * 0.1f, rand() % p * 0.1f));
 			else
 				e->transform->Rotate(XMFLOAT3(rand() % p * 0.1f, rand() % p * 0.1f, rand() % p * 0.1f));
 			
 			// Move entity away the screen a bit
-			e->transform->Translate(XMFLOAT3(0.0f, 0.0f, 5.0f));
+			e->transform->Translate(XMFLOAT3(0.0f, 0.0f, 5.0f));*/
 			
 			e->transform->Rotate(XMFLOAT3(0, 0.001f, 0));
 
-			if (scaleSmall) {
-				e->transform->Scale(XMFLOAT3(0.90f, 0.90f, 0.90f));
-			} else {
+			/*} else {
 				e->transform->Scale(XMFLOAT3(1.11111f, 1.11111f, 1.11111f));
 			}
 			scaleSmall = !scaleSmall;*/
@@ -413,6 +428,8 @@ void DemoGame::DrawScene()
 		0);
 #endif
 	if (currentState == GameState::Playing) {
+		//light->AddToConstantBuffer(&psConstantBuffer);
+
 		for(Entity* e :entities) 
 		{
 			// Create per primitive vertex shader constant buffer to hold world matrix.

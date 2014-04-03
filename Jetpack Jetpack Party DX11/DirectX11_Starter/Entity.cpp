@@ -12,7 +12,7 @@ Entity::Entity()
 {
 	totalMeshes = 0;
 	transform = new Transform();
-	material = new Material();
+	material = AssetManager::Instance()->GetMaterial();
 	XMStoreFloat4x4(&transform->trans, XMMatrixIdentity());
 	XMStoreFloat4x4(&transform->scale, XMMatrixIdentity());
 	XMStoreFloat4x4(&transform->rot, XMMatrixIdentity());
@@ -21,7 +21,10 @@ Entity::Entity()
 
 Entity::~Entity(void)
 {
+	delete transform;
 }
+
+/*TODO Need copy constructor and copy assignment operator*/
 
 XMFLOAT4X4 Entity::GetWorldMatrix()
 {

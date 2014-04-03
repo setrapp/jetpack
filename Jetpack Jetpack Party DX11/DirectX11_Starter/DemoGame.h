@@ -15,6 +15,7 @@
 #include "Sfx.h"
 #include "Camera.h"
 #include "AssetManager.h"
+#include "Light.h"
 
 using namespace DirectX;
 
@@ -59,11 +60,14 @@ private:
 	ID3D11InputLayout* inputLayout;
 	ID3D11Buffer* vsConstantBuffer;
 	VertexShaderConstantBuffer vsConstantBufferData;
+	ID3D11Buffer* psConstantBuffer;
+	//PixelShaderConstantBuffer psConstantBufferData;
 
 	// Keeps track of the old mouse position.  Useful for 
 	// determining how far the mouse moved in a single frame.
 	POINT prevMousePos;
 	//Camera* camera;
+	Light* light;
 	std::vector<Entity*> entities;
 	SpriteRenderer* spriteRenderer;
 	FontRenderer* fontRenderer;
