@@ -1,0 +1,15 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\..\genetic_racer\genetic\racer\Assets\Scripts\GenomeGenerator.cs">
+    <Files>
+      <File FileName="..\..\..\genetic_racer\genetic\racer\Assets\Scripts\Car.cs" Line="41" Column="30" />
+      <File FileName="..\..\..\genetic_racer\genetic\racer\Assets\Scripts\GeneticDriver.cs" Line="150" Column="25" />
+      <File FileName="..\..\..\genetic_racer\genetic\racer\Assets\Scripts\GenomeGenerator.cs" Line="221" Column="6" />
+      <File FileName="..\..\..\genetic_racer\genetic\racer\Assets\Scripts\WriterReader.cs" Line="28" Column="96" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

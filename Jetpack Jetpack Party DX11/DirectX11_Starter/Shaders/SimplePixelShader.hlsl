@@ -15,6 +15,7 @@ cbuffer perFrame : register(b0)
 struct VertexToPixel
 {
 	float4 position		: SV_POSITION;
+	float3 normal		: NORMAL;
 	float4 color		: COLOR;
 	float2 uv			: TEXCOORD0;
 };
@@ -22,5 +23,14 @@ struct VertexToPixel
 // Entry point for this pixel shader
 float4 main(VertexToPixel input) : SV_TARGET
 {
-	return input.color;
+	// Temp light
+	float3 lightDir = normalize(float3(0, -1, 3));
+
+	// Interpolation may have resulted in a non-unit normal, so re-normalize.
+	input.normal = normalize(input.normal);
+
+	// Calculate dot product of normal and direction to light.
+	float lightIntensity = dot(input.normal, -lightDir);
+
+	return input.color * float4(lightIntensity, lightIntensity, lightIntensity, 1);
 }
