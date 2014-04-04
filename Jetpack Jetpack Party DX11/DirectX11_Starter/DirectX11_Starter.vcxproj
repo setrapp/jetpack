@@ -42,14 +42,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>$(Project)\Libs;D:\New folder\Jetpack Jetpack Party DX11\DirectX11_Starter\Libs;%DXSDK_DIR%Include\x64\xaudio2.lib;%DXSDK_DIR%Include\x64\xaudio3.lib;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\inc;$(SolutionDir)\Toolkit\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\inc;$(SolutionDir)\Toolkit\inc;%(AdditionalIncludeDirectories);$(DXSDK_DIR)\Lib\x64</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -67,6 +69,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\inc;$(SolutionDir)\Toolkit\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WIN32_WINNT=0x600;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -143,6 +146,9 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Toolkit\Audio\DirectXTKAudio_Desktop_2012_DXSDK.vcxproj">
+      <Project>{4f150a30-cecb-49d1-8283-6a3f57438cf5}</Project>
+    </ProjectReference>
     <ProjectReference Include="Toolkit\DirectXTK_Desktop_2012.vcxproj">
       <Project>{e0b52ae7-e160-4d32-bf3f-910b785e5a8e}</Project>
       <Private>false</Private>

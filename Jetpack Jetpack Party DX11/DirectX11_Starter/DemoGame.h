@@ -79,7 +79,7 @@ private:
 	Camera* camera;
 	GameState currentState;
 	Menu* menu;
-	//Sfx* sfx;
+	Sfx* sfx;
 };
 
 #endif
