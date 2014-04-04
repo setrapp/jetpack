@@ -245,6 +245,8 @@ void DemoGame::CreateGeometryBuffers()
 		Vertex vertices[] = {vertex1, vertex2, vertex3};
 		UINT indices[] = {0, 1, 2};
 		modelEnt->AddTriangle(vertices, indices);
+		modelEnt->camera = camera;
+		modelEnt->cameraPos = XMFLOAT3(0, 0, -5);
 	}
 	//modelEnt->LoadTexture(L"../Assets/RedGift.png");
 	entities.push_back(modelEnt);
@@ -440,6 +442,8 @@ void DemoGame::DrawScene()
 		vsFrameConstantBufferData.light = light->ConvertToShaderLight();
 		DXConnection::Instance()->deviceContext->UpdateSubresource(vsFrameConstantBuffer, 0, NULL, &vsFrameConstantBufferData, 0, 0);
 		DXConnection::Instance()->deviceContext->VSSetConstantBuffers(1, 1, &vsFrameConstantBuffer);
+
+		// TODO: Model Vertices are not being rendered at correct depth, is this a problem with depth buffer or model???
 
 		for(Entity* e :entities) 
 		{

@@ -16,6 +16,18 @@ void Player::Update(float dt)
 	XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), groundSpeedDampening));
 
 	transform->Translate(XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt));
+	
+	if (camera)
+	{
+		// TODO do this with XMVector math
+		XMFLOAT3 cameraRight(transform->right.x * cameraPos.x, transform->right.y * cameraPos.x, transform->right.y * cameraPos.x);
+		XMFLOAT3 cameraUp(transform->up.x * cameraPos.y, transform->up.y * cameraPos.y, transform->up.y * cameraPos.y);
+		XMFLOAT3 cameraForward(transform->forward.x * cameraPos.z, transform->forward.y * cameraPos.z, transform->forward.y * cameraPos.z);
+		camera->LookAt(XMLoadFloat3(&XMFLOAT3(transform->trans._41 + cameraRight.x + cameraUp.x + cameraForward.x, transform->trans._42 + cameraRight.y + cameraUp.y + cameraForward.y, transform->trans._43 + cameraRight.z + cameraUp.z + cameraForward.z)),
+			XMLoadFloat3(&XMFLOAT3(transform->trans._41 + transform->forward.x, transform->trans._42 + transform->forward.y, transform->trans._43 + transform->forward.z)),
+			XMLoadFloat3(&transform->up));
+	}
+
 	Entity::Update(dt);
 }
 

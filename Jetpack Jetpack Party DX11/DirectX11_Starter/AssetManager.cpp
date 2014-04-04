@@ -25,6 +25,7 @@ AssetManager::~AssetManager()
 		instance = NULL;
 	}
 
+	// TODO: Actually free the memory of elements stored in vectors (erase only destroys the pointer)
 	inputLayouts->erase(inputLayouts->begin(), inputLayouts->end());
 	delete inputLayouts;
 	vertexShaders->erase(vertexShaders->begin(), vertexShaders->end());
