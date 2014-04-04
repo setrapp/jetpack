@@ -65,7 +65,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	currentState = GameState::Started;
 	menu = new Menu(device, deviceContext);
 	camera = new Camera();
-	//light = new Light(XMFLOAT3(0, 0 ,1), XMFLOAT4(1, 1, 1, 1), true);
+	light = new Light(XMFLOAT3(0, 1, -1), XMFLOAT4(0.2f, 0.2f, 0.2f, 1), XMFLOAT4(1, 1, 1, 1), false);
 	//sfx = new Sfx();
 }
 
@@ -73,8 +73,8 @@ DemoGame::~DemoGame()
 {
 	ReleaseMacro(vertexShader);
 	ReleaseMacro(pixelShader);
-	ReleaseMacro(vsConstantBuffer);
-	ReleaseMacro(psConstantBuffer);
+	ReleaseMacro(vsModelConstantBuffer);
+	ReleaseMacro(vsFrameConstantBuffer);
 	ReleaseMacro(inputLayout);
 
 	delete light;
@@ -276,7 +276,7 @@ void DemoGame::LoadShadersAndInputLayout()
 	// Constant buffers ----------------------------------------
 	// Vertex Shader Per Model Constant Buffer
 	D3D11_BUFFER_DESC cBufferDesc;
-	cBufferDesc.ByteWidth			= sizeof(vsConstantBufferData);
+	cBufferDesc.ByteWidth			= sizeof(vsModelConstantBufferData);
 	cBufferDesc.Usage				= D3D11_USAGE_DEFAULT;
 	cBufferDesc.BindFlags			= D3D11_BIND_CONSTANT_BUFFER;
 	cBufferDesc.CPUAccessFlags		= 0;
@@ -285,19 +285,20 @@ void DemoGame::LoadShadersAndInputLayout()
 	HR(device->CreateBuffer(
 		&cBufferDesc,
 		NULL,
-		&vsConstantBuffer));
+		&vsModelConstantBuffer));
 
 	// Pixel Shader Per Frame Constant Buffer
-	/*cBufferDesc.ByteWidth			= sizeof(psConstantBufferData);
-	cBufferDesc.Usage				= D3D11_USAGE_DEFAULT;
-	cBufferDesc.BindFlags			= D3D11_BIND_CONSTANT_BUFFER;
-	cBufferDesc.CPUAccessFlags		= 0;
-	cBufferDesc.MiscFlags			= 0;
-	cBufferDesc.StructureByteStride = 0;
+	D3D11_BUFFER_DESC cBufferDesc2;
+	cBufferDesc2.ByteWidth			= sizeof(vsFrameConstantBufferData);
+	cBufferDesc2.Usage				= D3D11_USAGE_DEFAULT;
+	cBufferDesc2.BindFlags			= D3D11_BIND_CONSTANT_BUFFER;
+	cBufferDesc2.CPUAccessFlags		= 0;
+	cBufferDesc2.MiscFlags			= 0;
+	cBufferDesc2.StructureByteStride = 0;
 	HR(device->CreateBuffer(
-		&cBufferDesc,
+		&cBufferDesc2,
 		NULL,
-		&psConstantBuffer));*/
+		&vsFrameConstantBuffer));
 
 	
 	menu->setRenderers(fontRenderer);
@@ -378,7 +379,7 @@ void DemoGame::UpdateScene(float dt)
 		}
 	}
 
-	camera->Update(dt, &vsConstantBufferData);	
+	camera->Update(dt, &vsModelConstantBufferData);	
 
 	if(currentState == GameState::Started)
 	{
@@ -387,10 +388,10 @@ void DemoGame::UpdateScene(float dt)
 
 
 	deviceContext->UpdateSubresource(
-	vsConstantBuffer,
+	vsModelConstantBuffer,
 	0,			
 	NULL,		
-	&vsConstantBufferData,
+	&vsModelConstantBufferData,
 	0,
 	0);
 }
@@ -428,7 +429,7 @@ void DemoGame::DrawScene()
 	deviceContext->VSSetConstantBuffers(
 		0,	
 		1, 
-		&vsConstantBuffer);
+		&vsModelConstantBuffer);
 
 	deviceContext->PSSetShader(
 		pixelShader, 
@@ -436,18 +437,20 @@ void DemoGame::DrawScene()
 		0);
 #endif
 	if (currentState == GameState::Playing) {
-		//light->AddToConstantBuffer(&psConstantBuffer);
+		vsFrameConstantBufferData.light = light->ConvertToShaderLight();
+		DXConnection::Instance()->deviceContext->UpdateSubresource(vsFrameConstantBuffer, 0, NULL, &vsFrameConstantBufferData, 0, 0);
+		DXConnection::Instance()->deviceContext->VSSetConstantBuffers(1, 1, &vsFrameConstantBuffer);
 
 		for(Entity* e :entities) 
 		{
 			// Create per primitive vertex shader constant buffer to hold world matrix.
-			VertexShaderConstantBuffer perPrimitiveVSConstantBuffer;
+			VertexShaderModelConstantBuffer perPrimitiveVSConstantBuffer;
 			perPrimitiveVSConstantBuffer.world = e->transform->worldMatrix;
-			perPrimitiveVSConstantBuffer.view = vsConstantBufferData.view;
-			perPrimitiveVSConstantBuffer.projection = vsConstantBufferData.projection;
+			perPrimitiveVSConstantBuffer.view = vsModelConstantBufferData.view;
+			perPrimitiveVSConstantBuffer.projection = vsModelConstantBufferData.projection;
 			
 			// Update vertex shader constant buffer with per primitive buffer.
-			DXConnection::Instance()->deviceContext->UpdateSubresource(vsConstantBuffer, 0, nullptr, &perPrimitiveVSConstantBuffer, 0, 0);
+			DXConnection::Instance()->deviceContext->UpdateSubresource(vsModelConstantBuffer, 0, nullptr, &perPrimitiveVSConstantBuffer, 0, 0);
 			
 			e->Draw();
 		}

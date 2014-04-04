@@ -13,9 +13,6 @@ Entity::Entity()
 	totalMeshes = 0;
 	transform = new Transform();
 	material = AssetManager::Instance()->GetMaterial();
-	XMStoreFloat4x4(&transform->trans, XMMatrixIdentity());
-	XMStoreFloat4x4(&transform->scale, XMMatrixIdentity());
-	XMStoreFloat4x4(&transform->rot, XMMatrixIdentity());
 }
 
 
@@ -47,11 +44,7 @@ void Entity::AddTriangle(Vertex* v, UINT* i)
 
 void Entity::Update(float dt)
 {
-	//if(this->transform->changed)
-	//{
-		//this->transform->changed = false;
-		XMStoreFloat4x4(&this->transform->worldMatrix, XMMatrixTranspose(XMLoadFloat4x4(&transform->scale) * XMLoadFloat4x4(&transform->rot) * XMLoadFloat4x4(&transform->trans)));
-	//}
+	XMStoreFloat4x4(&this->transform->worldMatrix, XMMatrixTranspose(XMLoadFloat4x4(&transform->scale) * XMLoadFloat4x4(&transform->rot) * XMLoadFloat4x4(&transform->trans)));
 }
 
 void Entity::Draw()

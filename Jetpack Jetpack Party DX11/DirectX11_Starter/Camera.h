@@ -40,7 +40,7 @@ public:
 		XMStoreFloat4x4(&view, XMMatrixTranspose(viewNew));
 	}
 
-	_inline void Update(float dt, VertexShaderConstantBuffer* vsConstantBufferdata)
+	_inline void Update(float dt, VertexShaderModelConstantBuffer* vsConstantBufferdata)
 	{		
 		vsConstantBufferdata->view			= view;
 		vsConstantBufferdata->projection	= projection;

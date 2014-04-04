@@ -33,16 +33,16 @@ using namespace DirectX;
 #endif
 
 
-struct VertexShaderConstantBuffer
+struct VertexShaderModelConstantBuffer
 {
 	XMFLOAT4X4 world;
 	XMFLOAT4X4 view;
 	XMFLOAT4X4 projection;
 };
 
-struct PixelShaderConstantBuffer
+struct VertexShaderFrameConstantBuffer
 {
-	Light light;
+	ShaderLight light;
 };
 
 struct Vertex

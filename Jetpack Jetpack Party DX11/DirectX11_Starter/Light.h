@@ -8,15 +8,23 @@
 
 using namespace DirectX;
 
+struct ShaderLight
+{
+	XMFLOAT4X4 world;
+	XMFLOAT4 ambient;
+	XMFLOAT4 diffuse;
+};
+
 class Light
 {
 public:
 	Light();
-	Light(XMFLOAT3 position, XMFLOAT4 color, bool isDirectional);
-	Light GetUsableCopy();
+	Light(XMFLOAT3 position, XMFLOAT4 ambient, XMFLOAT4 diffuse, bool isDirectional);
+	ShaderLight ConvertToShaderLight();
 
 public:
 	Transform* transform;
-	XMFLOAT4 color;
+	XMFLOAT4 ambient;
+	XMFLOAT4 diffuse;
 	bool isDirectional;
 };
