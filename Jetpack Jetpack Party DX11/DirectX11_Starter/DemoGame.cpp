@@ -325,7 +325,7 @@ XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
 bool scaleSmall = true;
 void DemoGame::UpdateScene(float dt)
 {
-	//sfx->Update(dt);
+	sfx->Update(dt);
 	if(currentState == GameState::Playing)
 	{
 	this->deltaTime = dt;
