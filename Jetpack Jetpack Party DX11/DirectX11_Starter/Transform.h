@@ -84,9 +84,51 @@ public :
 		}*/
 	}
 
-	/*XMFLOAT3 GetTranslation()
+	XMFLOAT3 GetTranslation()
 	{
-		return 
-	}*/
+		return XMFLOAT3(worldMatrix._41, worldMatrix._42, worldMatrix._43);
+	}
+
+	void SetTranslation(XMFLOAT3 newPosition)
+	{
+		XMFLOAT3 translation;
+		XMStoreFloat3(&translation, XMVectorSubtract(XMLoadFloat3(&newPosition), XMLoadFloat3(&XMFLOAT3(worldMatrix._41, worldMatrix._42, worldMatrix._43))));
+		Translate(translation);
+	}
+
+	XMFLOAT3X3 GetRotation()
+	{
+		return XMFLOAT3X3(	1, worldMatrix._12, worldMatrix._13,
+							worldMatrix._21, 1, worldMatrix._23,
+							worldMatrix._31, worldMatrix._32, 1);
+	}
+
+	void SetRotation(XMFLOAT3 newEulerAngles)
+	{
+		// TODO figure out if it is possible to get rotation from current rotation to new rotation
+		XMMATRIX rotation = XMMatrixRotationRollPitchYaw(newEulerAngles.x, newEulerAngles.y, newEulerAngles.z);
+	}
+
+	void SetRotation(XMFLOAT3 axis, float newAngle)
+	{
+		XMMATRIX rotation = XMMatrixRotationAxis(XMLoadFloat3(&axis), newAngle);
+	}
+
+	void SetRotation(XMFLOAT3X3 newRotation)
+	{
+		
+	}
+
+	XMFLOAT3 GetScale()
+	{
+		return XMFLOAT3(worldMatrix._11, worldMatrix._22, worldMatrix._33);
+	}
+
+	void SetScale(XMFLOAT3 newScale)
+	{
+		XMFLOAT3 scale;
+		XMStoreFloat3(&scale, XMVectorDivide(XMLoadFloat3(&newScale), XMLoadFloat3(&XMFLOAT3(worldMatrix._11, worldMatrix._22, worldMatrix._33))));
+		Scale(scale);
+	}
 };
 #endif
