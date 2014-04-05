@@ -129,20 +129,20 @@ void DemoGame::CreateGeometryBuffers()
 	
 	Vertex vertices[] = 
 	{
-		{ XMFLOAT3(+1.0f, +1.0f, +0.0f), XMFLOAT3(0, 0 , 1), red, XMFLOAT2(0, 0) },
-		{ XMFLOAT3(-1.0f, -1.0f, +0.0f), XMFLOAT3(0, 0 , 1), green, XMFLOAT2(1, 1) },
-		{ XMFLOAT3(+1.0f, -1.0f, +0.0f), XMFLOAT3(0, 0 , 1), blue, XMFLOAT2(0, 1) },		
-		{ XMFLOAT3(-1.0f, +1.0f, +0.0f), XMFLOAT3(0, 0 , 1), mid, XMFLOAT2(1, 0) },
+		{ XMFLOAT3(+1.0f, +1.0f, +0.0f), XMFLOAT3(0, 0, 1), red, XMFLOAT2(0, 0) },
+		{ XMFLOAT3(-1.0f, -1.0f, +0.0f), XMFLOAT3(0, 0, 1), green, XMFLOAT2(1, 1) },
+		{ XMFLOAT3(+1.0f, -1.0f, +0.0f), XMFLOAT3(0, 0, 1), blue, XMFLOAT2(0, 1) },		
+		{ XMFLOAT3(-1.0f, +1.0f, +0.0f), XMFLOAT3(0, 0, 1), mid, XMFLOAT2(1, 0) },
 	};
 
 	UINT indices[] = { 0, 2, 1, 3, 0, 1 };	
 
 	Vertex floorVertices[] = 
 	{
-		{ XMFLOAT3(40.0f, -1.0f, 40.0f), XMFLOAT3(0, 1, 0), red, XMFLOAT2(0, 0) },
-		{ XMFLOAT3(-40.0f, -1.0f, -40.0f), XMFLOAT3(0, 1, 0), green, XMFLOAT2(1, 1) },
-		{ XMFLOAT3(40.0f, -1.0f, -40.0f), XMFLOAT3(0, 1, 0), blue, XMFLOAT2(0, 1) },		
-		{ XMFLOAT3(-40.0f, -1.0f, 40.0f), XMFLOAT3(0, 1, 0), mid, XMFLOAT2(1, 0) },
+		{ XMFLOAT3(40.0f, -3.0f, 40.0f), XMFLOAT3(0, 1, 0), red, XMFLOAT2(0, 0) },
+		{ XMFLOAT3(-40.0f, -3.0f, -40.0f), XMFLOAT3(0, 1, 0), green, XMFLOAT2(1, 1) },
+		{ XMFLOAT3(40.0f, -3.0f, -40.0f), XMFLOAT3(0, 1, 0), blue, XMFLOAT2(0, 1) },		
+		{ XMFLOAT3(-40.0f, -3.0f, 40.0f), XMFLOAT3(0, 1, 0), mid, XMFLOAT2(1, 0) },
 	};
 
 	UINT floorIndices[] = { 0, 2, 1, 3, 0, 1 };	
@@ -246,7 +246,7 @@ void DemoGame::CreateGeometryBuffers()
 		UINT indices[] = {0, 1, 2};
 		modelEnt->AddTriangle(vertices, indices);
 		modelEnt->camera = camera;
-		modelEnt->cameraPos = XMFLOAT3(0, 0, -5);
+		modelEnt->cameraPos = XMFLOAT3(0, 0, 100);
 	}
 	//modelEnt->LoadTexture(L"../Assets/RedGift.png");
 	entities.push_back(modelEnt);
@@ -289,7 +289,7 @@ void DemoGame::LoadShadersAndInputLayout()
 		NULL,
 		&vsModelConstantBuffer));
 
-	// Pixel Shader Per Frame Constant Buffer
+	// Vertex Shader Per Frame Constant Buffer
 	D3D11_BUFFER_DESC cBufferDesc2;
 	cBufferDesc2.ByteWidth			= sizeof(vsFrameConstantBufferData);
 	cBufferDesc2.Usage				= D3D11_USAGE_DEFAULT;
@@ -370,7 +370,7 @@ void DemoGame::UpdateScene(float dt)
 			// Move entity away the screen a bit
 			e->transform->Translate(XMFLOAT3(0.0f, 0.0f, 5.0f));*/
 			
-			e->transform->Rotate(XMFLOAT3(0, 0.001f, 0));
+			//e->transform->Rotate(XMFLOAT3(0, 0.001f, 0));
 
 			/*} else {
 				e->transform->Scale(XMFLOAT3(1.11111f, 1.11111f, 1.11111f));

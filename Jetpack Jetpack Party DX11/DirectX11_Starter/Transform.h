@@ -83,5 +83,10 @@ public :
 			this->parent->children.push_back(this);
 		}*/
 	}
+
+	/*XMFLOAT3 GetTranslation()
+	{
+		return 
+	}*/
 };
 #endif
