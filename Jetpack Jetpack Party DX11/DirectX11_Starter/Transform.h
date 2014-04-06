@@ -41,7 +41,7 @@ public:
 
 	void Transform::Rotate(XMFLOAT3 rotation)
 	{
-		XMMATRIX rotationMatrix = XMMatrixRotationX(rotation.x) * XMMatrixRotationX(rotation.y) * XMMatrixRotationX(rotation.z);
+		XMMATRIX rotationMatrix = XMMatrixRotationX(rotation.x) * XMMatrixRotationY(rotation.y) * XMMatrixRotationZ(rotation.z);
 		XMStoreFloat4x4(&worldMatrix,  XMMatrixMultiply(XMLoadFloat4x4(&worldMatrix), XMMatrixTranspose(rotationMatrix)));
 		
 		XMStoreFloat3(&right, XMVector3Transform(XMLoadFloat3(&this->right), rotationMatrix));
