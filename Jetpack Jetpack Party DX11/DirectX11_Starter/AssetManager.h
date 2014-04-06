@@ -7,6 +7,8 @@
 #include <string>
 #include "Common.h"
 #include "Material.h"
+#include "Mesh.h"
+#include "ModelLoad\MLModelViewer.h"
 
 using namespace std;
 
@@ -35,6 +37,11 @@ public:
 	Material* StoreMaterial(Material* material, string name = "default");
 	Material* GetMaterial(string name = "default");
 
+	// Meshes
+	vector<Mesh*>* CreateAndStoreMesh(string filePath, string name = "default");
+	vector<Mesh*>* StoreMesh(vector<Mesh*>* mesh, string name = "default");
+	vector<Mesh*>* GetMesh(string name = "default");
+
 	static AssetManager* Instance();
 private:
 	static AssetManager* instance;
@@ -42,4 +49,5 @@ private:
 	map<string, ID3D11VertexShader*>* vertexShaders;
 	map<string, ID3D11PixelShader*>* pixelShaders;
 	map<string, Material*>* materials;
+	map<string, vector<Mesh*>*>* meshes;
 };

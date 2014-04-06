@@ -26,12 +26,13 @@ public:
 #include<DirectXMath.h>
 #include"Transform.h"
 #include"Common.h"
-class Camera: public CameraComponents, Transform
+class Camera: public CameraComponents
 {
 public: 	
 
 	Camera(void)
 	{		
+		transform = new Transform();
 	}
 
 	void LookAt(FXMVECTOR lookAt, FXMVECTOR eye, FXMVECTOR up)
@@ -46,6 +47,8 @@ public:
 		vsConstantBufferdata->projection	= projection;
 	}
 
+public:
+	Transform* transform;
 
 private:	
 

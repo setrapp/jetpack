@@ -6,6 +6,9 @@ AssetManager* AssetManager::Instance()
 	return instance;
 }
 
+/* TODO Replacing existing elements in store functions does not actually delete the old elements, need to do so */
+/* TODO Destructor also does not delete elements */
+
 AssetManager::AssetManager()
 {
 	if (!instance) {
@@ -16,6 +19,7 @@ AssetManager::AssetManager()
 	vertexShaders = new map<string, ID3D11VertexShader*>();
 	pixelShaders = new map<string, ID3D11PixelShader*>();
 	materials = new map<string, Material*>();
+	meshes = new map<string, vector<Mesh*>*>();
 }
 
 AssetManager::~AssetManager()
@@ -192,6 +196,109 @@ Material* AssetManager::GetMaterial(string name)
 		material = materialIt->second;
 	}
 	return material;
+}
+
+
+// Meshes
+vector<Mesh*>* AssetManager::CreateAndStoreMesh(string filePath, string name)
+{
+	vector<Mesh*>* mesh = new vector<Mesh*>();
+
+	MLModel3D* model = mlModel3DLoadOBJ(filePath.c_str());
+	bool hasUVs = mlModel3DGetTextureVertexCount(model) > 1;
+	unsigned int faceCount = mlModel3DGetFaceCount(model);
+	for (int i = 0; i < faceCount; i++) {
+		// Retrieve current face.
+		MLFace3D const* face = mlModel3DGetFace(model, i);
+
+		// Retrieve vertices that make up current face.
+		unsigned short mlIndex;
+		MLVertex3D const* mlVertex;
+		MLTexelXY const* mlTexel;
+		GUPoint3D guPoint;
+		GUNormal3D guNormal;// = mlVertex3DGetNormal(mlVertex);
+		GUPoint2D guUV;
+		// Vertex 1
+		mlIndex = mlFace3DGetVertex1(face);
+		mlVertex = mlModel3DGetVertex(model, mlIndex);
+		guPoint = mlVertex3DGetPosition(mlVertex);
+		guNormal = mlVertex3DGetNormal(mlVertex);
+		Vertex vertex1;
+		vertex1.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
+		vertex1.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
+		vertex1.Color = XMFLOAT4(1, 0, 0, 1);
+		if (hasUVs) {
+			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(model, mlIndex);
+			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
+			vertex1.UV = XMFLOAT2(guUV.x, guUV.y);
+		} else {
+			vertex1.UV = XMFLOAT2(0, 0);
+		}
+		// Vertex 2
+		mlIndex = mlFace3DGetVertex2(face);
+		mlVertex = mlModel3DGetVertex(model, mlIndex);
+		guPoint = mlVertex3DGetPosition(mlVertex);
+		guNormal = mlVertex3DGetNormal(mlVertex);
+		Vertex vertex2;
+		vertex2.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
+		vertex2.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
+		vertex2.Color = XMFLOAT4(1, 0, 0, 1);
+		if (hasUVs) {
+			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(model, mlIndex);
+			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
+			vertex2.UV = XMFLOAT2(guUV.x, guUV.y);
+		} else {
+			vertex2.UV = XMFLOAT2(0, 0);
+		}
+		// Vertex 3
+		mlIndex = mlFace3DGetVertex3(face);
+		mlVertex = mlModel3DGetVertex(model, mlIndex);
+		guPoint = mlVertex3DGetPosition(mlVertex);
+		guNormal = mlVertex3DGetNormal(mlVertex);
+		Vertex vertex3;
+		vertex3.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
+		vertex3.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
+		vertex3.Color = XMFLOAT4(1, 0, 0, 1);
+		vertex3.UV = XMFLOAT2(0,0);
+		if (hasUVs) {
+			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(model, mlIndex);
+			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
+			vertex3.UV = XMFLOAT2(guUV.x, guUV.y);
+		} else {
+			vertex3.UV = XMFLOAT2(0, 0);
+		}
+
+		// Create usable mesh.
+		Vertex vertices[] = {vertex1, vertex2, vertex3};
+		UINT indices[] = {0, 1, 2};
+		mesh->push_back(new Mesh(vertices, indices, 3, 3));
+	}
+
+	return StoreMesh(mesh, name);
+}
+vector<Mesh*>* AssetManager::StoreMesh(vector<Mesh*>* mesh, string name)
+{
+	// Attempt to add new element.
+	pair<map<string, vector<Mesh*>*>::iterator, bool> existing;
+	pair<string, vector<Mesh*>*> newMaterial(name, mesh);
+	existing = meshes->insert(newMaterial);
+	
+	// If the first attempt failed, destroy the element that is colliding and replace it.
+	if(!existing.second)
+	{
+		meshes->erase(existing.first);
+		meshes->insert(newMaterial);
+	}	
+	return mesh;
+}
+vector<Mesh*>* AssetManager::GetMesh(string name)
+{
+	vector<Mesh*>* mesh = NULL;
+	map<string, vector<Mesh*>*>::iterator meshIt = meshes->find(name);
+	if(meshIt != meshes->end()) {
+		mesh = meshIt->second;
+	}
+	return mesh;
 }
 
 	

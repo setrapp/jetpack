@@ -30,7 +30,6 @@
 #include <stdlib.h>
 #include <comdef.h>
 #include <iostream>
-#include "ModelLoad\MLModelViewer.h"
 #include "Player.h"
 
 #pragma region Win32 Entry Point (WinMain)
@@ -137,6 +136,8 @@ void DemoGame::CreateGeometryBuffers()
 
 	UINT indices[] = { 0, 2, 1, 3, 0, 1 };	
 
+
+
 	Vertex floorVertices[] = 
 	{
 		{ XMFLOAT3(40.0f, -3.0f, 40.0f), XMFLOAT3(0, 1, 0), red, XMFLOAT2(0, 0) },
@@ -176,80 +177,18 @@ void DemoGame::CreateGeometryBuffers()
 	}*/
 
 	// Attempt to load model
-	MLModel3D* model = mlModel3DLoadOBJ("../Assets/video_camera.obj");
-	Player* modelEnt = new Player();
-	bool hasUVs = mlModel3DGetTextureVertexCount(model) > 1;
-	unsigned int faceCount = mlModel3DGetFaceCount(model);
-	for (int i = 0; i < faceCount; i++) {
-		// Retrieve current face.
-		MLFace3D const* face = mlModel3DGetFace(model, i);
-
-		// Retrieve vertices that make up current face.
-		unsigned short mlIndex;
-		MLVertex3D const* mlVertex;
-		MLTexelXY const* mlTexel;
-		GUPoint3D guPoint;
-		GUNormal3D guNormal;// = mlVertex3DGetNormal(mlVertex);
-		GUPoint2D guUV;
-		// Vertex 1
-		mlIndex = mlFace3DGetVertex1(face);
-		mlVertex = mlModel3DGetVertex(model, mlIndex);
-		guPoint = mlVertex3DGetPosition(mlVertex);
-		guNormal = mlVertex3DGetNormal(mlVertex);
-		Vertex vertex1;
-		vertex1.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
-		vertex1.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
-		vertex1.Color = red;
-		if (hasUVs) {
-			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(model, mlIndex);
-			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
-			vertex1.UV = XMFLOAT2(guUV.x, guUV.y);
-		} else {
-			vertex1.UV = XMFLOAT2(0, 0);
-		}
-		// Vertex 2
-		mlIndex = mlFace3DGetVertex2(face);
-		mlVertex = mlModel3DGetVertex(model, mlIndex);
-		guPoint = mlVertex3DGetPosition(mlVertex);
-		guNormal = mlVertex3DGetNormal(mlVertex);
-		Vertex vertex2;
-		vertex2.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
-		vertex2.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
-		vertex2.Color = red;
-		if (hasUVs) {
-			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(model, mlIndex);
-			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
-			vertex2.UV = XMFLOAT2(guUV.x, guUV.y);
-		} else {
-			vertex2.UV = XMFLOAT2(0, 0);
-		}
-		// Vertex 3
-		mlIndex = mlFace3DGetVertex3(face);
-		mlVertex = mlModel3DGetVertex(model, mlIndex);
-		guPoint = mlVertex3DGetPosition(mlVertex);
-		guNormal = mlVertex3DGetNormal(mlVertex);
-		Vertex vertex3;
-		vertex3.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
-		vertex3.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
-		vertex3.Color = red;
-		vertex3.UV = XMFLOAT2(0,0);
-		if (hasUVs) {
-			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(model, mlIndex);
-			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
-			vertex3.UV = XMFLOAT2(guUV.x, guUV.y);
-		} else {
-			vertex3.UV = XMFLOAT2(0, 0);
-		}
-
-		// Create usable mesh.
-		Vertex vertices[] = {vertex1, vertex2, vertex3};
-		UINT indices[] = {0, 1, 2};
-		modelEnt->AddTriangle(vertices, indices);
-		modelEnt->camera = camera;
-		modelEnt->cameraPos = XMFLOAT3(0, 0, 100);
-	}
-	//modelEnt->LoadTexture(L"../Assets/RedGift.png");
-	entities.push_back(modelEnt);
+	AssetManager::Instance()->CreateAndStoreMesh("../Assets/video_camera.obj", "camera");
+	Player* player = new Player();
+	player->AddMesh(AssetManager::Instance()->GetMesh("camera"));
+	entities.push_back(player);
+	
+	AssetManager::Instance()->CreateAndStoreMesh("../Assets/cube.obj", "cube");
+	Entity* cube = new Entity();
+	cube->AddMesh(AssetManager::Instance()->GetMesh("cube"));
+	cube->transform->Translate(XMFLOAT3(3, 0, 0));
+	//cube->LoadTexture(L"../Assets/RedGift.png"
+	entities.push_back(cube);
+	cube->transform->SetParent(player->transform);
 }
 
 // Loads shaders from compiled shader object (.cso) files, and uses the

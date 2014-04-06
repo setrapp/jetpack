@@ -15,8 +15,9 @@ public:
 	~Entity(void);
 	void AddTriangle(Vertex* v, UINT* u);
 	void AddQuad(Vertex* v, UINT* u);
+	void AddMesh(vector<Mesh*>* mesh);
 	virtual void Update(float dt);
-	void Draw();	
+	void Draw();
 	void Rotate(XMFLOAT3 rotation);
 	void Translate(XMFLOAT3 translation);
 	void Scale(XMFLOAT3 scale);	

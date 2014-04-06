@@ -69,7 +69,7 @@ struct _ml_face3D
 
 struct _ml_model3D
 {
-	char* filename;
+	const char* filename;
 	unsigned int numVertices, numFaces, numTextureVertices, numMaterials;
 	MLVertex3D* vertices;
 	MLFace3D* faces;
@@ -147,7 +147,7 @@ void MLModel3DDelete(MLModel3D* deletee)
 }
 
 //load model from OBJ file
-MLModel3D* mlModel3DLoadOBJ(char* filename)
+MLModel3D* mlModel3DLoadOBJ(const char* filename)
 {	
 	/* Specifications:
 	 * v:		Vertex

@@ -42,6 +42,14 @@ void Entity::AddTriangle(Vertex* v, UINT* i)
 	totalMeshes ++;
 }
 
+void Entity::AddMesh(vector<Mesh*>* mesh) {
+	for (vector<Mesh*>::iterator it = mesh->begin(); it < mesh->end(); it++) 
+	{
+		meshes.push_back((*it));
+		totalMeshes ++;
+	}
+}
+
 void Entity::Update(float dt)
 {
 	//XMStoreFloat4x4(&this->transform->worldMatrix, XMMatrixTranspose(XMLoadFloat4x4(&transform->scale) * XMLoadFloat4x4(&transform->rot) * XMLoadFloat4x4(&transform->trans)));
