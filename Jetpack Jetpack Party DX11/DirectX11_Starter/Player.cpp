@@ -16,7 +16,7 @@ void Player::Update(float dt)
 	XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), groundSpeedDampening));
 	XMFLOAT3 transformedVel;
 	//XMVECTOR velVec;
-	XMStoreFloat3(&transformedVel, XMVector3Transform(XMLoadFloat3(&XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt)), XMLoadFloat4x4(&transform->rot)));
+	XMStoreFloat3(&transformedVel, XMVector3Transform(XMLoadFloat3(&XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt)), XMLoadFloat3x3(&transform->GetRotation())));
 	transform->Translate(transformedVel);
 	
 	if (camera)
