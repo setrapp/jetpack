@@ -18,17 +18,6 @@ void Player::Update(float dt)
 	//XMVECTOR velVec;
 	XMStoreFloat3(&transformedVel, XMVector3Transform(XMLoadFloat3(&XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt)), XMLoadFloat3x3(&transform->GetRotation())));
 	transform->Translate(transformedVel);
-	
-	if (camera)
-	{
-		// TODO do this with XMVector math
-		/*XMFLOAT3 cameraRight(transform->right.x * cameraPos.x, transform->right.y * cameraPos.x, transform->right.y * cameraPos.x);
-		XMFLOAT3 cameraUp(transform->up.x * cameraPos.y, transform->up.y * cameraPos.y, transform->up.y * cameraPos.y);
-		XMFLOAT3 cameraForward(transform->forward.x * cameraPos.z, transform->forward.y * cameraPos.z, transform->forward.y * cameraPos.z);
-		camera->LookAt(XMLoadFloat3(&XMFLOAT3(transform->trans._41 + transform->forward.x, transform->trans._42 + transform->forward.y, transform->trans._43 + transform->forward.z)),
-			XMLoadFloat3(&XMFLOAT3(transform->trans._41 + cameraRight.x + cameraUp.x + cameraForward.x, transform->trans._42 + cameraRight.y + cameraUp.y + cameraForward.y, transform->trans._43 + cameraRight.z + cameraUp.z + cameraForward.z)),
-			XMLoadFloat3(&transform->up));*/
-	}
 
 	Entity::Update(dt);
 }
@@ -70,5 +59,14 @@ void Player::CheckInput(float dt)
 	if(GetAsyncKeyState('E'))
 	{
 		transform->Rotate(XMFLOAT3(0, 1 * dt, 0));
+	}
+
+	if(GetAsyncKeyState('W'))
+	{
+		transform->Scale(XMFLOAT3(1 + dt, 1 + dt, 1 + dt));
+	}
+	if(GetAsyncKeyState('S'))
+	{
+		transform->Scale(XMFLOAT3(1 - dt, 1 - dt, 1 - dt));
 	}
 }

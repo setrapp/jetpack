@@ -318,6 +318,11 @@ void DemoGame::UpdateScene(float dt)
 
 			e->Update(dt);
 		}
+
+		if (GetAsyncKeyState('R'))
+		{
+			entities[2]->transform->SetTranslation(XMFLOAT3(2, 0, 0));
+		}
 	}
 
 	camera->Update(dt, &vsModelConstantBufferData);	
