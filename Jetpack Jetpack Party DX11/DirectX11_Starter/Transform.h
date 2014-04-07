@@ -33,7 +33,7 @@ public :
 
 	}
 
-	void Transform::Rotate(XMFLOAT3 rotation)
+	inline void Transform::Rotate(XMFLOAT3 rotation)
 	{
 		XMStoreFloat4x4(&this->rot,  XMMatrixMultiply(XMLoadFloat4x4(&this->rot),XMMatrixRotationZ(rotation.z) * XMMatrixRotationY(rotation.y) *  XMMatrixRotationX(rotation.x)));
 		XMStoreFloat3(&this->right, XMVector3Transform(XMLoadFloat3(&this->right), XMLoadFloat4x4(&this->rot)));
@@ -46,12 +46,12 @@ public :
 		}*/
 	 }
 
-	void Transform::Translate(XMFLOAT3 translation)
+	inline void Transform::Translate(XMFLOAT3 translation)
 	{
 		XMStoreFloat4x4(&this->trans, XMMatrixMultiply(XMLoadFloat4x4(&this->trans), XMMatrixTranslation(translation.x, translation.y, translation.z)));
 	}
 
-	void Transform::Scale(XMFLOAT3 scale)
+	inline void Transform::Scale(XMFLOAT3 scale)
 	{
 		XMStoreFloat4x4(&this->scale, XMMatrixMultiply(XMLoadFloat4x4(&this->scale), XMMatrixScaling(scale.x, scale.y, scale.z)));
 	}

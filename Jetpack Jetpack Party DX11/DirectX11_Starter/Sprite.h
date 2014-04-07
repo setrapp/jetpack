@@ -17,7 +17,7 @@ public:
 		
 	}
 
-	void SpriteRenderer::SetColor(FLOAT* color)
+	inline void SpriteRenderer::SetColor(FLOAT* color)
 	{
 		this->COLOR = color;
 	}
@@ -35,12 +35,12 @@ public:
 		0);
 	};
 
-	DirectX::SpriteBatch* SpriteRenderer::GetSpriteBatch()
+	inline DirectX::SpriteBatch* SpriteRenderer::GetSpriteBatch()
 	{
 		return this->spriteBatch;
 	}
 
-	void SpriteRenderer::Begin()
+	inline void SpriteRenderer::Begin()
 	{
 		// Store states that about to change.
 		deviceContext->OMGetBlendState(&blendState, blendVector, &blendMask);
@@ -50,7 +50,7 @@ public:
 		this->spriteBatch->Begin(DirectX::SpriteSortMode::SpriteSortMode_FrontToBack, nullptr,nullptr,nullptr,nullptr,nullptr, DirectX::XMMatrixIdentity());
 	}
 
-	void SpriteRenderer::End()
+	inline void SpriteRenderer::End()
 	{
 		this->spriteBatch->End();
 
