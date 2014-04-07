@@ -104,7 +104,7 @@ bool DemoGame::Init()
 	LoadShadersAndInputLayout();
 	this->deltaTime = 0;
 
-	XMVECTOR position	= XMVectorSet(0, 0, -5, 0);
+	XMVECTOR position	= XMVectorSet(0, 0, -20, 0);
 	XMVECTOR target		= XMVectorSet(0, 0, 0, 0);
 	XMVECTOR up			= XMVectorSet(0, 1, 0, 0);
 	XMMATRIX V			= XMMatrixLookAtLH(position, target, up);
@@ -182,13 +182,17 @@ void DemoGame::CreateGeometryBuffers()
 	player->AddMesh(AssetManager::Instance()->GetMesh("camera"));
 	entities.push_back(player);
 	
+	Entity* emptyEntity = new Entity();
+	entities.push_back(emptyEntity);
+
 	AssetManager::Instance()->CreateAndStoreMesh("../Assets/cube.obj", "cube");
 	Entity* cube = new Entity();
 	cube->AddMesh(AssetManager::Instance()->GetMesh("cube"));
-	cube->transform->Translate(XMFLOAT3(3, 0, 0));
+	cube->transform->Translate(XMFLOAT3(5, 0, 0));
 	//cube->LoadTexture(L"../Assets/RedGift.png"
 	entities.push_back(cube);
-	cube->transform->SetParent(player->transform);
+	cube->transform->SetParent(emptyEntity->transform);
+	emptyEntity->transform->SetParent(player->transform);
 }
 
 // Loads shaders from compiled shader object (.cso) files, and uses the
@@ -319,10 +323,13 @@ void DemoGame::UpdateScene(float dt)
 			e->Update(dt);
 		}
 
-		if (GetAsyncKeyState('R'))
+		entities[2]->transform->Rotate(XMFLOAT3(0, 2 * dt, 0));
+
+		// TODO: Make set scale and set rotation work
+		/*if (GetAsyncKeyState('R'))
 		{
-			entities[2]->transform->SetTranslation(XMFLOAT3(2, 0, 0));
-		}
+			entities[3]->transform->SetTranslation(XMFLOAT3(2, 0, 0));
+		}*/
 	}
 
 	camera->Update(dt, &vsModelConstantBufferData);	

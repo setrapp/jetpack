@@ -52,20 +52,36 @@ void Player::CheckInput(float dt)
 		velocity.z = velocity.z * (maxSpeed / velocityMag);
 	}
 
-	if(GetAsyncKeyState('Q'))
+	if(GetAsyncKeyState('A'))
 	{
 		transform->Rotate(XMFLOAT3(0, -1 * dt, 0));
 	}
-	if(GetAsyncKeyState('E'))
+	if(GetAsyncKeyState('D'))
 	{
 		transform->Rotate(XMFLOAT3(0, 1 * dt, 0));
 	}
-
 	if(GetAsyncKeyState('W'))
+	{
+		transform->Rotate(XMFLOAT3(-1 * dt, 0 , 0));
+	}
+	if(GetAsyncKeyState('S'))
+	{
+		transform->Rotate(XMFLOAT3(1 * dt, 0, 0));
+	}
+	if(GetAsyncKeyState('Q'))
+	{
+		transform->Rotate(XMFLOAT3(0, 0, -1 * dt));
+	}
+	if(GetAsyncKeyState('E'))
+	{
+		transform->Rotate(XMFLOAT3(0, 0, 1 * dt));
+	}
+
+	if(GetAsyncKeyState('X'))
 	{
 		transform->Scale(XMFLOAT3(1 + dt, 1 + dt, 1 + dt));
 	}
-	if(GetAsyncKeyState('S'))
+	if(GetAsyncKeyState('Z'))
 	{
 		transform->Scale(XMFLOAT3(1 - dt, 1 - dt, 1 - dt));
 	}
