@@ -20,7 +20,7 @@
 //    - This was changed in Project Properties > Config Properties > Debugging > Working Directory
 //
 // ----------------------------------------------------------------------------
-
+#define BUFFERED_STUFF
 #include <Windows.h>
 #include <d3dcompiler.h>
 #include "DemoGame.h"
@@ -32,7 +32,7 @@
 #include <iostream>
 #include "ModelLoad\MLModelViewer.h"
 #include "Player.h"
-#include "../DirectX11_Starter/GreaterMesh.h"
+#include "GreaterMesh.h"
 
 #pragma region Win32 Entry Point (WinMain)
 

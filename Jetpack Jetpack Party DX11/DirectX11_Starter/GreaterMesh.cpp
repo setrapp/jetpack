@@ -25,7 +25,7 @@ GMesh::~GMesh()
 }
 
 
-inline void GMesh::SaveMeshData(Vertex* v, UINT* i, int noOfIndices, int noOfVertices)
+void GMesh::SaveMeshData(Vertex* v, UINT* i, int noOfIndices, int noOfVertices)
 {
 	instance->totalIndices += noOfIndices;
 	instance->totalVertices += noOfVertices;
