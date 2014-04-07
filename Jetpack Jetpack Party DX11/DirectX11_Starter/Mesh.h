@@ -1,3 +1,5 @@
+#ifndef MESH_H_
+#define MESH_H_
 #pragma once
 
 #include "Vertex.h"
@@ -17,8 +19,11 @@ public:
 	void Draw();
 
 private:
+#ifndef BUFFERED_STUFF
 	ID3D11Buffer* indexBuffer;
 	ID3D11Buffer* vertexBuffer;
 	short totalIndices;
+#endif
 };
 
+#endif

@@ -87,6 +87,7 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GeneralUtility\GUMathUtility.cpp" />
     <ClCompile Include="GeneralUtility\GUParseUtility.cpp" />
+    <ClCompile Include="GreaterMesh.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -110,6 +111,7 @@
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="GeneralUtility\GUMathUtility.h" />
     <ClInclude Include="GeneralUtility\GUParseUtility.h" />
+    <ClInclude Include="GreaterMesh.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="KeyboardInput.h" />

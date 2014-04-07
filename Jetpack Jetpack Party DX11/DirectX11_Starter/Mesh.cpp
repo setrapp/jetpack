@@ -1,9 +1,12 @@
 #include "Mesh.h"
 #include "Vertex.h"
 #include <stdio.h>
+#include "../DirectX11_Starter/GreaterMesh.h"
 
 Mesh::Mesh(Vertex* v, UINT* i, int noOfIndices, int noOfVertices)
 {
+#ifndef BUFFERED_STUFF
+	
 	D3D11_BUFFER_DESC vbd;
     vbd.Usage					= D3D11_USAGE_IMMUTABLE;
 	vbd.ByteWidth				= sizeof(Vertex) * noOfVertices; // Number of vertices
@@ -39,6 +42,10 @@ Mesh::Mesh(Vertex* v, UINT* i, int noOfIndices, int noOfVertices)
 		&initialIndexData,
 		&indexBuffer));
 	totalIndices = noOfIndices;
+#endif
+#ifdef BUFFERED_STUFF
+	GMesh::SaveMeshData(v, i, noOfIndices, noOfVertices);
+#endif
 }
 
 
@@ -52,6 +59,7 @@ void Update(float dt);
 
 void Mesh::Draw()
 {	
+#ifndef BUFFERED_STUFF
 	const UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 
@@ -62,4 +70,5 @@ void Mesh::Draw()
 		this->totalIndices,	// The number of indices we're using in this draw
 		0,
 		0);
+#endif
 }

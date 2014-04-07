@@ -32,6 +32,7 @@
 #include <iostream>
 #include "ModelLoad\MLModelViewer.h"
 #include "Player.h"
+#include "../DirectX11_Starter/GreaterMesh.h"
 
 #pragma region Win32 Entry Point (WinMain)
 
@@ -62,6 +63,9 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	windowCaption = L"Demo DX11 Game";
 	windowWidth = 800;
 	windowHeight = 600;
+#ifdef BUFFERED_STUFF
+	GMesh* g = new GMesh();
+#endif
 	currentState = GameState::Started;
 	menu = new Menu(device, deviceContext);
 	camera = new Camera();
@@ -250,6 +254,11 @@ void DemoGame::CreateGeometryBuffers()
 	}
 	//modelEnt->LoadTexture(L"../Assets/RedGift.png");
 	entities.push_back(modelEnt);
+
+
+#ifdef BUFFERED_STUFF
+	GMesh::FinalizeData();
+#endif
 }
 
 // Loads shaders from compiled shader object (.cso) files, and uses the
@@ -262,10 +271,10 @@ void DemoGame::LoadShadersAndInputLayout()
 	// We can't set up the input layout yet since we need the actual vert shader
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,	0, 0,	D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,	0, 0,								D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,		0, D3D11_APPEND_ALIGNED_ELEMENT,	D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT,	D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,		0, D3D11_APPEND_ALIGNED_ELEMENT,	D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
 	// Load Vertex Shader --------------------------------------
@@ -459,6 +468,10 @@ void DemoGame::DrawScene()
 			e->Draw();
 		}
 	}
+
+#ifdef BUFFERED_STUFF
+	GMesh::BufferedDraw();
+#endif
 
 	HR(swapChain->Present(0, 0));
 }
