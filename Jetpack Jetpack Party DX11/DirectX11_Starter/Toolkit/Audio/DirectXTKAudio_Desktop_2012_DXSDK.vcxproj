@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Inc\Audio.h" />
+    <ClInclude Include="..\Src\PlatformHelpers.h" />
     <ClInclude Include="SoundCommon.h" />
     <ClInclude Include="WaveBankReader.h" />
     <ClInclude Include="WAVFileReader.h" />
@@ -38,6 +39,11 @@
     <ClCompile Include="WaveBank.cpp" />
     <ClCompile Include="WaveBankReader.cpp" />
     <ClCompile Include="WAVFileReader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DirectXTK_Desktop_2012.vcxproj">
+      <Project>{e0b52ae7-e160-4d32-bf3f-910b785e5a8e}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4F150A30-CECB-49D1-8283-6A3F57438CF5}</ProjectGuid>
@@ -124,8 +130,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_WIN32_WINNT=0x0600;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Inc;..\Src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\Inc;..\Src;%(AdditionalIncludeDirectories);$(DXSDK_DIR)\Lib\x64;C:\Program Files %28x86%29\Windows Kits\8.0\Redist\D3D\x64;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64</AdditionalIncludeDirectories>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>

@@ -7,11 +7,27 @@
 
 using namespace DirectX;
 
-Material::Material(ID3D11Device* device, ID3D11DeviceContext* deviceContext, wchar_t* path)
+Material::Material()
+{
+	this->color = XMFLOAT4(0.7f, 0.3f, 0.0f, 1.0f);
+}
+
+Material::Material(XMFLOAT4 color)
 {	
+	this->color = color;
+}
+
+Material::Material(wchar_t* path)
+{	
+	ApplyTexture(path);
+}
+
+void Material::ApplyTexture(wchar_t* path)
+{
+	ID3D11Resource* tex = texture;
 	HR (CreateWICTextureFromFile(
-		device, 
-		deviceContext, 
+		DXConnection::Instance()->device, 
+		DXConnection::Instance()->deviceContext, 
 		path, 
 		&texture, 
 		&this->resourceView));
@@ -23,11 +39,10 @@ Material::Material(ID3D11Device* device, ID3D11DeviceContext* deviceContext, wch
 	sBufferDesc.Filter = D3D11_FILTER_COMPARISON_ANISOTROPIC;
 	sBufferDesc.MaxAnisotropy = 16;
 
-	device->CreateSamplerState(
+	DXConnection::Instance()->device->CreateSamplerState(
 		&sBufferDesc,
 		&this->samplerState);
 }
-
 
 Material::~Material(void)
 {

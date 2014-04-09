@@ -13,8 +13,8 @@
 
 #pragma once
 
-#include "D:\Jetpack\Jetpack Jetpack Party DX11\DirectX11_Starter\Toolkit\Inc\Audio.h"
-#include "D:\Jetpack\Jetpack Jetpack Party DX11\DirectX11_Starter\Toolkit\Src\PlatformHelpers.h"
+#include "Audio.h"
+#include "../Src/PlatformHelpers.h"
 
 
 namespace DirectX

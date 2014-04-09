@@ -1,41 +1,43 @@
-#include <DirectXMath.h>
-
-class Camera
-{
-public :
-	Camera::Camera()
-	{
-		 DirectX::XMStoreFloat4x4(&this->viewMatrix, DirectX::XMMatrixIdentity());
-		 DirectX::XMStoreFloat4x4(&this->projectionMatrix, DirectX::XMMatrixIdentity());
-	}
-	Camera::~Camera()
-	{
-	}
-
-	DirectX::XMFLOAT4X4* Camera::getView()
-	{
-		return &viewMatrix;
-	}
-
-	DirectX::XMFLOAT4X4* Camera::getProjection()
-	{
-		return &projectionMatrix;
-	}
-
-	void Camera::Resize(float aspectRatio)
-	{
-		XMMATRIX P = XMMatrixPerspectiveFovLH(
-			0.25f * 3.1415926535f,
-			aspectRatio,
-			0.1f,
-			100.0f);
-
-		XMFLOAT4X4 temp;
-		XMStoreFloat4x4(&temp, XMMatrixTranspose(P));
-		this->projectionMatrix = temp;
-	}
-
-private:
-	DirectX::XMFLOAT4X4 viewMatrix;
-	DirectX::XMFLOAT4X4 projectionMatrix;
+#ifndef _CAMCOMPONENTS_H
+#define _CAMCOMPONENTS_H
+using namespace DirectX;
+class CameraComponents	
+{	
+public:
+	float depth;
+public:
+	CameraComponents::XMFLOAT4X4 view;			//size = 16x
+	CameraComponents::XMFLOAT4X4 projection;		//size = 16x
 };
+#endif
+
+#ifndef _CAMERA_H_
+#define _CAMERA_H_
+#include<d3d11.h>
+#include<DirectXMath.h>
+#include"Transform.h"
+#include"Common.h"
+class Camera: public CameraComponents //Removed Transform
+{
+public: 
+	Camera(void)
+	{		
+	}
+
+	_inline void LookAt(FXMVECTOR lookAt, FXMVECTOR eye, FXMVECTOR up)
+	{
+		XMMATRIX viewNew = XMMatrixLookAtLH(eye, lookAt, up);
+		XMStoreFloat4x4(&view, XMMatrixTranspose(viewNew));
+	}
+
+	_inline void Update(float dt, VertexShaderModelConstantBuffer* vsConstantBufferdata)
+	{		
+		vsConstantBufferdata->view			= view;
+		vsConstantBufferdata->projection	= projection;
+	}
+
+	Transform transform;
+private:	
+
+}; 
+#endif

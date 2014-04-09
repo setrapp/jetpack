@@ -1,8 +1,12 @@
+
 #pragma once
+
 #include <DirectXMath.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include "dxerr.h"
+#include "DXConnection.h"
+#include "Light.h"
 
 using namespace DirectX;
 
@@ -31,16 +35,22 @@ using namespace DirectX;
 #endif
 
 
-struct VertexShaderConstantBuffer
+struct VertexShaderModelConstantBuffer
 {
 	XMFLOAT4X4 world;
 	XMFLOAT4X4 view;
 	XMFLOAT4X4 projection;
 };
 
+struct VertexShaderFrameConstantBuffer
+{
+	ShaderLight light;
+};
+
 struct Vertex
 {
 	XMFLOAT3 Position;
+	XMFLOAT3 Normal;
 	XMFLOAT4 Color;
 	XMFLOAT2 UV;
 };

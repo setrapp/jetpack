@@ -72,6 +72,10 @@ DXGame::~DXGame(void)
 	ReleaseMacro(swapChain);
 	ReleaseMacro(depthStencilBuffer);
 
+	// Delete Exposed connection to DirectX
+	delete dxConnection;
+	dxConnection = 0;
+
 	// Restore default device settings
 	if( deviceContext )
 		deviceContext->ClearState();
@@ -218,6 +222,11 @@ bool DXGame::InitDirect3D()
 	ReleaseMacro(dxgiDevice);
 	ReleaseMacro(dxgiAdapter);
 	ReleaseMacro(dxgiFactory);
+
+	// Expose widely used DirectX elements
+	dxConnection = new DXConnection();
+	dxConnection->device = device;
+	dxConnection->deviceContext = deviceContext;
 
 	// The remaining steps also need to happen each time the window
 	// is resized, so just run the OnResize method

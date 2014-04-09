@@ -17,6 +17,7 @@
 
 #include "dxerr.h"
 #include "GameTimer.h"
+#include "DXConnection.h"
 
 
 class DXGame
@@ -53,6 +54,9 @@ protected:
 	void CalculateFrameStats();
 
 protected:
+
+	// Connection to widely used DirectX elements
+	DXConnection* dxConnection;
 
 	// Window handles and such
 	HINSTANCE hAppInst;

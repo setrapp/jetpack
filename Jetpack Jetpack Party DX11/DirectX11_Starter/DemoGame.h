@@ -13,6 +13,9 @@
 #include "GameState.h"
 #include "Menu.h"
 #include "Sfx.h"
+#include "Camera.h"
+#include "AssetManager.h"
+#include "Light.h"
 
 using namespace DirectX;
 
@@ -47,26 +50,33 @@ private:
 
 private:
 	float deltaTime;
+	AssetManager* assetManager;
 	// Our basic shaders for this example
 	ID3D11PixelShader* pixelShader;
+	ID3D11PixelShader* texturePixelShader;
 	ID3D11VertexShader* vertexShader;
 
 	// A few more odds and ends we'll need
 	ID3D11InputLayout* inputLayout;
-	ID3D11Buffer* vsConstantBuffer;
-	VertexShaderConstantBuffer vsConstantBufferData;
+	ID3D11Buffer* vsModelConstantBuffer;
+	VertexShaderModelConstantBuffer vsModelConstantBufferData;
+	ID3D11Buffer* vsFrameConstantBuffer;
+	VertexShaderFrameConstantBuffer vsFrameConstantBufferData;
 
 	// Keeps track of the old mouse position.  Useful for 
 	// determining how far the mouse moved in a single frame.
 	POINT prevMousePos;
 	//Camera* camera;
-	Entity* entity;
+	Light* light;
+	std::vector<Entity*> entities;
 	SpriteRenderer* spriteRenderer;
 	FontRenderer* fontRenderer;
 
-	DirectX::XMFLOAT4X4 viewMatrix;
-	DirectX::XMFLOAT4X4 projectionMatrix;
+	//DirectX::XMFLOAT4X4 viewMatrix;
+	//DirectX::XMFLOAT4X4 projectionMatrix;
 
+
+	Camera* camera;
 	GameState currentState;
 	Menu* menu;
 	Sfx* sfx;
