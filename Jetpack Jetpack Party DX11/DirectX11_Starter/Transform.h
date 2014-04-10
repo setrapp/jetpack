@@ -313,7 +313,12 @@ public:
 private:
 	void ApplyRotation(XMMATRIX* rotation)
 	{
-		localMatrix._12 = localMatrix._13 = localMatrix._21 = localMatrix._23 = localMatrix._31 = localMatrix._32 = 0;
+		//XMFLOAT3 oldScale(localMatrix._11, localMatrix._22, localMatrix._33);
+		XMFLOAT3X3 rotationMatrix = GetLocalRotation();
+		//XMStoreFloat3x3(&rotationMatrix, XMMatrixTranspose(XMLoadFloat3x3(&rotationMatrix)));
+		XMStoreFloat4x4(&localMatrix, XMMatrixMultiply(XMLoadFloat4x4(&localMatrix), XMLoadFloat3x3(&rotationMatrix)));
+		//XMStoreFloat3x3(&rotationMatrix, XMMatrixMultiply(XMLoadFloat3x3(&rotationMatrix), *rotation));
+		//localMatrix._12 = localMatrix._13 = localMatrix._21 = localMatrix._23 = localMatrix._31 = localMatrix._32 = 0;
 		XMStoreFloat4x4(&localMatrix, XMMatrixMultiply(XMLoadFloat4x4(&localMatrix), XMMatrixTranspose(*rotation)));
 		UpdateWorldMatrix();
 	}
