@@ -108,10 +108,10 @@
     <ClCompile Include="Light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ClientConnectionManager.cpp">
+    <ClCompile Include="ClientConnectionEntity.cpp">
       <Filter>Source Files\Networking</Filter>
     </ClCompile>
-    <ClCompile Include="ServerConnectionManager.cpp">
+    <ClCompile Include="ServerConnectionEntity.cpp">
       <Filter>Source Files\Networking</Filter>
     </ClCompile>
   </ItemGroup>
@@ -215,10 +215,10 @@
     <ClInclude Include="Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ClientConnectionManager.h">
+    <ClInclude Include="ClientConnectionEntity.h">
       <Filter>Header Files\Networking</Filter>
     </ClInclude>
-    <ClInclude Include="ServerConnectionManager.h">
+    <ClInclude Include="ServerConnectionEntity.h">
       <Filter>Header Files\Networking</Filter>
     </ClInclude>
   </ItemGroup>

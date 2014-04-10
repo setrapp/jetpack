@@ -7,6 +7,14 @@ Player::Player()
 	groundSpeedDampening = 0.95f;
 }
 
+Player::Player(DemoGame* v_gp)
+{
+	velocity = XMFLOAT3(0, 0, 0);
+	maxSpeed = 20;
+	groundSpeedDampening = 0.95f;
+	game= v_gp;
+}
+
 void Player::Update(float dt)
 {
 	// Check for user input.
@@ -75,6 +83,28 @@ void Player::CheckInput(float dt)
 	if(GetAsyncKeyState('E'))
 	{
 		transform->Rotate(XMFLOAT3(0, 0, 1 * dt));
+	}
+
+	if(GetAsyncKeyState('E'))
+	{
+		transform->Rotate(XMFLOAT3(0, 0, 1 * dt));
+	}
+
+	//spawns a block at a preset location
+	if(GetAsyncKeyState('P')){
+		AssetManager::Instance()->CreateAndStoreMesh("../Assets/cube.obj", "cube");
+		Entity* cube = new Entity();
+		cube->AddMesh(AssetManager::Instance()->GetMesh("cube"));
+		cube->transform->Translate(XMFLOAT3(-5, 0, 0));
+		cube->transform->SetParent(this->transform);
+		game->addedEntities.push(cube);
+	}
+
+	if(GetAsyncKeyState('N')){
+
+	}
+	if(GetAsyncKeyState('M')){
+
 	}
 
 	if(GetAsyncKeyState('X'))

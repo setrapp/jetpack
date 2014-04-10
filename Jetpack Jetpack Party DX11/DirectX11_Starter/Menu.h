@@ -1,5 +1,6 @@
 #ifndef _MENU_H
 #define _MENU_H
+#define WIN32_LEAN_AND_MEAN
 #include<d3d11.h>
 #include<DirectXMath.h>
 #include"Entity.h"

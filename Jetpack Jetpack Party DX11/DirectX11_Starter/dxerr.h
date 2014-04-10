@@ -16,7 +16,7 @@
 #ifdef _MSC_VER
 #pragma once
 #endif
-
+#define _WINSOCKAPI_
 #include <windows.h>
 #include <sal.h>
 

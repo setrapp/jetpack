@@ -1,8 +1,8 @@
 
-#include "ServerConnectionManager.h"
+#include "ServerConnectionEntity.h"
 
-std::map <SOCKET, string >ServerConnectionManager::testMap;
-ServerConnectionManager::ServerConnectionManager(void)
+std::map <SOCKET, string >ServerConnectionEntity::testMap;
+ServerConnectionEntity::ServerConnectionEntity(void)
 {
 	output = new queue<string>();
 	iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
@@ -11,7 +11,7 @@ ServerConnectionManager::ServerConnectionManager(void)
 	}
 }
 
-void ServerConnectionManager::initializeServer(){
+void ServerConnectionEntity::initializeServer(){
 	struct addrinfo *result = NULL, *ptr = NULL, hints;
 
 	ZeroMemory(&hints, sizeof (hints));
@@ -62,7 +62,7 @@ void ServerConnectionManager::initializeServer(){
 
 	
 }
-void ServerConnectionManager::listenForConnections(void* stuff){
+void ServerConnectionEntity::listenForConnections(void* stuff){
 
 SOCKET ListenSocket = (SOCKET)stuff;
 	bool bail=false;
@@ -79,14 +79,16 @@ SOCKET ListenSocket = (SOCKET)stuff;
 	}
 }
 
-void ServerConnectionManager::manageConnection(void* stuff){
-	int iResult, iSendResult;
+void ServerConnectionEntity::manageConnection(void* stuff){
+	int iResult=0, iSendResult;
 	int recvbuflen = DEFAULT_BUFLEN;
 	bool bail= false;
 	SOCKET curSocket= (SOCKET)stuff;
 
 	testMap[(int)curSocket] = "0";
-
+	string toReturn= "your socket number is: ";
+	toReturn.append(to_string((int)curSocket));
+	send(curSocket,toReturn.c_str() , iResult, 0);
 	// Receive until the peer shuts down the connection
 	do {
 		char* recvbuf = new char[DEFAULT_BUFLEN];
@@ -94,21 +96,32 @@ void ServerConnectionManager::manageConnection(void* stuff){
 				recvbuf[i]= '\0';
 			}
 		iResult = recv(curSocket, recvbuf, recvbuflen, 0);
-
-
 		if (iResult > 0) {
+
+
 			//printf("Bytes received: %d\n", iResult);
 			char* received = (char*)recvbuf;
 			cout << "server received: " << received << '\n';
-			testMap[curSocket] = received;
-			string s= printPortData();
+			string str(received);
+			if(str.compare("SOCKET REQUEST")== 0){
+				const char* toSend;
+				int test= (int)curSocket;
+				string s_test= to_string(test);
+				toSend=s_test.c_str();
+				iSendResult = send(curSocket,toSend , iResult, 0);
+			}
+			else{
 
-			// Echo the buffer back to the sender
-			const char* toSend;
-			toSend=s.c_str();
-			std::map<SOCKET, string>::iterator iter;
-			for (iter = testMap.begin(); iter != testMap.end(); ++iter) {
-				iSendResult = send(iter->first,toSend , iResult, 0);
+				testMap[curSocket] = received;
+				string s= printPortData();
+
+				// Echo the buffer back to the sender
+				const char* toSend;
+				toSend=s.c_str();
+				std::map<SOCKET, string>::iterator iter;
+				for (iter = testMap.begin(); iter != testMap.end(); ++iter) {
+					iSendResult = send(iter->first,toSend , iResult, 0);
+				}
 			}
 
 			if (iSendResult == SOCKET_ERROR) {
@@ -133,15 +146,16 @@ void ServerConnectionManager::manageConnection(void* stuff){
 
 	printf("SERVER LOOP HAS ENDED");
 
-}
-
-
-void ServerConnectionManager::chatThread(void* stuff){
 
 }
 
 
-string ServerConnectionManager::printPortData(){
+void ServerConnectionEntity::chatThread(void* stuff){
+
+}
+
+
+string ServerConnectionEntity::printPortData(){
 	std::map<SOCKET, string>::iterator iter;
 	
 	string toReturn= "";

@@ -1,6 +1,7 @@
 #ifndef _DEMOGAME_H
+#define WIN32_LEAN_AND_MEAN
 #pragma once
-
+#define WIN32_LEAN_AND_MEAN
 #include "FontRenderer.h"
 #include "Sprite.h"
 #include "Vertex.h"
@@ -16,6 +17,7 @@
 #include "Camera.h"
 #include "AssetManager.h"
 #include "Light.h"
+#include <queue>
 
 using namespace DirectX;
 
@@ -68,9 +70,12 @@ private:
 	POINT prevMousePos;
 	//Camera* camera;
 	Light* light;
+public:
 	std::vector<Entity*> entities;
 	SpriteRenderer* spriteRenderer;
 	FontRenderer* fontRenderer;
+
+	std::queue<Entity*> addedEntities;
 
 	//DirectX::XMFLOAT4X4 viewMatrix;
 	//DirectX::XMFLOAT4X4 projectionMatrix;

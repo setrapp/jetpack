@@ -1,13 +1,13 @@
-#include "ClientConnectionManager.h"
+#include "ClientConnectionEntity.h"
 
-
-ClientConnectionManager::ClientConnectionManager(void)
+int ClientConnectionEntity::socketNum;
+ClientConnectionEntity::ClientConnectionEntity(void)
 {
 	receivedChat = new std::queue<char*>();
 }
 
 
-void ClientConnectionManager::sendMessage(string sentMessage){
+void ClientConnectionEntity::sendMessage(string sentMessage){
 	recvbuflen = DEFAULT_BUFLEN;
 
 	char *sendbuf = stringToChar(sentMessage);
@@ -34,7 +34,7 @@ void ClientConnectionManager::sendMessage(string sentMessage){
 
 }
 
-void ClientConnectionManager::connectClient(string address){
+void ClientConnectionEntity::connectClient(string address){
 	iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
 	if (iResult != 0) {
 		printf("WSAStartup failed: %d\n", iResult);
@@ -89,30 +89,40 @@ void ClientConnectionManager::connectClient(string address){
 		cout <<"Unable to connect to server!\n";
 		WSACleanup();
 	}	
-	_beginthread(ClientConnectionManager::listenForResponse,0,(void*)ConnectSocket);
+	_beginthread(ClientConnectionEntity::listenForResponse,0,(void*)ConnectSocket);
 
 
 }
 
-char* ClientConnectionManager::stringToChar(string stringToConvert){
+char* ClientConnectionEntity::stringToChar(string stringToConvert){
 	const char* s= stringToConvert.c_str();
 	return const_cast<char *>(s);
 }
 
-void ClientConnectionManager::listenForResponse(void* stuff){
+void ClientConnectionEntity::listenForResponse(void* stuff){
 	bool bail= false;
 	SOCKET connectedSocket= (SOCKET)stuff;
 	int buflen= DEFAULT_BUFLEN;
 	int iResult= 0;
 	char* receiveBuffer= new char[DEFAULT_BUFLEN];
+	string s= "SOCKET REQUEST";
+	send(connectedSocket, s.c_str(), 512, 0);
+	int counter=0;
 	do {
 		for(int i=0; i<DEFAULT_BUFLEN; i++){
 			receiveBuffer[i]= '\0';
 		}
 		iResult = recv(connectedSocket, receiveBuffer, buflen, 0);
     if (iResult > 0){
-		//printf("Bytes received: %d\n", iResult);
-		cout << "client received: " << (char*)receiveBuffer << '\n';
+		if(counter==0){
+			ClientConnectionEntity::socketNum=atoi (receiveBuffer);
+			cout << "MY SOCKET NUMBER IS: " << ClientConnectionEntity::socketNum << '\n';
+		}
+		else{
+
+			cout << "client received: " << (char*)receiveBuffer << '\n';
+		}
+		counter++;
 	}    
     else if (iResult == 0){
         printf("Connection closed?\n");

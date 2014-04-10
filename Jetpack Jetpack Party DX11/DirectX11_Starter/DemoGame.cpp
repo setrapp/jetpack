@@ -20,7 +20,7 @@
 //    - This was changed in Project Properties > Config Properties > Debugging > Working Directory
 //
 // ----------------------------------------------------------------------------
-
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <d3dcompiler.h>
 #include "DemoGame.h"
@@ -31,6 +31,8 @@
 #include <comdef.h>
 #include <iostream>
 #include "Player.h"
+#include "ServerConnectionEntity.h"
+#include "ClientConnectionEntity.h"
 
 #pragma region Win32 Entry Point (WinMain)
 
@@ -151,34 +153,10 @@ void DemoGame::CreateGeometryBuffers()
 	Entity* floor = new Entity();
 	floor->AddQuad(floorVertices, floorIndices);
 	entities.push_back(floor);
-	
-	/*for(int i = 0 ; i < 5; i ++)
-	{	
-		Entity* entity = new Entity();
-
-		for(Vertex v : vertices)
-		{
-			int w;
-			if(rand() < 500)
-				w = -1;
-			else
-				w = 1;
-			v.Position.x += w * rand() % 2;
-			v.Position.y += w * rand() % 2;
-			v.Position.z += w * rand() %2;
-			v.Color.x += rand() % 5;
-			v.Color.y += rand() % 5;
-			v.Color.z += rand() % 5;
-		}
-		//entity->AddQuad(vertices, indices);
-		//if(rand() % 10 < 5)
-		//	entity->LoadTexture(L"../Assets/RedGift.png");
-		//entities.push_back(entity);
-	}*/
 
 	// Attempt to load model
 	AssetManager::Instance()->CreateAndStoreMesh("../Assets/video_camera.obj", "camera");
-	Player* player = new Player();
+	Player* player = new Player(this);
 	player->AddMesh(AssetManager::Instance()->GetMesh("camera"));
 	entities.push_back(player);
 	
@@ -189,10 +167,16 @@ void DemoGame::CreateGeometryBuffers()
 	Entity* cube = new Entity();
 	cube->AddMesh(AssetManager::Instance()->GetMesh("cube"));
 	cube->transform->Translate(XMFLOAT3(5, 0, 0));
-	//cube->LoadTexture(L"../Assets/RedGift.png"
 	entities.push_back(cube);
 	cube->transform->SetParent(emptyEntity->transform);
+
 	emptyEntity->transform->SetParent(player->transform);
+
+	//loading networkedEntities
+
+
+
+
 }
 
 // Loads shaders from compiled shader object (.cso) files, and uses the
@@ -293,9 +277,12 @@ void DemoGame::UpdateScene(float dt)
 	{
 	this->deltaTime = dt;
 	
-	//entity.Rotate(XMFLOAT3(0, 0, x));
-	//dt *= 5;
-
+	//when other classes want to add existing entities, they should add them to the addedEntities queue, so that they are added safely.
+	while (!addedEntities.empty())
+	{
+		entities.push_back(addedEntities.front());
+		addedEntities.pop();
+	}
 	
 	for(Entity* e: entities)
 		{

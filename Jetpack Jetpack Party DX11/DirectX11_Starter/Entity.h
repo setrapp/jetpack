@@ -1,4 +1,5 @@
 #pragma once
+#define WIN32_LEAN_AND_MEAN
 #include "Vertex.h"
 #include "Common.h"
 #include <vector>
@@ -6,6 +7,7 @@
 #include "Material.h"
 #include "Transform.h"
 #include "Rigidbody.h"
+
 
 
 class Entity

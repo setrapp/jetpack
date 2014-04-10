@@ -1,3 +1,4 @@
+#define WIN32_LEAN_AND_MEAN
 #include "Mesh.h"
 #include "Vertex.h"
 #include <stdio.h>

@@ -1,8 +1,11 @@
 #include "Entity.h"
+
 #include "Toolkit\Inc\WICTextureLoader.h"
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <d3dcompiler.h>
 #include "DemoGame.h"
+#include "ServerConnectionEntity.h"
 #include "Common.h"
 #include <stdio.h>
 #include <stdlib.h>
