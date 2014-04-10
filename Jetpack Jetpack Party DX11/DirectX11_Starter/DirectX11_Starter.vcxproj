@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="ClientConnectionManager.cpp" />
     <ClCompile Include="DemoGame.cpp" />
     <ClCompile Include="DXConnection.cpp" />
     <ClCompile Include="dxerr.cpp" />
@@ -94,11 +95,13 @@
     <ClCompile Include="ModelLoad\MLMaterialLoader.c" />
     <ClCompile Include="ModelLoad\MLModelViewer.c" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="ServerConnectionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="ClientConnectionManager.h" />
     <ClInclude Include="DemoGame.h" />
     <ClInclude Include="DXConnection.h" />
     <ClInclude Include="dxerr.h" />
@@ -125,6 +128,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Response.h" />
     <ClInclude Include="Rigidbody.h" />
+    <ClInclude Include="ServerConnectionManager.h" />
     <ClInclude Include="Sfx.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="Sprite.h" />

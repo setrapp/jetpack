@@ -52,6 +52,12 @@
     <Filter Include="Source Files\ModelLoading">
       <UniqueIdentifier>{8832b5cd-f068-4934-acc7-29ceeaa143c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Networking">
+      <UniqueIdentifier>{9a92c628-8727-4fd1-998d-103e61dc3707}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Networking">
+      <UniqueIdentifier>{3e9a3adc-ad80-4977-8d0f-154840303ebb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXGame.cpp">
@@ -101,6 +107,12 @@
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientConnectionManager.cpp">
+      <Filter>Source Files\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerConnectionManager.cpp">
+      <Filter>Source Files\Networking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +214,12 @@
     </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientConnectionManager.h">
+      <Filter>Header Files\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerConnectionManager.h">
+      <Filter>Header Files\Networking</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
