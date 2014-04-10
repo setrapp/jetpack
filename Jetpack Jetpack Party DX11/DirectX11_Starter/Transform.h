@@ -249,7 +249,7 @@ public:
 		{
 			XMStoreFloat3(&newScale, XMVector3Transform(XMLoadFloat3(&newScale), XMLoadFloat4x4(&parent->worldMatrix)));
 		}
-		SetLocalTranslation(newScale);
+		SetLocalScale(newScale);
 	}
 
 	// Set local scale

@@ -323,13 +323,13 @@ void DemoGame::UpdateScene(float dt)
 			e->Update(dt);
 		}
 
-		entities[2]->transform->Rotate(XMFLOAT3(0, 2 * dt, 0));
+		//entities[2]->transform->Rotate(XMFLOAT3(0, 2 * dt, 0));
 
 		// TODO: Make set scale and set rotation work
-		/*if (GetAsyncKeyState('R'))
+		if (GetAsyncKeyState('R'))
 		{
-			entities[3]->transform->SetTranslation(XMFLOAT3(2, 0, 0));
-		}*/
+			entities[3]->transform->SetScale(XMFLOAT3(2, 1, 1));
+		}
 	}
 
 	camera->Update(dt, &vsModelConstantBufferData);	
