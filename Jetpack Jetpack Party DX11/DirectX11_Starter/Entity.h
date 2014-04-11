@@ -26,11 +26,15 @@ public:
 	Material GetMaterialSafe();
 	std::vector<Mesh*> GetMeshes();
 	Transform* transform;
+	void Finalize();
 
 private:
-	LONG totalMeshes;				//keep this. 
+	ID3D11Buffer* indexBuffer;
+	ID3D11Buffer* vertexBuffer;
+	vector<Vertex> vertices;
+	LONG totalMeshes;			 
 	std::vector<Mesh*> meshes; 
-
 	Material* material;
+	LONG totalIndices;
 };
 

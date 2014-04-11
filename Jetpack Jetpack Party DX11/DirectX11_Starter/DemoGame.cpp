@@ -150,6 +150,7 @@ void DemoGame::CreateGeometryBuffers()
 
 	Entity* floor = new Entity();
 	floor->AddQuad(floorVertices, floorIndices);
+	floor->Finalize();
 	entities.push_back(floor);
 	
 	/*for(int i = 0 ; i < 5; i ++)
@@ -250,6 +251,7 @@ void DemoGame::CreateGeometryBuffers()
 		modelEnt->cameraPos = XMFLOAT3(0, 0, 100);
 	}
 	//modelEnt->LoadTexture(L"../Assets/RedGift.png");
+	modelEnt->Finalize();
 	entities.push_back(modelEnt);
 
 
