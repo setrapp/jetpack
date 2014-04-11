@@ -63,9 +63,6 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	windowCaption = L"Demo DX11 Game";
 	windowWidth = 800;
 	windowHeight = 600;
-#ifdef BUFFERED_STUFF
-	GMesh* g = new GMesh();
-#endif
 	currentState = GameState::Started;
 	menu = new Menu(device, deviceContext);
 	camera = new Camera();
@@ -256,9 +253,6 @@ void DemoGame::CreateGeometryBuffers()
 	entities.push_back(modelEnt);
 
 
-#ifdef BUFFERED_STUFF
-	GMesh::FinalizeData();
-#endif
 }
 
 // Loads shaders from compiled shader object (.cso) files, and uses the
@@ -468,10 +462,6 @@ void DemoGame::DrawScene()
 			e->Draw();
 		}
 	}
-
-#ifdef BUFFERED_STUFF
-	GMesh::BufferedDraw();
-#endif
 
 	HR(swapChain->Present(0, 0));
 }

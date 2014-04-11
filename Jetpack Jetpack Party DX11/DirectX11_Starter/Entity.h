@@ -30,6 +30,7 @@ public:
 private:
 	LONG totalMeshes;				//keep this. 
 	std::vector<Mesh*> meshes; 
+
 	Material* material;
 };
 

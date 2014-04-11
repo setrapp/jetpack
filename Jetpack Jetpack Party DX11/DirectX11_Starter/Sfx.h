@@ -38,6 +38,8 @@ public:
 	{				
 		p->Update();
 	}
+
+	void Sfx::SafePlay(SoundEffectInstance* instance);
 };
 
 #endif
