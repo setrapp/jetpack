@@ -5,13 +5,16 @@ std::map <SOCKET, string >ServerConnectionEntity::testMap;
 ServerConnectionEntity::ServerConnectionEntity(void)
 {
 	output = new queue<string>();
+	initializeServer();
+	
+}
+
+void ServerConnectionEntity::initializeServer(){
+	iResult=0;
 	iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
 	if (iResult != 0) {
 		printf("WSAStartup failed: %d\n", iResult);
 	}
-}
-
-void ServerConnectionEntity::initializeServer(){
 	struct addrinfo *result = NULL, *ptr = NULL, hints;
 
 	ZeroMemory(&hints, sizeof (hints));
@@ -77,6 +80,7 @@ SOCKET ListenSocket = (SOCKET)stuff;
 
 		_beginthread(manageConnection,0,(void*)curSocket);
 	}
+	
 }
 
 void ServerConnectionEntity::manageConnection(void* stuff){
@@ -98,12 +102,12 @@ void ServerConnectionEntity::manageConnection(void* stuff){
 		iResult = recv(curSocket, recvbuf, recvbuflen, 0);
 		if (iResult > 0) {
 
-
 			//printf("Bytes received: %d\n", iResult);
 			char* received = (char*)recvbuf;
 			cout << "server received: " << received << '\n';
 			string str(received);
 			if(str.compare("SOCKET REQUEST")== 0){
+				//Sleep(100);
 				const char* toSend;
 				int test= (int)curSocket;
 				string s_test= to_string(test);

@@ -4,12 +4,12 @@ int ClientConnectionEntity::socketNum;
 ClientConnectionEntity::ClientConnectionEntity(void)
 {
 	receivedChat = new std::queue<char*>();
+	connectClient("127.0.0.1");
 }
 
 
 void ClientConnectionEntity::sendMessage(string sentMessage){
-	recvbuflen = DEFAULT_BUFLEN;
-
+	
 	char *sendbuf = stringToChar(sentMessage);
 
 	int iResult;
@@ -48,6 +48,9 @@ void ClientConnectionEntity::connectClient(string address){
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_TCP;
+
+	bool connectionFound=false;
+
 	iResult = getaddrinfo(stringToChar(address), DEFAULT_PORT, &hints, &result);
 	if (iResult != 0) {
 		printf("getaddrinfo failed: %d\n", iResult);
@@ -73,9 +76,10 @@ void ClientConnectionEntity::connectClient(string address){
 	// Connect to server.
 	iResult = connect( ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
 	if (iResult == SOCKET_ERROR) {
-    closesocket(ConnectSocket);
+	// closesocket(ConnectSocket);
+	int fdfs= WSAGetLastError();
 	cout<<"Connect doesn't work";
-    ConnectSocket = INVALID_SOCKET;
+	// ConnectSocket = INVALID_SOCKET;
 	}
 
 	// Should really try the next address returned by getaddrinfo
@@ -129,7 +133,8 @@ void ClientConnectionEntity::listenForResponse(void* stuff){
 		bail=true;
 	}
     else{
-		printf("recv failed: %d\n", WSAGetLastError());
+		int fdfs= WSAGetLastError();
+
 		bail=true;
 	}
 	} while (!bail);

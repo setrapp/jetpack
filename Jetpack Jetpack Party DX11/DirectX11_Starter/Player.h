@@ -17,6 +17,9 @@ public:
 	Camera* camera;
 	XMFLOAT3 cameraPos;
 	DemoGame* game;
+	ClientConnectionEntity* clientEntity;
+	ServerConnectionEntity* serverEntity;
+
 
 private:
 	void CheckInput(float dt);

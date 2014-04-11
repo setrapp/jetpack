@@ -5,6 +5,7 @@ Player::Player()
 	velocity = XMFLOAT3(0, 0, 0);
 	maxSpeed = 20;
 	groundSpeedDampening = 0.95f;
+	
 }
 
 Player::Player(DemoGame* v_gp)
@@ -13,6 +14,10 @@ Player::Player(DemoGame* v_gp)
 	maxSpeed = 20;
 	groundSpeedDampening = 0.95f;
 	game= v_gp;
+//	serverEntity = new ServerConnectionEntity();
+//	Sleep(1000);
+	clientEntity = new ClientConnectionEntity();
+	
 }
 
 void Player::Update(float dt)
@@ -26,6 +31,15 @@ void Player::Update(float dt)
 	//XMVECTOR velVec;
 	XMStoreFloat3(&transformedVel, XMVector3Transform(XMLoadFloat3(&XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt)), XMLoadFloat3x3(&transform->GetRotation())));
 	transform->Translate(transformedVel);
+	DirectX::XMFLOAT3 t =transform->GetLocalTranslation();
+
+
+	if(clientEntity!=NULL){
+
+	}
+	if(serverEntity!=NULL){
+
+	}
 
 	Entity::Update(dt);
 }
@@ -101,10 +115,9 @@ void Player::CheckInput(float dt)
 	}
 
 	if(GetAsyncKeyState('N')){
-
 	}
 	if(GetAsyncKeyState('M')){
-
+		serverEntity->initializeServer();
 	}
 
 	if(GetAsyncKeyState('X'))
