@@ -36,15 +36,13 @@ float4 main(VertexToPixel input) : SV_TARGET
 		float3 lightReflect = reflect(-input.toLight, input.normal);
 		float specularIntensity = dot(input.toEye, lightReflect);
 		// TODO add shininess
-		specularIntensity = pow(specularIntensity, 4);
+		specularIntensity = pow(specularIntensity, 16);
 		if (specularIntensity > 0)
 		{
 			// TODO use specular color values
-			specular = float4(1, 1, 1, 1) * float4(1, 1, 1, 1) * specularIntensity;
+			specular = float4(1, 1, 1, 1) * float4(.7, .7, .7, 1) * specularIntensity;
 		}
 	}
 
-	//return ambient + diffuse + specular;
-	return float4(dot(input.toEye, reflect(-input.toLight, input.normal)), 0, 0, 1);
-	//return float4(-input.normal, 1);
+	return ambient + diffuse + specular;
 }

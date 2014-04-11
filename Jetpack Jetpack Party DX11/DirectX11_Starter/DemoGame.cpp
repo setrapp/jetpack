@@ -64,7 +64,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	currentState = GameState::Started;
 	menu = new Menu(device, deviceContext);
 	camera = new ControllableCamera();
-	light = new Light(XMFLOAT3(0, 0, 1), XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), true);
+	light = new Light(XMFLOAT3(0, 100, -100), XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), false);
 	sfx = new Sfx();
 }
 
@@ -157,7 +157,7 @@ void DemoGame::CreateGeometryBuffers()
 	entities.push_back(floor);
 
 	// Attempt to load model
-	AssetManager::Instance()->CreateAndStoreMesh("../Assets/cube.obj", "camera");//"../Assets/video_camera.obj", "camera");
+	AssetManager::Instance()->CreateAndStoreMesh("../Assets/video_camera.obj", "camera");
 	Player* player = new Player();
 	player->AddMesh(AssetManager::Instance()->GetMesh("camera"));
 	entities.push_back(player);
