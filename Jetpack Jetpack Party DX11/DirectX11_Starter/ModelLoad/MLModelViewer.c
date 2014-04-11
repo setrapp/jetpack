@@ -332,8 +332,7 @@ MLModel3D* mlModel3DLoadOBJ(const char* filename)
                 faces[faceCount] = f;
                 faceCount++;
                 break;
-            case MODEL_SPLIT_FACE:				//two faces
-                
+            case MODEL_SPLIT_FACE:				//two faces 
                 f1.vert1 = *(GLushort*)data[0];
                 f1.vert2 = *(GLushort*)data[1];
                 f1.vert3 = *(GLushort*)data[2];

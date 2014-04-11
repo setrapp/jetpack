@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="ControllableCamera.cpp" />
     <ClCompile Include="DemoGame.cpp" />
     <ClCompile Include="DXConnection.cpp" />
     <ClCompile Include="dxerr.cpp" />
@@ -100,6 +101,7 @@
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="ControllableCamera.h" />
     <ClInclude Include="DemoGame.h" />
     <ClInclude Include="DXConnection.h" />
     <ClInclude Include="dxerr.h" />

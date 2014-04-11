@@ -10,6 +10,7 @@
 #include "Mesh.h"
 #include "Entity.h"
 #include "Camera.h"
+#include "ControllableCamera.h"
 #include "GameState.h"
 #include "Menu.h"
 #include "Sfx.h"
@@ -76,7 +77,7 @@ private:
 	//DirectX::XMFLOAT4X4 projectionMatrix;
 
 
-	Camera* camera;
+	ControllableCamera* camera;
 	GameState currentState;
 	Menu* menu;
 	Sfx* sfx;

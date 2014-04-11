@@ -1,12 +1,14 @@
 #ifndef _CAMCOMPONENTS_H
 #define _CAMCOMPONENTS_H
+#include<d3d11.h>
+#include<DirectXMath.h>
 using namespace DirectX;
 class CameraComponents	
 {	
 public:
 	float depth;
 public:
-	CameraComponents::XMFLOAT4X4 view;			//size = 16x
+	CameraComponents::XMFLOAT4X4 view;				//size = 16x
 	CameraComponents::XMFLOAT4X4 projection;		//size = 16x
 };
 #endif
@@ -31,7 +33,7 @@ public:
 		XMStoreFloat4x4(&view, XMMatrixTranspose(viewNew));
 	}
 
-	_inline void Update(float dt, VertexShaderModelConstantBuffer* vsConstantBufferdata)
+	virtual void Update(float dt, VertexShaderModelConstantBuffer* vsConstantBufferdata)
 	{		
 		vsConstantBufferdata->view			= view;
 		vsConstantBufferdata->projection	= projection;

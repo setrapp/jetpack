@@ -27,5 +27,5 @@ float4 main(VertexToPixel input) : SV_TARGET
 	float diffuseIntensity = max(0, dot(input.normal, input.toLight));
 	float4 diffuse = input.color * input.lightDiffuse * float4(diffuseIntensity, diffuseIntensity, diffuseIntensity, 1);
 
-	return ambient + diffuse;
+	return float4((input.normal.r / 2 + 0.5f), (input.normal.g / 2 + 0.5f), (input.normal.b / 2 + 0.5f), 1);//ambient + diffuse;
 }

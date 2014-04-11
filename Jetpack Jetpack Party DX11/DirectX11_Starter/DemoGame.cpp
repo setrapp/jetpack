@@ -63,8 +63,8 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	windowHeight = 600;
 	currentState = GameState::Started;
 	menu = new Menu(device, deviceContext);
-	camera = new Camera();
-	light = new Light(XMFLOAT3(0, 1, -1), XMFLOAT4(0.2f, 0.2f, 0.2f, 1), XMFLOAT4(1, 1, 1, 1), false);
+	camera = new ControllableCamera();
+	light = new Light(XMFLOAT3(0, 0, 1), XMFLOAT4(0.2f, 0.2f, 0.2f, 1), XMFLOAT4(1, 1, 1, 1), false);
 	sfx = new Sfx();
 }
 
@@ -152,32 +152,8 @@ void DemoGame::CreateGeometryBuffers()
 	floor->AddQuad(floorVertices, floorIndices);
 	entities.push_back(floor);
 
-	/*for(int i = 0 ; i < 5; i ++)
-	{	
-		Entity* entity = new Entity();
-
-		for(Vertex v : vertices)
-		{
-			int w;
-			if(rand() < 500)
-				w = -1;
-			else
-				w = 1;
-			v.Position.x += w * rand() % 2;
-			v.Position.y += w * rand() % 2;
-			v.Position.z += w * rand() %2;
-			v.Color.x += rand() % 5;
-			v.Color.y += rand() % 5;
-			v.Color.z += rand() % 5;
-		}
-		//entity->AddQuad(vertices, indices);
-		//if(rand() % 10 < 5)
-		//	entity->LoadTexture(L"../Assets/RedGift.png");
-		//entities.push_back(entity);
-	}*/
-
 	// Attempt to load model
-	AssetManager::Instance()->CreateAndStoreMesh("../Assets/video_camera.obj", "camera");
+	AssetManager::Instance()->CreateAndStoreMesh("../Assets/cube.obj", "camera");//"../Assets/video_camera.obj", "camera");
 	Player* player = new Player();
 	player->AddMesh(AssetManager::Instance()->GetMesh("camera"));
 	entities.push_back(player);
