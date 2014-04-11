@@ -21,4 +21,3 @@ private:
 	ID3D11Buffer* vertexBuffer;
 	short totalIndices;
 };
-

@@ -52,7 +52,7 @@ void Entity::AddMesh(vector<Mesh*>* mesh) {
 
 void Entity::Update(float dt)
 {
-	//XMStoreFloat4x4(&this->transform->worldMatrix, XMMatrixTranspose(XMLoadFloat4x4(&transform->scale) * XMLoadFloat4x4(&transform->rot) * XMLoadFloat4x4(&transform->trans)));
+	
 }
 
 void Entity::Draw()

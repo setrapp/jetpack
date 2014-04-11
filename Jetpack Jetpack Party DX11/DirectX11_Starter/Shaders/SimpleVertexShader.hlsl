@@ -64,7 +64,7 @@ VertexToPixel main( VertexShaderInput input )
 	// Pass the color through - will be interpolated per-pixel by the rasterizer
 	output.color = input.color;
 
-	// Calculate direction to light.
+	// Calculate direction to light. Use fun math tricks to differentiate between point and directional lights.
 	float4 lightPos = light.world._41_42_43_44;
 	output.toLight = (lightPos.xyz * ((lightPos.a - 0.5) * 2))  - (input.position.xyz * lightPos.a);
 	output.lightAmbient = light.ambient;

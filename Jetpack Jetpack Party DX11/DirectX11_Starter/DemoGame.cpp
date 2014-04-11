@@ -45,10 +45,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 	// Make the game, initialize and run
 	DemoGame game(hInstance);
-	
+
 	if( !game.Init() )
 		return 0;	
-	
+
 	return game.Run();
 }
 
@@ -125,7 +125,7 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 green	= XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT4 blue	= XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	
+
 	Vertex vertices[] = 
 	{
 		{ XMFLOAT3(+1.0f, +1.0f, +0.0f), XMFLOAT3(0, 0, 1), red, XMFLOAT2(0, 0) },
@@ -151,7 +151,7 @@ void DemoGame::CreateGeometryBuffers()
 	Entity* floor = new Entity();
 	floor->AddQuad(floorVertices, floorIndices);
 	entities.push_back(floor);
-	
+
 	/*for(int i = 0 ; i < 5; i ++)
 	{	
 		Entity* entity = new Entity();
@@ -181,7 +181,7 @@ void DemoGame::CreateGeometryBuffers()
 	Player* player = new Player();
 	player->AddMesh(AssetManager::Instance()->GetMesh("camera"));
 	entities.push_back(player);
-	
+
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
 
@@ -245,7 +245,7 @@ void DemoGame::LoadShadersAndInputLayout()
 		NULL,
 		&vsFrameConstantBuffer));
 
-	
+
 	menu->setRenderers(fontRenderer);
 
 #ifdef OPTIMIZATION
@@ -275,7 +275,7 @@ void DemoGame::OnResize()
 			AspectRatio(),
 			0.1f,
 			100.0f);
-	
+
 	XMStoreFloat4x4(&camera->projection, XMMatrixTranspose(P));
 }
 #pragma endregion
@@ -292,50 +292,14 @@ void DemoGame::UpdateScene(float dt)
 	if(currentState == GameState::Playing)
 	{
 	this->deltaTime = dt;
-	
-	//entity.Rotate(XMFLOAT3(0, 0, x));
-	//dt *= 5;
 
-	
+
 	for(Entity* e: entities)
 		{
-			// Reset entity translation back to origin. This is not need, just preserving the jitter effect.
-			//XMFLOAT4X4 eTrans = e->transform->trans;
-			//e->transform->Translate(XMFLOAT3(-eTrans._41, -eTrans._42, -eTrans._43));
-
-			//auto p = rand() % 2;
-			//p++;
-			/*if(p <4 )
-				e->transform->Translate(XMFLOAT3(rand() % p * 0.1f, rand() % p * 0.1f, rand() % p * 0.1f));
-			else
-				e->transform->Rotate(XMFLOAT3(rand() % p * 0.1f, rand() % p * 0.1f, rand() % p * 0.1f));
-			
-			// Move entity away the screen a bit
-			e->transform->Translate(XMFLOAT3(0.0f, 0.0f, 5.0f));*/
-			
-			//e->transform->Rotate(XMFLOAT3(0, 0.001f, 0));
-
-			/*} else {
-				e->transform->Scale(XMFLOAT3(1.11111f, 1.11111f, 1.11111f));
-			}
-			scaleSmall = !scaleSmall;*/
-
 			e->Update(dt);
 		}
 
 		entities[2]->transform->Rotate(XMFLOAT3(0, 2 * dt, 0));
-
-		// TODO: Make set scale and set rotation work
-		if (GetAsyncKeyState('R'))
-		{
-			entities[3]->transform->SetLocalRotation(XMFLOAT3X3(1, 0, 0,
-																0, 1, 0,
-																0, 0, 1));
-		}
-		if (GetAsyncKeyState('T'))
-		{
-			entities[3]->transform->Rotate(XMFLOAT3(0.1, 0, 0));
-		}
 	}
 
 	camera->Update(dt, &vsModelConstantBufferData);	
@@ -409,10 +373,10 @@ void DemoGame::DrawScene()
 			perPrimitiveVSConstantBuffer.world = e->transform->GetWorldMatrix();
 			perPrimitiveVSConstantBuffer.view = vsModelConstantBufferData.view;
 			perPrimitiveVSConstantBuffer.projection = vsModelConstantBufferData.projection;
-			
+
 			// Update vertex shader constant buffer with per primitive buffer.
 			DXConnection::Instance()->deviceContext->UpdateSubresource(vsModelConstantBuffer, 0, nullptr, &perPrimitiveVSConstantBuffer, 0, 0);
-			
+
 			e->Draw();
 		}
 	}

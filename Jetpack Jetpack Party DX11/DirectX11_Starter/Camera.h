@@ -2,18 +2,9 @@
 #define _CAMCOMPONENTS_H
 using namespace DirectX;
 class CameraComponents	
-{
-	
+{	
 public:
 	float depth;
-	CameraComponents::CameraComponents()
-	{
-
-	}
-	~CameraComponents()
-	{
-
-	}
 public:
 	CameraComponents::XMFLOAT4X4 view;			//size = 16x
 	CameraComponents::XMFLOAT4X4 projection;		//size = 16x
@@ -28,14 +19,13 @@ public:
 #include"Common.h"
 class Camera: public CameraComponents
 {
-public: 	
-
+public: 
 	Camera(void)
 	{		
 		transform = new Transform();
 	}
 
-	void LookAt(FXMVECTOR lookAt, FXMVECTOR eye, FXMVECTOR up)
+	_inline void LookAt(FXMVECTOR lookAt, FXMVECTOR eye, FXMVECTOR up)
 	{
 		XMMATRIX viewNew = XMMatrixLookAtLH(eye, lookAt, up);
 		XMStoreFloat4x4(&view, XMMatrixTranspose(viewNew));
@@ -49,8 +39,6 @@ public:
 
 public:
 	Transform* transform;
-
-private:	
 
 }; 
 #endif
