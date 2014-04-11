@@ -25,7 +25,7 @@ ShaderLight Light::ConvertToShaderLight()
 	// TODO World Matrix should update properly, should light extend entity?
 	//XMStoreFloat4x4(&this->transform->worldMatrix, XMMatrixTranspose(XMLoadFloat4x4(&transform->scale) * XMLoadFloat4x4(&transform->rot) * XMLoadFloat4x4(&transform->trans)));
 
-	shaderLight.world = transform->worldMatrix;
+	shaderLight.world = transform->GetWorldMatrix();
 	if (!isDirectional)
 	{
 		shaderLight.world._44 = 1.0f;

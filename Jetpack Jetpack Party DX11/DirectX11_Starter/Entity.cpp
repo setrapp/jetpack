@@ -25,7 +25,7 @@ Entity::~Entity(void)
 
 XMFLOAT4X4 Entity::GetWorldMatrix()
 {
-	return this->transform->worldMatrix;
+	return this->transform->GetWorldMatrix();
 }
 
 void Entity::AddQuad(Vertex* v, UINT* i)

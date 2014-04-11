@@ -328,8 +328,9 @@ void DemoGame::UpdateScene(float dt)
 		// TODO: Make set scale and set rotation work
 		if (GetAsyncKeyState('R'))
 		{
-			entities[3]->transform->SetLocalRotation(XMFLOAT3(0.1, 0, 0));
-			//entities[3]->transform->Rotate(XMFLOAT3(0.1, 0, 0));
+			entities[3]->transform->SetLocalRotation(XMFLOAT3X3(1, 0, 0,
+																0, 1, 0,
+																0, 0, 1));
 		}
 		if (GetAsyncKeyState('T'))
 		{
@@ -405,7 +406,7 @@ void DemoGame::DrawScene()
 		{
 			// Create per primitive vertex shader constant buffer to hold world matrix.
 			VertexShaderModelConstantBuffer perPrimitiveVSConstantBuffer;
-			perPrimitiveVSConstantBuffer.world = e->transform->worldMatrix;
+			perPrimitiveVSConstantBuffer.world = e->transform->GetWorldMatrix();
 			perPrimitiveVSConstantBuffer.view = vsModelConstantBufferData.view;
 			perPrimitiveVSConstantBuffer.projection = vsModelConstantBufferData.projection;
 			
