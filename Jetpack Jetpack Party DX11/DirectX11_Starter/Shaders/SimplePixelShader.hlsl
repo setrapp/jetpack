@@ -7,7 +7,8 @@ struct VertexToPixel
 	float3 normal		: NORMAL0;
 	float4 color		: COLOR;
 	float2 uv			: TEXCOORD0;
-	float3 toLight		: NORMAL1;
+	float3 toEye		: NORMAL1;
+	float3 toLight		: NORMAL2;
 	// TODO Make a constant buffer for the pixel shader for light stuff.
 	float4 lightAmbient : COLOR1;
 	float4 lightDiffuse : COLOR2;
@@ -18,14 +19,32 @@ float4 main(VertexToPixel input) : SV_TARGET
 {
 	// Interpolation may have resulted in a non-unit directions, so re-normalize.
 	input.normal = normalize(input.normal);
+	input.toEye = normalize(input.toEye);
 	input.toLight = normalize(input.toLight);
 
 	// Ambient
 	float4 ambient = input.color * input.lightAmbient;
 
-	// Diffuse
-	float diffuseIntensity = max(0, dot(input.normal, input.toLight));
-	float4 diffuse = input.color * input.lightDiffuse * float4(diffuseIntensity, diffuseIntensity, diffuseIntensity, 1);
+	// Diffuse and Specular
+	float4 diffuse = float4(0, 0, 0, 0);
+	float4 specular = float4(0, 0, 0, 0);
+	float diffuseIntensity = dot(input.normal, input.toLight);
+	if (diffuseIntensity > 0)
+	{
+		diffuse = input.color * input.lightDiffuse * float4(diffuseIntensity, diffuseIntensity, diffuseIntensity, 1);
 
-	return float4((input.normal.r / 2 + 0.5f), (input.normal.g / 2 + 0.5f), (input.normal.b / 2 + 0.5f), 1);//ambient + diffuse;
+		float3 lightReflect = reflect(-input.toLight, input.normal);
+		float specularIntensity = dot(input.toEye, lightReflect);
+		// TODO add shininess
+		specularIntensity = pow(specularIntensity, 4);
+		if (specularIntensity > 0)
+		{
+			// TODO use specular color values
+			specular = float4(1, 1, 1, 1) * float4(1, 1, 1, 1) * specularIntensity;
+		}
+	}
+
+	//return ambient + diffuse + specular;
+	return float4(dot(input.toEye, reflect(-input.toLight, input.normal)), 0, 0, 1);
+	//return float4(-input.normal, 1);
 }

@@ -40,7 +40,8 @@ struct VertexToPixel
 	float3 normal		: NORMAL0;
 	float4 color		: COLOR;
 	float2 uv			: TEXCOORD0;
-	float3 toLight		: NORMAL1;
+	float3 toEye		: NORMAL1;
+	float3 toLight		: NORMAL2;
 	// TODO Make a constant buffer for the pixel shader for light stuff.
 	float4 lightAmbient : COLOR1;
 	float4 lightDiffuse : COLOR2;
@@ -63,6 +64,9 @@ VertexToPixel main( VertexShaderInput input )
 
 	// Pass the color through - will be interpolated per-pixel by the rasterizer
 	output.color = input.color;
+
+	// Calculate direction to eye.
+	output.toEye = normalize(input.position - float3(view._41_42_43));
 
 	// Calculate direction to light. Use fun math tricks to differentiate between point and directional lights.
 	float4 lightPos = light.world._41_42_43_44;

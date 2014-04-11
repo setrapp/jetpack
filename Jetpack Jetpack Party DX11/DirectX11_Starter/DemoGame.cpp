@@ -64,7 +64,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	currentState = GameState::Started;
 	menu = new Menu(device, deviceContext);
 	camera = new ControllableCamera();
-	light = new Light(XMFLOAT3(0, 0, 1), XMFLOAT4(0.2f, 0.2f, 0.2f, 1), XMFLOAT4(1, 1, 1, 1), false);
+	light = new Light(XMFLOAT3(0, 0, 1), XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), true);
 	sfx = new Sfx();
 }
 
