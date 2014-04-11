@@ -67,7 +67,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	menu = new Menu(device, deviceContext);
 	camera = new Camera();
 	light = new Light(XMFLOAT3(0, 1, -1), XMFLOAT4(0.2f, 0.2f, 0.2f, 1), XMFLOAT4(1, 1, 1, 1), false);
-	sfx = new Sfx();
+	soundManager = new SoundManager();
 }
 
 DemoGame::~DemoGame()
@@ -350,7 +350,7 @@ XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
 bool scaleSmall = true;
 void DemoGame::UpdateScene(float dt)
 {
-	sfx->Update(dt);
+	
 	if(currentState == GameState::Playing)
 	{
 	this->deltaTime = dt;

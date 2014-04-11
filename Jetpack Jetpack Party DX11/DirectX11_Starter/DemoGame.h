@@ -16,6 +16,7 @@
 #include "Camera.h"
 #include "AssetManager.h"
 #include "Light.h"
+#include "SoundManager.h"
 
 using namespace DirectX;
 
@@ -79,7 +80,7 @@ private:
 	Camera* camera;
 	GameState currentState;
 	Menu* menu;
-	Sfx* sfx;
+	SoundManager* soundManager;
 };
 
 #endif
