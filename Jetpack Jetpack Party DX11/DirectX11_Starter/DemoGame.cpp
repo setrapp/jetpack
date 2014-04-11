@@ -64,7 +64,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	currentState = GameState::Started;
 	menu = new Menu(device, deviceContext);
 	camera = new ControllableCamera();
-	light = new Light(XMFLOAT3(0, 100, -100), XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), false);
+	light = new Light(XMFLOAT3(0, 100, -100), XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), false);
 	sfx = new Sfx();
 }
 
@@ -73,7 +73,7 @@ DemoGame::~DemoGame()
 	ReleaseMacro(vertexShader);
 	ReleaseMacro(pixelShader);
 	ReleaseMacro(vsModelConstantBuffer);
-	ReleaseMacro(vsFrameConstantBuffer);
+	ReleaseMacro(lightsConstantBuffer);
 	ReleaseMacro(inputLayout);
 
 	delete light;
@@ -212,19 +212,17 @@ void DemoGame::LoadShadersAndInputLayout()
 		NULL,
 		&vsModelConstantBuffer));
 
-	// Vertex Shader Per Frame Constant Buffer
-	D3D11_BUFFER_DESC cBufferDesc2;
-	cBufferDesc2.ByteWidth			= sizeof(vsFrameConstantBufferData);
-	cBufferDesc2.Usage				= D3D11_USAGE_DEFAULT;
-	cBufferDesc2.BindFlags			= D3D11_BIND_CONSTANT_BUFFER;
-	cBufferDesc2.CPUAccessFlags		= 0;
-	cBufferDesc2.MiscFlags			= 0;
-	cBufferDesc2.StructureByteStride = 0;
+	// Light Constant Buffer
+	cBufferDesc.ByteWidth			= sizeof(lightsConstantBufferData);
+	cBufferDesc.Usage				= D3D11_USAGE_DEFAULT;
+	cBufferDesc.BindFlags			= D3D11_BIND_CONSTANT_BUFFER;
+	cBufferDesc.CPUAccessFlags		= 0;
+	cBufferDesc.MiscFlags			= 0;
+	cBufferDesc.StructureByteStride = 0;
 	HR(device->CreateBuffer(
-		&cBufferDesc2,
+		&cBufferDesc,
 		NULL,
-		&vsFrameConstantBuffer));
-
+		&lightsConstantBuffer));
 
 	menu->setRenderers(fontRenderer);
 
@@ -340,11 +338,12 @@ void DemoGame::DrawScene()
 		0);
 #endif
 	if (currentState == GameState::Playing) {
-		vsFrameConstantBufferData.light = light->ConvertToShaderLight();
-		DXConnection::Instance()->deviceContext->UpdateSubresource(vsFrameConstantBuffer, 0, NULL, &vsFrameConstantBufferData, 0, 0);
-		DXConnection::Instance()->deviceContext->VSSetConstantBuffers(1, 1, &vsFrameConstantBuffer);
 
-		// TODO: Model Vertices are not being rendered at correct depth, is this a problem with depth buffer or model???
+		// Update light constant buffer for vertex and pixel shader.
+		lightsConstantBufferData.light = light->ConvertToShaderLight();
+		DXConnection::Instance()->deviceContext->UpdateSubresource(lightsConstantBuffer, 0, NULL, &lightsConstantBufferData, 0, 0);
+		DXConnection::Instance()->deviceContext->VSSetConstantBuffers(1, 1, &lightsConstantBuffer);
+		DXConnection::Instance()->deviceContext->PSSetConstantBuffers(0, 1, &lightsConstantBuffer);
 
 		for(Entity* e :entities) 
 		{

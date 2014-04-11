@@ -14,9 +14,10 @@ struct Light
 	matrix world;
 	float4 ambient;
 	float4 diffuse;
+	float4 specular;
 };
 
-cbuffer perFrame : register(b1)
+cbuffer lights : register(b1)
 {
 	Light light;
 }
@@ -42,9 +43,6 @@ struct VertexToPixel
 	float2 uv			: TEXCOORD0;
 	float3 toEye		: NORMAL1;
 	float3 toLight		: NORMAL2;
-	// TODO Make a constant buffer for the pixel shader for light stuff.
-	float4 lightAmbient : COLOR1;
-	float4 lightDiffuse : COLOR2;
 };
 
 // The entry point for our vertex shader
@@ -71,8 +69,6 @@ VertexToPixel main( VertexShaderInput input )
 	// Calculate direction to light. Use fun math tricks to differentiate between point and directional lights.
 	float4 lightPos = light.world._41_42_43_44;
 	output.toLight = (lightPos.xyz * ((lightPos.a - 0.5) * 2))  - (input.position.xyz * lightPos.a);
-	output.lightAmbient = light.ambient;
-	output.lightDiffuse = light.diffuse;
 
 	return output;
 }

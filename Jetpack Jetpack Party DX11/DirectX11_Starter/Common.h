@@ -42,7 +42,7 @@ struct VertexShaderModelConstantBuffer
 	XMFLOAT4X4 projection;
 };
 
-struct VertexShaderFrameConstantBuffer
+struct LightsConstantBuffer
 {
 	ShaderLight light;
 };
