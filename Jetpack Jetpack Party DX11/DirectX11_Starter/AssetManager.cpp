@@ -19,7 +19,7 @@ AssetManager::AssetManager()
 	vertexShaders = new map<string, ID3D11VertexShader*>();
 	pixelShaders = new map<string, ID3D11PixelShader*>();
 	materials = new map<string, Material*>();
-	meshes = new map<string, vector<Mesh*>*>();
+	models = new map<string, Model*>();
 }
 
 AssetManager::~AssetManager()
@@ -199,106 +199,74 @@ Material* AssetManager::GetMaterial(string name)
 }
 
 
-// Meshes
-vector<Mesh*>* AssetManager::CreateAndStoreMesh(string filePath, string name)
+// Model
+Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 {
-	vector<Mesh*>* mesh = new vector<Mesh*>();
+	Model* model = new Model();
 
-	MLModel3D* model = mlModel3DLoadOBJ(filePath.c_str());
-	bool hasUVs = mlModel3DGetTextureVertexCount(model) > 1;
-	unsigned int faceCount = mlModel3DGetFaceCount(model);
-	for (int i = 0; i < faceCount; i++) {
-		// Retrieve current face.
-		MLFace3D const* face = mlModel3DGetFace(model, i);
+	MLModel3D* objModel = mlModel3DLoadOBJ(filePath.c_str());
+	bool hasUVs = mlModel3DGetTextureVertexCount(objModel) > 1;
 
-		// Retrieve vertices that make up current face.
-		unsigned short mlIndex;
-		MLVertex3D const* mlVertex;
-		MLTexelXY const* mlTexel;
-		GUPoint3D guPoint;
-		GUNormal3D guNormal;// = mlVertex3DGetNormal(mlVertex);
-		GUPoint2D guUV;
-		// Vertex 1
-		mlIndex = mlFace3DGetVertex1(face);
-		mlVertex = mlModel3DGetVertex(model, mlIndex);
-		guPoint = mlVertex3DGetPosition(mlVertex);
-		guNormal = mlVertex3DGetNormal(mlVertex);
-		Vertex vertex1;
-		vertex1.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
-		vertex1.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
-		vertex1.Color = XMFLOAT4(1, 0, 0, 1);
+	// Load Vertices.
+	unsigned int vertexCount = mlModel3DGetFaceCount(objModel);
+	for (int i = 0; i < vertexCount; i++) {
+		MLVertex3D const*  mlVertex = mlModel3DGetVertex(objModel, i);
+		GUPoint3D guPoint = mlVertex3DGetPosition(mlVertex);
+		GUNormal3D guNormal = mlVertex3DGetNormal(mlVertex);
+		Vertex vertex;
+		vertex.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
+		vertex.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
+		vertex.Color = XMFLOAT4(1, 0, 0, 1);
 		if (hasUVs) {
-			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(model, mlIndex);
+			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(objModel, i);
 			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
-			vertex1.UV = XMFLOAT2(guUV.x, guUV.y);
+			vertex.UV = XMFLOAT2(guUV.x, guUV.y);
 		} else {
-			vertex1.UV = XMFLOAT2(0, 0);
+			vertex.UV = XMFLOAT2(0, 0);
 		}
-		// Vertex 2
-		mlIndex = mlFace3DGetVertex2(face);
-		mlVertex = mlModel3DGetVertex(model, mlIndex);
-		guPoint = mlVertex3DGetPosition(mlVertex);
-		guNormal = mlVertex3DGetNormal(mlVertex);
-		Vertex vertex2;
-		vertex2.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
-		vertex2.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
-		vertex2.Color = XMFLOAT4(1, 0, 0, 1);
-		if (hasUVs) {
-			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(model, mlIndex);
-			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
-			vertex2.UV = XMFLOAT2(guUV.x, guUV.y);
-		} else {
-			vertex2.UV = XMFLOAT2(0, 0);
-		}
-		// Vertex 3
-		mlIndex = mlFace3DGetVertex3(face);
-		mlVertex = mlModel3DGetVertex(model, mlIndex);
-		guPoint = mlVertex3DGetPosition(mlVertex);
-		guNormal = mlVertex3DGetNormal(mlVertex);
-		Vertex vertex3;
-		vertex3.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
-		vertex3.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
-		vertex3.Color = XMFLOAT4(1, 0, 0, 1);
-		vertex3.UV = XMFLOAT2(0,0);
-		if (hasUVs) {
-			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(model, mlIndex);
-			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
-			vertex3.UV = XMFLOAT2(guUV.x, guUV.y);
-		} else {
-			vertex3.UV = XMFLOAT2(0, 0);
-		}
-
-		// Create usable mesh.
-		Vertex vertices[] = {vertex1, vertex2, vertex3};
-		UINT indices[] = {0, 1, 2};
-		mesh->push_back(new Mesh(vertices, indices, 3, 3));
+		model->vertices.push_back(vertex);
 	}
 
-	return StoreMesh(mesh, name);
+	// Load Mesh Indices.
+	unsigned int faceCount = mlModel3DGetFaceCount(objModel);
+	for (int i = 0; i < faceCount; i++) {
+		// Retrieve current face.
+		MLFace3D const* face = mlModel3DGetFace(objModel, i);
+
+		// Retrieve vertices that make up current face.
+		UINT* mlIndices = new UINT[3];
+		mlIndices[0] = mlFace3DGetVertex1(face);
+		mlIndices[1] = mlFace3DGetVertex2(face);
+		mlIndices[2] = mlFace3DGetVertex3(face);
+
+		model->meshes.push_back(new Mesh(mlIndices, 3));
+	}
+
+	return StoreModel(model, name);
 }
-vector<Mesh*>* AssetManager::StoreMesh(vector<Mesh*>* mesh, string name)
+Model* AssetManager::StoreModel(Model* model, string name)
 {
 	// Attempt to add new element.
-	pair<map<string, vector<Mesh*>*>::iterator, bool> existing;
-	pair<string, vector<Mesh*>*> newMaterial(name, mesh);
-	existing = meshes->insert(newMaterial);
+	pair<map<string, Model*>::iterator, bool> existing;
+	pair<string, Model*> newModel(name, model);
+	existing = models->insert(newModel);
 	
 	// If the first attempt failed, destroy the element that is colliding and replace it.
 	if(!existing.second)
 	{
-		meshes->erase(existing.first);
-		meshes->insert(newMaterial);
+		models->erase(existing.first);
+		models->insert(newModel);
 	}	
-	return mesh;
+	return model;
 }
-vector<Mesh*>* AssetManager::GetMesh(string name)
+Model* AssetManager::GetModel(string name)
 {
-	vector<Mesh*>* mesh = NULL;
-	map<string, vector<Mesh*>*>::iterator meshIt = meshes->find(name);
-	if(meshIt != meshes->end()) {
-		mesh = meshIt->second;
+	Model* model = NULL;
+	map<string, Model*>::iterator modelIt = models->find(name);
+	if(modelIt != models->end()) {
+		model = modelIt->second;
 	}
-	return mesh;
+	return model;
 }
 
 	
