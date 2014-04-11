@@ -2,36 +2,48 @@
 
 ControllableCamera::ControllableCamera()
 {
-	
+	velocity = XMFLOAT3(0, 0, 0);
+	maxSpeed = 20;
+	groundSpeedDampening = 0.95f;
 }
 
 void ControllableCamera::Update(float dt, VertexShaderModelConstantBuffer* vsConstantBufferdata)
 {
 	CheckInput(dt);
-	Camera::Update(dt, vsConstantBufferdata);
+	
 
 	// Slow the character a bit so that it comes to a nice stop over time.
 	XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), groundSpeedDampening));
 	transform->Translate(XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt));
+
+	Camera::Update(dt, vsConstantBufferdata);
 }
 
 void ControllableCamera::CheckInput(float dt)
 {
-	if(GetAsyncKeyState('I'))
+	if(GetAsyncKeyState('K'))
 	{
 		velocity.z += 0.8f;
 	}
-	if(GetAsyncKeyState('K'))
+	if(GetAsyncKeyState('I'))
 	{
 		velocity.z -= 0.8f;
 	}
-	if(GetAsyncKeyState(VK_LEFT))
+	if(GetAsyncKeyState('L'))
 	{
 		velocity.x -= 0.8f;
 	}
-	if(GetAsyncKeyState(VK_RIGHT))
+	if(GetAsyncKeyState('J'))
 	{
 		velocity.x += 0.8f;
+	}
+	if(GetAsyncKeyState('N'))
+	{
+		velocity.y -= 0.8f;
+	}
+	if(GetAsyncKeyState('M'))
+	{
+		velocity.y += 0.8f;
 	}
 
 	// Clamp to max speed.

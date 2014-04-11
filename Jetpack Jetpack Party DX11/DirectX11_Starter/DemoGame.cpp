@@ -104,12 +104,16 @@ bool DemoGame::Init()
 	LoadShadersAndInputLayout();
 	this->deltaTime = 0;
 
-	XMVECTOR position	= XMVectorSet(0, 0, -20, 0);
-	XMVECTOR target		= XMVectorSet(0, 0, 0, 0);
-	XMVECTOR up			= XMVectorSet(0, 1, 0, 0);
-	XMMATRIX V			= XMMatrixLookAtLH(position, target, up);
+	XMFLOAT3 cameraPosition;
+	XMStoreFloat3(&cameraPosition, XMVectorSet(0, 0, -20, 0));
+	XMFLOAT3 cameraTarget;
+	XMStoreFloat3(&cameraTarget, XMVectorSet(0, 0, 0, 0));
+	XMFLOAT3 cameraUp;
+	XMStoreFloat3(&cameraUp, XMVectorSet(0, 1, 0, 0));
+	//XMMATRIX V			= XMMatrixLookAtLH(position, target, up);
 
-	XMStoreFloat4x4(&camera->view, XMMatrixTranspose(V));
+	//XMStoreFloat4x4(&camera->view, XMMatrixTranspose(V));
+	camera->LookAt(cameraPosition, cameraTarget, cameraUp);
 
 	XMMATRIX W = XMMatrixIdentity();
 	for( Entity* e : entities)

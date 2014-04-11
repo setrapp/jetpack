@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ControllableCamera.cpp" />
     <ClCompile Include="DemoGame.cpp" />
     <ClCompile Include="DXConnection.cpp" />
@@ -96,6 +97,7 @@
     <ClCompile Include="ModelLoad\MLMaterialLoader.c" />
     <ClCompile Include="ModelLoad\MLModelViewer.c" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />

@@ -22,25 +22,17 @@ public:
 class Camera: public CameraComponents
 {
 public: 
-	Camera(void)
-	{		
-		transform = new Transform();
-	}
+	Camera();
 
-	_inline void LookAt(FXMVECTOR lookAt, FXMVECTOR eye, FXMVECTOR up)
-	{
-		XMMATRIX viewNew = XMMatrixLookAtLH(eye, lookAt, up);
-		XMStoreFloat4x4(&view, XMMatrixTranspose(viewNew));
-	}
+	void LookAt(XMFLOAT3 eye, XMFLOAT3 lookAt, XMFLOAT3 up);
 
-	virtual void Update(float dt, VertexShaderModelConstantBuffer* vsConstantBufferdata)
-	{		
-		vsConstantBufferdata->view			= view;
-		vsConstantBufferdata->projection	= projection;
-	}
+	virtual void Update(float dt, VertexShaderModelConstantBuffer* vsConstantBufferdata);
 
 public:
 	Transform* transform;
+
+private:
+	XMFLOAT4X4 oldWorldMatrix;
 
 }; 
 #endif
