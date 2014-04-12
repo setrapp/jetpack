@@ -3,16 +3,9 @@
 #include <conio.h>
 #include <DirectXMath.h>
 #include <d3dcompiler.h>
+#include "Common.h"
 
 using namespace DirectX;
-
-struct ShaderMaterial
-{
-	XMFLOAT4 ambient;
-	XMFLOAT4 diffuse;
-	XMFLOAT4 specular;
-	XMUINT4 shininess;
-};
 
 class Material
 {
@@ -32,5 +25,7 @@ public:
 	ID3D11Resource* texture;
 	ID3D11ShaderResourceView* resourceView;
 	ID3D11SamplerState* samplerState;
+private:
+	void Init();
 };
 

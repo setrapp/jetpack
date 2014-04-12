@@ -1,15 +1,14 @@
-
 #pragma once
 
 #include <DirectXMath.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
+#include <vector>
 #include "dxerr.h"
 #include "DXConnection.h"
-#include "Light.h"
-#include "Material.h"
 
 using namespace DirectX;
+using namespace std;
 
 #define Print(x) { if(x) { printf(x); } }
 
@@ -35,6 +34,22 @@ using namespace DirectX;
 	#endif
 #endif
 
+struct ShaderMaterial
+{
+	XMFLOAT4 ambient;
+	XMFLOAT4 diffuse;
+	XMFLOAT4 specular;
+	XMUINT4 shininess;
+};
+
+struct ShaderLight
+{
+	XMFLOAT4X4 world;
+	XMFLOAT4 ambient;
+	XMFLOAT4 diffuse;
+	XMFLOAT4 specular;
+};
+
 struct VertexShaderModelConstantBuffer
 {
 	XMFLOAT4X4 world;
@@ -52,9 +67,5 @@ struct Vertex
 {
 	XMFLOAT3 Position;
 	XMFLOAT3 Normal;
-	XMFLOAT4 Ambient;
-	XMFLOAT4 Diffuse;
-	XMFLOAT4 Specular;
-	XMUINT4 Shininess;
 	XMFLOAT2 UV;
 };

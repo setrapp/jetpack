@@ -20,19 +20,15 @@ cbuffer materialsAndLights : register(b1)
 	Light light;
 }
 
-// Defines the input to this pixel shader
-// - Should match the output of our corresponding vertex shader
 struct VertexToPixel
 {
 	float4 position		: SV_POSITION;
 	float3 normal		: NORMAL0;
-	//float4 color		: COLOR;
 	float2 uv			: TEXCOORD0;
 	float3 toEye		: NORMAL1;
 	float3 toLight		: NORMAL2;
 };
 
-// Entry point for this pixel shader
 float4 main(VertexToPixel input) : SV_TARGET
 {
 	// Extract color data.
@@ -62,7 +58,6 @@ float4 main(VertexToPixel input) : SV_TARGET
 		specularIntensity = pow(specularIntensity, inShininess);
 		if (specularIntensity > 0)
 		{
-			// TODO use specular color values
 			specular = inSpecular * light.specular * specularIntensity;
 		}
 	}

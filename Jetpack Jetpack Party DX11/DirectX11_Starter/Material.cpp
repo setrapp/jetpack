@@ -4,19 +4,18 @@
 #include "Common.h"
 #include <string>
 #include <wchar.h>
+#include "AssetManager.h"
 
 using namespace DirectX;
 
 Material::Material()
 {
-	this->ambient = XMFLOAT4(0.3, 0.3f, 0.3f, 1);
-	this->diffuse = XMFLOAT4(0.3, 0.3f, 0.3f, 1);
-	this->specular = XMFLOAT4(0, 0, 0, 1);
-	this->shininess = 0;
+	Init();
 }
 
 Material::Material(XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT4 specular, UINT shininess)
 {	
+	Init();
 	this->ambient = ambient;
 	this->diffuse = diffuse;
 	this->specular = specular;
@@ -25,11 +24,18 @@ Material::Material(XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT4 specular, UINT s
 
 Material::Material(wchar_t* path)
 {	
+	Init();
+	ApplyTexture(path);
+}
+
+void Material::Init()
+{
+	vertexShader = AssetManager::Instance()->GetVertexShader();
+	pixelShader = AssetManager::Instance()->GetPixelShader();
 	this->ambient = XMFLOAT4(0.3, 0.3f, 0.3f, 1);
 	this->diffuse = XMFLOAT4(0.3, 0.3f, 0.3f, 1);
 	this->specular = XMFLOAT4(0, 0, 0, 1);
 	this->shininess = 0;
-	ApplyTexture(path);
 }
 
 Material::~Material(void)

@@ -90,8 +90,11 @@ void Entity::Draw()
 {
 	if(material)
 	{
-		DXConnection::Instance()->deviceContext->PSSetShaderResources(0, 1, &material->resourceView);
-		DXConnection::Instance()->deviceContext->PSSetSamplers(0, 1, &material->samplerState);
+		ID3D11DeviceContext* deviceContext = DXConnection::Instance()->deviceContext;
+		deviceContext->VSSetShader(material->vertexShader, NULL, 0);
+		deviceContext->PSSetShader(material->pixelShader, NULL, 0);
+		deviceContext->PSSetShaderResources(0, 1, &material->resourceView);
+		deviceContext->PSSetSamplers(0, 1, &material->samplerState);
 	}	
 
 	const UINT stride = sizeof(Vertex);

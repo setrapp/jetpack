@@ -94,16 +94,17 @@ bool DemoGame::Init()
 
 	AssetManager* assetManager = new AssetManager();
 
-	AssetManager::Instance()->StoreMaterial(new Material());
-
 	spriteRenderer = new SpriteRenderer(deviceContext);
 	spriteRenderer->SetColor(color);	
 	fontRenderer = new FontRenderer(device, L"../Assets/font.spritefont");	
 	fontRenderer->setSpriteBatch(spriteRenderer->GetSpriteBatch());
 
+	LoadShadersAndInputLayout();
+
+	AssetManager::Instance()->StoreMaterial(new Material());
+
 	// Set up buffers and such
 	CreateGeometryBuffers();
-	LoadShadersAndInputLayout();
 	this->deltaTime = 0;
 
 	XMFLOAT3 cameraPosition;
@@ -147,10 +148,28 @@ void DemoGame::CreateGeometryBuffers()
 	cube->AddModel(AssetManager::Instance()->GetModel("cube"));
 	cube->Finalize();
 	cube->transform->Translate(XMFLOAT3(5, 0, 0));
-	//cube->LoadTexture(L"../Assets/RedGift.png"
 	entities.push_back(cube);
 	cube->transform->SetParent(emptyEntity->transform);
 	emptyEntity->transform->SetParent(player->transform);
+
+	Vertex vertices[] = 
+	{
+		{ XMFLOAT3(+1.0f, +1.0f, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 0) },
+		{ XMFLOAT3(-1.0f, -1.0f, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 1) },
+		{ XMFLOAT3(+1.0f, -1.0f, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 1) },		
+		{ XMFLOAT3(-1.0f, +1.0f, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 0) },
+	};
+
+	UINT indices[] = { 0, 2, 1, 3, 0, 1 };
+	Entity* gift = new Entity();
+	gift->AddQuad(vertices, indices);
+	gift->Finalize();
+	gift->transform->Translate(XMFLOAT3(-5, 5, 0));
+	entities.push_back(gift);
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
+	gift->SetMaterial("gift");
+	gift->GetMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
+	gift->LoadTexture(L"../Assets/RedGift.png");
 }
 
 // Loads shaders from compiled shader object (.cso) files, and uses the
@@ -168,7 +187,7 @@ void DemoGame::LoadShadersAndInputLayout()
 		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
-	// Load Vertex Shader --------------------------------------
+	// Load Vertex Shaders --------------------------------------
 	vertexShader = AssetManager::Instance()->CreateAndStoreVertexShader("../Debug/SimpleVertexShader.cso", vertexDesc, ARRAYSIZE(vertexDesc), &inputLayout);
 
 	// Load Pixel Shaders ---------------------------------------
@@ -300,21 +319,11 @@ void DemoGame::DrawScene()
 #ifndef OPTIMIZATION
 	deviceContext->IASetInputLayout(inputLayout);
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	deviceContext->VSSetShader(
-		vertexShader, 
-		NULL, 
-		0);
-
+	
 	deviceContext->VSSetConstantBuffers(
 		0,	
 		1, 
 		&vsModelConstantBuffer);
-
-	deviceContext->PSSetShader(
-		pixelShader, 
-		NULL, 
-		0);
 #endif
 	if (currentState == GameState::Playing) {
 
