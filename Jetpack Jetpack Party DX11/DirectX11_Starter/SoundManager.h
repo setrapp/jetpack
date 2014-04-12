@@ -20,10 +20,10 @@ public:
 		flags = AUDIO_ENGINE_FLAGS::AudioEngine_Default;
 		category = AUDIO_STREAM_CATEGORY::AudioCategory_GameEffects;
 		engineSfx = new AudioEngine(flags, nullptr, nullptr, category);
-		category = AUDIO_STREAM_CATEGORY::AudioCategory_GameMedia;
+		category = AUDIO_STREAM_CATEGORY::AudioCategory_GameEffects;
 		BG = new SoundInstance(L"../Assets/SampleBG.wav", engineSfx);
 		//BG->Enable3D();
-		BG->SafePlay();
+		//BG->SafePlay();
 		man = new AudioWaveManger(L"../Assets/tempwavebank.xwb", engineSfx);
 		man->Play("party", true);
 		mute = false;

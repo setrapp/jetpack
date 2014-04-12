@@ -72,7 +72,7 @@ public:
 			if (instances.find(id) == instances.end())
 				{
 					instances[id] = p.get();
-					p.get()->Play();
+					instances[id]->Play(loop);
 					p.get()->SetVolume(10000);
 				}
 			else
@@ -139,11 +139,11 @@ public:
 
 	void AudioWaveManger::Mute(bool mute)
 	{
-	/*	for(int i = 0 ; i< instances.size(); i++)
+		for(int i = 0 ; i< instances.size(); i++)
 			if(!mute)
 				instances.at(i)->SetVolume(0);			
 			else
-				instances.at(i)->SetVolume(1);*/
+				instances.at(i)->SetVolume(1);
 	}
 private:
 	DirectX::WaveBank* waveBank;	
