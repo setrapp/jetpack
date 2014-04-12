@@ -217,6 +217,11 @@ void Transform::SetLocalRotation(XMFLOAT3X3 newRotation)
 	ApplyRotation(&XMLoadFloat3x3(&newRotation));
 }
 
+bool Transform::IsUniformScale()
+{
+	return (scale.x == scale.y && scale.x == scale.z) && (parent == NULL || parent->IsUniformScale());
+}
+
 XMFLOAT3 Transform::GetLocalScale()
 {
 	return scale;

@@ -151,6 +151,7 @@ void DemoGame::CreateGeometryBuffers()
 	entities.push_back(cube);
 	cube->transform->SetParent(emptyEntity->transform);
 	emptyEntity->transform->SetParent(player->transform);
+	player->transform->Scale(XMFLOAT3(3, 1, 1));
 
 	Vertex vertices[] = 
 	{
@@ -336,9 +337,25 @@ void DemoGame::DrawScene()
 		
 		for(Entity* e :entities) 
 		{
+			// Compute the inverse transpose of the entity's world matrix for use by normals in the shaders. Ignore translation.
+			// If the entity is scaled uniformly, cheat and use the world matrix because scales will work.
+			XMFLOAT3X3 rotationScale;
+			XMStoreFloat3x3(&rotationScale, XMLoadFloat4x4(&e->transform->GetWorldMatrix()));
+			XMFLOAT4X4 inverseTranspose;
+			if (e->transform->IsUniformScale())
+			{
+				XMStoreFloat4x4(&inverseTranspose, XMLoadFloat3x3(&rotationScale));
+			}
+			else
+			{
+				XMStoreFloat4x4(&inverseTranspose, XMMatrixTranspose(XMMatrixInverse(nullptr, XMLoadFloat3x3(&rotationScale))));
+			}
+			
+
 			// Create per primitive vertex shader constant buffer to hold matrices.
 			VertexShaderModelConstantBuffer perPrimitiveVSConstantBuffer;
 			perPrimitiveVSConstantBuffer.world = e->transform->GetWorldMatrix();
+			perPrimitiveVSConstantBuffer.inverseTranspose = inverseTranspose;
 			perPrimitiveVSConstantBuffer.view = vsModelConstantBufferData.view;
 			perPrimitiveVSConstantBuffer.projection = vsModelConstantBufferData.projection;
 

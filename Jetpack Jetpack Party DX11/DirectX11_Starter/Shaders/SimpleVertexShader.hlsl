@@ -5,6 +5,7 @@
 cbuffer perModel : register(b0)
 {
 	matrix world;
+	matrix inverseTranspose;
 	matrix view;
 	matrix projection;
 };
@@ -58,8 +59,8 @@ VertexToPixel main( VertexShaderInput input )
 	output.position = mul(float4(input.position, 1.0f), worldViewProj);
 	output.uv = input.uv;
 	
-	// Transform normal assuming uniform scaling. Ignore translation.
-	output.normal = mul(input.normal, (float3x3)world);
+	// Transform normal by inverse transpose to remove scaling without affecting rotation.
+	output.normal = mul(input.normal, (float3x3)inverseTranspose);
 	output.normal = normalize(output.normal);
 
 	// Calculate direction to eye.

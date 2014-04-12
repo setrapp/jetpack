@@ -80,7 +80,10 @@ public:
 	void SetLocalRotation(XMFLOAT3 newEulerAngles);
 
 	void SetLocalRotation(XMFLOAT3 axis, float newAngle);
+	
 	void SetLocalRotation(XMFLOAT3X3 newRotation);
+
+	bool IsUniformScale();
 
 	XMFLOAT3 GetLocalScale();
 
