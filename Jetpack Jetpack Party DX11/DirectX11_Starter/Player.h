@@ -22,6 +22,7 @@ public:
 	ServerConnectionEntity* serverEntity;
 	Entity* networkedCube;
 	std::map<int,Entity*> networkedEntities;
+	float networkSendTimer;
 
 private:
 	void CheckInput(float dt);

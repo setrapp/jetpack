@@ -15,12 +15,13 @@ Player::Player(DemoGame* v_gp)
 	groundSpeedDampening = 0.95f;
 	game= v_gp;
 	clientEntity = new ClientConnectionEntity();
-	networkedEntities = vector<Entity*>();
+	networkSendTimer=0.0f;
 	
 }
 
 void Player::Update(float dt)
 {
+	networkSendTimer-=dt;
 	// Check for user input.
 	CheckInput(dt);
 	
@@ -33,9 +34,11 @@ void Player::Update(float dt)
 	DirectX::XMFLOAT3 t =transform->GetLocalTranslation();
 
 	while(!clientEntity->networkMessages.empty()){
+
 		std::vector<std::string> stringParts;
 		string readData= clientEntity->networkMessages.front();
 		string curString;
+		Entity* cube;
 		std::istringstream stringsplitter(readData);
 		while(std::getline(stringsplitter,curString, '\n')){
 			stringParts.push_back(curString);
@@ -48,14 +51,13 @@ void Player::Update(float dt)
 			//a new player has been added
 		case 2:
 			AssetManager::Instance()->CreateAndStoreMesh("../Assets/cube.obj", "cube");
-			Entity* cube = new Entity();
+			cube = new Entity();
 			cube->socketNumber= atoi(stringParts.at(1).c_str());
 			cube->AddMesh(AssetManager::Instance()->GetMesh("cube"));
 			cube->transform->Translate(XMFLOAT3(-5, 0, 0));
 			cube->transform->SetParent(this->transform);
 			networkedEntities[cube->socketNumber]=cube;
 			game->addedEntities.push(cube);
-			clientEntity->networkMessages.pop();
 			break;
 
 			//a list of sockets and the positions of the data is sent, the positions of all the associated entities is updated.
@@ -82,6 +84,7 @@ void Player::Update(float dt)
 
 			}
 		}
+		clientEntity->networkMessages.pop();
 			
 	}
 
@@ -91,6 +94,8 @@ void Player::Update(float dt)
 
 void Player::CheckInput(float dt)
 {
+
+	bool cubeInputReceived= false;
 	if(GetAsyncKeyState(VK_UP))
 	{
 		velocity.z += 0.8f;
@@ -171,23 +176,32 @@ void Player::CheckInput(float dt)
 	}
 
 	if(GetAsyncKeyState('H')){
-		if(clientEntity->isConnected)
+		if(clientEntity->isConnected){
+			cubeInputReceived=true;
 			networkedCube->transform->Translate(XMFLOAT3(dt, 0, 0));
+
+		}
 
 	}
 	if(GetAsyncKeyState('U')){
-		if(clientEntity->isConnected)
+		if(clientEntity->isConnected){
+			cubeInputReceived=true;
 			networkedCube->transform->Translate(XMFLOAT3(0, 0, dt));
+		}
 
 	}
 	if(GetAsyncKeyState('J')){
-		if(clientEntity->isConnected)
+		if(clientEntity->isConnected){
+			cubeInputReceived=true;
 			networkedCube->transform->Translate(XMFLOAT3(0, 0,-1* dt));
+		}
 
 	}
 	if(GetAsyncKeyState('K')){
-		if(clientEntity->isConnected)
+		if(clientEntity->isConnected){
+			cubeInputReceived=true;
 			networkedCube->transform->Translate(XMFLOAT3(-1* dt, 0, 0));
+		}
 	}
 
 
@@ -199,4 +213,24 @@ void Player::CheckInput(float dt)
 	{
 		transform->Scale(XMFLOAT3(1 - dt, 1 - dt, 1 - dt));
 	}
+
+
+	if(clientEntity->isConnected && networkSendTimer<0.0f && cubeInputReceived){
+		XMFLOAT3 curTransform= networkedCube->transform->GetLocalTranslation();
+		networkSendTimer=0.5f;
+		std::ostringstream ss1;
+		ss1 << curTransform.x;
+		std::string s1(ss1.str());
+		std::ostringstream ss2;
+		ss2 << curTransform.y;
+		std::string s2(ss2.str());
+		std::ostringstream ss3;
+		ss3 << curTransform.z;
+		std::string s3(ss3.str());
+
+		clientEntity->sendMessage(s1+","+ s2+","+ s3);
+
+	}
+
+
 }

@@ -114,6 +114,7 @@ void ClientConnectionEntity::listenForResponse(void* stuff){
 			if(counter==0){
 				ClientConnectionEntity::socketNum=atoi (receiveBuffer);
 				cout << "MY SOCKET NUMBER IS: " << ClientConnectionEntity::socketNum << '\n';
+					
 			}
 			else{
 
@@ -132,6 +133,14 @@ void ClientConnectionEntity::listenForResponse(void* stuff){
 						
 						networkMessages.push(toPush);
 					}
+				}
+				else if(toParse.find("MOVEMENT UPDATE: ",0)!=-1){
+					string movementUpdateStr= "MOVEMENT UPDATE: ";
+					toParse = toParse.substr(movementUpdateStr.length());
+					string toPush= "3";
+					toPush+= "\n";
+					toPush+= toParse;
+					networkMessages.push(toPush);
 				}
 			}
 			counter++;
