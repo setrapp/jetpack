@@ -66,7 +66,7 @@ void Transform::Scale(XMFLOAT3 scale)
 
 void Transform::LookAt(XMFLOAT3 eye, XMFLOAT3 lookAt, XMFLOAT3 up)
 {
-	XMStoreFloat4x4(&localMatrix, XMMatrixTranspose(XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&lookAt), XMLoadFloat3(&up))));
+	XMStoreFloat4x4(&localMatrix, XMMatrixInverse(nullptr, XMMatrixTranspose(XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&lookAt), XMLoadFloat3(&up)))));
 	translation = XMFLOAT3(localMatrix._14, localMatrix._24, localMatrix._34);
 	XMStoreFloat3x3(&rotation, XMLoadFloat4x4(&localMatrix));
 	UpdateLocalAndWorld();
@@ -90,7 +90,7 @@ Transform* Transform::GetParent()
 
 void Transform::SetParent(Transform* parent)
 {
-	if (parent == this->parent)
+	if (parent == this->parent || this->parent == this)
 	{
 		return;
 	}

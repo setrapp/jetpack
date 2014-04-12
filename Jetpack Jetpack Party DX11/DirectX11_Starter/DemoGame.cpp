@@ -151,7 +151,6 @@ void DemoGame::CreateGeometryBuffers()
 	entities.push_back(cube);
 	cube->transform->SetParent(emptyEntity->transform);
 	emptyEntity->transform->SetParent(player->transform);
-	player->transform->Scale(XMFLOAT3(3, 1, 1));
 
 	Vertex vertices[] = 
 	{
@@ -171,6 +170,9 @@ void DemoGame::CreateGeometryBuffers()
 	gift->SetMaterial("gift");
 	gift->GetMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 	gift->LoadTexture(L"../Assets/RedGift.png");
+
+	camera->transform->SetParent(player->transform);
+	//player->transform->SetParent(camera->transform);
 }
 
 // Loads shaders from compiled shader object (.cso) files, and uses the

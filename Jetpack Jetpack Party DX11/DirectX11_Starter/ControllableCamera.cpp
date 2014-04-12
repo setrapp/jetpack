@@ -37,11 +37,11 @@ void ControllableCamera::CheckInput(float dt)
 	{
 		velocity.x += 0.8f;
 	}
-	if(GetAsyncKeyState('N'))
+	if(GetAsyncKeyState('B'))
 	{
 		velocity.y -= 0.8f;
 	}
-	if(GetAsyncKeyState('M'))
+	if(GetAsyncKeyState('N'))
 	{
 		velocity.y += 0.8f;
 	}
@@ -55,5 +55,30 @@ void ControllableCamera::CheckInput(float dt)
 		velocity.x = velocity.x * (maxSpeed / velocityMag);
 		velocity.y = velocity.y * (maxSpeed / velocityMag);
 		velocity.z = velocity.z * (maxSpeed / velocityMag);
+	}
+
+	if(GetAsyncKeyState('Y'))
+	{
+		transform->Rotate(XMFLOAT3(0, -1 * dt, 0));
+	}
+	if(GetAsyncKeyState('H'))
+	{
+		transform->Rotate(XMFLOAT3(0, 1 * dt, 0));
+	}
+	if(GetAsyncKeyState('T'))
+	{
+		transform->Rotate(XMFLOAT3(-1 * dt, 0 , 0));
+	}
+	if(GetAsyncKeyState('G'))
+	{
+		transform->Rotate(XMFLOAT3(1 * dt, 0, 0));
+	}
+	if(GetAsyncKeyState('U'))
+	{
+		transform->Rotate(XMFLOAT3(0, 0, -1 * dt));
+	}
+	if(GetAsyncKeyState('O'))
+	{
+		transform->Rotate(XMFLOAT3(0, 0, 1 * dt));
 	}
 }
