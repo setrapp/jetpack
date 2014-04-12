@@ -606,12 +606,13 @@ namespace DirectX
 
         // Notifications.
         void OnDestroyParent();
-
-    private:
-        // Private implementation.
+		 // Private implementation.
         class Impl;
-
+		
         std::unique_ptr<Impl> pImpl;
+    private:
+       
+
 
         // Private constructors
         SoundEffectInstance( _In_ AudioEngine* engine, _In_ SoundEffect* effect, SOUND_EFFECT_INSTANCE_FLAGS flags );

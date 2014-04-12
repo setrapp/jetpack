@@ -7,6 +7,7 @@
 #include "Common.h"
 #include <stdio.h>
 #include <stdlib.h>
+
 using namespace DirectX;
 
 Entity::Entity()
@@ -25,7 +26,6 @@ Entity::~Entity(void)
 	ReleaseMacro(indexBuffer);
 }
 
-/*TODO Need copy constructor and copy assignment operator*/
 
 XMFLOAT4X4 Entity::GetWorldMatrix()
 {

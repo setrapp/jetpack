@@ -58,14 +58,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 {
-	windowCaption = L"Demo DX11 Game";
+	windowCaption = L"Jetpack Jetpack Party!";
 	windowWidth = 800;
 	windowHeight = 600;
 	currentState = GameState::Started;
 	menu = new Menu(device, deviceContext);
 	camera = new ControllableCamera();
-	light = new Light(XMFLOAT3(0, 100, -100), XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), false);
-	sfx = new Sfx();
+	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
+	soundManager = new SoundManager();
 }
 
 DemoGame::~DemoGame()
@@ -129,33 +129,6 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 green	= XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT4 blue	= XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-
-	/*Vertex vertices[] = 
-	{
-		{ XMFLOAT3(+1.0f, +1.0f, +0.0f), XMFLOAT3(0, 0, 1), red, XMFLOAT2(0, 0) },
-		{ XMFLOAT3(-1.0f, -1.0f, +0.0f), XMFLOAT3(0, 0, 1), green, XMFLOAT2(1, 1) },
-		{ XMFLOAT3(+1.0f, -1.0f, +0.0f), XMFLOAT3(0, 0, 1), blue, XMFLOAT2(0, 1) },		
-		{ XMFLOAT3(-1.0f, +1.0f, +0.0f), XMFLOAT3(0, 0, 1), mid, XMFLOAT2(1, 0) },
-	};
-
-	UINT indices[] = { 0, 2, 1, 3, 0, 1 };	
-
-
-
-	Vertex floorVertices[] = 
-	{
-		{ XMFLOAT3(40.0f, -3.0f, 40.0f), XMFLOAT3(0, 1, 0), red, XMFLOAT2(0, 0) },
-		{ XMFLOAT3(-40.0f, -3.0f, -40.0f), XMFLOAT3(0, 1, 0), green, XMFLOAT2(1, 1) },
-		{ XMFLOAT3(40.0f, -3.0f, -40.0f), XMFLOAT3(0, 1, 0), blue, XMFLOAT2(0, 1) },		
-		{ XMFLOAT3(-40.0f, -3.0f, 40.0f), XMFLOAT3(0, 1, 0), mid, XMFLOAT2(1, 0) },
-	};
-
-	UINT floorIndices[] = { 0, 2, 1, 3, 0, 1 };	
-
-	Entity* floor = new Entity();
-	floor->AddQuad(floorVertices, floorIndices);
-	floor->Finalize();
-	entities.push_back(floor);*/
 
 	// Attempt to load model
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
@@ -270,7 +243,7 @@ XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
 bool scaleSmall = true;
 void DemoGame::UpdateScene(float dt)
 {
-	sfx->Update(dt);
+	soundManager->Update();
 	if(currentState == GameState::Playing)
 	{
 	this->deltaTime = dt;
@@ -290,6 +263,8 @@ void DemoGame::UpdateScene(float dt)
 	{
 		currentState = menu->Update(dt);
 	}
+
+
 
 
 	deviceContext->UpdateSubresource(

@@ -164,9 +164,6 @@
     <ClInclude Include="Rect.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="SoundManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sfx.h">
       <Filter>Header Files\Sound</Filter>
     </ClInclude>
@@ -220,6 +217,15 @@
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>Header Files\Core\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundInstance.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioWaveManager.h">
+      <Filter>Header Files\Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

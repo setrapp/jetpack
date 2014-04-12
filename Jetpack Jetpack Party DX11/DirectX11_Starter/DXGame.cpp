@@ -36,7 +36,7 @@ LRESULT CALLBACK
 
 DXGame::DXGame(HINSTANCE hInstance)
 	:	hAppInst(hInstance),
-	windowCaption(L"DirectX Game"),
+	windowCaption(L"Jetpack Jetpack Party!"),
 	driverType(D3D_DRIVER_TYPE_HARDWARE),
 	windowWidth(800),
 	windowHeight(600),
@@ -96,6 +96,8 @@ bool DXGame::Init()
 
 	if(!InitDirect3D())
 		return false;
+
+	initCPU();
 
 	return true;
 }
@@ -371,11 +373,18 @@ void DXGame::CalculateFrameStats()
 
 		std::wostringstream outs;   
 		outs.precision(6);
+		 memInfo.dwLength = sizeof(MEMORYSTATUSEX);
+		GlobalMemoryStatusEx(&memInfo);
+		DWORDLONG totalVirtualMem = memInfo.ullTotalPageFile;
+		DWORDLONG totalPhysMem = memInfo.dwMemoryLoad;
+
 		outs << windowCaption << L"    "
 			<< L"Width: " << windowWidth << L"    "
 			<< L"Height: " << windowHeight << L"    "
 			<< L"FPS: " << fps << L"    " 
-			<< L"Frame Time: " << mspf << L" (ms)";
+			<< L"Frame Time: " << mspf << L" (ms)"<< "    "
+			<< L"CPU : " << getCurrentValue() << "    "
+			<< L"RAM : " << totalPhysMem << " MB   ";
 
 		// Include feature level
 		switch(featureLevel)
@@ -530,6 +539,61 @@ LRESULT DXGame::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 
 	return DefWindowProc(hwnd, msg, wParam, lParam);
+}
+
+
+#include "windows.h"
+
+
+static ULARGE_INTEGER lastCPU, lastSysCPU, lastUserCPU;
+static int numProcessors;
+static HANDLE self;
+
+
+void DXGame::initCPU(){
+
+    SYSTEM_INFO sysInfo;
+    FILETIME ftime, fsys, fuser;
+
+
+    GetSystemInfo(&sysInfo);
+    numProcessors = sysInfo.dwNumberOfProcessors;
+
+
+    GetSystemTimeAsFileTime(&ftime);
+    memcpy(&lastCPU, &ftime, sizeof(FILETIME));
+
+
+    self = GetCurrentProcess();
+    GetProcessTimes(self, &ftime, &ftime, &fsys, &fuser);
+    memcpy(&lastSysCPU, &fsys, sizeof(FILETIME));
+    memcpy(&lastUserCPU, &fuser, sizeof(FILETIME));
+}
+
+
+double DXGame::getCurrentValue(){
+    FILETIME ftime, fsys, fuser;
+    ULARGE_INTEGER now, sys, user;
+    double percent;
+
+
+    GetSystemTimeAsFileTime(&ftime);
+    memcpy(&now, &ftime, sizeof(FILETIME));
+
+
+    GetProcessTimes(self, &ftime, &ftime, &fsys, &fuser);
+    memcpy(&sys, &fsys, sizeof(FILETIME));
+    memcpy(&user, &fuser, sizeof(FILETIME));
+    percent = (sys.QuadPart - lastSysCPU.QuadPart) +
+        (user.QuadPart - lastUserCPU.QuadPart);
+    percent /= (now.QuadPart - lastCPU.QuadPart);
+    percent /= numProcessors;
+    lastCPU = now;
+    lastUserCPU = user;
+    lastSysCPU = sys;
+
+
+    return percent * 100;
 }
 
 #pragma endregion
