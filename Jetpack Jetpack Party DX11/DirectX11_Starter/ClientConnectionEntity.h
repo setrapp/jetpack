@@ -6,6 +6,7 @@
 #include <iostream>
 #include <process.h>
 #include <queue>
+#include <sstream>
 #include "Entity.h"
 #define DEFAULT_PORT "8080"
 #define DEFAULT_BUFLEN 512
@@ -30,5 +31,6 @@ public:
 	void sendMessage(string sentMessage);
 	void connectClient(string address);
 	static void listenForResponse(void* stuff);
-	char* stringToChar(string toConvert);
+	static queue<string> networkMessages;
+	bool isConnected;
 };

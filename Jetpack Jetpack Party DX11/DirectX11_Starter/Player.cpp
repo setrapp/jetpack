@@ -14,9 +14,8 @@ Player::Player(DemoGame* v_gp)
 	maxSpeed = 20;
 	groundSpeedDampening = 0.95f;
 	game= v_gp;
-//	serverEntity = new ServerConnectionEntity();
-//	Sleep(1000);
 	clientEntity = new ClientConnectionEntity();
+	networkedEntities = vector<Entity*>();
 	
 }
 
@@ -33,13 +32,59 @@ void Player::Update(float dt)
 	transform->Translate(transformedVel);
 	DirectX::XMFLOAT3 t =transform->GetLocalTranslation();
 
+	while(!clientEntity->networkMessages.empty()){
+		std::vector<std::string> stringParts;
+		string readData= clientEntity->networkMessages.front();
+		string curString;
+		std::istringstream stringsplitter(readData);
+		while(std::getline(stringsplitter,curString, '\n')){
+			stringParts.push_back(curString);
+		}
+		int toSwitch= atoi(stringParts.at(0).c_str());
+		switch(toSwitch){
+		case 1:
 
-	if(clientEntity!=NULL){
+			break;
+			//a new player has been added
+		case 2:
+			AssetManager::Instance()->CreateAndStoreMesh("../Assets/cube.obj", "cube");
+			Entity* cube = new Entity();
+			cube->socketNumber= atoi(stringParts.at(1).c_str());
+			cube->AddMesh(AssetManager::Instance()->GetMesh("cube"));
+			cube->transform->Translate(XMFLOAT3(-5, 0, 0));
+			cube->transform->SetParent(this->transform);
+			networkedEntities[cube->socketNumber]=cube;
+			game->addedEntities.push(cube);
+			clientEntity->networkMessages.pop();
+			break;
 
+			//a list of sockets and the positions of the data is sent, the positions of all the associated entities is updated.
+		case 3:
+			for(int i=1; i<(int)stringParts.size()-1; i+=2){
+				int targetSocket= atoi(stringParts.at(i).c_str());
+				if(networkedEntities[targetSocket]!=NULL){
+					string unparsedPosition= stringParts.at(i+1);
+
+					std::vector<std::string> vectorParts;
+
+					string vectorString;
+					std::istringstream stringsplitter(unparsedPosition);
+					while(std::getline(stringsplitter,vectorString, ',')){
+						vectorParts.push_back(vectorString);
+					}
+
+					XMFLOAT3 newVector= XMFLOAT3(strtod(vectorParts.at(0).c_str(),0),strtod(vectorParts.at(1).c_str(),0),strtod(vectorParts.at(2).c_str(),0));
+					XMFLOAT3 currentTransform=networkedEntities[targetSocket]->transform->GetLocalTranslation();
+
+					//calculates how much to translate the body in question
+					networkedEntities[targetSocket]->transform->Translate(XMFLOAT3(newVector.x-currentTransform.x,newVector.y-currentTransform.y,newVector.z-currentTransform.z));
+				}
+
+			}
+		}
+			
 	}
-	if(serverEntity!=NULL){
 
-	}
 
 	Entity::Update(dt);
 }
@@ -106,19 +151,45 @@ void Player::CheckInput(float dt)
 
 	//spawns a block at a preset location
 	if(GetAsyncKeyState('P')){
-		AssetManager::Instance()->CreateAndStoreMesh("../Assets/cube.obj", "cube");
-		Entity* cube = new Entity();
-		cube->AddMesh(AssetManager::Instance()->GetMesh("cube"));
-		cube->transform->Translate(XMFLOAT3(-5, 0, 0));
-		cube->transform->SetParent(this->transform);
-		game->addedEntities.push(cube);
+		
 	}
 
 	if(GetAsyncKeyState('N')){
 	}
 	if(GetAsyncKeyState('M')){
-		serverEntity->initializeServer();
+		if(!clientEntity->isConnected){
+			AssetManager::Instance()->CreateAndStoreMesh("../Assets/cube.obj", "cube");
+			Entity* cube = new Entity();
+			cube->AddMesh(AssetManager::Instance()->GetMesh("cube"));
+			cube->transform->Translate(XMFLOAT3(-5, 0, 0));
+			cube->transform->SetParent(this->transform);
+			networkedCube= cube;
+			game->addedEntities.push(cube);
+
+			clientEntity->connectClient("127.0.0.1");
+		}
 	}
+
+	if(GetAsyncKeyState('H')){
+		if(clientEntity->isConnected)
+			networkedCube->transform->Translate(XMFLOAT3(dt, 0, 0));
+
+	}
+	if(GetAsyncKeyState('U')){
+		if(clientEntity->isConnected)
+			networkedCube->transform->Translate(XMFLOAT3(0, 0, dt));
+
+	}
+	if(GetAsyncKeyState('J')){
+		if(clientEntity->isConnected)
+			networkedCube->transform->Translate(XMFLOAT3(0, 0,-1* dt));
+
+	}
+	if(GetAsyncKeyState('K')){
+		if(clientEntity->isConnected)
+			networkedCube->transform->Translate(XMFLOAT3(-1* dt, 0, 0));
+	}
+
 
 	if(GetAsyncKeyState('X'))
 	{

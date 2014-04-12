@@ -30,6 +30,9 @@ public:
 	std::vector<Mesh*> GetMeshes();
 	Transform* transform;
 
+	//associated with a certain player on the multiplayer network
+	int socketNumber;
+
 private:
 	LONG totalMeshes;				//keep this. 
 	std::vector<Mesh*> meshes; 

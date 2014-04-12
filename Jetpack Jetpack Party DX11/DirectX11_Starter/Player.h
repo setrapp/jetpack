@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "ClientConnectionEntity.h"
 #include "ServerConnectionEntity.h"
+#include <queue>
 
 class Player : public Entity
 {
@@ -19,7 +20,8 @@ public:
 	DemoGame* game;
 	ClientConnectionEntity* clientEntity;
 	ServerConnectionEntity* serverEntity;
-
+	Entity* networkedCube;
+	std::map<int,Entity*> networkedEntities;
 
 private:
 	void CheckInput(float dt);

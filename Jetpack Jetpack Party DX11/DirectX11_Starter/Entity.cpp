@@ -16,6 +16,7 @@ Entity::Entity()
 	totalMeshes = 0;
 	transform = new Transform();
 	material = AssetManager::Instance()->GetMaterial();
+	socketNumber=0;
 }
 
 
