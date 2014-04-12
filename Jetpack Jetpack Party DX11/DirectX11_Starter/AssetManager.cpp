@@ -15,6 +15,7 @@ AssetManager::AssetManager()
 		instance = this;
 	}
 
+	soundManager = new SoundManager();
 	inputLayouts = new map<ID3D11VertexShader*, ID3D11InputLayout*>();
 	vertexShaders = new map<string, ID3D11VertexShader*>();
 	pixelShaders = new map<string, ID3D11PixelShader*>();
@@ -268,6 +269,11 @@ Model* AssetManager::GetModel(string name)
 		model = modelIt->second;
 	}
 	return model;
+}
+
+SoundManager* AssetManager::GetSoundManager()
+{
+	return soundManager;
 }
 
 	

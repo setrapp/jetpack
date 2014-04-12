@@ -65,7 +65,6 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	menu = new Menu(device, deviceContext);
 	camera = new ControllableCamera();
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
-	soundManager = new SoundManager();
 }
 
 DemoGame::~DemoGame()
@@ -75,7 +74,6 @@ DemoGame::~DemoGame()
 	ReleaseMacro(vsModelConstantBuffer);
 	ReleaseMacro(materialsAndLightsConstantBuffer);
 	ReleaseMacro(inputLayout);
-
 	delete light;
 }
 
@@ -83,8 +81,6 @@ DemoGame::~DemoGame()
 
 #pragma region Initialization
 
-// Initializes the base class (including the window and D3D),
-// sets up our geometry and loads the shaders (among other things)
 bool DemoGame::Init()
 {
 	if( !DXGame::Init() )
@@ -119,10 +115,10 @@ bool DemoGame::Init()
 	XMMATRIX W = XMMatrixIdentity();
 	for( Entity* e : entities)
 		XMStoreFloat4x4(&e->GetWorldMatrix(), XMMatrixTranspose(W));	
+	LoadSoundAssets();
 
 	return true;
 }
-
 
 void DemoGame::CreateGeometryBuffers()
 {
@@ -175,6 +171,9 @@ void DemoGame::CreateGeometryBuffers()
 	//player->transform->SetParent(camera->transform);
 }
 
+#pragma endregion
+
+#pragma region Load Content
 // Loads shaders from compiled shader object (.cso) files, and uses the
 // vertex shader to create an input layout which is needed when sending
 // vertex data to the device
@@ -240,6 +239,16 @@ void DemoGame::LoadShadersAndInputLayout()
 #endif
 }
 
+void DemoGame::LoadSoundAssets()
+{
+	SoundId id;
+	id = SoundId::SAMPLEBG;
+	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/SampleBG.wav");
+	id = SoundId::SINK;
+	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sunk.wav");
+	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SAMPLEBG, true, true);
+	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SINK);
+}
 #pragma endregion
 
 #pragma region Window Resizing
@@ -265,7 +274,7 @@ XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
 bool scaleSmall = true;
 void DemoGame::UpdateScene(float dt)
 {
-	soundManager->Update();
+	assetManager->Instance()->GetSoundManager()->Update();
 	if(currentState == GameState::Playing)
 	{
 	this->deltaTime = dt;
@@ -285,9 +294,6 @@ void DemoGame::UpdateScene(float dt)
 	{
 		currentState = menu->Update(dt);
 	}
-
-
-
 
 	deviceContext->UpdateSubresource(
 	vsModelConstantBuffer,

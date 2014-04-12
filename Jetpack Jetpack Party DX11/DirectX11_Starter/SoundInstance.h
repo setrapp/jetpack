@@ -4,6 +4,8 @@
 
 using namespace DirectX;
 
+namespace JetpackAudio
+{
 class SoundInstance
 {
 public :
@@ -11,9 +13,10 @@ public :
 	{
 		if(engine)
 			{
-				temp = new SoundEffect(engine, path);				
-				auto p = (temp->CreateInstance());
-				effect = p.get();
+				unique_ptr<SoundEffect> temp;
+				temp.reset(new SoundEffect(engine, path));				
+				effect = temp.get()->CreateInstance(SOUND_EFFECT_INSTANCE_FLAGS::SoundEffectInstance_Use3D);			
+				temp.release();
 				if(!effect)
 				{
 					throw 1;
@@ -25,22 +28,22 @@ public :
 
 	~SoundInstance(void)
 	{
-		delete effect;
-		delete temp;
+		effect.release();
+		delete effect.release();
 	}
 
-	void SoundInstance::Play()
+	void SoundInstance::Play(bool loop)
 	{
 		if(effect)
-			effect->Play();
+			effect->Play(loop);
 	}
 
-	void SoundInstance::SafePlay()
+	void SoundInstance::SafePlay(bool loop)
 	{
 		if(effect)
 		{
-
-			temp->Play();
+			if(effect->GetState() != SoundState::PLAYING)
+				effect->Play(loop);
 		}
 	}
 
@@ -60,13 +63,21 @@ public :
 		}
 	}
 
+	void SoundInstance::Pause()
+	{
+		if(effect)
+			effect->Pause();
+	}
+
 	//Wont work right now
-	void SoundInstance::Enable3D()
+	void SoundInstance::Enable3D(XMFLOAT4 ListnerPosition, XMFLOAT4 EmitterPosition)
 	{
 		if(effect)
 		{
 			AudioListener* listner = new AudioListener();
+			listner->SetPosition(XMLoadFloat4(&ListnerPosition));
 			AudioEmitter* emitter = new AudioEmitter();
+			emitter->SetPosition(XMLoadFloat4(&EmitterPosition));
 			effect->Apply3D(*listner, *emitter);
 		}
 	}
@@ -79,29 +90,18 @@ public :
 		}
 	}
 
-	//Wont work right now
-	bool SoundInstance::Loop(bool loop)
-	{
-		if(effect)
-		{
-			auto p = effect->pImpl.get();			
-			return effect->IsLooped();
-		}
-		return false;
-	}
-
 	void SoundInstance::Mute(bool mute)
 	{
 		if(effect)
 		{
-			if(!mute)
+			if(mute)
 				effect->SetVolume(0);			
 			else
 				effect->SetVolume(1);
 		}
 	}
+
 private:
-	SoundEffectInstance* effect;
-	SoundEffect* temp;
-	float oldVolume;
+	std::unique_ptr<SoundEffectInstance> effect;
 };
+}

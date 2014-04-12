@@ -49,6 +49,7 @@ private:
 	// Initialization for our "game" demo
 	void CreateGeometryBuffers();
 	void LoadShadersAndInputLayout();
+	void LoadSoundAssets();
 
 private:
 	float deltaTime;
@@ -77,11 +78,9 @@ private:
 	//DirectX::XMFLOAT4X4 viewMatrix;
 	//DirectX::XMFLOAT4X4 projectionMatrix;
 
-
 	ControllableCamera* camera;
 	GameState currentState;
 	Menu* menu;
-	SoundManager* soundManager;
 };
 
 #endif

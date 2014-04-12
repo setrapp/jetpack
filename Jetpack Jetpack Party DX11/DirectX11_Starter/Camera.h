@@ -23,9 +23,7 @@ class Camera: public CameraComponents
 {
 public: 
 	Camera();
-
 	void LookAt(XMFLOAT3 eye, XMFLOAT3 lookAt, XMFLOAT3 up);
-
 	virtual void Update(float dt, VertexShaderModelConstantBuffer* vsConstantBufferdata);
 
 public:
