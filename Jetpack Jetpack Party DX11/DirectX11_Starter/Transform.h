@@ -75,6 +75,8 @@ public:
 	// Set local translation
 	void SetLocalTranslation(XMFLOAT3 newPosition);
 
+	XMFLOAT3X3 GetRotation();
+
 	XMFLOAT3X3 GetLocalRotation();
 
 	void SetLocalRotation(XMFLOAT3 newEulerAngles);
@@ -84,6 +86,8 @@ public:
 	void SetLocalRotation(XMFLOAT3X3 newRotation);
 
 	bool IsUniformScale();
+
+	XMFLOAT3 GetScale();
 
 	XMFLOAT3 GetLocalScale();
 
