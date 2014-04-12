@@ -350,7 +350,7 @@ XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
 bool scaleSmall = true;
 void DemoGame::UpdateScene(float dt)
 {
-	
+	soundManager->Update();
 	if(currentState == GameState::Playing)
 	{
 	this->deltaTime = dt;
@@ -392,6 +392,8 @@ void DemoGame::UpdateScene(float dt)
 	{
 		currentState = menu->Update(dt);
 	}
+
+
 
 
 	deviceContext->UpdateSubresource(

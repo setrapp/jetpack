@@ -89,7 +89,19 @@ public :
 		}
 		return false;
 	}
+
+	void SoundInstance::Mute(bool mute)
+	{
+		if(effect)
+		{
+			if(!mute)
+				effect->SetVolume(0);			
+			else
+				effect->SetVolume(1);
+		}
+	}
 private:
 	SoundEffectInstance* effect;
 	SoundEffect* temp;
+	float oldVolume;
 };

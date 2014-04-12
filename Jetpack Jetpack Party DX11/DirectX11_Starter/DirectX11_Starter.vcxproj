@@ -44,6 +44,10 @@
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <IncludePath>$(Project)\Libs;D:\New folder\Jetpack Jetpack Party DX11\DirectX11_Starter\Libs;%DXSDK_DIR%Include\x64\xaudio2.lib;%DXSDK_DIR%Include\x64\xaudio3.lib;$(IncludePath)</IncludePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(Project)\Libs;D:\New folder\Jetpack Jetpack Party DX11\DirectX11_Starter\Libs;%DXSDK_DIR%Include\x64\xaudio2.lib;%DXSDK_DIR%Include\x64\xaudio3.lib;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
@@ -98,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="AudioWaveManager.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="DemoGame.h" />
@@ -136,6 +141,7 @@
   <ItemGroup>
     <FxCompile Include="Shaders\SimplePixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Shaders\SimpleVertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
@@ -143,10 +149,12 @@
     </FxCompile>
     <FxCompile Include="Shaders\TexturePixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Toolkit\Src\Shaders\DGSLPhong.hlsl">
       <FileType>Document</FileType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
