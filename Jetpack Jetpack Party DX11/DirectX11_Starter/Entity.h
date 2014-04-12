@@ -15,8 +15,9 @@ public:
 	~Entity(void);
 	void AddTriangle(Vertex* v, UINT* u);
 	void AddQuad(Vertex* v, UINT* u);
+	void AddModel(Model* model);
 	virtual void Update(float dt);
-	void Draw();	
+	void Draw();
 	void Rotate(XMFLOAT3 rotation);
 	void Translate(XMFLOAT3 translation);
 	void Scale(XMFLOAT3 scale);	
@@ -24,12 +25,18 @@ public:
 	DirectX::XMFLOAT4X4 GetWorldMatrix();
 	Material* GetMaterial();
 	Material GetMaterialSafe();
-	std::vector<Mesh*> GetMeshes();
+	void SetMaterial(string name = "default");
+	vector<Mesh*> GetMeshes();
 	Transform* transform;
+	void Finalize();
 
 private:
-	LONG totalMeshes;				//keep this. 
-	std::vector<Mesh*> meshes; 
+	ID3D11Buffer* indexBuffer;
+	ID3D11Buffer* vertexBuffer;
+	vector<Vertex> vertices;
+	LONG totalMeshes;			 
+	vector<Mesh*> meshes; 
 	Material* material;
+	LONG totalIndices;
 };
 

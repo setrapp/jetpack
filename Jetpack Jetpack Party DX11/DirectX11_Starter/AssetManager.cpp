@@ -6,6 +6,9 @@ AssetManager* AssetManager::Instance()
 	return instance;
 }
 
+/* TODO Replacing existing elements in store functions does not actually delete the old elements, need to do so */
+/* TODO Destructor also does not delete elements */
+
 AssetManager::AssetManager()
 {
 	if (!instance) {
@@ -16,6 +19,7 @@ AssetManager::AssetManager()
 	vertexShaders = new map<string, ID3D11VertexShader*>();
 	pixelShaders = new map<string, ID3D11PixelShader*>();
 	materials = new map<string, Material*>();
+	models = new map<string, Model*>();
 }
 
 AssetManager::~AssetManager()
@@ -100,6 +104,8 @@ ID3D11VertexShader* AssetManager::CreateAndStoreVertexShader(string shaderPath, 
 		vertexShaders->erase(existing.first);
 		vertexShaders->insert(newShader);
 	}
+
+	int a = vsBlob->GetBufferSize();
 
 	// Before cleaning up the data, create the input layout
 	ID3D11InputLayout* newInputLayout = CreateAndStoreInputLayout(vertexShader, vsBlob, vertexDescription, numVertDescElements);
@@ -192,6 +198,76 @@ Material* AssetManager::GetMaterial(string name)
 		material = materialIt->second;
 	}
 	return material;
+}
+
+
+// Model
+Model* AssetManager::CreateAndStoreModel(string filePath, string name)
+{
+	Model* model = new Model();
+
+	MLModel3D* objModel = mlModel3DLoadOBJ(filePath.c_str());
+	bool hasUVs = mlModel3DGetTextureVertexCount(objModel) > 1;
+
+	// Load Vertices.
+	unsigned int vertexCount = mlModel3DGetFaceCount(objModel);
+	for (int i = 0; i < vertexCount; i++) {
+		MLVertex3D const*  mlVertex = mlModel3DGetVertex(objModel, i);
+		GUPoint3D guPoint = mlVertex3DGetPosition(mlVertex);
+		GUNormal3D guNormal = mlVertex3DGetNormal(mlVertex);
+		Vertex vertex;
+		vertex.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
+		vertex.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
+		if (hasUVs) {
+			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(objModel, i);
+			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
+			vertex.UV = XMFLOAT2(guUV.x, guUV.y);
+		} else {
+			vertex.UV = XMFLOAT2(0, 0);
+		}
+		model->vertices.push_back(vertex);
+	}
+
+	// Load Mesh Indices.
+	unsigned int faceCount = mlModel3DGetFaceCount(objModel);
+	for (int i = 0; i < faceCount; i++) {
+		// Retrieve current face.
+		MLFace3D const* face = mlModel3DGetFace(objModel, i);
+
+		// Retrieve vertices that make up current face.
+		UINT* mlIndices = new UINT[3];
+		mlIndices[0] = mlFace3DGetVertex1(face);
+		mlIndices[1] = mlFace3DGetVertex2(face);
+		mlIndices[2] = mlFace3DGetVertex3(face);
+
+		model->meshes.push_back(new Mesh(mlIndices, 3));
+	}
+
+	return StoreModel(model, name);
+}
+Model* AssetManager::StoreModel(Model* model, string name)
+{
+	// Attempt to add new element.
+	pair<map<string, Model*>::iterator, bool> existing;
+	pair<string, Model*> newModel(name, model);
+	existing = models->insert(newModel);
+	
+	// If the first attempt failed, destroy the element that is colliding and replace it.
+	if(!existing.second)
+	{
+		models->erase(existing.first);
+		models->insert(newModel);
+	}	
+	return model;
+}
+Model* AssetManager::GetModel(string name)
+{
+	Model* model = NULL;
+	map<string, Model*>::iterator modelIt = models->find(name);
+	if(modelIt != models->end()) {
+		model = modelIt->second;
+	}
+	return model;
 }
 
 	

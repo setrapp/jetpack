@@ -51,7 +51,7 @@ extern "C"
     
     MLModel3D* MLModel3DCreate(MLVertex3D* vertices,  unsigned int numVertices, MLFace3D* faces,  unsigned int numFaces, MLTexelXY* textureVertices,  unsigned int numTextureVertices, MLModelMaterial** materials,  unsigned int numMaterials);
     void MLModel3DDelete(MLModel3D* deletee);
-    MLModel3D* mlModel3DLoadOBJ(char* filename);
+    MLModel3D* mlModel3DLoadOBJ(const char* filename);
     void mlModel3DLoadTextures(MLModel3D* targetModel);
     void mlModel3DDraw(MLModel3D* targetModel, GLfloat transform[16]);
     void mlModel3DDrawForPick(MLModel3D* targetModel, GLfloat transform[16], GLubyte red, GLubyte green, GLubyte blue);

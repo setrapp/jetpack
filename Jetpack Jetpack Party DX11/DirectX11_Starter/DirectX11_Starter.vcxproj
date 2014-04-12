@@ -44,6 +44,10 @@
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <IncludePath>$(Project)\Libs;D:\New folder\Jetpack Jetpack Party DX11\DirectX11_Starter\Libs;%DXSDK_DIR%Include\x64\xaudio2.lib;%DXSDK_DIR%Include\x64\xaudio3.lib;$(IncludePath)</IncludePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(Project)\Libs;D:\New folder\Jetpack Jetpack Party DX11\DirectX11_Starter\Libs;%DXSDK_DIR%Include\x64\xaudio2.lib;%DXSDK_DIR%Include\x64\xaudio3.lib;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
@@ -79,6 +83,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ControllableCamera.cpp" />
     <ClCompile Include="DemoGame.cpp" />
     <ClCompile Include="DXConnection.cpp" />
     <ClCompile Include="dxerr.cpp" />
@@ -87,6 +93,7 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GeneralUtility\GUMathUtility.cpp" />
     <ClCompile Include="GeneralUtility\GUParseUtility.cpp" />
+    <ClCompile Include="GreaterMesh.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -94,11 +101,14 @@
     <ClCompile Include="ModelLoad\MLMaterialLoader.c" />
     <ClCompile Include="ModelLoad\MLModelViewer.c" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="AudioWaveManager.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="ControllableCamera.h" />
     <ClInclude Include="DemoGame.h" />
     <ClInclude Include="DXConnection.h" />
     <ClInclude Include="dxerr.h" />
@@ -110,6 +120,7 @@
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="GeneralUtility\GUMathUtility.h" />
     <ClInclude Include="GeneralUtility\GUParseUtility.h" />
+    <ClInclude Include="GreaterMesh.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="KeyboardInput.h" />
@@ -126,6 +137,7 @@
     <ClInclude Include="Response.h" />
     <ClInclude Include="Rigidbody.h" />
     <ClInclude Include="Sfx.h" />
+    <ClInclude Include="SoundInstance.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Transform.h" />
@@ -133,16 +145,20 @@
   <ItemGroup>
     <FxCompile Include="Shaders\SimplePixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Shaders\SimpleVertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Shaders\TexturePixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Toolkit\Src\Shaders\DGSLPhong.hlsl">
       <FileType>Document</FileType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
