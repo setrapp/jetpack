@@ -9,17 +9,31 @@ using namespace DirectX;
 
 Material::Material()
 {
-	this->color = XMFLOAT4(0.7f, 0.3f, 0.0f, 1.0f);
+	this->ambient = XMFLOAT4(0.3, 0.3f, 0.3f, 1);
+	this->diffuse = XMFLOAT4(0.3, 0.3f, 0.3f, 1);
+	this->specular = XMFLOAT4(0, 0, 0, 1);
+	this->shininess = 0;
 }
 
-Material::Material(XMFLOAT4 color)
+Material::Material(XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT4 specular, UINT shininess)
 {	
-	this->color = color;
+	this->ambient = ambient;
+	this->diffuse = diffuse;
+	this->specular = specular;
+	this->shininess = shininess;
 }
 
 Material::Material(wchar_t* path)
 {	
+	this->ambient = XMFLOAT4(0.3, 0.3f, 0.3f, 1);
+	this->diffuse = XMFLOAT4(0.3, 0.3f, 0.3f, 1);
+	this->specular = XMFLOAT4(0, 0, 0, 1);
+	this->shininess = 0;
 	ApplyTexture(path);
+}
+
+Material::~Material(void)
+{
 }
 
 void Material::ApplyTexture(wchar_t* path)
@@ -44,7 +58,13 @@ void Material::ApplyTexture(wchar_t* path)
 		&this->samplerState);
 }
 
-Material::~Material(void)
+ShaderMaterial Material::GetShaderMaterial()
 {
+	ShaderMaterial shaderMat;
+	shaderMat.ambient = ambient;
+	shaderMat.diffuse = diffuse;
+	shaderMat.specular = specular;
+	shaderMat.shininess = XMUINT4(shininess, shininess, shininess, shininess);
+	return shaderMat;
 }
 

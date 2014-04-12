@@ -19,7 +19,7 @@ Light::Light(XMFLOAT3 position, XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT4 spe
 	this->isDirectional = isDirectional;
 }
 
-ShaderLight Light::ConvertToShaderLight()
+ShaderLight Light::GetShaderLight()
 {
 	// Create copy of light and store its state as a point or directional light in the world matrix;
 	ShaderLight shaderLight;

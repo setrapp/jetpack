@@ -25,6 +25,7 @@ public:
 	DirectX::XMFLOAT4X4 GetWorldMatrix();
 	Material* GetMaterial();
 	Material GetMaterialSafe();
+	void SetMaterial(string name = "default");
 	vector<Mesh*> GetMeshes();
 	Transform* transform;
 	void Finalize();

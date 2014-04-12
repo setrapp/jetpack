@@ -73,7 +73,7 @@ DemoGame::~DemoGame()
 	ReleaseMacro(vertexShader);
 	ReleaseMacro(pixelShader);
 	ReleaseMacro(vsModelConstantBuffer);
-	ReleaseMacro(lightsConstantBuffer);
+	ReleaseMacro(materialsAndLightsConstantBuffer);
 	ReleaseMacro(inputLayout);
 
 	delete light;
@@ -94,6 +94,8 @@ bool DemoGame::Init()
 
 	AssetManager* assetManager = new AssetManager();
 
+	AssetManager::Instance()->StoreMaterial(new Material());
+
 	spriteRenderer = new SpriteRenderer(deviceContext);
 	spriteRenderer->SetColor(color);	
 	fontRenderer = new FontRenderer(device, L"../Assets/font.spritefont");	
@@ -110,9 +112,7 @@ bool DemoGame::Init()
 	XMStoreFloat3(&cameraTarget, XMVectorSet(0, 0, 0, 0));
 	XMFLOAT3 cameraUp;
 	XMStoreFloat3(&cameraUp, XMVectorSet(0, 1, 0, 0));
-	//XMMATRIX V			= XMMatrixLookAtLH(position, target, up);
-
-	//XMStoreFloat4x4(&camera->view, XMMatrixTranspose(V));
+	
 	camera->LookAt(cameraPosition, cameraTarget, cameraUp);
 
 	XMMATRIX W = XMMatrixIdentity();
@@ -130,7 +130,7 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 blue	= XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 
-	Vertex vertices[] = 
+	/*Vertex vertices[] = 
 	{
 		{ XMFLOAT3(+1.0f, +1.0f, +0.0f), XMFLOAT3(0, 0, 1), red, XMFLOAT2(0, 0) },
 		{ XMFLOAT3(-1.0f, -1.0f, +0.0f), XMFLOAT3(0, 0, 1), green, XMFLOAT2(1, 1) },
@@ -155,7 +155,7 @@ void DemoGame::CreateGeometryBuffers()
 	Entity* floor = new Entity();
 	floor->AddQuad(floorVertices, floorIndices);
 	floor->Finalize();
-	entities.push_back(floor);
+	entities.push_back(floor);*/
 
 	// Attempt to load model
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
@@ -163,6 +163,8 @@ void DemoGame::CreateGeometryBuffers()
 	player->AddModel(AssetManager::Instance()->GetModel("camera"));
 	entities.push_back(player);
 	player->Finalize();
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
+	player->SetMaterial("camera");
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
@@ -188,9 +190,8 @@ void DemoGame::LoadShadersAndInputLayout()
 	// We can't set up the input layout yet since we need the actual vert shader
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,	0, 0,	D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,		0, D3D11_APPEND_ALIGNED_ELEMENT,	D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT,	D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT,	D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
@@ -216,7 +217,7 @@ void DemoGame::LoadShadersAndInputLayout()
 		&vsModelConstantBuffer));
 
 	// Light Constant Buffer
-	cBufferDesc.ByteWidth			= sizeof(lightsConstantBufferData);
+	cBufferDesc.ByteWidth			= sizeof(materialsAndLightsConstantBufferData);
 	cBufferDesc.Usage				= D3D11_USAGE_DEFAULT;
 	cBufferDesc.BindFlags			= D3D11_BIND_CONSTANT_BUFFER;
 	cBufferDesc.CPUAccessFlags		= 0;
@@ -225,7 +226,7 @@ void DemoGame::LoadShadersAndInputLayout()
 	HR(device->CreateBuffer(
 		&cBufferDesc,
 		NULL,
-		&lightsConstantBuffer));
+		&materialsAndLightsConstantBuffer));
 
 	menu->setRenderers(fontRenderer);
 
@@ -280,7 +281,7 @@ void DemoGame::UpdateScene(float dt)
 			e->Update(dt);
 		}
 
-		entities[2]->transform->Rotate(XMFLOAT3(0, 2 * dt, 0));
+		entities[1]->transform->Rotate(XMFLOAT3(0, 2 * dt, 0));
 	}
 
 	camera->Update(dt, &vsModelConstantBufferData);	
@@ -343,14 +344,15 @@ void DemoGame::DrawScene()
 	if (currentState == GameState::Playing) {
 
 		// Update light constant buffer for vertex and pixel shader.
-		lightsConstantBufferData.light = light->ConvertToShaderLight();
-		DXConnection::Instance()->deviceContext->UpdateSubresource(lightsConstantBuffer, 0, NULL, &lightsConstantBufferData, 0, 0);
-		DXConnection::Instance()->deviceContext->VSSetConstantBuffers(1, 1, &lightsConstantBuffer);
-		DXConnection::Instance()->deviceContext->PSSetConstantBuffers(0, 1, &lightsConstantBuffer);
-
+		materialsAndLightsConstantBufferData.light = light->GetShaderLight();
+		materialsAndLightsConstantBufferData.material = AssetManager::Instance()->GetMaterial("default")->GetShaderMaterial();
+		DXConnection::Instance()->deviceContext->UpdateSubresource(materialsAndLightsConstantBuffer, 0, NULL, &materialsAndLightsConstantBufferData, 0, 0);
+		DXConnection::Instance()->deviceContext->VSSetConstantBuffers(1, 1, &materialsAndLightsConstantBuffer);
+		DXConnection::Instance()->deviceContext->PSSetConstantBuffers(1, 1, &materialsAndLightsConstantBuffer);
+		
 		for(Entity* e :entities) 
 		{
-			// Create per primitive vertex shader constant buffer to hold world matrix.
+			// Create per primitive vertex shader constant buffer to hold matrices.
 			VertexShaderModelConstantBuffer perPrimitiveVSConstantBuffer;
 			perPrimitiveVSConstantBuffer.world = e->transform->GetWorldMatrix();
 			perPrimitiveVSConstantBuffer.view = vsModelConstantBufferData.view;
@@ -359,6 +361,14 @@ void DemoGame::DrawScene()
 			// Update vertex shader constant buffer with per primitive buffer.
 			DXConnection::Instance()->deviceContext->UpdateSubresource(vsModelConstantBuffer, 0, nullptr, &perPrimitiveVSConstantBuffer, 0, 0);
 
+			// Create per primitive pixel shader constant buffer to hold materials.
+			MaterialsAndLightsConstantBuffer perPrimitiveMaterialConstantBuffer;
+			perPrimitiveMaterialConstantBuffer.light = materialsAndLightsConstantBufferData.light;
+			perPrimitiveMaterialConstantBuffer.material = e->GetMaterial()->GetShaderMaterial();
+
+			// Update pixel shader constant buffer with per primitive materials buffer.
+			DXConnection::Instance()->deviceContext->UpdateSubresource(materialsAndLightsConstantBuffer, 0, nullptr, &perPrimitiveMaterialConstantBuffer, 0, 0);
+			
 			e->Draw();
 		}
 	}

@@ -61,8 +61,8 @@ private:
 	ID3D11InputLayout* inputLayout;
 	ID3D11Buffer* vsModelConstantBuffer;
 	VertexShaderModelConstantBuffer vsModelConstantBufferData;
-	ID3D11Buffer* lightsConstantBuffer;
-	LightsConstantBuffer lightsConstantBufferData;
+	ID3D11Buffer* materialsAndLightsConstantBuffer;
+	MaterialsAndLightsConstantBuffer materialsAndLightsConstantBufferData;
 
 	// Keeps track of the old mouse position.  Useful for 
 	// determining how far the mouse moved in a single frame.

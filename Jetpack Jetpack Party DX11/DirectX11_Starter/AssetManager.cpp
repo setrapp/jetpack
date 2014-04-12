@@ -105,6 +105,8 @@ ID3D11VertexShader* AssetManager::CreateAndStoreVertexShader(string shaderPath, 
 		vertexShaders->insert(newShader);
 	}
 
+	int a = vsBlob->GetBufferSize();
+
 	// Before cleaning up the data, create the input layout
 	ID3D11InputLayout* newInputLayout = CreateAndStoreInputLayout(vertexShader, vsBlob, vertexDescription, numVertDescElements);
 	if (inputLayout) {
@@ -216,7 +218,6 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 		Vertex vertex;
 		vertex.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
 		vertex.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
-		vertex.Color = XMFLOAT4(1, 0, 0, 1);
 		if (hasUVs) {
 			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(objModel, i);
 			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);

@@ -9,6 +9,14 @@ cbuffer perModel : register(b0)
 	matrix projection;
 };
 
+struct Material
+{
+	float4 ambient;
+	float4 diffuse;
+	float4 specular;
+	uint4 shininess;
+};
+
 struct Light
 {
 	matrix world;
@@ -17,8 +25,9 @@ struct Light
 	float4 specular;
 };
 
-cbuffer lights : register(b1)
+cbuffer materialsAndLights : register(b1)
 {
+	Material material;
 	Light light;
 }
 
@@ -28,8 +37,7 @@ struct VertexShaderInput
 {
 	float3 position		: POSITION;
 	float3 normal		: NORMAL;
-	float4 color		: COLOR;
-	float2 uv			: TEXCOORD0;
+	float2 uv			: TEXCOORD;
 };
 
 // Defines the output data of our vertex shader
@@ -39,7 +47,7 @@ struct VertexToPixel
 {
 	float4 position		: SV_POSITION;	// System Value Position - Has specific meaning to the pipeline!
 	float3 normal		: NORMAL0;
-	float4 color		: COLOR;
+	//float4x4 color		: COLOR;
 	float2 uv			: TEXCOORD0;
 	float3 toEye		: NORMAL1;
 	float3 toLight		: NORMAL2;
@@ -59,9 +67,6 @@ VertexToPixel main( VertexShaderInput input )
 	// Transform normal assuming uniform scaling. Ignore translation.
 	output.normal = mul(input.normal, (float3x3)world);
 	output.normal = normalize(output.normal);
-
-	// Pass the color through - will be interpolated per-pixel by the rasterizer
-	output.color = input.color;
 
 	// Calculate direction to eye.
 	output.toEye = normalize(input.position - float3(view._41_42_43));

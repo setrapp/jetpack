@@ -124,6 +124,11 @@ Material Entity::GetMaterialSafe()
 	return *this->material;
 }
 
+void Entity::SetMaterial(string name)
+{
+	material = AssetManager::Instance()->GetMaterial(name);
+}
+
 vector<Mesh*> Entity::GetMeshes()
 {
 	return meshes;

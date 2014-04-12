@@ -7,6 +7,7 @@
 #include "dxerr.h"
 #include "DXConnection.h"
 #include "Light.h"
+#include "Material.h"
 
 using namespace DirectX;
 
@@ -34,7 +35,6 @@ using namespace DirectX;
 	#endif
 #endif
 
-
 struct VertexShaderModelConstantBuffer
 {
 	XMFLOAT4X4 world;
@@ -42,8 +42,9 @@ struct VertexShaderModelConstantBuffer
 	XMFLOAT4X4 projection;
 };
 
-struct LightsConstantBuffer
+struct MaterialsAndLightsConstantBuffer
 {
+	ShaderMaterial material;
 	ShaderLight light;
 };
 
@@ -51,6 +52,9 @@ struct Vertex
 {
 	XMFLOAT3 Position;
 	XMFLOAT3 Normal;
-	XMFLOAT4 Color;
+	XMFLOAT4 Ambient;
+	XMFLOAT4 Diffuse;
+	XMFLOAT4 Specular;
+	XMUINT4 Shininess;
 	XMFLOAT2 UV;
 };
