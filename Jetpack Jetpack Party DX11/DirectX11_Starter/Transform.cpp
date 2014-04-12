@@ -66,7 +66,16 @@ void Transform::Scale(XMFLOAT3 scale)
 
 void Transform::LookAt(XMFLOAT3 eye, XMFLOAT3 lookAt, XMFLOAT3 up)
 {
-	XMStoreFloat4x4(&localMatrix, XMMatrixInverse(nullptr, XMMatrixTranspose(XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&lookAt), XMLoadFloat3(&up)))));
+	eye = InverseTransformPoint(eye);
+	lookAt = InverseTransformPoint(lookAt);
+	up = InverseTransformDirection(up);
+	XMStoreFloat4x4(&localMatrix, XMMatrixInverse(nullptr, XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&lookAt), XMLoadFloat3(&up))));
+	localMatrix._14 = localMatrix._41;
+	localMatrix._24 = localMatrix._42;
+	localMatrix._34 = localMatrix._43;
+	localMatrix._41 = 0;
+	localMatrix._42 = 0;
+	localMatrix._43 = 0;
 	translation = XMFLOAT3(localMatrix._14, localMatrix._24, localMatrix._34);
 	XMStoreFloat3x3(&rotation, XMLoadFloat4x4(&localMatrix));
 	UpdateLocalAndWorld();
@@ -119,6 +128,10 @@ void Transform::SetParent(Transform* parent)
 
 	// Update local matrix to exist within new parent space.
 	XMStoreFloat4x4(&localMatrix, XMMatrixMultiply(XMLoadFloat4x4(&worldMatrix), XMMatrixInverse(nullptr, parentWorldMatrix)));
+
+	// TODO need to update translation, rotation, and scale. Maybe try storing the old world scale and rotation, and then converting to new world scale and rotation
+	translation = XMFLOAT3(localMatrix._14, localMatrix._24, localMatrix._34);
+	UpdateLocalAndWorld();
 }
 
 // Transform point from local space to world space.
@@ -195,6 +208,20 @@ void Transform::SetLocalTranslation(XMFLOAT3 newPosition)
 	Translate(translation);
 }
 
+XMFLOAT3X3 Transform::GetRotation()
+{
+	XMFLOAT3X3 worldRotation;
+	if (parent)
+	{
+		XMStoreFloat3x3(&worldRotation, XMMatrixMultiply(XMLoadFloat3x3(&parent->GetRotation()), XMLoadFloat3x3(&rotation))); 
+	}
+	else
+	{
+		worldRotation = rotation; 
+	}
+	return worldRotation;
+}
+
 XMFLOAT3X3 Transform::GetLocalRotation()
 {
 	return rotation;
@@ -220,6 +247,20 @@ void Transform::SetLocalRotation(XMFLOAT3X3 newRotation)
 bool Transform::IsUniformScale()
 {
 	return (scale.x == scale.y && scale.x == scale.z) && (parent == NULL || parent->IsUniformScale());
+}
+
+XMFLOAT3 Transform::GetScale()
+{
+	XMFLOAT3 worldScale;
+	if (parent)
+	{
+		XMStoreFloat3(&worldScale, XMVectorMultiply(XMLoadFloat3(&parent->GetScale()), XMLoadFloat3(&scale)));
+	}
+	else
+	{
+		worldScale = scale;
+	}
+	return worldScale;
 }
 
 XMFLOAT3 Transform::GetLocalScale()

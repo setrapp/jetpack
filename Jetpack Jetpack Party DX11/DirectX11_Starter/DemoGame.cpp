@@ -103,18 +103,18 @@ bool DemoGame::Init()
 
 	AssetManager::Instance()->StoreMaterial(new Material());
 
-	// Set up buffers and such
-	CreateGeometryBuffers();
-	this->deltaTime = 0;
-
 	XMFLOAT3 cameraPosition;
 	XMStoreFloat3(&cameraPosition, XMVectorSet(0, 0, -20, 0));
 	XMFLOAT3 cameraTarget;
 	XMStoreFloat3(&cameraTarget, XMVectorSet(0, 0, 0, 0));
 	XMFLOAT3 cameraUp;
 	XMStoreFloat3(&cameraUp, XMVectorSet(0, 1, 0, 0));
-	
+
 	camera->LookAt(cameraPosition, cameraTarget, cameraUp);
+
+	// Set up buffers and such
+	CreateGeometryBuffers();
+	this->deltaTime = 0;
 
 	XMMATRIX W = XMMatrixIdentity();
 	for( Entity* e : entities)
@@ -172,7 +172,10 @@ void DemoGame::CreateGeometryBuffers()
 	gift->LoadTexture(L"../Assets/RedGift.png");
 
 	camera->transform->SetParent(player->transform);
-	//player->transform->SetParent(camera->transform);
+	player->transform->Translate(XMFLOAT3(5, 0, 0));
+	//camera->transform->SetLocalTranslation(XMFLOAT3(0, 2, -10));
+	//camera->transform->Translate(XMFLOAT3(5, 0, 0));
+	//camera->LookAt(camera->transform->GetTranslation(), gift->transform->GetTranslation(), player->transform->GetUp());
 }
 
 // Loads shaders from compiled shader object (.cso) files, and uses the
