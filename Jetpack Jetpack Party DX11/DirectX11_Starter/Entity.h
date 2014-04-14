@@ -1,4 +1,6 @@
 #pragma once
+#ifndef ENTITY_H
+#define ENTITY_H
 #include "Vertex.h"
 #include "Common.h"
 #include <vector>
@@ -40,3 +42,4 @@ private:
 	LONG totalIndices;
 };
 
+#endif

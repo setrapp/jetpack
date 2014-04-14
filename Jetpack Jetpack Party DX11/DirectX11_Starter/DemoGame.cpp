@@ -65,6 +65,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	menu = new Menu(device, deviceContext);
 	camera = new ControllableCamera();
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
+	
 }
 
 DemoGame::~DemoGame()
@@ -311,6 +312,7 @@ void DemoGame::UpdateScene(float dt)
 void DemoGame::DrawScene()
 {
 	spriteRenderer->ClearScreen(deviceContext, renderTargetView, depthStencilView);
+
 	FLOAT color[4] = {0.4f, 0.6f, 0.75f, 0.0f};
 	deviceContext->ClearRenderTargetView(
 		renderTargetView,
@@ -338,7 +340,7 @@ void DemoGame::DrawScene()
 		&vsModelConstantBuffer);
 #endif
 	if (currentState == GameState::Playing) {
-
+		
 		// Update light constant buffer for vertex and pixel shader.
 		materialsAndLightsConstantBufferData.light = light->GetShaderLight();
 		materialsAndLightsConstantBufferData.material = AssetManager::Instance()->GetMaterial("default")->GetShaderMaterial();

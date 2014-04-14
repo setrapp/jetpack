@@ -115,7 +115,6 @@ void Entity::LoadTexture(wchar_t* path)
 	this->material->ApplyTexture(path);
 }
 
-
 Material* Entity::GetMaterial()
 {
 	return this->material;

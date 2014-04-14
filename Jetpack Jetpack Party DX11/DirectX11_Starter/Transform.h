@@ -21,7 +21,7 @@ private:
 	XMFLOAT3 scale;
 	XMFLOAT3X3 rotation;
 	Transform* parent;
-	vector<Transform*>children;
+	vector<Transform*> children;
 	
 public:
 

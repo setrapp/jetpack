@@ -18,6 +18,7 @@
 #include "AssetManager.h"
 #include "Light.h"
 #include "SoundManager.h"
+#include "Particle.h"
 
 using namespace DirectX;
 
