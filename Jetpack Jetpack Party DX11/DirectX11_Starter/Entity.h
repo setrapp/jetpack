@@ -18,9 +18,6 @@ public:
 	void AddModel(Model* model);
 	virtual void Update(float dt);
 	void Draw();
-	void Rotate(XMFLOAT3 rotation);
-	void Translate(XMFLOAT3 translation);
-	void Scale(XMFLOAT3 scale);	
 	void LoadTexture(wchar_t* path);
 	DirectX::XMFLOAT4X4 GetWorldMatrix();
 	Material* GetMaterial();

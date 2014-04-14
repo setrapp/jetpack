@@ -166,12 +166,17 @@ void DemoGame::CreateGeometryBuffers()
 	gift->SetMaterial("gift");
 	gift->GetMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 	gift->LoadTexture(L"../Assets/RedGift.png");
+	
 
 	camera->transform->SetParent(player->transform);
 	player->transform->Translate(XMFLOAT3(5, 0, 0));
 	//camera->transform->SetLocalTranslation(XMFLOAT3(0, 2, -10));
 	//camera->transform->Translate(XMFLOAT3(5, 0, 0));
-	//camera->LookAt(camera->transform->GetTranslation(), gift->transform->GetTranslation(), player->transform->GetUp());
+	/*TODO make look at work, testing some stuffing in inverse transform point*/
+	XMFLOAT3 eye = camera->transform->InverseTransformPoint(camera->transform->GetTranslation());
+	XMFLOAT3 target = camera->transform->InverseTransformPoint(gift->transform->GetTranslation());
+	XMFLOAT3 up = camera->transform->InverseTransformDirection(player->transform->GetUp());
+	camera->LookAt(eye, target, up);
 }
 
 #pragma endregion

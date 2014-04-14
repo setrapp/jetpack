@@ -5,6 +5,7 @@
 #include <DirectXMath.h>
 #include <d3d11.h>
 #include <vector>
+#include <math.h>
 
 using namespace DirectX;
 using namespace std;
@@ -131,6 +132,13 @@ void Transform::SetParent(Transform* parent)
 
 	// TODO need to update translation, rotation, and scale. Maybe try storing the old world scale and rotation, and then converting to new world scale and rotation
 	translation = XMFLOAT3(localMatrix._14, localMatrix._24, localMatrix._34);
+	scale = XMFLOAT3(	sqrt((localMatrix._11 * localMatrix._11) + (localMatrix._12 * localMatrix._12) + (localMatrix._13 * localMatrix._13)), 
+						sqrt((localMatrix._21 * localMatrix._21) + (localMatrix._22 * localMatrix._22) + (localMatrix._23 * localMatrix._23)),
+						sqrt((localMatrix._31 * localMatrix._31) + (localMatrix._32 * localMatrix._32) + (localMatrix._33 * localMatrix._33)));
+	XMStoreFloat3x3(&rotation, XMLoadFloat4x4(&localMatrix));
+	rotation._11 /= scale.x;
+	rotation._22 /= scale.y;
+	rotation._33 /= scale.z;
 	UpdateLocalAndWorld();
 }
 
@@ -149,7 +157,9 @@ XMFLOAT3 Transform::InverseTransformPoint(XMFLOAT3 worldPoint)
 {
 	if (parent)
 	{
-		XMStoreFloat3(&worldPoint, XMVector3Transform(XMLoadFloat3(&worldPoint), XMMatrixInverse(nullptr, XMLoadFloat4x4(&worldMatrix))));
+		XMFLOAT4X4 test;
+		XMStoreFloat4x4(&test, XMMatrixTranspose(XMMatrixInverse(nullptr, XMLoadFloat4x4(&worldMatrix))));
+		XMStoreFloat3(&worldPoint, XMVector3Transform(XMLoadFloat3(&worldPoint), /*XMMatrixTranspose(*/XMMatrixInverse(nullptr, XMLoadFloat4x4(&worldMatrix))));//);
 	}
 	return worldPoint;
 }
