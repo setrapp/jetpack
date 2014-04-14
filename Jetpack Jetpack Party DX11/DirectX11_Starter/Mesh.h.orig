@@ -1,0 +1,30 @@
+#pragma once
+
+#include "Vertex.h"
+#include <DirectXMath.h>
+#include <d3d11.h>
+#include "Common.h"
+
+class Mesh
+{
+public:
+	Mesh(UINT* i, short noOfIndices);
+	~Mesh(void);
+	void Update(float dt);
+	void Draw();
+	UINT* GetIndices(short **total);
+
+<<<<<<< HEAD
+private:
+	ID3D11Buffer* indexBuffer;
+	ID3D11Buffer* vertexBuffer;
+	short totalIndices;
+};
+=======
+private:	
+	short totalIndices;
+	UINT* indices;
+};
+
+#endif
+>>>>>>> 13f511e527abf9272a6e0aa679e42563c914978d

@@ -1,5 +1,4 @@
-#ifndef _TRANSFORM_H_
-#define _TRANSFORM_H_
+#pragma once
 
 #include <DirectXMath.h>
 #include <d3d11.h>
@@ -8,85 +7,102 @@
 using namespace DirectX;
 using namespace std;
 
+///////////////////////////////////////////////////
+// NOTE: World and Local Matrices are Transposed //
+///////////////////////////////////////////////////
+
 class Transform
 {
-public :
-	DirectX::XMFLOAT4X4 trans, rot, scale;
-	DirectX::XMFLOAT3 right, up, forward;
-	DirectX::XMFLOAT4X4 worldMatrix;
+private:
+	XMFLOAT3 right, up, forward;
+	XMFLOAT4X4 worldMatrix;
+	XMFLOAT4X4 localMatrix;
+	XMFLOAT3 translation;
+	XMFLOAT3 scale;
+	XMFLOAT3X3 rotation;
 	Transform* parent;
 	vector<Transform*>children;
+	
+public:
 
-	Transform::Transform()
-	{
-		XMStoreFloat4x4(&trans, XMMatrixIdentity());
-		XMStoreFloat4x4(&rot, XMMatrixIdentity());
-		XMStoreFloat4x4(&scale, XMMatrixIdentity());
-		XMStoreFloat4x4(&worldMatrix, XMMatrixIdentity());
-		right = XMFLOAT3(1, 0, 0);
-		up = XMFLOAT3(0, 1, 0);
-		forward = XMFLOAT3(0, 0, 1);
-	}
+	Transform::Transform();
 
-	Transform::~Transform()
-	{
+	Transform::~Transform();
 
-	}
+	// Translate locally.
+	void Transform::Translate(XMFLOAT3 translation);
 
-	inline void Transform::Rotate(XMFLOAT3 rotation)
-	{
-		XMStoreFloat4x4(&this->rot,  XMMatrixMultiply(XMLoadFloat4x4(&this->rot),XMMatrixRotationZ(rotation.z) * XMMatrixRotationY(rotation.y) *  XMMatrixRotationX(rotation.x)));
-		XMStoreFloat3(&this->right, XMVector3Transform(XMLoadFloat3(&this->right), XMLoadFloat4x4(&this->rot)));
-		XMStoreFloat3(&this->up, XMVector3Transform(XMLoadFloat3(&this->up), XMLoadFloat4x4(&this->rot)));
-		XMStoreFloat3(&this->forward, XMVector3Transform(XMLoadFloat3(&this->forward), XMLoadFloat4x4(&this->rot)));
-		// TODO does child need to get parent transform when added???
-		/*for (vector<Transform*>::iterator it = children.begin(); it < children.end(); it++)
-		{
-			(*it)->Rotate(rotation);
-		}*/
-	 }
+	// Rotate locally.
+	void Transform::Rotate(XMFLOAT3 rotation);
 
-	inline void Transform::Translate(XMFLOAT3 translation)
-	{
-		XMStoreFloat4x4(&this->trans, XMMatrixMultiply(XMLoadFloat4x4(&this->trans), XMMatrixTranslation(translation.x, translation.y, translation.z)));
-	}
+	// Rotate locally.
+	void Transform::Rotate(XMFLOAT3X3 rotation);
 
-	inline void Transform::Scale(XMFLOAT3 scale)
-	{
-		XMStoreFloat4x4(&this->scale, XMMatrixMultiply(XMLoadFloat4x4(&this->scale), XMMatrixScaling(scale.x, scale.y, scale.z)));
-	}
+	// Scale locally.
+	void Transform::Scale(XMFLOAT3 scale);
 
-	void Transform::SetParent(Transform* parent)
-	{
-		/*if (parent == this->parent)
-		{
-			return;
-		}
-		
-		// Remove from old parent.
-		if (this->parent)
-		{
-			for(vector<Transform*>::iterator it = parent->children.begin(); it < parent->children.end(); it++)
-			{
-				if (*it == this)
-				{
-					parent->children.erase(it);
-					it--;
-				}
-			}
-		}
+	void Transform::LookAt(XMFLOAT3 eye, XMFLOAT3 lookAt, XMFLOAT3 up);
 
-		// Add to new parent.
-		this->parent = parent;
-		if (this->parent) 
-		{
-			this->parent->children.push_back(this);
-		}*/
-	}
+	XMFLOAT4X4 Transform::GetWorldMatrix();
 
-	/*XMFLOAT3 GetTranslation()
-	{
-		return 
-	}*/
+	XMFLOAT4X4 Transform::GetLocalMatrix();
+
+	Transform* Transform::GetParent();
+
+	void Transform::SetParent(Transform* parent);
+
+	// Transform point from local space to world space.
+	XMFLOAT3 TransformPoint(XMFLOAT3 localPoint);
+
+	// Transform point from world space to local space.
+	XMFLOAT3 InverseTransformPoint(XMFLOAT3 worldPoint);
+
+	// Transform direction from local space to world space.
+	XMFLOAT3 TransformDirection(XMFLOAT3 localDirection);
+
+	// Transform direction from world space to local space.
+	XMFLOAT3 InverseTransformDirection(XMFLOAT3 worldDirection);
+
+	// Get world translation.
+	XMFLOAT3 GetTranslation();
+
+	// Get local translation.
+	XMFLOAT3 GetLocalTranslation();
+
+	// Set world translation
+	void SetTranslation(XMFLOAT3 newPosition);
+
+	// Set local translation
+	void SetLocalTranslation(XMFLOAT3 newPosition);
+
+	XMFLOAT3X3 GetRotation();
+
+	XMFLOAT3X3 GetLocalRotation();
+
+	void SetLocalRotation(XMFLOAT3 newEulerAngles);
+
+	void SetLocalRotation(XMFLOAT3 axis, float newAngle);
+	
+	void SetLocalRotation(XMFLOAT3X3 newRotation);
+
+	bool IsUniformScale();
+
+	XMFLOAT3 GetScale();
+
+	XMFLOAT3 GetLocalScale();
+
+	// Set local scale
+	void SetLocalScale(XMFLOAT3 newScale);
+
+	XMFLOAT3 GetForward();
+
+	XMFLOAT3 GetRight();
+
+	XMFLOAT3 GetUp();
+
+	// Concatenate translation, scale, and rotation in to local and world matrices.
+	void UpdateLocalAndWorld();
+
+private:
+	void ApplyRotation(XMMATRIX* rotation);
 };
-#endif

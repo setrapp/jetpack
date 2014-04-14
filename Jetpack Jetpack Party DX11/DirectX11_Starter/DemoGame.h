@@ -10,12 +10,14 @@
 #include "Mesh.h"
 #include "Entity.h"
 #include "Camera.h"
+#include "ControllableCamera.h"
 #include "GameState.h"
 #include "Menu.h"
 #include "Sfx.h"
 #include "Camera.h"
 #include "AssetManager.h"
 #include "Light.h"
+#include "SoundManager.h"
 
 using namespace DirectX;
 
@@ -47,6 +49,7 @@ private:
 	// Initialization for our "game" demo
 	void CreateGeometryBuffers();
 	void LoadShadersAndInputLayout();
+	void LoadSoundAssets();
 
 private:
 	float deltaTime;
@@ -60,8 +63,8 @@ private:
 	ID3D11InputLayout* inputLayout;
 	ID3D11Buffer* vsModelConstantBuffer;
 	VertexShaderModelConstantBuffer vsModelConstantBufferData;
-	ID3D11Buffer* vsFrameConstantBuffer;
-	VertexShaderFrameConstantBuffer vsFrameConstantBufferData;
+	ID3D11Buffer* materialsAndLightsConstantBuffer;
+	MaterialsAndLightsConstantBuffer materialsAndLightsConstantBufferData;
 
 	// Keeps track of the old mouse position.  Useful for 
 	// determining how far the mouse moved in a single frame.
@@ -75,11 +78,9 @@ private:
 	//DirectX::XMFLOAT4X4 viewMatrix;
 	//DirectX::XMFLOAT4X4 projectionMatrix;
 
-
-	Camera* camera;
+	ControllableCamera* camera;
 	GameState currentState;
 	Menu* menu;
-	Sfx* sfx;
 };
 
 #endif

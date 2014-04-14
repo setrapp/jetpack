@@ -5,8 +5,17 @@
 cbuffer perModel : register(b0)
 {
 	matrix world;
+	matrix inverseTranspose;
 	matrix view;
 	matrix projection;
+};
+
+struct Material
+{
+	float4 ambient;
+	float4 diffuse;
+	float4 specular;
+	uint4 shininess;
 };
 
 struct Light
@@ -14,36 +23,29 @@ struct Light
 	matrix world;
 	float4 ambient;
 	float4 diffuse;
+	float4 specular;
 };
 
-cbuffer perFrame : register(b1)
+cbuffer materialsAndLights : register(b1)
 {
+	Material material;
 	Light light;
 }
 
-// Defines what kind of data to expect as input
-// - This should match our input layout!
 struct VertexShaderInput
 {
 	float3 position		: POSITION;
 	float3 normal		: NORMAL;
-	float4 color		: COLOR;
-	float2 uv			: TEXCOORD0;
+	float2 uv			: TEXCOORD;
 };
 
-// Defines the output data of our vertex shader
-// - At a minimum, you'll need an SV_POSITION
-// - Should match the pixel shader's input
 struct VertexToPixel
 {
-	float4 position		: SV_POSITION;	// System Value Position - Has specific meaning to the pipeline!
+	float4 position		: SV_POSITION;
 	float3 normal		: NORMAL0;
-	float4 color		: COLOR;
 	float2 uv			: TEXCOORD0;
-	float3 toLight		: NORMAL1;
-	// TODO Make a constant buffer for the pixel shader for light stuff.
-	float4 lightAmbient : COLOR1;
-	float4 lightDiffuse : COLOR2;
+	float3 toEye		: NORMAL1;
+	float3 toLight		: NORMAL2;
 };
 
 // The entry point for our vertex shader
@@ -57,18 +59,16 @@ VertexToPixel main( VertexShaderInput input )
 	output.position = mul(float4(input.position, 1.0f), worldViewProj);
 	output.uv = input.uv;
 	
-	// Transform normal assuming uniform scaling. Ignore translation.
-	output.normal = mul(input.normal, (float3x3)world);
+	// Transform normal by inverse transpose to remove scaling without affecting rotation.
+	output.normal = mul(input.normal, (float3x3)inverseTranspose);
 	output.normal = normalize(output.normal);
 
-	// Pass the color through - will be interpolated per-pixel by the rasterizer
-	output.color = input.color;
+	// Calculate direction to eye.
+	output.toEye = normalize(input.position - float3(view._41_42_43));
 
-	// Calculate direction to light.
+	// Calculate direction to light. Use fun math tricks to differentiate between point and directional lights.
 	float4 lightPos = light.world._41_42_43_44;
 	output.toLight = (lightPos.xyz * ((lightPos.a - 0.5) * 2))  - (input.position.xyz * lightPos.a);
-	output.lightAmbient = light.ambient;
-	output.lightDiffuse = light.diffuse;
 
 	return output;
 }

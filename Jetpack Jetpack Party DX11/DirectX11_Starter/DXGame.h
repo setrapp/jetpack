@@ -45,7 +45,8 @@ public:
 	virtual void OnMouseUp(WPARAM btnState, int x, int y)  { }
 	virtual void OnMouseMove(WPARAM btnState, int x, int y){ }	
 	virtual void OnMouseWheel(WPARAM btnState, int x, int y) { }
-
+	double getCurrentValue();
+	void initCPU();
 protected:
 	// Handles window and Direct3D initialization
 	bool InitMainWindow();
@@ -88,5 +89,6 @@ protected:
 	int windowWidth;
 	int windowHeight;
 	bool enable4xMsaa;
+	MEMORYSTATUSEX memInfo;
 };
 
