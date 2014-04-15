@@ -23,19 +23,19 @@ void ControllableCamera::CheckInput(float dt)
 {
 	if(GetAsyncKeyState('K'))
 	{
-		velocity.z += 0.8f;
+		velocity.z -= 0.8f;
 	}
 	if(GetAsyncKeyState('I'))
 	{
-		velocity.z -= 0.8f;
+		velocity.z += 0.8f;
 	}
 	if(GetAsyncKeyState('L'))
 	{
-		velocity.x -= 0.8f;
+		velocity.x += 0.8f;
 	}
 	if(GetAsyncKeyState('J'))
 	{
-		velocity.x += 0.8f;
+		velocity.x -= 0.8f;
 	}
 	if(GetAsyncKeyState('B'))
 	{
