@@ -74,13 +74,7 @@ void Transform::LookAt(XMFLOAT3 eye, XMFLOAT3 lookAt, XMFLOAT3 up)
 		up = parent->InverseTransformDirection(up);
 	}
 	XMStoreFloat4x4(&localMatrix, XMMatrixInverse(nullptr, XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&lookAt), XMLoadFloat3(&up))));
-	localMatrix._14 = localMatrix._41;
-	localMatrix._24 = localMatrix._42;
-	localMatrix._34 = localMatrix._43;
-	localMatrix._41 = 0;
-	localMatrix._42 = 0;
-	localMatrix._43 = 0;
-	translation = XMFLOAT3(localMatrix._14, localMatrix._24, localMatrix._34);
+	translation = XMFLOAT3(localMatrix._41, localMatrix._42, localMatrix._43);
 	XMStoreFloat3x3(&rotation, XMLoadFloat4x4(&localMatrix));
 	UpdateLocalAndWorld();
 }
@@ -133,7 +127,7 @@ void Transform::SetParent(Transform* parent)
 	// Update local matrix to exist within new parent space.
 	XMStoreFloat4x4(&localMatrix, XMMatrixMultiply(XMLoadFloat4x4(&worldMatrix), XMMatrixInverse(nullptr, parentWorldMatrix)));
 
-	// TODO need to update translation, rotation, and scale. Maybe try storing the old world scale and rotation, and then converting to new world scale and rotation
+	// Update translation, rotation, and scale
 	translation = XMFLOAT3(localMatrix._14, localMatrix._24, localMatrix._34);
 	scale = XMFLOAT3(	sqrt((localMatrix._11 * localMatrix._11) + (localMatrix._12 * localMatrix._12) + (localMatrix._13 * localMatrix._13)), 
 						sqrt((localMatrix._21 * localMatrix._21) + (localMatrix._22 * localMatrix._22) + (localMatrix._23 * localMatrix._23)),
@@ -148,46 +142,38 @@ void Transform::SetParent(Transform* parent)
 // Transform point from local space to world space.
 XMFLOAT3 Transform::TransformPoint(XMFLOAT3 localPoint)
 {
-	//if (parent)
-	//{
-		XMStoreFloat3(&localPoint, XMVector3Transform(XMLoadFloat3(&localPoint), XMLoadFloat4x4(&worldMatrix)));
-	//}
+	XMStoreFloat3(&localPoint, XMVector3Transform(XMLoadFloat3(&localPoint), XMLoadFloat4x4(&worldMatrix)));
 	return localPoint;
 }
 
 // Transform point from world space to local space.
 XMFLOAT3 Transform::InverseTransformPoint(XMFLOAT3 worldPoint)
 {
-	//if (parent)
-	//{
-		XMFLOAT4X4 test;
-		XMStoreFloat4x4(&test, XMMatrixTranspose(XMMatrixInverse(nullptr, XMLoadFloat4x4(&worldMatrix))));
-		XMStoreFloat3(&worldPoint, XMVector3Transform(XMLoadFloat3(&worldPoint), XMMatrixTranspose(XMMatrixInverse(nullptr, XMLoadFloat4x4(&worldMatrix)))));
-	//}
+	XMStoreFloat3(&worldPoint, XMVector3Transform(XMLoadFloat3(&worldPoint), XMMatrixTranspose(XMMatrixInverse(nullptr, XMLoadFloat4x4(&worldMatrix)))));
 	return worldPoint;
 }
 
 // Transform direction from local space to world space.
 XMFLOAT3 Transform::TransformDirection(XMFLOAT3 localDirection)
 {
-	//if (parent)
-	//{
-		XMFLOAT3X3 sansTranslation;
-		XMStoreFloat3x3(&sansTranslation, XMLoadFloat4x4(&worldMatrix));
-		XMStoreFloat3(&localDirection, XMVector3Transform(XMLoadFloat3(&localDirection), XMLoadFloat3x3(&sansTranslation)));
-	//}
+	XMFLOAT3X3 sansTranslationAndScale;
+	XMStoreFloat3x3(&sansTranslationAndScale, XMLoadFloat4x4(&worldMatrix));
+	sansTranslationAndScale._11 /= scale.x;
+	sansTranslationAndScale._22 /= scale.y;
+	sansTranslationAndScale._33 /= scale.z;
+	XMStoreFloat3(&localDirection, XMVector3Transform(XMLoadFloat3(&localDirection), XMLoadFloat3x3(&sansTranslationAndScale)));
 	return localDirection;
 }
 
 // Transform direction from world space to local space.
 XMFLOAT3 Transform::InverseTransformDirection(XMFLOAT3 worldDirection)
 {
-	//if (parent)
-	//{
-		XMFLOAT3X3 sansTranslation;
-		XMStoreFloat3x3(&sansTranslation, XMLoadFloat4x4(&worldMatrix));
-		XMStoreFloat3(&worldDirection, XMVector3Transform(XMLoadFloat3(&worldDirection), XMMatrixInverse(nullptr, XMLoadFloat3x3(&sansTranslation))));
-	//}
+	XMFLOAT3X3 sansTranslationAndScale;
+	XMStoreFloat3x3(&sansTranslationAndScale, XMLoadFloat4x4(&worldMatrix));
+	sansTranslationAndScale._11 /= scale.x;
+	sansTranslationAndScale._22 /= scale.y;
+	sansTranslationAndScale._33 /= scale.z;
+	XMStoreFloat3(&worldDirection, XMVector3Transform(XMLoadFloat3(&worldDirection), XMMatrixInverse(nullptr, XMLoadFloat3x3(&sansTranslationAndScale))));
 	return worldDirection;
 }
 

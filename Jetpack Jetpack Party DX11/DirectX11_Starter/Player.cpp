@@ -14,7 +14,7 @@ void Player::Update(float dt)
 	
 	// Slow the character a bit so that it comes to a nice stop over time.
 	XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), groundSpeedDampening));
-	transform->Translate(XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt));
+	transform->Translate(transform->InverseTransformDirection(XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt)));
 
 	Entity::Update(dt);
 }
