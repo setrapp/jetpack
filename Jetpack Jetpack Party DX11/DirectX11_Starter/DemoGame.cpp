@@ -100,7 +100,7 @@ bool DemoGame::Init()
 	AssetManager::Instance()->StoreMaterial(new Material());
 
 	XMFLOAT3 cameraPosition;
-	XMStoreFloat3(&cameraPosition, XMVectorSet(0, 0, -20, 0));
+	XMStoreFloat3(&cameraPosition, XMVectorSet(0, 0, -10, 0));
 	XMFLOAT3 cameraTarget;
 	XMStoreFloat3(&cameraTarget, XMVectorSet(0, 0, 0, 0));
 	XMFLOAT3 cameraUp;
@@ -166,12 +166,30 @@ void DemoGame::CreateGeometryBuffers()
 	gift->SetMaterial("gift");
 	gift->GetMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 	gift->LoadTexture(L"../Assets/RedGift.png");
-	
 
+	Vertex floorVertices[] = 
+	{
+		{ XMFLOAT3(+100.0f, -10.0f, +100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 0) },
+		{ XMFLOAT3(-100.0f, -10.0f, -100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 1) },
+		{ XMFLOAT3(+100.0f, -10.0f, -100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 1) },		
+		{ XMFLOAT3(-100.0f, -10.0f, +100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 0) },
+	};
+
+	UINT floorIndices[] = { 0, 2, 1, 3, 0, 1 };
+	Entity* floor = new Entity();
+	floor->AddQuad(floorVertices, floorIndices);
+	floor->Finalize();
+	floor->transform->Translate(XMFLOAT3(-5, 5, 0));
+	entities.push_back(floor);
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(0.0f, 0.2f, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "floor");
+	floor->SetMaterial("floor");
+	
 	camera->transform->SetParent(player->transform);
-	player->transform->Translate(XMFLOAT3(5, 0, 0));
+	player->transform->Translate(XMFLOAT3(1, 0, 0));
 	XMFLOAT3 eye = camera->transform->GetTranslation();
-	XMFLOAT3 target = gift->transform->GetTranslation();
+	XMStoreFloat3(&eye, XMLoadFloat3(&camera->transform->GetTranslation()) + (5 * XMLoadFloat3(&player->transform->GetUp())));
+	XMFLOAT3 target;
+	XMStoreFloat3(&target, XMLoadFloat3(&player->transform->GetTranslation()) + (3 * XMLoadFloat3(&player->transform->GetForward())));
 	XMFLOAT3 up = player->transform->GetUp();
 	camera->LookAt(eye, target, up);
 }
