@@ -18,6 +18,8 @@
 #include "AssetManager.h"
 #include "Light.h"
 #include "SoundManager.h"
+#include "MouseLook.h"
+#include "Debug.h"
 
 using namespace DirectX;
 
@@ -81,6 +83,7 @@ private:
 	ControllableCamera* camera;
 	GameState currentState;
 	Menu* menu;
+	MouseLook* mouseLook;
 };
 
 #endif

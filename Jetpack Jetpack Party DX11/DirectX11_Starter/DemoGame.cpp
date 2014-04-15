@@ -117,6 +117,8 @@ bool DemoGame::Init()
 		XMStoreFloat4x4(&e->GetWorldMatrix(), XMMatrixTranspose(W));	
 	LoadSoundAssets();
 
+	mouseLook = new MouseLook(camera, XMFLOAT2(0.001f, 0.001f));
+
 	return true;
 }
 
@@ -303,6 +305,8 @@ void DemoGame::UpdateScene(float dt)
 		currentState = menu->Update(dt);
 	}
 
+	Debug::Log(Debug::ToString(camera->transform->GetRotation()));
+
 	deviceContext->UpdateSubresource(
 	vsModelConstantBuffer,
 	0,			
@@ -416,6 +420,8 @@ void DemoGame::OnMouseMove(WPARAM btnState, int x, int y)
 {
 	prevMousePos.x = x;
 	prevMousePos.y = y;
+
+	mouseLook->MouseMove(btnState, x, y);
 }
 
 void DemoGame::OnMouseWheel(WPARAM btnState, int x, int y)

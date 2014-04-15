@@ -218,6 +218,12 @@
     <ClInclude Include="AudioWaveManager.h">
       <Filter>Header Files\Sound</Filter>
     </ClInclude>
+    <ClInclude Include="MouseLook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Toolkit\Src\Shaders\DGSLPhong.hlsl">
