@@ -299,18 +299,21 @@ XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
 bool scaleSmall = true;
 void DemoGame::UpdateScene(float dt)
 {
-	assetManager->Instance()->GetSoundManager()->Update();
-	if(currentState == GameState::Playing)
-	{
-	this->deltaTime = dt;
+		assetManager->Instance()->GetSoundManager()->Update();
+		if(currentState == GameState::Playing)
+		{
+		this->deltaTime = dt;
 
 
-	for(Entity* e: entities)
+		for(Entity* e: entities)
 		{
 			e->Update(dt);
 		}
 
 		entities[1]->transform->Rotate(XMFLOAT3(0, 2 * dt, 0));
+		
+		Debug::Log(Debug::ToString(camera->transform->GetRotation()));
+		
 	}
 
 	camera->Update(dt, &vsModelConstantBufferData);	
@@ -320,7 +323,6 @@ void DemoGame::UpdateScene(float dt)
 		currentState = menu->Update(dt);
 	}
 
-	Debug::Log(Debug::ToString(camera->transform->GetRotation()));
 
 	deviceContext->UpdateSubresource(
 	vsModelConstantBuffer,
@@ -408,7 +410,7 @@ void DemoGame::DrawScene()
 			e->Draw();
 		}
 	}
-
+	
 	HR(swapChain->Present(0, 0));
 }
 
@@ -422,7 +424,8 @@ void DemoGame::OnMouseDown(WPARAM btnState, int x, int y)
 {
 	prevMousePos.x = x;
 	prevMousePos.y = y;
-	menu->ProcessMouseInput(btnState, x, y);
+	
+		menu->ProcessMouseInput(btnState, x, y);
 	SetCapture(hMainWnd);
 }
 
@@ -435,8 +438,11 @@ void DemoGame::OnMouseMove(WPARAM btnState, int x, int y)
 {
 	prevMousePos.x = x;
 	prevMousePos.y = y;
-
-	mouseLook->MouseMove(btnState, x, y);
+	if(currentState == Playing)
+	{
+		/*mouseLook->MouseMove(btnState, x, y);		
+		SetCursorPos(screenWidth / 2, screenHeight / 2);*/
+	}
 }
 
 void DemoGame::OnMouseWheel(WPARAM btnState, int x, int y)

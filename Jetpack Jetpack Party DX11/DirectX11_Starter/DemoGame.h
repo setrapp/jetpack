@@ -1,6 +1,5 @@
 #ifndef _DEMOGAME_H
 #pragma once
-
 #include "FontRenderer.h"
 #include "Sprite.h"
 #include "Vertex.h"

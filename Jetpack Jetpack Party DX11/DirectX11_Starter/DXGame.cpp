@@ -38,8 +38,8 @@ DXGame::DXGame(HINSTANCE hInstance)
 	:	hAppInst(hInstance),
 	windowCaption(L"Jetpack Jetpack Party!"),
 	driverType(D3D_DRIVER_TYPE_HARDWARE),
-	windowWidth(800),
-	windowHeight(600),
+	windowWidth(screenWidth),
+	windowHeight(screenHeight),
 	enable4xMsaa(false),
 	hMainWnd(0),
 	gamePaused(false),
@@ -131,7 +131,7 @@ bool DXGame::InitMainWindow()
 	int height = R.bottom - R.top;
 
 	hMainWnd = CreateWindow(L"D3DWndClassName", windowCaption.c_str(), 
-		WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, width, height, 0, 0, hAppInst, 0); 
+		WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, screenWidth, screenHeight, 0, 0, hAppInst, 0); 
 	if( !hMainWnd )
 	{
 		MessageBox(0, L"CreateWindow Failed.", 0, 0);
