@@ -28,7 +28,7 @@ Transform::Transform()
 
 Transform::~Transform()
 {
-
+	
 }
 
 // Translate locally.
@@ -44,7 +44,7 @@ void Transform::Rotate(XMFLOAT3 rotation)
 	XMFLOAT3X3 rotationMatrix;
 	XMStoreFloat3x3(&rotationMatrix, XMMatrixRotationX(rotation.x) * XMMatrixRotationY(rotation.y) * XMMatrixRotationZ(rotation.z));
 	Rotate(rotationMatrix);
-	}
+}
 
 // Rotate locally.
 void Transform::Rotate(XMFLOAT3X3 rotation)

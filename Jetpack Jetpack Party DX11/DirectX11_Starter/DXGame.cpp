@@ -12,14 +12,15 @@
 #include <sstream>
 #include "Toolkit\Inc\CommonStates.h"
 #pragma region Global Window Callback
+bool DXGame::sysEvent  = false;
 namespace
 {
 	// Allows us to forward Windows messages from a global
 	// window procedure to our member function window procedure
 	// because we cannot assign a member function to WNDCLASS::lpfnWndProc
 	DXGame* dxGame = 0;
+	
 }
-
 // Set up a global callback for handling windows messages
 LRESULT CALLBACK
 	MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -47,7 +48,6 @@ DXGame::DXGame(HINSTANCE hInstance)
 	maximized(false),
 	resizing(false),
 	msaa4xQuality(0),
-
 	device(0),
 	deviceContext(0),
 	swapChain(0),
@@ -57,6 +57,7 @@ DXGame::DXGame(HINSTANCE hInstance)
 {
 	// Zero out the viewport struct
 	ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
+	DXGame::sysEvent =true;
 
 	// Grabs a pointer to this DXGame object so we can forward
 	// Windows messages to the object's message handling function
@@ -531,11 +532,11 @@ LRESULT DXGame::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		OnMouseUp(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		return 0;
 	case WM_MOUSEMOVE:
-		OnMouseMove(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		OnMouseMove(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));		
 		return 0;
 	case WM_MOUSEWHEEL:
-	OnMouseWheel(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-	return 0;
+		OnMouseWheel(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		return 0;
 	}
 
 	return DefWindowProc(hwnd, msg, wParam, lParam);
@@ -551,6 +552,8 @@ static HANDLE self;
 
 
 void DXGame::initCPU(){
+
+
 
     SYSTEM_INFO sysInfo;
     FILETIME ftime, fsys, fuser;

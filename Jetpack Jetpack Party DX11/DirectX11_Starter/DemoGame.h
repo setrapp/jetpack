@@ -53,6 +53,7 @@ private:
 	void LoadSoundAssets();
 
 private:
+
 	float deltaTime;
 	AssetManager* assetManager;
 	// Our basic shaders for this example
@@ -83,6 +84,9 @@ private:
 	GameState currentState;
 	Menu* menu;
 	MouseLook* mouseLook;
+
+	bool mouseCursorVisibility;
+	bool flag;
 };
 
 #endif

@@ -8,8 +8,8 @@
 // -------------------------------------------------------------
 
 #pragma once
-#define screenWidth 1920
-#define screenHeight 1080
+#define screenWidth 1920	
+#define screenHeight 1017
 
 #include "Common.h"
 #include "Windows.h"
@@ -91,5 +91,8 @@ protected:
 	int windowHeight;
 	bool enable4xMsaa;
 	MEMORYSTATUSEX memInfo;
+
+public :
+	static bool sysEvent;
 };
 

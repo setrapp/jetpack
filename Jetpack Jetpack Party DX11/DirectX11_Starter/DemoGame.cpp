@@ -58,6 +58,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 {
+	
+	flag = true;
 	windowCaption = L"Jetpack Jetpack Party!";
 	windowWidth = 800;
 	windowHeight = 600;
@@ -65,6 +67,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	menu = new Menu(device, deviceContext);
 	camera = new ControllableCamera();
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
+	mouseCursorVisibility = true;
 }
 
 DemoGame::~DemoGame()
@@ -75,6 +78,19 @@ DemoGame::~DemoGame()
 	ReleaseMacro(materialsAndLightsConstantBuffer);
 	ReleaseMacro(inputLayout);
 	delete light;
+
+	for(int i = 0 ; i < entities.size(); i++)
+		delete entities.at(i);
+	
+	
+	//delete light;
+	/*delete camera;
+	delete menu;
+	delete mouseLook;
+	delete fontRenderer;
+	delete spriteRenderer;*/
+
+	ReleaseMacro(vsModelConstantBuffer);
 }
 
 #pragma endregion
@@ -186,7 +202,7 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(0.0f, 0.2f, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "floor");
 	floor->SetMaterial("floor");
 	
-	camera->transform->SetParent(player->transform);
+	//camera->transform->SetParent(player->transform);
 	player->transform->Translate(XMFLOAT3(1, 0, 0));
 	XMFLOAT3 eye = camera->transform->GetTranslation();
 	XMStoreFloat3(&eye, XMLoadFloat3(&camera->transform->GetTranslation()) + (5 * XMLoadFloat3(&player->transform->GetUp())));
@@ -310,10 +326,7 @@ void DemoGame::UpdateScene(float dt)
 			e->Update(dt);
 		}
 
-		entities[1]->transform->Rotate(XMFLOAT3(0, 2 * dt, 0));
-		
-		Debug::Log(Debug::ToString(camera->transform->GetRotation()));
-		
+		entities[1]->transform->Rotate(XMFLOAT3(0, 5 * dt, 0));	
 	}
 
 	camera->Update(dt, &vsModelConstantBufferData);	
@@ -347,11 +360,17 @@ void DemoGame::DrawScene()
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
 		1.0f,
 		0);
+
 	if(currentState == GameState::Started)
 	{	
 		spriteRenderer->Begin();
 		menu->Render(deviceContext);
 		spriteRenderer->End();
+		if(!mouseCursorVisibility)
+		{
+			mouseCursorVisibility = true;
+			ShowCursor(mouseCursorVisibility);
+		}
 	}
 
 #ifndef OPTIMIZATION
@@ -363,8 +382,12 @@ void DemoGame::DrawScene()
 		1, 
 		&vsModelConstantBuffer);
 #endif
-	if (currentState == GameState::Playing) {
-
+	if (currentState == GameState::Playing) {		
+		/*if(mouseCursorVisibility)
+		{
+			mouseCursorVisibility = false;
+			ShowCursor(mouseCursorVisibility);
+		}*/
 		// Update light constant buffer for vertex and pixel shader.
 		materialsAndLightsConstantBufferData.light = light->GetShaderLight();
 		materialsAndLightsConstantBufferData.material = AssetManager::Instance()->GetMaterial("default")->GetShaderMaterial();
@@ -410,7 +433,7 @@ void DemoGame::DrawScene()
 			e->Draw();
 		}
 	}
-	
+	flag = true;
 	HR(swapChain->Present(0, 0));
 }
 
@@ -425,7 +448,7 @@ void DemoGame::OnMouseDown(WPARAM btnState, int x, int y)
 	prevMousePos.x = x;
 	prevMousePos.y = y;
 	
-		menu->ProcessMouseInput(btnState, x, y);
+	menu->ProcessMouseInput(btnState, x, y);
 	SetCapture(hMainWnd);
 }
 
@@ -434,25 +457,23 @@ void DemoGame::OnMouseUp(WPARAM btnState, int x, int y)
 	ReleaseCapture();
 }
 
+
 void DemoGame::OnMouseMove(WPARAM btnState, int x, int y)
 {
-	prevMousePos.x = x;
-	prevMousePos.y = y;
-	if(currentState == Playing)
+	if(flag)
 	{
-		/*mouseLook->MouseMove(btnState, x, y);		
-		SetCursorPos(screenWidth / 2, screenHeight / 2);*/
+		flag = false;
+		prevMousePos.x = x;
+		prevMousePos.y = y;
+		if(currentState == Playing)
+		{
+			mouseLook->MouseMove(btnState, x, y);		
+		}
 	}
 }
 
 void DemoGame::OnMouseWheel(WPARAM btnState, int x, int y)
 {
-	float rot = (float)GET_WHEEL_DELTA_WPARAM(btnState);
-	if (rot <= 0)
-		rot = +0.085f;
-	else
-		rot = -0.085f;
-
-	trans.z += rot;
+	//float rot = (float)GET_WHEEL_DELTA_WPARAM(btnState);	
 }
 #pragma endregion

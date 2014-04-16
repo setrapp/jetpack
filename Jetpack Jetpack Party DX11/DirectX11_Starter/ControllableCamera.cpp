@@ -59,19 +59,19 @@ void ControllableCamera::CheckInput(float dt)
 
 	if(GetAsyncKeyState('Y'))
 	{
-		transform->Rotate(XMFLOAT3(0, -1 * dt, 0));
+		transform->Rotate(XMFLOAT3(0, -20 * dt, 0));
 	}
 	if(GetAsyncKeyState('H'))
 	{
-		transform->Rotate(XMFLOAT3(0, 1 * dt, 0));
+		transform->Rotate(XMFLOAT3(0, 20 * dt, 0));
 	}
 	if(GetAsyncKeyState('T'))
 	{
-		transform->Rotate(XMFLOAT3(-1 * dt, 0 , 0));
+		transform->Rotate(XMFLOAT3(-20 * dt, 0 , 0));
 	}
 	if(GetAsyncKeyState('G'))
 	{
-		transform->Rotate(XMFLOAT3(1 * dt, 0, 0));
+		transform->Rotate(XMFLOAT3(20 * dt, 0, 0));
 	}
 	if(GetAsyncKeyState('U'))
 	{
