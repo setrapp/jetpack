@@ -315,11 +315,15 @@ XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
 bool scaleSmall = true;
 void DemoGame::UpdateScene(float dt)
 {
-		assetManager->Instance()->GetSoundManager()->Update();
-		if(currentState == GameState::Playing)
-		{
-		this->deltaTime = dt;
+	if (GetAsyncKeyState(VK_ESCAPE))
+	{
+		PostQuitMessage(0);
+	}
 
+	assetManager->Instance()->GetSoundManager()->Update();
+	if(currentState == GameState::Playing)
+	{
+		this->deltaTime = dt;
 
 		for(Entity* e: entities)
 		{
