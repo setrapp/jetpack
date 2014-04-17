@@ -41,11 +41,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(LibraryPath)</LibraryPath>
-    <IncludePath>$(Project)\Libs;D:\New folder\Jetpack Jetpack Party DX11\DirectX11_Starter\Libs;%DXSDK_DIR%Include\x64\xaudio2.lib;%DXSDK_DIR%Include\x64\xaudio3.lib;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Additional Packages\bullet-2.82-r2704\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(Project)\Libs;D:\New folder\Jetpack Jetpack Party DX11\DirectX11_Starter\Libs;%DXSDK_DIR%Include\x64\xaudio2.lib;%DXSDK_DIR%Include\x64\xaudio3.lib;$(ProjectLib)\Additional Packages\bullet-2.82-r2704\src;$(IncludePath);$(SolutionDir)\Additional Packages\bullet-2.82-r2704\src</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(Project)\Libs;D:\New folder\Jetpack Jetpack Party DX11\DirectX11_Starter\Libs;%DXSDK_DIR%Include\x64\xaudio2.lib;%DXSDK_DIR%Include\x64\xaudio3.lib;$(IncludePath)</IncludePath>
+    <IncludePath>$(Project)\Libs;D:\New folder\Jetpack Jetpack Party DX11\DirectX11_Starter\Libs;%DXSDK_DIR%Include\x64\xaudio2.lib;%DXSDK_DIR%Include\x64\xaudio3.lib;$(IncludePath);$(SolutionDir)\Additional Packages\bullet-2.82-r2704\src</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -53,14 +53,15 @@
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\inc;$(SolutionDir)\Toolkit\inc;%(AdditionalIncludeDirectories);$(DXSDK_DIR)\Lib\x64</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\inc;$(SolutionDir)\Toolkit\inc;%(AdditionalIncludeDirectories);$(DXSDK_DIR)\Lib\x64;$(ProjectDir)\Additional Packages\bullet-2.82-r2704\src</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;BulletCollision_vs2010_debug.lib;LinearMath_vs2010_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)\Additional Packages\bullet-2.82-r2704\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
