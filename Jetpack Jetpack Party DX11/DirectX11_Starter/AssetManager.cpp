@@ -21,6 +21,8 @@ AssetManager::AssetManager()
 	pixelShaders = new map<string, ID3D11PixelShader*>();
 	materials = new map<string, Material*>();
 	models = new map<string, Model*>();
+	inputManager = new InputManager((INPUTMODES)(INPUTMODES::KEYBOARD & INPUTMODES::XCONTROLLER));
+	inputManager ->GetState(KeyType::FORWARD);
 }
 
 AssetManager::~AssetManager()

@@ -161,21 +161,6 @@
     <ClInclude Include="Rect.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyboardInput.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Response.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="MouseInput.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -223,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="Debug.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Header Files\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

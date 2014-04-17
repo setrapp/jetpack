@@ -10,6 +10,7 @@
 #include "Mesh.h"
 #include "ModelLoad\MLModelViewer.h"
 #include "SoundManager.h"
+#include "InputManager.h"
 
 using namespace std;
 
@@ -54,4 +55,5 @@ private:
 	map<string, Material*>* materials;
 	map<string, Model*>* models;
 	SoundManager* soundManager;
+	InputManager* inputManager;
 };
