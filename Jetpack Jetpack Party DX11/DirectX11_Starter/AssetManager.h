@@ -7,6 +7,9 @@
 #include <string>
 #include "Common.h"
 #include "Material.h"
+#include "Mesh.h"
+#include "ModelLoad\MLModelViewer.h"
+#include "SoundManager.h"
 
 using namespace std;
 
@@ -35,11 +38,20 @@ public:
 	Material* StoreMaterial(Material* material, string name = "default");
 	Material* GetMaterial(string name = "default");
 
+	// Models
+	Model* CreateAndStoreModel(string filePath, string name = "default");
+	Model* StoreModel(Model* model, string name = "default");
+	Model* GetModel(string name = "default");
+	SoundManager* GetSoundManager();
+
 	static AssetManager* Instance();
 private:
 	static AssetManager* instance;
+
 	map<ID3D11VertexShader*, ID3D11InputLayout*>* inputLayouts;
 	map<string, ID3D11VertexShader*>* vertexShaders;
 	map<string, ID3D11PixelShader*>* pixelShaders;
 	map<string, Material*>* materials;
+	map<string, Model*>* models;
+	SoundManager* soundManager;
 };

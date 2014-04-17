@@ -5,20 +5,22 @@
 #include <d3d11.h>
 #include "Common.h"
 
-using namespace DirectX;
-
 class Mesh
 {
 public:
-	Mesh(Vertex* v, UINT* i, int noOfIndices, int noOfVertices);
+	Mesh(UINT* i, short noOfIndices);
 	~Mesh(void);
-	void Initialize(Vertex* v, UINT* i, int noOfIndices, int noOfVertices);
 	void Update(float dt);
 	void Draw();
+	UINT* GetIndices(short *total);
 
-private:
-	ID3D11Buffer* indexBuffer;
-	ID3D11Buffer* vertexBuffer;
+private:	
 	short totalIndices;
+	UINT* indices;
 };
 
+struct Model 
+{
+	vector<Vertex> vertices;
+	vector<Mesh*> meshes;
+};

@@ -102,6 +102,15 @@
     <ClCompile Include="Light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ControllableCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXGame.h">
@@ -128,9 +137,6 @@
     <ClInclude Include="Mesh.h">
       <Filter>Header Files\Core\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>Header Files\Core\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Rigidbody.h">
       <Filter>Header Files\Core\Physics</Filter>
     </ClInclude>
@@ -154,12 +160,6 @@
     </ClInclude>
     <ClInclude Include="Rect.h">
       <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sfx.h">
-      <Filter>Header Files\Sound</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>Header Files\Input</Filter>
@@ -203,6 +203,27 @@
     <ClInclude Include="Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ControllableCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Header Files\Core\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundInstance.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioWaveManager.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseLook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Toolkit\Src\Shaders\DGSLPhong.hlsl">
@@ -217,8 +238,5 @@
     <FxCompile Include="Shaders\TexturePixelShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{e11479ef-8a44-4ba5-9d5a-c14237485115}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DXToolkit">
+      <UniqueIdentifier>{0eb3c0ae-49b2-4234-88a4-3276fb8d51ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{eef70584-65e6-42aa-ad07-195041bccdfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\GameObject">
+      <UniqueIdentifier>{07323a2e-464f-4c7e-adb9-d8372089abc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Physics">
+      <UniqueIdentifier>{b8954814-22cb-481e-8ead-604e425aa62e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Camera">
+      <UniqueIdentifier>{13f8993d-c62d-4edc-8220-fde93d3d44f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\GUI">
+      <UniqueIdentifier>{124f7d67-4415-403e-a66d-5b9e7b11f22b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Font">
+      <UniqueIdentifier>{a89fb1b5-aa1f-49d5-a46b-6e7e67266987}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\StateManagement">
+      <UniqueIdentifier>{730eb80d-cc1b-4ae1-8966-60cf73a358bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Sound">
+      <UniqueIdentifier>{5e15a5d3-fb99-40aa-95ec-02827ae7227f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Input">
+      <UniqueIdentifier>{b5caec15-6297-4e70-a5eb-14040a8543c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ModelLoading">
+      <UniqueIdentifier>{98d47a7d-e4bb-4e53-9f40-4fb559444154}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ModelLoading">
+      <UniqueIdentifier>{8832b5cd-f068-4934-acc7-29ceeaa143c2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DXGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DemoGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dxerr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DXConnection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelLoad\MLMaterialLoader.c">
+      <Filter>Source Files\ModelLoading</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralUtility\GUMathUtility.cpp">
+      <Filter>Source Files\ModelLoading</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralUtility\GUParseUtility.cpp">
+      <Filter>Source Files\ModelLoading</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelLoad\MLModelViewer.c">
+      <Filter>Source Files\ModelLoading</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GreaterMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllableCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DXGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTimer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DemoGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dxerr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files\Core\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Header Files\Core\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\Core\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Rigidbody.h">
+      <Filter>Header Files\Core\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Header Files\Core\StateManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\Core\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="FontRenderer.h">
+      <Filter>Header Files\Core\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Sfx.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardInput.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Response.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseInput.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXConnection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelLoad\MLMaterialLoader.h">
+      <Filter>Header Files\ModelLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralUtility\GUMathUtility.h">
+      <Filter>Header Files\ModelLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralUtility\GUParseUtility.h">
+      <Filter>Header Files\ModelLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelLoad\MLModelViewer.h">
+      <Filter>Header Files\ModelLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GreaterMesh.h">
+      <Filter>Header Files\Core\GameObject</Filter>
+    </ClInclude>
+<<<<<<< HEAD
+    <ClInclude Include="ControllableCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Header Files\Core\GameObject</Filter>
+=======
+    <ClInclude Include="SoundInstance.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioWaveManager.h">
+      <Filter>Header Files\Sound</Filter>
+>>>>>>> 36f4cef1886aa7bd6685ef5d6caf55643ea065e5
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Toolkit\Src\Shaders\DGSLPhong.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\SimplePixelShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\SimpleVertexShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\TexturePixelShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+</Project>
