@@ -5,6 +5,7 @@
 #include <DirectXMath.h>
 #include <d3d11.h>
 #include <vector>
+#include <math.h>
 
 using namespace DirectX;
 using namespace std;
@@ -27,7 +28,7 @@ Transform::Transform()
 
 Transform::~Transform()
 {
-
+	
 }
 
 // Translate locally.
@@ -43,7 +44,7 @@ void Transform::Rotate(XMFLOAT3 rotation)
 	XMFLOAT3X3 rotationMatrix;
 	XMStoreFloat3x3(&rotationMatrix, XMMatrixRotationX(rotation.x) * XMMatrixRotationY(rotation.y) * XMMatrixRotationZ(rotation.z));
 	Rotate(rotationMatrix);
-	}
+}
 
 // Rotate locally.
 void Transform::Rotate(XMFLOAT3X3 rotation)
@@ -55,7 +56,7 @@ void Transform::Rotate(XMFLOAT3X3 rotation)
 	XMStoreFloat3(&right, XMVector3Transform(XMLoadFloat3(&right), rotationMatrix));
 	XMStoreFloat3(&up, XMVector3Transform(XMLoadFloat3(&up), rotationMatrix));
 	XMStoreFloat3(&forward, XMVector3Transform(XMLoadFloat3(&forward), rotationMatrix));
-	}
+}
 
 // Scale locally.
 void Transform::Scale(XMFLOAT3 scale)
@@ -66,8 +67,14 @@ void Transform::Scale(XMFLOAT3 scale)
 
 void Transform::LookAt(XMFLOAT3 eye, XMFLOAT3 lookAt, XMFLOAT3 up)
 {
-	XMStoreFloat4x4(&localMatrix, XMMatrixTranspose(XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&lookAt), XMLoadFloat3(&up))));
-	translation = XMFLOAT3(localMatrix._14, localMatrix._24, localMatrix._34);
+	if (parent)
+	{
+		eye = parent->InverseTransformPoint(eye);
+		lookAt = parent->InverseTransformPoint(lookAt);
+		up = parent->InverseTransformDirection(up);
+	}
+	XMStoreFloat4x4(&localMatrix, XMMatrixInverse(nullptr, XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&lookAt), XMLoadFloat3(&up))));
+	translation = XMFLOAT3(localMatrix._41, localMatrix._42, localMatrix._43);
 	XMStoreFloat3x3(&rotation, XMLoadFloat4x4(&localMatrix));
 	UpdateLocalAndWorld();
 }
@@ -90,7 +97,7 @@ Transform* Transform::GetParent()
 
 void Transform::SetParent(Transform* parent)
 {
-	if (parent == this->parent)
+	if (parent == this->parent || this->parent == this)
 	{
 		return;
 	}
@@ -119,49 +126,54 @@ void Transform::SetParent(Transform* parent)
 
 	// Update local matrix to exist within new parent space.
 	XMStoreFloat4x4(&localMatrix, XMMatrixMultiply(XMLoadFloat4x4(&worldMatrix), XMMatrixInverse(nullptr, parentWorldMatrix)));
+
+	// Update translation, rotation, and scale
+	translation = XMFLOAT3(localMatrix._14, localMatrix._24, localMatrix._34);
+	scale = XMFLOAT3(	sqrt((localMatrix._11 * localMatrix._11) + (localMatrix._12 * localMatrix._12) + (localMatrix._13 * localMatrix._13)), 
+						sqrt((localMatrix._21 * localMatrix._21) + (localMatrix._22 * localMatrix._22) + (localMatrix._23 * localMatrix._23)),
+						sqrt((localMatrix._31 * localMatrix._31) + (localMatrix._32 * localMatrix._32) + (localMatrix._33 * localMatrix._33)));
+	XMStoreFloat3x3(&rotation, XMLoadFloat4x4(&localMatrix));
+	rotation._11 /= scale.x;
+	rotation._22 /= scale.y;
+	rotation._33 /= scale.z;
+	UpdateLocalAndWorld();
 }
 
 // Transform point from local space to world space.
 XMFLOAT3 Transform::TransformPoint(XMFLOAT3 localPoint)
 {
-	if (parent)
-	{
-		XMStoreFloat3(&localPoint, XMVector3Transform(XMLoadFloat3(&localPoint), XMLoadFloat4x4(&worldMatrix)));
-	}
+	XMStoreFloat3(&localPoint, XMVector3Transform(XMLoadFloat3(&localPoint), XMLoadFloat4x4(&worldMatrix)));
 	return localPoint;
 }
 
 // Transform point from world space to local space.
 XMFLOAT3 Transform::InverseTransformPoint(XMFLOAT3 worldPoint)
 {
-	if (parent)
-	{
-		XMStoreFloat3(&worldPoint, XMVector3Transform(XMLoadFloat3(&worldPoint), XMMatrixInverse(nullptr, XMLoadFloat4x4(&worldMatrix))));
-	}
+	XMStoreFloat3(&worldPoint, XMVector3Transform(XMLoadFloat3(&worldPoint), XMMatrixTranspose(XMMatrixInverse(nullptr, XMLoadFloat4x4(&worldMatrix)))));
 	return worldPoint;
 }
 
 // Transform direction from local space to world space.
 XMFLOAT3 Transform::TransformDirection(XMFLOAT3 localDirection)
 {
-	if (parent)
-	{
-		XMFLOAT3X3 sansTranslation;
-		XMStoreFloat3x3(&sansTranslation, XMLoadFloat4x4(&worldMatrix));
-		XMStoreFloat3(&localDirection, XMVector3Transform(XMLoadFloat3(&localDirection), XMLoadFloat3x3(&sansTranslation)));
-	}
+	XMFLOAT3X3 sansTranslationAndScale;
+	XMStoreFloat3x3(&sansTranslationAndScale, XMLoadFloat4x4(&worldMatrix));
+	sansTranslationAndScale._11 /= scale.x;
+	sansTranslationAndScale._22 /= scale.y;
+	sansTranslationAndScale._33 /= scale.z;
+	XMStoreFloat3(&localDirection, XMVector3Transform(XMLoadFloat3(&localDirection), XMLoadFloat3x3(&sansTranslationAndScale)));
 	return localDirection;
 }
 
 // Transform direction from world space to local space.
 XMFLOAT3 Transform::InverseTransformDirection(XMFLOAT3 worldDirection)
 {
-	if (parent)
-	{
-		XMFLOAT3X3 sansTranslation;
-		XMStoreFloat3x3(&sansTranslation, XMLoadFloat4x4(&worldMatrix));
-		XMStoreFloat3(&worldDirection, XMVector3Transform(XMLoadFloat3(&worldDirection), XMMatrixInverse(nullptr, XMLoadFloat3x3(&sansTranslation))));
-	}
+	XMFLOAT3X3 sansTranslationAndScale;
+	XMStoreFloat3x3(&sansTranslationAndScale, XMLoadFloat4x4(&worldMatrix));
+	sansTranslationAndScale._11 /= scale.x;
+	sansTranslationAndScale._22 /= scale.y;
+	sansTranslationAndScale._33 /= scale.z;
+	XMStoreFloat3(&worldDirection, XMVector3Transform(XMLoadFloat3(&worldDirection), XMMatrixInverse(nullptr, XMLoadFloat3x3(&sansTranslationAndScale))));
 	return worldDirection;
 }
 
@@ -195,6 +207,20 @@ void Transform::SetLocalTranslation(XMFLOAT3 newPosition)
 	Translate(translation);
 }
 
+XMFLOAT3X3 Transform::GetRotation()
+{
+	XMFLOAT3X3 worldRotation;
+	if (parent)
+	{
+		XMStoreFloat3x3(&worldRotation, XMMatrixMultiply(XMLoadFloat3x3(&parent->GetRotation()), XMLoadFloat3x3(&rotation))); 
+	}
+	else
+	{
+		worldRotation = rotation; 
+	}
+	return worldRotation;
+}
+
 XMFLOAT3X3 Transform::GetLocalRotation()
 {
 	return rotation;
@@ -215,6 +241,25 @@ void Transform::SetLocalRotation(XMFLOAT3 axis, float newAngle)
 void Transform::SetLocalRotation(XMFLOAT3X3 newRotation)
 {
 	ApplyRotation(&XMLoadFloat3x3(&newRotation));
+}
+
+bool Transform::IsUniformScale()
+{
+	return (scale.x == scale.y && scale.x == scale.z) && (parent == NULL || parent->IsUniformScale());
+}
+
+XMFLOAT3 Transform::GetScale()
+{
+	XMFLOAT3 worldScale;
+	if (parent)
+	{
+		XMStoreFloat3(&worldScale, XMVectorMultiply(XMLoadFloat3(&parent->GetScale()), XMLoadFloat3(&scale)));
+	}
+	else
+	{
+		worldScale = scale;
+	}
+	return worldScale;
 }
 
 XMFLOAT3 Transform::GetLocalScale()

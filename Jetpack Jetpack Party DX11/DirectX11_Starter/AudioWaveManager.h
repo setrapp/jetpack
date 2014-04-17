@@ -12,6 +12,7 @@
 
 using namespace std;
 
+//Obselete. Use SoundInstance
 class AudioWaveManger
 {
 public:
@@ -139,11 +140,11 @@ public:
 
 	void AudioWaveManger::Mute(bool mute)
 	{
-		for(int i = 0 ; i< instances.size(); i++)
+		/*for(int i = 0 ; i< instances.size(); i++)
 			if(!mute)
 				instances.at(i)->SetVolume(0);			
 			else
-				instances.at(i)->SetVolume(1);
+				instances.at(i)->SetVolume(1);*/
 	}
 private:
 	DirectX::WaveBank* waveBank;	

@@ -42,3 +42,8 @@ ShaderLight Light::GetShaderLight()
 
 	return shaderLight;
 }
+
+Light::~Light()
+{
+	delete transform;
+}

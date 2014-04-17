@@ -58,6 +58,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 {
+	
+	flag = true;
 	windowCaption = L"Jetpack Jetpack Party!";
 	windowWidth = 800;
 	windowHeight = 600;
@@ -65,7 +67,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	menu = new Menu(device, deviceContext);
 	camera = new ControllableCamera();
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
-	soundManager = new SoundManager();
+	mouseCursorVisibility = true;
 }
 
 DemoGame::~DemoGame()
@@ -75,16 +77,26 @@ DemoGame::~DemoGame()
 	ReleaseMacro(vsModelConstantBuffer);
 	ReleaseMacro(materialsAndLightsConstantBuffer);
 	ReleaseMacro(inputLayout);
-
 	delete light;
+
+	for(int i = 0 ; i < entities.size(); i++)
+		delete entities.at(i);
+	
+	
+	//delete light;
+	/*delete camera;
+	delete menu;
+	delete mouseLook;
+	delete fontRenderer;
+	delete spriteRenderer;*/
+
+	ReleaseMacro(vsModelConstantBuffer);
 }
 
 #pragma endregion
 
 #pragma region Initialization
 
-// Initializes the base class (including the window and D3D),
-// sets up our geometry and loads the shaders (among other things)
 bool DemoGame::Init()
 {
 	if( !DXGame::Init() )
@@ -103,26 +115,28 @@ bool DemoGame::Init()
 
 	AssetManager::Instance()->StoreMaterial(new Material());
 
-	// Set up buffers and such
-	CreateGeometryBuffers();
-	this->deltaTime = 0;
-
 	XMFLOAT3 cameraPosition;
-	XMStoreFloat3(&cameraPosition, XMVectorSet(0, 0, -20, 0));
+	XMStoreFloat3(&cameraPosition, XMVectorSet(0, 0, -10, 0));
 	XMFLOAT3 cameraTarget;
 	XMStoreFloat3(&cameraTarget, XMVectorSet(0, 0, 0, 0));
 	XMFLOAT3 cameraUp;
 	XMStoreFloat3(&cameraUp, XMVectorSet(0, 1, 0, 0));
-	
+
 	camera->LookAt(cameraPosition, cameraTarget, cameraUp);
+
+	// Set up buffers and such
+	CreateGeometryBuffers();
+	this->deltaTime = 0;
 
 	XMMATRIX W = XMMatrixIdentity();
 	for( Entity* e : entities)
 		XMStoreFloat4x4(&e->GetWorldMatrix(), XMMatrixTranspose(W));	
+	LoadSoundAssets();
+
+	mouseLook = new MouseLook(camera, XMFLOAT2(0.001f, 0.001f));
 
 	return true;
 }
-
 
 void DemoGame::CreateGeometryBuffers()
 {
@@ -170,8 +184,37 @@ void DemoGame::CreateGeometryBuffers()
 	gift->SetMaterial("gift");
 	gift->GetMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 	gift->LoadTexture(L"../Assets/RedGift.png");
+
+	Vertex floorVertices[] = 
+	{
+		{ XMFLOAT3(+100.0f, -10.0f, +100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 0) },
+		{ XMFLOAT3(-100.0f, -10.0f, -100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 1) },
+		{ XMFLOAT3(+100.0f, -10.0f, -100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 1) },		
+		{ XMFLOAT3(-100.0f, -10.0f, +100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 0) },
+	};
+
+	UINT floorIndices[] = { 0, 2, 1, 3, 0, 1 };
+	Entity* floor = new Entity();
+	floor->AddQuad(floorVertices, floorIndices);
+	floor->Finalize();
+	floor->transform->Translate(XMFLOAT3(-5, 5, 0));
+	entities.push_back(floor);
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(0.0f, 0.2f, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "floor");
+	floor->SetMaterial("floor");
+	
+	//camera->transform->SetParent(player->transform);
+	player->transform->Translate(XMFLOAT3(1, 0, 0));
+	XMFLOAT3 eye = camera->transform->GetTranslation();
+	XMStoreFloat3(&eye, XMLoadFloat3(&camera->transform->GetTranslation()) + (5 * XMLoadFloat3(&player->transform->GetUp())));
+	XMFLOAT3 target;
+	XMStoreFloat3(&target, XMLoadFloat3(&player->transform->GetTranslation()) + (3 * XMLoadFloat3(&player->transform->GetForward())));
+	XMFLOAT3 up = player->transform->GetUp();
+	camera->LookAt(eye, target, up);
 }
 
+#pragma endregion
+
+#pragma region Load Content
 // Loads shaders from compiled shader object (.cso) files, and uses the
 // vertex shader to create an input layout which is needed when sending
 // vertex data to the device
@@ -237,6 +280,16 @@ void DemoGame::LoadShadersAndInputLayout()
 #endif
 }
 
+void DemoGame::LoadSoundAssets()
+{
+	SoundId id;
+	id = SoundId::SAMPLEBG;
+	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/SampleBG.wav");
+	id = SoundId::SINK;
+	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sunk.wav");
+	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SAMPLEBG, true, true);
+	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SINK);
+}
 #pragma endregion
 
 #pragma region Window Resizing
@@ -262,18 +315,22 @@ XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
 bool scaleSmall = true;
 void DemoGame::UpdateScene(float dt)
 {
-	soundManager->Update();
+	if (GetAsyncKeyState(VK_ESCAPE))
+	{
+		PostQuitMessage(0);
+	}
+
+	assetManager->Instance()->GetSoundManager()->Update();
 	if(currentState == GameState::Playing)
 	{
-	this->deltaTime = dt;
+		this->deltaTime = dt;
 
-
-	for(Entity* e: entities)
+		for(Entity* e: entities)
 		{
 			e->Update(dt);
 		}
 
-		entities[1]->transform->Rotate(XMFLOAT3(0, 2 * dt, 0));
+		entities[1]->transform->Rotate(XMFLOAT3(0, 5 * dt, 0));	
 	}
 
 	camera->Update(dt, &vsModelConstantBufferData);	
@@ -282,8 +339,6 @@ void DemoGame::UpdateScene(float dt)
 	{
 		currentState = menu->Update(dt);
 	}
-
-
 
 
 	deviceContext->UpdateSubresource(
@@ -309,11 +364,17 @@ void DemoGame::DrawScene()
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
 		1.0f,
 		0);
+
 	if(currentState == GameState::Started)
 	{	
 		spriteRenderer->Begin();
 		menu->Render(deviceContext);
 		spriteRenderer->End();
+		if(!mouseCursorVisibility)
+		{
+			mouseCursorVisibility = true;
+			ShowCursor(mouseCursorVisibility);
+		}
 	}
 
 #ifndef OPTIMIZATION
@@ -325,8 +386,12 @@ void DemoGame::DrawScene()
 		1, 
 		&vsModelConstantBuffer);
 #endif
-	if (currentState == GameState::Playing) {
-
+	if (currentState == GameState::Playing) {		
+		/*if(mouseCursorVisibility)
+		{
+			mouseCursorVisibility = false;
+			ShowCursor(mouseCursorVisibility);
+		}*/
 		// Update light constant buffer for vertex and pixel shader.
 		materialsAndLightsConstantBufferData.light = light->GetShaderLight();
 		materialsAndLightsConstantBufferData.material = AssetManager::Instance()->GetMaterial("default")->GetShaderMaterial();
@@ -336,9 +401,25 @@ void DemoGame::DrawScene()
 		
 		for(Entity* e :entities) 
 		{
+			// Compute the inverse transpose of the entity's world matrix for use by normals in the shaders. Ignore translation.
+			// If the entity is scaled uniformly, cheat and use the world matrix because scales will work.
+			XMFLOAT3X3 rotationScale;
+			XMStoreFloat3x3(&rotationScale, XMLoadFloat4x4(&e->transform->GetWorldMatrix()));
+			XMFLOAT4X4 inverseTranspose;
+			if (e->transform->IsUniformScale())
+			{
+				XMStoreFloat4x4(&inverseTranspose, XMLoadFloat3x3(&rotationScale));
+			}
+			else
+			{
+				XMStoreFloat4x4(&inverseTranspose, XMMatrixTranspose(XMMatrixInverse(nullptr, XMLoadFloat3x3(&rotationScale))));
+			}
+			
+
 			// Create per primitive vertex shader constant buffer to hold matrices.
 			VertexShaderModelConstantBuffer perPrimitiveVSConstantBuffer;
 			perPrimitiveVSConstantBuffer.world = e->transform->GetWorldMatrix();
+			perPrimitiveVSConstantBuffer.inverseTranspose = inverseTranspose;
 			perPrimitiveVSConstantBuffer.view = vsModelConstantBufferData.view;
 			perPrimitiveVSConstantBuffer.projection = vsModelConstantBufferData.projection;
 
@@ -356,7 +437,7 @@ void DemoGame::DrawScene()
 			e->Draw();
 		}
 	}
-
+	flag = true;
 	HR(swapChain->Present(0, 0));
 }
 
@@ -370,6 +451,7 @@ void DemoGame::OnMouseDown(WPARAM btnState, int x, int y)
 {
 	prevMousePos.x = x;
 	prevMousePos.y = y;
+	
 	menu->ProcessMouseInput(btnState, x, y);
 	SetCapture(hMainWnd);
 }
@@ -379,20 +461,23 @@ void DemoGame::OnMouseUp(WPARAM btnState, int x, int y)
 	ReleaseCapture();
 }
 
+
 void DemoGame::OnMouseMove(WPARAM btnState, int x, int y)
 {
-	prevMousePos.x = x;
-	prevMousePos.y = y;
+	if(flag)
+	{
+		flag = false;
+		prevMousePos.x = x;
+		prevMousePos.y = y;
+		if(currentState == Playing)
+		{
+			mouseLook->MouseMove(btnState, x, y);		
+		}
+	}
 }
 
 void DemoGame::OnMouseWheel(WPARAM btnState, int x, int y)
 {
-	float rot = (float)GET_WHEEL_DELTA_WPARAM(btnState);
-	if (rot <= 0)
-		rot = +0.085f;
-	else
-		rot = -0.085f;
-
-	trans.z += rot;
+	//float rot = (float)GET_WHEEL_DELTA_WPARAM(btnState);	
 }
 #pragma endregion

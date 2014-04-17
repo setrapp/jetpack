@@ -13,6 +13,6 @@ void Camera::LookAt(XMFLOAT3 eye, XMFLOAT3 lookAt, XMFLOAT3 up)
 
 void Camera::Update(float dt, VertexShaderModelConstantBuffer* vsConstantBufferdata)
 {		
-	vsConstantBufferdata->view			= transform->GetWorldMatrix();
-	vsConstantBufferdata->projection	= projection;
+	XMStoreFloat4x4(&vsConstantBufferdata->view, XMMatrixInverse(nullptr, XMLoadFloat4x4(&transform->GetWorldMatrix())));
+	vsConstantBufferdata->projection = projection;
 }

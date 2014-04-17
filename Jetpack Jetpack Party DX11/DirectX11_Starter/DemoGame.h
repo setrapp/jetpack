@@ -1,6 +1,5 @@
 #ifndef _DEMOGAME_H
 #pragma once
-
 #include "FontRenderer.h"
 #include "Sprite.h"
 #include "Vertex.h"
@@ -18,6 +17,8 @@
 #include "AssetManager.h"
 #include "Light.h"
 #include "SoundManager.h"
+#include "MouseLook.h"
+#include "Debug.h"
 
 using namespace DirectX;
 
@@ -49,8 +50,10 @@ private:
 	// Initialization for our "game" demo
 	void CreateGeometryBuffers();
 	void LoadShadersAndInputLayout();
+	void LoadSoundAssets();
 
 private:
+
 	float deltaTime;
 	AssetManager* assetManager;
 	// Our basic shaders for this example
@@ -77,11 +80,13 @@ private:
 	//DirectX::XMFLOAT4X4 viewMatrix;
 	//DirectX::XMFLOAT4X4 projectionMatrix;
 
-
 	ControllableCamera* camera;
 	GameState currentState;
 	Menu* menu;
-	SoundManager* soundManager;
+	MouseLook* mouseLook;
+
+	bool mouseCursorVisibility;
+	bool flag;
 };
 
 #endif
