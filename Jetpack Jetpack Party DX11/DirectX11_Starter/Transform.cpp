@@ -42,7 +42,10 @@ void Transform::Translate(XMFLOAT3 translation)
 void Transform::Rotate(XMFLOAT3 rotation)
 {
 	XMFLOAT3X3 rotationMatrix;
-	XMStoreFloat3x3(&rotationMatrix, XMMatrixRotationX(rotation.x) * XMMatrixRotationY(rotation.y) * XMMatrixRotationZ(rotation.z));
+	XMStoreFloat3x3(&rotationMatrix, XMMatrixIdentity());
+	//XMStoreFloat3x3(&rotationMatrix, XMMatrixMultiply(XMLoadFloat3x3(&rotationMatrix), XMMatrixRotationZ(rotation.z)));
+	XMStoreFloat3x3(&rotationMatrix, XMMatrixMultiply(XMLoadFloat3x3(&rotationMatrix), XMMatrixRotationY(rotation.y)));
+	XMStoreFloat3x3(&rotationMatrix, XMMatrixMultiply(XMLoadFloat3x3(&rotationMatrix), XMMatrixRotationX(rotation.x)));
 	Rotate(rotationMatrix);
 }
 
@@ -50,7 +53,7 @@ void Transform::Rotate(XMFLOAT3 rotation)
 void Transform::Rotate(XMFLOAT3X3 rotation)
 {
 	XMMATRIX rotationMatrix = XMLoadFloat3x3(&rotation);
-	XMStoreFloat3x3(&this->rotation,  XMMatrixMultiply(XMLoadFloat3x3(&this->rotation), rotationMatrix));
+	XMStoreFloat3x3(&this->rotation, XMMatrixMultiply(XMLoadFloat3x3(&this->rotation), rotationMatrix));
 	UpdateLocalAndWorld();
 		
 	XMStoreFloat3(&right, XMVector3Transform(XMLoadFloat3(&right), rotationMatrix));

@@ -51,19 +51,19 @@ void Player::CheckInput(float dt)
 
 	if(GetAsyncKeyState('A'))
 	{
-		transform->Rotate(XMFLOAT3(0, -1 * dt, 0));
+		transform->Rotate(XMFLOAT3(0, -10 * dt, 0));
 	}
 	if(GetAsyncKeyState('D'))
 	{
-		transform->Rotate(XMFLOAT3(0, 1 * dt, 0));
+		transform->Rotate(XMFLOAT3(0, 10 * dt, 0));
 	}
 	if(GetAsyncKeyState('W'))
 	{
-		transform->Rotate(XMFLOAT3(-1 * dt, 0 , 0));
+		transform->Rotate(XMFLOAT3(-10 * dt, 0 , 0));
 	}
 	if(GetAsyncKeyState('S'))
 	{
-		transform->Rotate(XMFLOAT3(1 * dt, 0, 0));
+		transform->Rotate(XMFLOAT3(10 * dt, 0, 0));
 	}
 	if(GetAsyncKeyState('Q'))
 	{

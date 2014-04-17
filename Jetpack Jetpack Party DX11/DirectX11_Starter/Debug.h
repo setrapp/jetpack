@@ -17,12 +17,20 @@ public:
 
 	static string ToString(float t)
 	{		
-		return to_string(t);
+		std::stringstream ss;
+		ss << "\n";
+		ss << t;
+		ss << "\n";
+		return ss.str();
 	}
 
 	static string ToString(double t)
 	{		
-		return to_string(t);
+		std::stringstream ss;
+		ss << "\n";
+		ss << t;
+		ss << "\n";
+		return ss.str();
 	}
 
 	static string ToString(XMFLOAT4 v)
