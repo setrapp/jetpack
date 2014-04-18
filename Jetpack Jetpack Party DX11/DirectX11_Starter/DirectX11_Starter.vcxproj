@@ -141,6 +141,7 @@
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="XController.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\SimplePixelShader.hlsl">
