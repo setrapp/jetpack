@@ -70,16 +70,35 @@ void Transform::Scale(XMFLOAT3 scale)
 
 void Transform::LookAt(XMFLOAT3 eye, XMFLOAT3 lookAt, XMFLOAT3 up)
 {
+	XMVECTOR newForward = XMVector3Normalize(XMVectorSubtract(XMLoadFloat3(&lookAt), XMLoadFloat3(&eye)));
+	XMVECTOR newUp = XMVector3Normalize(XMLoadFloat3(&up));
+	XMVECTOR newForwardDotUp = XMVector3Dot(newForward, newUp);
+	XMFLOAT3 product;
+	XMStoreFloat3(&product, XMVector3Dot(newForward, newUp));
+	if (product.x >= 1.0f)
+	{
+		newUp = XMVector3Normalize(XMVector3Cross(newForward, XMLoadFloat3(&right)));
+	}
+	XMStoreFloat3(&up, newUp);
+
 	if (parent)
 	{
 		eye = parent->InverseTransformPoint(eye);
 		lookAt = parent->InverseTransformPoint(lookAt);
 		up = parent->InverseTransformDirection(up);
 	}
+
+	XMFLOAT4X4 test;
+	XMStoreFloat4x4(&test, XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&lookAt), XMLoadFloat3(&up)));
+
 	XMStoreFloat4x4(&localMatrix, XMMatrixInverse(nullptr, XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&lookAt), XMLoadFloat3(&up))));
 	translation = XMFLOAT3(localMatrix._41, localMatrix._42, localMatrix._43);
 	XMStoreFloat3x3(&rotation, XMLoadFloat4x4(&localMatrix));
 	UpdateLocalAndWorld();
+
+	this->right = XMFLOAT3(test._11, test._21, test._31);
+	this->up = XMFLOAT3(test._12, test._22, test._32);
+	this->forward = XMFLOAT3(test._13, test._23, test._33);
 }
 
 XMFLOAT4X4 Transform::GetWorldMatrix()

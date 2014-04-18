@@ -47,8 +47,8 @@ public :
 			XMFLOAT3 up = activeCamera->transform->GetUp();
 
 			activeCamera->transform->Rotate(activeCamera->transform->InverseTransformDirection(XMFLOAT3(deltaRotation.y * this->speed.y, 0, 0)));
-			eye = /*activeCamera->transform->InverseTransformPoint(*/activeCamera->transform->GetTranslation();//);
-			XMStoreFloat3(&lookAt, XMVectorAdd(XMLoadFloat3(&eye), XMLoadFloat3(&activeCamera->transform->InverseTransformDirection(activeCamera->transform->GetForward()))));
+			eye = activeCamera->transform->GetTranslation();
+			XMStoreFloat3(&lookAt, XMVectorAdd(XMLoadFloat3(&eye), XMLoadFloat3(&activeCamera->transform->GetForward())));
 			up = activeCamera->transform->GetUp();
 			activeCamera->transform->LookAt(eye, lookAt, up); 
 			//activeCamera->transform->Rotate(activeCamera->transform->InverseTransformDirection(XMFLOAT3(0, deltaRotation.x * this->speed.x, 0)));
