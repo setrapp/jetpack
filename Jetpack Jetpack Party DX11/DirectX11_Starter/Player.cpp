@@ -35,20 +35,50 @@ void Player::Update(float dt)
 
 	while(!clientEntity->networkMessages.empty()){
 
-		std::vector<std::string> stringParts;
+		
 		string readData= clientEntity->networkMessages.front();
 		string curString;
 		Entity* cube;
+		std::vector<std::string> stringParts;
 		std::istringstream stringsplitter(readData);
 		while(std::getline(stringsplitter,curString, '\n')){
 			stringParts.push_back(curString);
 		}
 		int toSwitch= atoi(stringParts.at(0).c_str());
 		switch(toSwitch){
+			//add all players if you are entering the games
 		case 1:
+			for(int i=1; i<(int)stringParts.size()-1; i+=2){
+				int targetSocket= atoi(stringParts.at(i).c_str());
+
+				string unparsedPosition= stringParts.at(i+1);
+
+				AssetManager::Instance()->CreateAndStoreMesh("../Assets/cube.obj", "cube");
+				cube = new Entity();
+				cube->socketNumber= targetSocket;
+				cube->AddMesh(AssetManager::Instance()->GetMesh("cube"));
+				cube->transform->Translate(XMFLOAT3(-5, 0, 0));
+				cube->transform->SetParent(this->transform);
+				networkedEntities[cube->socketNumber]=cube;
+				game->addedEntities.push(cube);
+
+				std::vector<std::string> vectorParts;
+
+				string vectorString;
+				std::istringstream stringsplitter(unparsedPosition);
+				while(std::getline(stringsplitter,vectorString, ',')){
+					vectorParts.push_back(vectorString);
+				}
+
+				XMFLOAT3 newVector= XMFLOAT3(strtod(vectorParts.at(0).c_str(),0),strtod(vectorParts.at(1).c_str(),0),strtod(vectorParts.at(2).c_str(),0));
+				XMFLOAT3 currentTransform=networkedEntities[targetSocket]->transform->GetLocalTranslation();
+				//calculates how much to translate the body in question
+				networkedEntities[targetSocket]->transform->Translate(XMFLOAT3(newVector.x-currentTransform.x,newVector.y-currentTransform.y,newVector.z-currentTransform.z));
+			}
+
 
 			break;
-			//a new player has been added
+			//adding this current player
 		case 2:
 			AssetManager::Instance()->CreateAndStoreMesh("../Assets/cube.obj", "cube");
 			cube = new Entity();

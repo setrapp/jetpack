@@ -111,38 +111,54 @@ void ClientConnectionEntity::listenForResponse(void* stuff){
 		}
 		iResult = recv(connectedSocket, receiveBuffer, buflen, 0);
 		if (iResult > 0){
-			if(counter==0){
-				ClientConnectionEntity::socketNum=atoi (receiveBuffer);
-				cout << "MY SOCKET NUMBER IS: " << ClientConnectionEntity::socketNum << '\n';
-					
-			}
-			else{
 
-				cout << "client received: " << (char*)receiveBuffer << '\n';
-				string toParse(receiveBuffer);
-				if(toParse.find("SOCKET ADDED: ",0)!=-1){
-					string socketAddedStr= "SOCKET ADDED: ";
-					toParse = toParse.substr(socketAddedStr.length());
-					int value = atoi(toParse.c_str());
-					if(value != ClientConnectionEntity::socketNum){
-						string toPush= "2";
-						toPush+= "\n";
-						ostringstream ss;
-						ss<< value;
-						toPush+= ss.str();
-						
-						networkMessages.push(toPush);
-					}
+			string toParse(receiveBuffer);
+			string curString;
+			cout << "client received: " << (char*)receiveBuffer << '\n';
+			if(toParse.find("ADDED. SOCKET NUMBER IS: ",0)!=-1){
+				string socketAddedStr="ADDED. SOCKET NUMBER IS: ";
+				toParse = toParse.substr(socketAddedStr.length());
+				std::vector<std::string> stringParts;
+				std::istringstream stringsplitter(toParse);
+				while(std::getline(stringsplitter,curString, '\n')){
+					stringParts.push_back(curString);
 				}
-				else if(toParse.find("MOVEMENT UPDATE: ",0)!=-1){
-					string movementUpdateStr= "MOVEMENT UPDATE: ";
-					toParse = toParse.substr(movementUpdateStr.length());
-					string toPush= "3";
+				string socketString=(string)stringParts.at(0);
+				ClientConnectionEntity::socketNum=atoi(socketString.c_str());
+				string socketNumLengthEndLn = to_string(ClientConnectionEntity::socketNum);
+				socketNumLengthEndLn +="\n";
+				toParse = toParse.substr(socketNumLengthEndLn.length());
+				string toPush= "1";
+				toPush+= "\n";
+				ostringstream ss;
+				ss<< toParse;
+				toPush+= ss.str();
+						
+				networkMessages.push(toPush);
+			}
+			else if(toParse.find("SOCKET ADDED: ",0)!=-1){
+				string socketAddedStr= "SOCKET ADDED: ";
+				toParse = toParse.substr(socketAddedStr.length());
+				int value = atoi(toParse.c_str());
+				if(value != ClientConnectionEntity::socketNum){
+					string toPush= "2";
 					toPush+= "\n";
-					toPush+= toParse;
+					ostringstream ss;
+					ss<< value;
+					toPush+= ss.str();
+						
 					networkMessages.push(toPush);
 				}
 			}
+			else if(toParse.find("MOVEMENT UPDATE: ",0)!=-1){
+				string movementUpdateStr= "MOVEMENT UPDATE: ";
+				toParse = toParse.substr(movementUpdateStr.length());
+				string toPush= "3";
+				toPush+= "\n";
+				toPush+= toParse;
+				networkMessages.push(toPush);
+			}
+			
 			counter++;
 		}    
 		else if (iResult == 0){
