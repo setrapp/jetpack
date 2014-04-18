@@ -31,9 +31,13 @@ GameState Menu::Update(float dt)
 {
 	GameState currstate;
 	if(newGameFlag)
+	{
 		currstate = GameState::Playing;
+	}
 	else
-	currstate = GameState::Started;
+	{
+		currstate = GameState::Started;
+	}
 	return currstate;	
 }
 

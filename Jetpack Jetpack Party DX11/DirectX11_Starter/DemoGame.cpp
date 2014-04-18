@@ -133,7 +133,7 @@ bool DemoGame::Init()
 		XMStoreFloat4x4(&e->GetWorldMatrix(), XMMatrixTranspose(W));	
 	LoadSoundAssets();
 
-	//mouseLook = new MouseLook(camera, XMFLOAT2(0.001f, 0.001f));
+	mouseLook = new MouseLook(camera, XMFLOAT2(0.001f, 0.001f));
 
 	return true;
 }
@@ -153,14 +153,15 @@ void DemoGame::CreateGeometryBuffers()
 	player->Finalize();
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
 	player->SetMaterial("camera");
-	mouseLook = new MouseLook(player, XMFLOAT2(0.001f, 0.001f));
+	//mouseLook = new MouseLook(player, XMFLOAT2(0.001f, 0.001f));
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
 
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/cube.obj", "cube");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicJetMan.obj", "jetman");
 	Entity* cube = new Entity();
-	cube->AddModel(AssetManager::Instance()->GetModel("cube"));
+	cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
 	cube->Finalize();
 	cube->transform->Translate(XMFLOAT3(5, 0, 0));
 	entities.push_back(cube);
@@ -338,7 +339,12 @@ void DemoGame::UpdateScene(float dt)
 
 	if(currentState == GameState::Started)
 	{
-		currentState = menu->Update(dt);
+		GameState newState = menu->Update(dt);
+		if (currentState != newState)
+		{
+			mouseLook->ResetCursor();
+			currentState = newState;
+		}
 	}
 
 
