@@ -15,15 +15,17 @@ using namespace DirectX;
 class MouseLook
 {
 public :
-	Transform* looker;
+	//Camera* activeCamera;
+	Transform* activeCamera;
 	XMFLOAT3 rotationValue;
 	XMFLOAT2 speed;
 
-	MouseLook(Transform* looker, XMFLOAT2 speed) {
-		this->looker = looker;
+	//MouseLook(ControllableCamera* cam, XMFLOAT2 speed) {
+	MouseLook(Transform* cam, XMFLOAT2 speed) {
+		activeCamera = cam;
 		rotationValue = XMFLOAT3(0, 0, 0);		
 		this->speed = speed;
-		this->looker->SetLocalRotation(XMFLOAT3());
+		cam->Rotate(XMFLOAT3());
 	}
 
 	void MouseLook::Update(float dt) {
@@ -32,30 +34,32 @@ public :
 
 	XMFLOAT3 MouseLook::MouseMove(WPARAM btnState, float x, float y) {
 		XMFLOAT2 deltaRotation = XMFLOAT2(x - screenWidth / 2, y - screenHeight / 2);
+		if (deltaRotation.x != 0 || deltaRotation.y != 0) 
+		{
+			rotationValue = XMFLOAT3(rotationValue.x + (deltaRotation.y * this->speed.y), rotationValue.y + (deltaRotation.x * this->speed.x), 0);
+			
+			// Keep x rotation between 0 and (+/-)360
+			if (rotationValue.x >= 2 * PI)
+			{
+				rotationValue.x -= 2 * PI;
+			} 
+			else if (rotationValue.x <= -2 * PI)
+			{
+				rotationValue.x += 2 * PI;
+			}
 
-		rotationValue = XMFLOAT3(rotationValue.x + (deltaRotation.y * this->speed.y), rotationValue.y + (deltaRotation.x * this->speed.x), 0);
-		
-		// Keep x rotation between 0 and (+/-)360
-		if (rotationValue.x >= 2 * PI)
-		{
-			rotationValue.x -= 2 * PI;
-		} 
-		else if (rotationValue.x <= -2 * PI)
-		{
-			rotationValue.x += 2 * PI;
-		}
+			// Keep y rotation between 0 and (+/-)360
+			if (rotationValue.y >= 2 * PI)
+			{
+				rotationValue.y -= 2 * PI;
+			}
+			else if (rotationValue.y <= -2 * PI)
+			{
+				rotationValue.y += 2 * PI;
+			}
 
-		// Keep y rotation between 0 and (+/-)360
-		if (rotationValue.y >= 2 * PI)
-		{
-			rotationValue.y -= 2 * PI;
+			activeCamera->SetLocalRotation(rotationValue);
 		}
-		else if (rotationValue.y <= -2 * PI)
-		{
-			rotationValue.y += 2 * PI;
-		}
-
-		looker->SetLocalRotation(rotationValue);
 		
 		ResetCursor();
 

@@ -133,7 +133,7 @@ bool DemoGame::Init()
 		XMStoreFloat4x4(&e->GetWorldMatrix(), XMMatrixTranspose(W));	
 	LoadSoundAssets();
 
-	//mouseLook = new MouseLook(camera, XMFLOAT2(0.001f, 0.001f));
+	//mouseLook = new MouseLook(camera->transform, XMFLOAT2(0.001f, 0.001f));
 
 	return true;
 }
@@ -148,9 +148,9 @@ void DemoGame::CreateGeometryBuffers()
 	// Attempt to load model
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
 	Player* player = new Player();
-	player->AddModel(AssetManager::Instance()->GetModel("camera"));
+	//player->AddModel(AssetManager::Instance()->GetModel("camera"));
 	entities.push_back(player);
-	player->Finalize();
+	//player->Finalize();
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
 	player->SetMaterial("camera");
 	mouseLook = new MouseLook(player->transform, XMFLOAT2(0.001f, 0.001f));
@@ -163,10 +163,12 @@ void DemoGame::CreateGeometryBuffers()
 	Entity* cube = new Entity();
 	cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
 	cube->Finalize();
-	cube->transform->Translate(XMFLOAT3(5, 0, 0));
+	cube->transform->Translate(XMFLOAT3(0, -5, 0));
+	cube->transform->Rotate(XMFLOAT3(0, PI / 2, 0));
 	entities.push_back(cube);
-	cube->transform->SetParent(emptyEntity->transform);
-	emptyEntity->transform->SetParent(player->transform);
+	cube->transform->SetParent(player->transform);
+	//cube->transform->SetParent(emptyEntity->transform);
+	//emptyEntity->transform->SetParent(player->transform);
 
 	Vertex vertices[] = 
 	{
