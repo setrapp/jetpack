@@ -133,7 +133,7 @@ bool DemoGame::Init()
 		XMStoreFloat4x4(&e->GetWorldMatrix(), XMMatrixTranspose(W));	
 	LoadSoundAssets();
 
-	mouseLook = new MouseLook(camera, XMFLOAT2(0.001f, 0.001f));
+	//mouseLook = new MouseLook(camera, XMFLOAT2(0.001f, 0.001f));
 
 	return true;
 }
@@ -153,7 +153,7 @@ void DemoGame::CreateGeometryBuffers()
 	player->Finalize();
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
 	player->SetMaterial("camera");
-	//mouseLook = new MouseLook(player, XMFLOAT2(0.001f, 0.001f));
+	mouseLook = new MouseLook(player, XMFLOAT2(0.001f, 0.001f));
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
@@ -204,7 +204,7 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(0.0f, 0.2f, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "floor");
 	floor->SetMaterial("floor");
 	
-	//camera->transform->SetParent(player->transform);
+	camera->transform->SetParent(player->transform);
 	player->transform->Translate(XMFLOAT3(1, 0, 0));
 	XMFLOAT3 eye = camera->transform->GetTranslation();
 	XMStoreFloat3(&eye, XMLoadFloat3(&camera->transform->GetTranslation()) + (5 * XMLoadFloat3(&player->transform->GetUp())));
@@ -342,6 +342,7 @@ void DemoGame::UpdateScene(float dt)
 		GameState newState = menu->Update(dt);
 		if (currentState != newState)
 		{
+			ShowCursor(false);
 			mouseLook->ResetCursor();
 			currentState = newState;
 		}

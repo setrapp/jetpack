@@ -15,13 +15,13 @@ using namespace DirectX;
 class MouseLook
 {
 public :
-	Camera* activeCamera;
-	//Player* activeCamera;
+	//Camera* activeCamera;
+	Player* activeCamera;
 	XMFLOAT3 rotationValue;
 	XMFLOAT2 speed;
 
-	MouseLook(ControllableCamera* cam, XMFLOAT2 speed) {
-	//MouseLook(Player* cam, XMFLOAT2 speed) {
+	//MouseLook(ControllableCamera* cam, XMFLOAT2 speed) {
+	MouseLook(Player* cam, XMFLOAT2 speed) {
 		activeCamera = cam;
 		rotationValue = XMFLOAT3(0, 0, 0);		
 		this->speed = speed;
