@@ -153,7 +153,7 @@ void DemoGame::CreateGeometryBuffers()
 	player->Finalize();
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
 	player->SetMaterial("camera");
-	mouseLook = new MouseLook(player, XMFLOAT2(0.001f, 0.001f));
+	mouseLook = new MouseLook(player->transform, XMFLOAT2(0.001f, 0.001f));
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
