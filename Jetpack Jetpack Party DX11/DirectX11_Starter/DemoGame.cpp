@@ -68,6 +68,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	camera = new ControllableCamera();
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
 	mouseCursorVisibility = true;
+	ipMan = new InputManager(INPUTMODES::XCONTROLLER);
 }
 
 DemoGame::~DemoGame()
@@ -153,7 +154,7 @@ void DemoGame::CreateGeometryBuffers()
 	//player->Finalize();
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
 	player->SetMaterial("camera");
-	mouseLook = new MouseLook(player->transform, XMFLOAT2(0.001f, 0.001f));
+	mouseLook = new MouseLook(player->transform, XMFLOAT2(0.01f, 0.01f));
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
@@ -336,6 +337,11 @@ void DemoGame::UpdateScene(float dt)
 		}
 
 		entities[1]->transform->Rotate(XMFLOAT3(0, 5 * dt, 0));	
+
+		ipMan->GetXKeyDown(KeyType::BACKWARD);
+		ipMan->GetXKeyDown(KeyType::FORWARD);
+		ipMan->GetXKeyDown(KeyType::RIGHT);
+		ipMan->GetXKeyDown(KeyType::LEFT);
 	}
 
 	camera->Update(dt, &vsModelConstantBufferData);	
@@ -449,6 +455,8 @@ void DemoGame::DrawScene()
 		}
 	}
 	flag = true;
+
+	
 	HR(swapChain->Present(0, 0));
 }
 
