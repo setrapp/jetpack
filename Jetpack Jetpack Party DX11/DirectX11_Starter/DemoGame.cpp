@@ -293,6 +293,7 @@ void DemoGame::LoadSoundAssets()
 	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sunk.wav");
 	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SAMPLEBG, true, true);
 	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SINK);
+	assetManager->Instance()->GetSoundManager()->Mute(true);
 }
 #pragma endregion
 
