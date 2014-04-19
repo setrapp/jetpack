@@ -89,6 +89,7 @@
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ClientConnectionEntity.cpp" />
     <ClCompile Include="ControllableCamera.cpp" />
     <ClCompile Include="DemoGame.cpp" />
     <ClCompile Include="DXConnection.cpp" />
@@ -111,6 +112,7 @@
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="AudioWaveManager.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ClientConnectionEntity.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="ControllableCamera.h" />
     <ClInclude Include="Debug.h" />

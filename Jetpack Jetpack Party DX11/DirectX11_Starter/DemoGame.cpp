@@ -20,7 +20,7 @@
 //    - This was changed in Project Properties > Config Properties > Debugging > Working Directory
 //
 // ----------------------------------------------------------------------------
-
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <d3dcompiler.h>
 #include "DemoGame.h"
@@ -320,6 +320,13 @@ void DemoGame::UpdateScene(float dt)
 	if(currentState == GameState::Playing)
 	{
 		this->deltaTime = dt;
+
+		while (!AssetManager::Instance()->addedEntities.empty())
+		{
+			entities.push_back(AssetManager::Instance()->addedEntities.front());
+			AssetManager::Instance()->addedEntities.pop();
+		}
+
 
 		for(Entity* e: entities)
 		{

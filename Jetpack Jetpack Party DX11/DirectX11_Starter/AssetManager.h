@@ -5,7 +5,9 @@
 
 #include <map>
 #include <string>
+#include <queue>
 #include "Common.h"
+#include "Entity.h"
 #include "Material.h"
 #include "Mesh.h"
 #include "ModelLoad\MLModelViewer.h"
@@ -44,6 +46,7 @@ public:
 	Model* GetModel(string name = "default");
 	SoundManager* GetSoundManager();
 	static AssetManager* Instance();
+	std::queue<Entity*> addedEntities;
 
 private:
 	static AssetManager* instance;

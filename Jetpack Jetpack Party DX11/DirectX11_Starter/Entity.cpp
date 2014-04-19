@@ -1,4 +1,5 @@
 #pragma once 
+#define WIN32_LEAN_AND_MEAN
 #include "Entity.h"
 #include "Toolkit\Inc\WICTextureLoader.h"
 #include <Windows.h>
@@ -16,6 +17,7 @@ Entity::Entity()
 	totalMeshes = 0;
 	transform = new Transform();
 	material = AssetManager::Instance()->GetMaterial();
+	socketNumber=0;
 }
 
 
