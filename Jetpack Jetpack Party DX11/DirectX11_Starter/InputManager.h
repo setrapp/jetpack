@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <map>
 #include "Debug.h"
+#include "XInputValues.h"
 
 //Max int value in XINPUTVALUES + 1
 #define xMap 20 + 1
@@ -43,32 +44,9 @@ typedef enum SpecialKeys {
 	BRAKE,
 	//Gamepad X or E
 	COLLECT,
-
 	ACCELERATE,
 };
 
-typedef enum XINPUTVALUES {
-	LX = 1,
-	LY = 2,
-	RX = 3,
-	RY = 4,
-	LT = 5,
-	RT = 6,
-	_DPAD_UP = 7,
-	_DPAD_DOWN = 8,
-	_DPAD_LEFT = 9,
-	_DPAD_RIGHT = 10,
-	_START= 11,
-	_BACK = 12,
-	_LEFT_THUMB = 13,
-	_RIGHT_THUMB = 14,
-	_LEFT_SHOULDER =15,
-	_RIGHT_SHOULDER=16,
-	_A =17,
-	_B =18,
-	_X =19,
-	_Y =20,
-};
 
 class InputManager
 {
