@@ -128,6 +128,11 @@ void ClientConnectionEntity::listenForResponse(void* stuff){
 				string socketNumLengthEndLn = to_string(ClientConnectionEntity::socketNum);
 				socketNumLengthEndLn +="\n";
 				toParse = toParse.substr(socketNumLengthEndLn.length());
+
+
+				string currentPlayersString= "CURRENT PLAYERS: ";
+				toParse = toParse.substr(currentPlayersString.length());
+
 				string toPush= "1";
 				toPush+= "\n";
 				ostringstream ss;

@@ -115,7 +115,7 @@ void Player::Update(float dt)
 
 void Player::CheckInput(float dt)
 {
-
+	networkSendTimer-=dt;
 	bool cubeInputReceived= false;
 	if(GetAsyncKeyState(VK_UP) || GetAsyncKeyState('W'))
 	{
@@ -232,7 +232,7 @@ void Player::CheckInput(float dt)
 
 	if(clientEntity->isConnected && networkSendTimer<0.0f && cubeInputReceived){
 		XMFLOAT3 curTransform= networkedCube->transform->GetLocalTranslation();
-		networkSendTimer=0.5f;
+		networkSendTimer=0.2f;
 		std::ostringstream ss1;
 		ss1 << curTransform.x;
 		std::string s1(ss1.str());
@@ -243,7 +243,7 @@ void Player::CheckInput(float dt)
 		ss3 << curTransform.z;
 		std::string s3(ss3.str());
 
-		//clientEntity->sendMessage(s1+","+ s2+","+ s3);
+		clientEntity->sendMessage(s1+","+ s2+","+ s3);
 
 	}
 }
