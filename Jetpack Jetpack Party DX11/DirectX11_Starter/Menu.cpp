@@ -49,4 +49,8 @@ void Menu::Render(ID3D11DeviceContext* deviceContext)
 
 Menu::~Menu(void)
 {
+	delete newGameArea;
+	delete exitGameArea;
+	delete fontRenderer;
+	delete spriteBatch;
 }

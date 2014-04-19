@@ -43,6 +43,9 @@ public:
 	void DrawScene(); 
 	void FixedUpdate();
 
+	//Locked at 60FPS
+	void FixedUpdate();
+
 	// For handing mouse input
 	void OnMouseDown(WPARAM btnState, int x, int y);
 	void OnMouseUp(WPARAM btnState, int x, int y);
@@ -90,6 +93,7 @@ private:
 	InputManager* inputManager;
 	bool mouseCursorVisibility;
 	bool flag;
+	InputManager* ipMan;
 };
 
 #endif

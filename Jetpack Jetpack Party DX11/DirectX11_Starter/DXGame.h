@@ -8,8 +8,8 @@
 // -------------------------------------------------------------
 
 #pragma once
-#define screenWidth 1920	
-#define screenHeight 1017
+#define screenWidth 800	
+#define screenHeight 600
 
 #include "Common.h"
 #include "Windows.h"
@@ -39,6 +39,7 @@ public:
 	virtual void OnResize(); 
 	virtual void UpdateScene(float dt)=0;
 	virtual void DrawScene()=0; 
+	virtual void FixedUpdate() = 0;
 	virtual LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	// Convenience overrides for handling mouse input.
@@ -95,6 +96,8 @@ protected:
 	MEMORYSTATUSEX memInfo;
 	LONG64 elapsedTime;
 
+	//In milliseconds
+	LONG64 elapsedTime;
 public :
 	static bool sysEvent;
 };

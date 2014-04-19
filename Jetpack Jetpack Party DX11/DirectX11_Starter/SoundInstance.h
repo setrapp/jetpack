@@ -32,13 +32,13 @@ public :
 		delete effect.release();
 	}
 
-	void SoundInstance::Play(bool loop)
+	inline void SoundInstance::Play(bool loop)
 	{
 		if(effect)
 			effect->Play(loop);
 	}
 
-	void SoundInstance::SafePlay(bool loop)
+	inline void SoundInstance::SafePlay(bool loop)
 	{
 		if(effect)
 		{
@@ -47,7 +47,7 @@ public :
 		}
 	}
 
-	void SoundInstance::Stop()
+	inline void SoundInstance::Stop()
 	{
 		if(effect)
 		{
@@ -70,7 +70,7 @@ public :
 	}
 
 	//Wont work right now
-	void SoundInstance::Enable3D(XMFLOAT4 ListnerPosition, XMFLOAT4 EmitterPosition)
+	inline void SoundInstance::Enable3D(XMFLOAT4 ListnerPosition, XMFLOAT4 EmitterPosition)
 	{
 		if(effect)
 		{
@@ -90,7 +90,7 @@ public :
 		}
 	}
 
-	void SoundInstance::Mute(bool mute)
+	inline void SoundInstance::Mute(bool mute)
 	{
 		if(effect)
 		{

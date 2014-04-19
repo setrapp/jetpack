@@ -149,6 +149,5 @@ public:
 private:
 	DirectX::WaveBank* waveBank;	
 	std::map<int, SoundEffectInstance*> instances;
-	AUDIO_ENGINE_FLAGS flags;
-	
+	AUDIO_ENGINE_FLAGS flags;	
 };

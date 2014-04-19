@@ -35,7 +35,7 @@ public:
 		0);
 	};
 
-	inline DirectX::SpriteBatch* SpriteRenderer::GetSpriteBatch()
+	inline DirectX::SpriteBatch* SpriteRenderer::GetSpriteBatch() const
 	{
 		return this->spriteBatch;
 	}

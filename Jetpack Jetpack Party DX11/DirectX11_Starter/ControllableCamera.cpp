@@ -9,8 +9,7 @@ ControllableCamera::ControllableCamera()
 
 void ControllableCamera::Update(float dt, VertexShaderModelConstantBuffer* vsConstantBufferdata)
 {
-	CheckInput(dt);
-	
+	CheckInput(dt);	
 
 	// Slow the character a bit so that it comes to a nice stop over time.
 	XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), groundSpeedDampening));

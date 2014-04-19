@@ -22,11 +22,3 @@ UINT* Mesh::GetIndices(short* total)
 	*total = totalIndices;
 	return indices;
 }
-		
-
-void Update(float dt);
-
-void Mesh::Draw()
-{	
-	
-}
