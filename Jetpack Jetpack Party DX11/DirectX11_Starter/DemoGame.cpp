@@ -31,7 +31,6 @@
 #include <comdef.h>
 #include <iostream>
 #include "Player.h"
-#include "Debug.h"
 
 #pragma region Win32 Entry Point (WinMain)
 
@@ -50,8 +49,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 	if( !game.Init() )
 		return 0;	
 
-	
-
 	return game.Run();
 }
 
@@ -61,8 +58,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 {
-	//ipMan = new InputManager((INPUTMODES)0);
-	ipMan = new InputManager(INPUTMODES::XCONTROLLER);
+	
 	flag = true;
 	windowCaption = L"Jetpack Jetpack Party!";
 	windowWidth = 800;
@@ -137,7 +133,7 @@ bool DemoGame::Init()
 		XMStoreFloat4x4(&e->GetWorldMatrix(), XMMatrixTranspose(W));	
 	LoadSoundAssets();
 
-	mouseLook = new MouseLook(camera, XMFLOAT2(0.001f, 0.001f));
+	//mouseLook = new MouseLook(camera->transform, XMFLOAT2(0.001f, 0.001f));
 
 	return true;
 }
@@ -152,12 +148,12 @@ void DemoGame::CreateGeometryBuffers()
 	// Attempt to load model
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
 	Player* player = new Player();
-	player->AddModel(AssetManager::Instance()->GetModel("camera"));
+	//player->AddModel(AssetManager::Instance()->GetModel("camera"));
 	entities.push_back(player);
-	player->Finalize();
+	//player->Finalize();
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
 	player->SetMaterial("camera");
-	//mouseLook = new MouseLook(player, XMFLOAT2(0.001f, 0.001f));
+	mouseLook = new MouseLook(player->transform, XMFLOAT2(0.001f, 0.001f));
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
@@ -167,10 +163,12 @@ void DemoGame::CreateGeometryBuffers()
 	Entity* cube = new Entity();
 	cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
 	cube->Finalize();
-	cube->transform->Translate(XMFLOAT3(5, 0, 0));
+	cube->transform->Translate(XMFLOAT3(0, -5, 0));
+	cube->transform->Rotate(XMFLOAT3(0, PI / 2, 0));
 	entities.push_back(cube);
-	cube->transform->SetParent(emptyEntity->transform);
-	emptyEntity->transform->SetParent(player->transform);
+	cube->transform->SetParent(player->transform);
+	//cube->transform->SetParent(emptyEntity->transform);
+	//emptyEntity->transform->SetParent(player->transform);
 
 	Vertex vertices[] = 
 	{
@@ -208,7 +206,7 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(0.0f, 0.2f, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "floor");
 	floor->SetMaterial("floor");
 	
-	//camera->transform->SetParent(player->transform);
+	camera->transform->SetParent(player->transform);
 	player->transform->Translate(XMFLOAT3(1, 0, 0));
 	XMFLOAT3 eye = camera->transform->GetTranslation();
 	XMStoreFloat3(&eye, XMLoadFloat3(&camera->transform->GetTranslation()) + (5 * XMLoadFloat3(&player->transform->GetUp())));
@@ -295,9 +293,7 @@ void DemoGame::LoadSoundAssets()
 	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sunk.wav");
 	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SAMPLEBG, true, true);
 	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SINK);
-#ifdef _DEBUG
 	assetManager->Instance()->GetSoundManager()->Mute(true);
-#endif
 }
 #pragma endregion
 
@@ -322,11 +318,9 @@ void DemoGame::OnResize()
 // push it to the buffer on the device
 XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
 bool scaleSmall = true;
-
-int w = 0;
 void DemoGame::UpdateScene(float dt)
 {
-	if (ipMan->GetBack())
+	if (GetAsyncKeyState(VK_ESCAPE))
 	{
 		PostQuitMessage(0);
 	}
@@ -334,7 +328,6 @@ void DemoGame::UpdateScene(float dt)
 	assetManager->Instance()->GetSoundManager()->Update();
 	if(currentState == GameState::Playing)
 	{
-	
 		this->deltaTime = dt;
 
 		for(Entity* e: entities)
@@ -352,10 +345,10 @@ void DemoGame::UpdateScene(float dt)
 		GameState newState = menu->Update(dt);
 		if (currentState != newState)
 		{
+			ShowCursor(false);
 			mouseLook->ResetCursor();
 			currentState = newState;
 		}
-		
 	}
 
 
@@ -431,7 +424,8 @@ void DemoGame::DrawScene()
 			else
 			{
 				XMStoreFloat4x4(&inverseTranspose, XMMatrixTranspose(XMMatrixInverse(nullptr, XMLoadFloat3x3(&rotationScale))));
-			}			
+			}
+			
 
 			// Create per primitive vertex shader constant buffer to hold matrices.
 			VertexShaderModelConstantBuffer perPrimitiveVSConstantBuffer;
@@ -454,21 +448,10 @@ void DemoGame::DrawScene()
 			e->Draw();
 		}
 	}
-
 	flag = true;
-
-	if(ipMan->GetKey(KeyType::LEFT))
-	{
-		w++;
-	}
-
 	HR(swapChain->Present(0, 0));
 }
 
-void DemoGame::FixedUpdate() 
-{	
-
-}
 #pragma endregion
 
 #pragma region Mouse Input

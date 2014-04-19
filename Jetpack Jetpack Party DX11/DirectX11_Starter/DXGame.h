@@ -8,8 +8,8 @@
 // -------------------------------------------------------------
 
 #pragma once
-#define screenWidth 1920	
-#define screenHeight 1017
+#define screenWidth 800	
+#define screenHeight 600
 
 #include "Common.h"
 #include "Windows.h"

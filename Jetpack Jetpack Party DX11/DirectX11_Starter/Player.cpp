@@ -21,19 +21,19 @@ void Player::Update(float dt)
 
 void Player::CheckInput(float dt)
 {
-	if(GetAsyncKeyState(VK_UP))
+	if(GetAsyncKeyState(VK_UP) || GetAsyncKeyState('W'))
 	{
 		velocity.z += 0.8f;
 	}
-	if(GetAsyncKeyState(VK_DOWN))
+	if(GetAsyncKeyState(VK_DOWN) || GetAsyncKeyState('S'))
 	{
 		velocity.z -= 0.8f;
 	}
-	if(GetAsyncKeyState(VK_LEFT))
+	if(GetAsyncKeyState(VK_LEFT) || GetAsyncKeyState('A'))
 	{
 		velocity.x -= 0.8f;
 	}
-	if(GetAsyncKeyState(VK_RIGHT))
+	if(GetAsyncKeyState(VK_RIGHT) || GetAsyncKeyState('D'))
 	{
 		velocity.x += 0.8f;
 	}
@@ -49,21 +49,21 @@ void Player::CheckInput(float dt)
 		velocity.z = velocity.z * (maxSpeed / velocityMag);
 	}
 
-	if(GetAsyncKeyState('A'))
+	/*if(GetAsyncKeyState('A'))
 	{
-		transform->Rotate(XMFLOAT3(0, -10 * dt, 0));
+		transform->Rotate(XMFLOAT3(0, -1 * dt, 0));
 	}
 	if(GetAsyncKeyState('D'))
 	{
-		transform->Rotate(XMFLOAT3(0, 10 * dt, 0));
+		transform->Rotate(XMFLOAT3(0, 1 * dt, 0));
 	}
 	if(GetAsyncKeyState('W'))
 	{
-		transform->Rotate(XMFLOAT3(-10 * dt, 0 , 0));
+		transform->Rotate(XMFLOAT3(-1 * dt, 0 , 0));
 	}
 	if(GetAsyncKeyState('S'))
 	{
-		transform->Rotate(XMFLOAT3(10 * dt, 0, 0));
+		transform->Rotate(XMFLOAT3(1 * dt, 0, 0));
 	}
 	if(GetAsyncKeyState('Q'))
 	{
@@ -81,5 +81,5 @@ void Player::CheckInput(float dt)
 	if(GetAsyncKeyState('Z'))
 	{
 		transform->Scale(XMFLOAT3(1 - dt, 1 - dt, 1 - dt));
-	}
+	}*/
 }

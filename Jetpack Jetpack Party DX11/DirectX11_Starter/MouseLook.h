@@ -15,62 +15,76 @@ using namespace DirectX;
 class MouseLook
 {
 public :
-	Camera* activeCamera;
-	//Player* activeCamera;
+	Transform* activeCamera;
 	XMFLOAT3 rotationValue;
 	XMFLOAT2 speed;
 
-	MouseLook(ControllableCamera* cam, XMFLOAT2 speed) {
-	//MouseLook(Player* cam, XMFLOAT2 speed) {
+	MouseLook(Transform* cam, XMFLOAT2 speed) {
 		activeCamera = cam;
 		rotationValue = XMFLOAT3(0, 0, 0);		
 		this->speed = speed;
-		cam->transform->Rotate(XMFLOAT3());
+		cam->Rotate(XMFLOAT3());
 	}
 
 	void MouseLook::Update(float dt) {
 		
 	}	
 
-	inline XMFLOAT3 MouseLook::MouseMove(WPARAM btnState, float x, float y) {
-		//if (this->rotationValue.x != 0 || this->rotationValue.y != 0) {
-			//activeCamera->transform->SetLocalRotation(XMFLOAT3(0, 0, 1), 0);
-			//Debug::Log(Debug::ToString(x));
-			//Debug::Log(Debug::ToString(y));
-			XMFLOAT2 deltaRotation = XMFLOAT2(x - screenWidth / 2, y - screenHeight / 2);
-
-			XMFLOAT3 eye = activeCamera->transform->GetTranslation();
-			XMFLOAT3 lookAt;
-			XMStoreFloat3(&lookAt, XMVectorAdd(XMLoadFloat3(&eye), XMLoadFloat3(&activeCamera->transform->GetForward())));
-			XMFLOAT3 up = XMFLOAT3(0, 1, 0);//activeCamera->transform->GetUp();
-
-			// Rotation around x-axis.
-			/*activeCamera->transform->Rotate(activeCamera->transform->InverseTransformDirection(XMFLOAT3(deltaRotation.y * this->speed.y, 0, 0)));
-			eye = activeCamera->transform->GetTranslation();
-			XMStoreFloat3(&lookAt, XMVectorAdd(XMLoadFloat3(&eye), XMLoadFloat3(&activeCamera->transform->GetForward())));
-			activeCamera->transform->LookAt(eye, lookAt, up);
-
-			// Rotation around y-axis.
-			activeCamera->transform->Rotate(activeCamera->transform->InverseTransformDirection(XMFLOAT3(0, deltaRotation.y * this->speed.y, 0)));
-			eye = activeCamera->transform->GetTranslation();
-			XMStoreFloat3(&lookAt, XMVectorAdd(XMLoadFloat3(&eye), XMLoadFloat3(&activeCamera->transform->GetForward())));
-			activeCamera->transform->LookAt(eye, lookAt, up);*/
+	XMFLOAT3 MouseLook::MouseMove(WPARAM btnState, float x, float y) {
+		XMFLOAT2 screenCenter = GetClientCenter();
+		XMFLOAT2 deltaRotation = XMFLOAT2(x - screenCenter.x, y - screenCenter.y);
+		if (deltaRotation.x != 0 || deltaRotation.y != 0) 
+		{
 			rotationValue = XMFLOAT3(rotationValue.x + (deltaRotation.y * this->speed.y), rotationValue.y + (deltaRotation.x * this->speed.x), 0);
-			/*TODO: reset rotation value to zero when it passes 360 (may need to convert to degrees)*/
-			activeCamera->transform->SetLocalRotation(rotationValue);
-		//}
+			
+			// Keep x rotation between 0 and (+/-)360
+			if (rotationValue.x >= 2 * PI)
+			{
+				rotationValue.x -= 2 * PI;
+			} 
+			else if (rotationValue.x <= -2 * PI)
+			{
+				rotationValue.x += 2 * PI;
+			}
+
+			// Keep y rotation between 0 and (+/-)360
+			if (rotationValue.y >= 2 * PI)
+			{
+				rotationValue.y -= 2 * PI;
+			}
+			else if (rotationValue.y <= -2 * PI)
+			{
+				rotationValue.y += 2 * PI;
+			}
+
+			activeCamera->SetLocalRotation(rotationValue);
+		}
 		
 		ResetCursor();
 
-		//this->rotationValue = XMFLOAT2(x, y);
 		return this->rotationValue;
 	}
 
-	inline void MouseLook::ResetCursor()
+	void MouseLook::ResetCursor()
 	{
-		RECT r;
-		GetWindowRect(GetActiveWindow(), &r);
-		SetCursorPos((r.right  + r.left) / 2, (r.bottom + r.top)/ 2 + 23 / 2);
+		XMFLOAT2 center = GetScreenCenter();
+		SetCursorPos(center.x, center.y);
 	}
+
+private:
+	XMFLOAT2 MouseLook::GetScreenCenter()
+	{
+		RECT rect;
+		GetWindowRect(GetActiveWindow(), &rect);
+		return XMFLOAT2 ((rect.right  + rect.left) / 2, (rect.bottom + rect.top) / 2);
+	}
+
+	XMFLOAT2 MouseLook::GetClientCenter()
+	{
+		RECT rect;
+		GetClientRect(GetActiveWindow(), &rect);
+		return XMFLOAT2((rect.right  + rect.left) / 2, (rect.bottom + rect.top) / 2 - 11);
+	}
+
 	
 };
