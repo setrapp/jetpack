@@ -41,7 +41,6 @@ public:
 	void OnResize();
 	void UpdateScene(float dt);
 	void DrawScene(); 
-	void FixedUpdate();
 
 	//Locked at 60FPS
 	void FixedUpdate();

@@ -234,7 +234,7 @@ public:
 					if(key == BACKWARD)
 					{					
 								Debug::Log("BOTTOM " + Debug::ToString((float)(state.Gamepad.sThumbLY  / -xDefaultVals[LY]< 0 ? 1 : 0)));						
-						return state.Gamepad.sThumbLY / xDefaultVals[LY] < 0 ? 0 : 1;
+						return state.Gamepad.sThumbLY / -xDefaultVals[LY] < 0 ? 0 : 1;
 					}
 					if(key == RIGHT)
 					{

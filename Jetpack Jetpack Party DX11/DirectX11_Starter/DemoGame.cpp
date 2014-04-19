@@ -155,7 +155,7 @@ void DemoGame::CreateGeometryBuffers()
 	//player->Finalize();
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
 	player->SetMaterial("camera");
-	mouseLook = new MouseLook(player->transform, XMFLOAT2(0.001f, 0.001f));
+	mouseLook = new MouseLook(player->transform, XMFLOAT2(0.01f, 0.01f));
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
@@ -270,20 +270,6 @@ void DemoGame::LoadShadersAndInputLayout()
 		&materialsAndLightsConstantBuffer));
 
 	menu->setRenderers(fontRenderer);
-
-#ifdef OPTIMIZATION
-	deviceContext->IASetInputLayout(inputLayout);
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-
-	// Set the current vertex and pixel shaders, as well the constant buffer for the vert shader
-	deviceContext->VSSetShader(vertexShader, NULL, 0);
-	deviceContext->VSSetConstantBuffers(
-		0,	// Corresponds to the constant buffer's register in the vertex shader
-		1, 
-		&vsConstantBuffer);
-	deviceContext->PSSetShader(pixelShader, NULL, 0);
-#endif
 }
 
 void DemoGame::LoadSoundAssets()
@@ -366,7 +352,6 @@ void DemoGame::UpdateScene(float dt)
 	0);
 }
 
-int w = 0;
 // Clear the screen, redraw everything, present
 void DemoGame::DrawScene()
 {
@@ -455,11 +440,6 @@ void DemoGame::DrawScene()
 		}
 	}
 	flag = true;
-
-	if(inputManager->GetStandardState(KeyType::LEFT))
-    {
-        w++;
-    }
 
 	HR(swapChain->Present(0, 0));
 }
