@@ -58,7 +58,7 @@ DXGame::DXGame(HINSTANCE hInstance)
 	// Zero out the viewport struct
 	ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
 	DXGame::sysEvent =true;
-
+	elapsedTime = 0;
 	// Grabs a pointer to this DXGame object so we can forward
 	// Windows messages to the object's message handling function
 	dxGame = this;
@@ -349,6 +349,13 @@ int DXGame::Run()
 				CalculateFrameStats();
 				UpdateScene(timer.DeltaTime());
 				DrawScene();
+				elapsedTime += (LONG64)(timer.DeltaTime() * 10000);
+                if(((__int64)elapsedTime > 60))
+                {
+                    elapsedTime %= 60;
+                    FixedUpdate();
+                }
+
 			}
 		}
 	}

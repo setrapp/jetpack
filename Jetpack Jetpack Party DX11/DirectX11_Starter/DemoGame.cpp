@@ -31,6 +31,8 @@
 #include <comdef.h>
 #include <iostream>
 #include "Player.h"
+#include "Debug.h"
+
 
 #pragma region Win32 Entry Point (WinMain)
 
@@ -58,7 +60,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 {
-	
+	inputManager = new InputManager(INPUTMODES::XCONTROLLER);
 	flag = true;
 	windowCaption = L"Jetpack Jetpack Party!";
 	windowWidth = 800;
@@ -293,6 +295,10 @@ void DemoGame::LoadSoundAssets()
 	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sunk.wav");
 	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SAMPLEBG, true, true);
 	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SINK);
+	#ifdef _DEBUG
+    assetManager->Instance()->GetSoundManager()->Mute(true);
+	#endif
+
 }
 #pragma endregion
 
@@ -360,6 +366,7 @@ void DemoGame::UpdateScene(float dt)
 	0);
 }
 
+int w = 0;
 // Clear the screen, redraw everything, present
 void DemoGame::DrawScene()
 {
@@ -448,8 +455,21 @@ void DemoGame::DrawScene()
 		}
 	}
 	flag = true;
+
+	if(inputManager->GetStandardState(KeyType::LEFT))
+    {
+        w++;
+    }
+
 	HR(swapChain->Present(0, 0));
 }
+
+
+void DemoGame::FixedUpdate() 
+{    
+
+}
+
 
 #pragma endregion
 

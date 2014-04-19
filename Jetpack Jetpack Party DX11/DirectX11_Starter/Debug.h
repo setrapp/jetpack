@@ -15,7 +15,7 @@ class Debug
 {
 public: 
 
-	static string ToString(float t)
+	inline static string ToString(float t)
 	{		
 		std::stringstream ss;
 		ss << "\n";
@@ -24,7 +24,7 @@ public:
 		return ss.str();
 	}
 
-	static string ToString(double t)
+	inline static string ToString(double t)
 	{		
 		std::stringstream ss;
 		ss << "\n";
@@ -33,7 +33,7 @@ public:
 		return ss.str();
 	}
 
-	static string ToString(XMFLOAT4 v)
+	inline static string ToString(XMFLOAT4 v)
 	{
 		std::stringstream ss;
 		ss << "\n";
@@ -42,7 +42,7 @@ public:
 		return ss.str();
 	}
 
-	static string ToString(XMFLOAT4X4 v)
+	inline static string ToString(XMFLOAT4X4 v)
 	{
 		std::stringstream ss;
 		int four = 0;
@@ -63,7 +63,7 @@ public:
 		return ss.str();
 	}
 
-	static string ToString(XMFLOAT3X3 v)
+	inline static string ToString(XMFLOAT3X3 v)
 	{
 		std::stringstream ss;
 		int four = 0;
@@ -84,12 +84,12 @@ public:
 		return ss.str();
 	}
 
-	static void Log(string s)
+	inline static void Log(string s)
 	{
 		OutputDebugStringA(s.c_str());
 	}
 
-	static string ToString(void * ptr)
+	inline static string ToString(void * ptr)
 	{
 		std::stringstream ss;
 		ss << "\n";

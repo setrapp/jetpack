@@ -19,6 +19,7 @@
 #include "SoundManager.h"
 #include "MouseLook.h"
 #include "Debug.h"
+#include "InputManager.h"
 
 using namespace DirectX;
 
@@ -40,6 +41,7 @@ public:
 	void OnResize();
 	void UpdateScene(float dt);
 	void DrawScene(); 
+	void FixedUpdate();
 
 	// For handing mouse input
 	void OnMouseDown(WPARAM btnState, int x, int y);
@@ -85,6 +87,7 @@ private:
 	Menu* menu;
 	MouseLook* mouseLook;
 
+	InputManager* inputManager;
 	bool mouseCursorVisibility;
 	bool flag;
 };
