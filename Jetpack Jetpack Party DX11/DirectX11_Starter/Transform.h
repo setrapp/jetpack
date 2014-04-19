@@ -124,7 +124,7 @@ public:
 
 private:
 	void ApplyRotation(XMMATRIX* rotation);
-}__declspec(align(16));
+};
 
 
 

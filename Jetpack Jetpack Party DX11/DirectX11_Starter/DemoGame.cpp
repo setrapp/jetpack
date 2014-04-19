@@ -457,7 +457,7 @@ void DemoGame::DrawScene()
 
 	flag = true;
 
-	if(ipMan->GetStandardState(KeyType::LEFT))
+	if(ipMan->GetKey(KeyType::LEFT))
 	{
 		w++;
 	}

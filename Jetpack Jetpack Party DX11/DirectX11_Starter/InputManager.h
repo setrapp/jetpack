@@ -10,9 +10,6 @@
 #include <DirectXMath.h>
 #include "XController.h"
 #include <stdlib.h>
-#include <memory>
-#include <memory.h>
-#include <xmemory>
 #include <map>
 #include "Debug.h"
 
@@ -287,10 +284,14 @@ public:
 						return -1 * result;
 					}						
 				}
+				
 			}
-
+			
+		}
+		
 			return result;
 	}
+	
 
 	bool GetSpecialKeyboardState(int key) const
 	{
@@ -360,7 +361,7 @@ public:
 	}
 
 protected:
-	inline void DumpAll() const
+	inline void DumpAll()
 	{
 		if(keyboard)
 		for(int i = 0 ; i < maxMappedControls; i++) {
@@ -387,7 +388,7 @@ protected:
 	}
 
 	inline void SetXDefaults() {
-		if(xAvailable)
+		if(xAvailable())
 		{
 			auto state = xState();
 			/*xDefaultVals[LX] = state.*/
@@ -400,4 +401,4 @@ private:
 	float* xDefaultVals;
 	XBOX360CONTROLLER* xcontroller;
 };
-#endif
+#endif 
