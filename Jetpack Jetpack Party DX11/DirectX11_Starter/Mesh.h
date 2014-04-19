@@ -10,8 +10,6 @@ class Mesh
 public:
 	Mesh(UINT* i, short noOfIndices);
 	~Mesh(void);
-	void Update(float dt);
-	void Draw();
 	UINT* GetIndices(short *total);
 
 private:	

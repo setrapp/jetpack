@@ -32,7 +32,7 @@ public :
 		
 	}	
 
-	XMFLOAT3 MouseLook::MouseMove(WPARAM btnState, float x, float y) {
+	inline XMFLOAT3 MouseLook::MouseMove(WPARAM btnState, float x, float y) {
 		//if (this->rotationValue.x != 0 || this->rotationValue.y != 0) {
 			//activeCamera->transform->SetLocalRotation(XMFLOAT3(0, 0, 1), 0);
 			//Debug::Log(Debug::ToString(x));
@@ -66,7 +66,7 @@ public :
 		return this->rotationValue;
 	}
 
-	void MouseLook::ResetCursor()
+	inline void MouseLook::ResetCursor()
 	{
 		RECT r;
 		GetWindowRect(GetActiveWindow(), &r);

@@ -27,7 +27,7 @@ Entity::~Entity(void)
 }
 
 
-XMFLOAT4X4 Entity::GetWorldMatrix()
+XMFLOAT4X4 Entity::GetWorldMatrix() const
 {
 	return this->transform->GetWorldMatrix();
 }
@@ -122,7 +122,7 @@ Material* Entity::GetMaterial()
 }
 
 
-Material Entity::GetMaterialSafe()
+inline Material Entity::GetMaterialSafe() const
 {
 	return *this->material;
 }
@@ -132,7 +132,7 @@ void Entity::SetMaterial(string name)
 	material = AssetManager::Instance()->GetMaterial(name);
 }
 
-vector<Mesh*> Entity::GetMeshes()
+inline vector<Mesh*> Entity::GetMeshes() const 
 {
 	return meshes;
 }

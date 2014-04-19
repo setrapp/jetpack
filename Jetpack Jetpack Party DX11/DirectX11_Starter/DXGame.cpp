@@ -99,7 +99,7 @@ bool DXGame::Init()
 		return false;
 
 	initCPU();
-
+	elapsedTime = 0;
 	return true;
 }
 
@@ -349,6 +349,12 @@ int DXGame::Run()
 				CalculateFrameStats();
 				UpdateScene(timer.DeltaTime());
 				DrawScene();
+				elapsedTime += (LONG64)(timer.DeltaTime() * 10000);
+				if(((__int64)elapsedTime > 60))
+				{
+					elapsedTime %= 60;
+					FixedUpdate();
+				}
 			}
 		}
 	}

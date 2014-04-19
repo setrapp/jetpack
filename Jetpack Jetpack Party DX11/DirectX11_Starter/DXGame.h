@@ -39,6 +39,7 @@ public:
 	virtual void OnResize(); 
 	virtual void UpdateScene(float dt)=0;
 	virtual void DrawScene()=0; 
+	virtual void FixedUpdate() = 0;
 	virtual LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	// Convenience overrides for handling mouse input.
@@ -92,6 +93,8 @@ protected:
 	bool enable4xMsaa;
 	MEMORYSTATUSEX memInfo;
 
+	//In milliseconds
+	LONG64 elapsedTime;
 public :
 	static bool sysEvent;
 };

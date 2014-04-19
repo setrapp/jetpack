@@ -11,23 +11,13 @@ public:
 	~Rect(void)
 	{
 	}
-	bool Rect::Contains(int x, int y)
+	inline bool Rect::Contains(int x, int y) const
 	{
 		if(x > this->x && x < this->width && y > this->y && y < this->height)
 		{
-			//delete p;
 			return true;
 		}
-		//delete p;
 		return false;
 	}
-
 };
-//class Point
-//{
-//public :
-//	Point();
-//	~Point();
-//	int x, y;
-//};
 #endif

@@ -175,7 +175,7 @@ private:
 	std::map<SoundId, SoundInstance*>* SoundMap;
 	int oldkeystate;
 
-	map<SoundId, SoundInstance*>::iterator Contains(SoundId name)
+	inline map<SoundId, SoundInstance*>::iterator Contains(SoundId name) const
 	{
 		auto instance = SoundMap->find(name);
 		if(instance == SoundMap->end())

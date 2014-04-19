@@ -31,6 +31,7 @@
 #include <comdef.h>
 #include <iostream>
 #include "Player.h"
+#include "Debug.h"
 
 #pragma region Win32 Entry Point (WinMain)
 
@@ -49,6 +50,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 	if( !game.Init() )
 		return 0;	
 
+	
+
 	return game.Run();
 }
 
@@ -58,7 +61,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 {
-	
+	//ipMan = new InputManager((INPUTMODES)0);
+	ipMan = new InputManager(INPUTMODES::XCONTROLLER);
 	flag = true;
 	windowCaption = L"Jetpack Jetpack Party!";
 	windowWidth = 800;
@@ -291,6 +295,9 @@ void DemoGame::LoadSoundAssets()
 	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sunk.wav");
 	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SAMPLEBG, true, true);
 	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SINK);
+#ifdef _DEBUG
+	assetManager->Instance()->GetSoundManager()->Mute(true);
+#endif
 }
 #pragma endregion
 
@@ -315,9 +322,11 @@ void DemoGame::OnResize()
 // push it to the buffer on the device
 XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
 bool scaleSmall = true;
+
+int w = 0;
 void DemoGame::UpdateScene(float dt)
 {
-	if (GetAsyncKeyState(VK_ESCAPE))
+	if (ipMan->GetBack())
 	{
 		PostQuitMessage(0);
 	}
@@ -325,6 +334,7 @@ void DemoGame::UpdateScene(float dt)
 	assetManager->Instance()->GetSoundManager()->Update();
 	if(currentState == GameState::Playing)
 	{
+	
 		this->deltaTime = dt;
 
 		for(Entity* e: entities)
@@ -345,6 +355,7 @@ void DemoGame::UpdateScene(float dt)
 			mouseLook->ResetCursor();
 			currentState = newState;
 		}
+		
 	}
 
 
@@ -420,8 +431,7 @@ void DemoGame::DrawScene()
 			else
 			{
 				XMStoreFloat4x4(&inverseTranspose, XMMatrixTranspose(XMMatrixInverse(nullptr, XMLoadFloat3x3(&rotationScale))));
-			}
-			
+			}			
 
 			// Create per primitive vertex shader constant buffer to hold matrices.
 			VertexShaderModelConstantBuffer perPrimitiveVSConstantBuffer;
@@ -444,10 +454,21 @@ void DemoGame::DrawScene()
 			e->Draw();
 		}
 	}
+
 	flag = true;
+
+	if(ipMan->GetStandardState(KeyType::LEFT))
+	{
+		w++;
+	}
+
 	HR(swapChain->Present(0, 0));
 }
 
+void DemoGame::FixedUpdate() 
+{	
+
+}
 #pragma endregion
 
 #pragma region Mouse Input

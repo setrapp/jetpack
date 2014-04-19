@@ -1,8 +1,28 @@
 #pragma once
 
+#include <d3d11.h>
 #include <DirectXMath.h>
 #include <d3d11.h>
 #include <vector>
+#include <stdio.h>
+#include <stdlib.h>
+#include <memory>
+#include <memory.h>
+#include <xmemory>
+#include <map>
+#include <stdio.h>
+#include <xkeycheck.h>
+#include <Xinput.h>
+#include <d3d11.h>
+#include <string>
+#include <string.h>
+#include <DirectXMath.h>
+#include "XController.h"
+#include <stdlib.h>
+#include <memory>
+#include <memory.h>
+#include <xmemory>
+#include <map>
 
 using namespace DirectX;
 using namespace std;
@@ -24,7 +44,6 @@ private:
 	vector<Transform*>children;
 	
 public:
-
 	Transform::Transform();
 
 	Transform::~Transform();
@@ -43,31 +62,31 @@ public:
 
 	void Transform::LookAt(XMFLOAT3 eye, XMFLOAT3 lookAt, XMFLOAT3 up);
 
-	XMFLOAT4X4 Transform::GetWorldMatrix();
+	XMFLOAT4X4 Transform::GetWorldMatrix() const;
 
-	XMFLOAT4X4 Transform::GetLocalMatrix();
+	XMFLOAT4X4 Transform::GetLocalMatrix() const;
 
-	Transform* Transform::GetParent();
+	Transform* Transform::GetParent() const;
 
 	void Transform::SetParent(Transform* parent);
 
 	// Transform point from local space to world space.
-	XMFLOAT3 TransformPoint(XMFLOAT3 localPoint);
+	XMFLOAT3 TransformPoint(XMFLOAT3 localPoint) const;
 
 	// Transform point from world space to local space.
-	XMFLOAT3 InverseTransformPoint(XMFLOAT3 worldPoint);
+	XMFLOAT3 InverseTransformPoint(XMFLOAT3 worldPoint) const;
 
 	// Transform direction from local space to world space.
-	XMFLOAT3 TransformDirection(XMFLOAT3 localDirection);
+	XMFLOAT3 TransformDirection(XMFLOAT3 localDirection) const;
 
 	// Transform direction from world space to local space.
-	XMFLOAT3 InverseTransformDirection(XMFLOAT3 worldDirection);
+	XMFLOAT3 InverseTransformDirection(XMFLOAT3 worldDirection) const;
 
 	// Get world translation.
-	XMFLOAT3 GetTranslation();
+	XMFLOAT3 GetTranslation() const;
 
 	// Get local translation.
-	XMFLOAT3 GetLocalTranslation();
+	XMFLOAT3 GetLocalTranslation() const;
 
 	// Set world translation
 	void SetTranslation(XMFLOAT3 newPosition);
@@ -75,9 +94,9 @@ public:
 	// Set local translation
 	void SetLocalTranslation(XMFLOAT3 newPosition);
 
-	XMFLOAT3X3 GetRotation();
+	XMFLOAT3X3 GetRotation() const;
 
-	XMFLOAT3X3 GetLocalRotation();
+	XMFLOAT3X3 GetLocalRotation() const;
 
 	void SetLocalRotation(XMFLOAT3 newEulerAngles);
 
@@ -85,11 +104,11 @@ public:
 	
 	void SetLocalRotation(XMFLOAT3X3 newRotation);
 
-	bool IsUniformScale();
+	bool IsUniformScale() const;
 
-	XMFLOAT3 GetScale();
+	XMFLOAT3 GetScale() const;
 
-	XMFLOAT3 GetLocalScale();
+	XMFLOAT3 GetLocalScale() const;
 
 	// Set local scale
 	void SetLocalScale(XMFLOAT3 newScale);
@@ -105,4 +124,21 @@ public:
 
 private:
 	void ApplyRotation(XMMATRIX* rotation);
-};
+}__declspec(align(16));
+
+
+
+//XINPUT_GAMEPAD_DPAD_UP	 0x0001
+//XINPUT_GAMEPAD_DPAD_DOWN	 0x0002
+//XINPUT_GAMEPAD_DPAD_LEFT	 0x0004
+//XINPUT_GAMEPAD_DPAD_RIGHT	 0x0008
+//XINPUT_GAMEPAD_START	 0x0010
+//XINPUT_GAMEPAD_BACK	 0x0020
+//XINPUT_GAMEPAD_LEFT_THUMB	 0x0040
+//XINPUT_GAMEPAD_RIGHT_THUMB	 0x0080
+//XINPUT_GAMEPAD_LEFT_SHOULDER	 0x0100
+//XINPUT_GAMEPAD_RIGHT_SHOULDER	 0x0200
+//XINPUT_GAMEPAD_A	 0x1000
+//XINPUT_GAMEPAD_B	 0x2000
+//XINPUT_GAMEPAD_X	 0x4000
+//XINPUT_GAMEPAD_Y	 0x8000
