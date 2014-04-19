@@ -15,12 +15,10 @@ using namespace DirectX;
 class MouseLook
 {
 public :
-	//Camera* activeCamera;
 	Transform* activeCamera;
 	XMFLOAT3 rotationValue;
 	XMFLOAT2 speed;
 
-	//MouseLook(ControllableCamera* cam, XMFLOAT2 speed) {
 	MouseLook(Transform* cam, XMFLOAT2 speed) {
 		activeCamera = cam;
 		rotationValue = XMFLOAT3(0, 0, 0);		
@@ -67,13 +65,13 @@ public :
 		return this->rotationValue;
 	}
 
-private:
 	void MouseLook::ResetCursor()
 	{
 		XMFLOAT2 center = GetScreenCenter();
 		SetCursorPos(center.x, center.y);
 	}
 
+private:
 	XMFLOAT2 MouseLook::GetScreenCenter()
 	{
 		RECT rect;
