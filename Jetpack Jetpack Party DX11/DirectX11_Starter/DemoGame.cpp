@@ -452,6 +452,10 @@ void DemoGame::DrawScene()
 	HR(swapChain->Present(0, 0));
 }
 
+void DemoGame::FixedUpdate() 
+{
+
+}
 #pragma endregion
 
 #pragma region Mouse Input
