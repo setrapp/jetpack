@@ -48,6 +48,8 @@ public:
 	virtual void OnMouseMove(WPARAM btnState, int x, int y){ }	
 	virtual void OnMouseWheel(WPARAM btnState, int x, int y) { }
 	double getCurrentValue();
+	virtual void FixedUpdate() = 0;
+
 	void initCPU();
 protected:
 	// Handles window and Direct3D initialization
@@ -92,6 +94,7 @@ protected:
 	int windowHeight;
 	bool enable4xMsaa;
 	MEMORYSTATUSEX memInfo;
+	LONG64 elapsedTime;
 
 	//In milliseconds
 	LONG64 elapsedTime;

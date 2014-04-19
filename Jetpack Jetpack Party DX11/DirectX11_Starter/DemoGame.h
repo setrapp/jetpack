@@ -41,6 +41,7 @@ public:
 	void OnResize();
 	void UpdateScene(float dt);
 	void DrawScene(); 
+	void FixedUpdate();
 
 	//Locked at 60FPS
 	void FixedUpdate();
@@ -89,6 +90,7 @@ private:
 	Menu* menu;
 	MouseLook* mouseLook;
 
+	InputManager* inputManager;
 	bool mouseCursorVisibility;
 	bool flag;
 	InputManager* ipMan;

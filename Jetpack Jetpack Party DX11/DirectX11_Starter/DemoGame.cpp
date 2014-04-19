@@ -31,6 +31,8 @@
 #include <comdef.h>
 #include <iostream>
 #include "Player.h"
+#include "Debug.h"
+
 
 #pragma region Win32 Entry Point (WinMain)
 
@@ -58,7 +60,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 {
-	
+	inputManager = new InputManager(INPUTMODES::XCONTROLLER);
 	flag = true;
 	windowCaption = L"Jetpack Jetpack Party!";
 	windowWidth = 800;
@@ -68,7 +70,6 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	camera = new ControllableCamera();
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
 	mouseCursorVisibility = true;
-	ipMan = new InputManager(INPUTMODES::XCONTROLLER);
 }
 
 DemoGame::~DemoGame()
@@ -154,7 +155,7 @@ void DemoGame::CreateGeometryBuffers()
 	//player->Finalize();
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
 	player->SetMaterial("camera");
-	mouseLook = new MouseLook(player->transform, XMFLOAT2(0.01f, 0.01f));
+	mouseLook = new MouseLook(player->transform, XMFLOAT2(0.001f, 0.001f));
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
@@ -294,7 +295,10 @@ void DemoGame::LoadSoundAssets()
 	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sunk.wav");
 	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SAMPLEBG, true, true);
 	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SINK);
-	assetManager->Instance()->GetSoundManager()->Mute(true);
+	#ifdef _DEBUG
+    assetManager->Instance()->GetSoundManager()->Mute(true);
+	#endif
+
 }
 #pragma endregion
 
@@ -337,11 +341,6 @@ void DemoGame::UpdateScene(float dt)
 		}
 
 		entities[1]->transform->Rotate(XMFLOAT3(0, 5 * dt, 0));	
-
-		ipMan->GetXKeyDown(KeyType::BACKWARD);
-		ipMan->GetXKeyDown(KeyType::FORWARD);
-		ipMan->GetXKeyDown(KeyType::RIGHT);
-		ipMan->GetXKeyDown(KeyType::LEFT);
 	}
 
 	camera->Update(dt, &vsModelConstantBufferData);	
@@ -367,6 +366,7 @@ void DemoGame::UpdateScene(float dt)
 	0);
 }
 
+int w = 0;
 // Clear the screen, redraw everything, present
 void DemoGame::DrawScene()
 {
@@ -456,14 +456,21 @@ void DemoGame::DrawScene()
 	}
 	flag = true;
 
-	
+	if(inputManager->GetStandardState(KeyType::LEFT))
+    {
+        w++;
+    }
+
 	HR(swapChain->Present(0, 0));
 }
 
+
 void DemoGame::FixedUpdate() 
-{
+{    
 
 }
+
+
 #pragma endregion
 
 #pragma region Mouse Input

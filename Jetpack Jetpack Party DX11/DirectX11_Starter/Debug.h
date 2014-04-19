@@ -14,6 +14,7 @@ using namespace DirectX;
 class Debug
 {
 public: 
+
 	inline static string ToString(float t)
 	{		
 		std::stringstream ss;
