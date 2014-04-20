@@ -99,17 +99,16 @@ DemoGame::~DemoGame()
 
 #pragma region Initialization
 
+float clearColor[4] = {0.4f, 0.6f, 0.75f, 0.0f};
+
 bool DemoGame::Init()
 {
 	if( !DXGame::Init() )
 		return false;
 
-	FLOAT color[4] = {0.4f, 0.6f, 0.75f, 0.0f};
-
 	AssetManager* assetManager = new AssetManager();
 
 	spriteRenderer = new SpriteRenderer(deviceContext);
-	spriteRenderer->SetColor(color);	
 	fontRenderer = new FontRenderer(device, L"../Assets/font.spritefont");	
 	fontRenderer->setSpriteBatch(spriteRenderer->GetSpriteBatch());
 
@@ -362,11 +361,9 @@ void DemoGame::UpdateScene(float dt)
 // Clear the screen, redraw everything, present
 void DemoGame::DrawScene()
 {
-	spriteRenderer->ClearScreen(deviceContext, renderTargetView, depthStencilView);
-	FLOAT color[4] = {0.4f, 0.6f, 0.75f, 0.0f};
 	deviceContext->ClearRenderTargetView(
 		renderTargetView,
-		color);
+		clearColor);
 
 	deviceContext->ClearDepthStencilView(
 		depthStencilView, 
