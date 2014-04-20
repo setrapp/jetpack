@@ -56,12 +56,15 @@ void Material::ApplyTexture(wchar_t* path)
 	sBufferDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 	sBufferDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	sBufferDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	sBufferDesc.Filter = D3D11_FILTER_COMPARISON_ANISOTROPIC;
+	sBufferDesc.Filter = D3D11_FILTER_ANISOTROPIC;
 	sBufferDesc.MaxAnisotropy = 16;
+	sBufferDesc.MipLODBias = 0;
+	//sBufferDesc.ComparisonFunc = D3D11_Comparesion;
 
 	DXConnection::Instance()->device->CreateSamplerState(
 		&sBufferDesc,
 		&this->samplerState);
+	int a = 0;
 }
 
 ShaderMaterial Material::GetShaderMaterial()

@@ -52,6 +52,12 @@
     <Filter Include="Source Files\ModelLoading">
       <UniqueIdentifier>{8832b5cd-f068-4934-acc7-29ceeaa143c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Networking">
+      <UniqueIdentifier>{28ffae39-5a3c-4f18-a241-f3d2ae0c3ca4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Networking">
+      <UniqueIdentifier>{4602c02e-931a-49e1-a078-4e6b5c40afa6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXGame.cpp">
@@ -109,6 +115,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientConnectionEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -215,11 +224,8 @@
     <ClInclude Include="XController.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
-    <ClInclude Include="XNew.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="XInputValues.h">
-      <Filter>Header Files\Input</Filter>
+    <ClInclude Include="ClientConnectionEntity.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

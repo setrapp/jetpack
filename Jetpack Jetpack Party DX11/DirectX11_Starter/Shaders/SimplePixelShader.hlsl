@@ -29,6 +29,9 @@ struct VertexToPixel
 	float3 toLight		: NORMAL2;
 };
 
+//Texture2D myTexture : register(t0);
+//SamplerState mySampler : register(s0);
+
 float4 main(VertexToPixel input) : SV_TARGET
 {
 	// Extract color data.

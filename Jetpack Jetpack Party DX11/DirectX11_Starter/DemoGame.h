@@ -1,5 +1,7 @@
 #ifndef _DEMOGAME_H
+#define _DEMOGAME_H
 #pragma once
+#define WIN32_LEAN_AND_MEAN
 #include "FontRenderer.h"
 #include "Sprite.h"
 #include "Vertex.h"
@@ -20,6 +22,7 @@
 #include "MouseLook.h"
 #include "Debug.h"
 #include "InputManager.h"
+#include <queue>
 
 using namespace DirectX;
 
@@ -78,6 +81,7 @@ private:
 	//Camera* camera;
 	Light* light;
 	std::vector<Entity*> entities;
+
 	SpriteRenderer* spriteRenderer;
 	FontRenderer* fontRenderer;
 

@@ -1,4 +1,7 @@
+#ifndef ENTITY_H
+#define ENTITY_H
 #pragma once
+#define WIN32_LEAN_AND_MEAN
 #include "Vertex.h"
 #include "Common.h"
 #include <vector>
@@ -6,7 +9,6 @@
 #include "Material.h"
 #include "Transform.h"
 #include "Rigidbody.h"
-
 
 class Entity
 {
@@ -25,6 +27,7 @@ public:
 	void SetMaterial(string name = "default");
 	inline vector<Mesh*> GetMeshes() const;
 	Transform* transform;
+	int socketNumber;
 	void Finalize();
 
 private:
@@ -37,3 +40,4 @@ private:
 	LONG totalIndices;
 };
 
+#endif

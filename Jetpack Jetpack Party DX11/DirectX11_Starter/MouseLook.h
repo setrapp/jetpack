@@ -35,6 +35,7 @@ public :
 	XMFLOAT3 MouseLook::MouseMove(WPARAM btnState, float x, float y) {
 		XMFLOAT2 screenCenter = GetClientCenter();
 		XMFLOAT2 deltaRotation = XMFLOAT2(x - screenCenter.x, y - screenCenter.y);
+		Debug::Log(Debug::ToString(deltaRotation.x) + " " + Debug::ToString(deltaRotation.y));
 		if (deltaRotation.x != 0 || deltaRotation.y != 0) 
 		{
 			rotationValue = XMFLOAT3(rotationValue.x + (deltaRotation.y * this->speed.y), rotationValue.y + (deltaRotation.x * this->speed.x), 0);

@@ -18,27 +18,21 @@ public:
 	inline static string ToString(float t)
 	{		
 		std::stringstream ss;
-		ss << "\n";
 		ss << t;
-		ss << "\n";
 		return ss.str();
 	}
 
 	inline static string ToString(double t)
 	{		
 		std::stringstream ss;
-		ss << "\n";
 		ss << t;
-		ss << "\n";
 		return ss.str();
 	}
 
 	inline static string ToString(XMFLOAT4 v)
 	{
 		std::stringstream ss;
-		ss << "\n";
 		ss << "x : " << v.x << "\ny : " << v.y << "\nz : " << v.z << "\nw : " << v.w;
-		ss << "\n";
 		return ss.str();
 	}
 
@@ -46,7 +40,6 @@ public:
 	{
 		std::stringstream ss;
 		int four = 0;
-		ss << "\n";
 		ss << "XMFLOAT4X4"<< "\n";
 		for( float* f : v.m)
 		{
@@ -59,7 +52,6 @@ public:
 			ss << "\n";
 			four ++;
 		}
-		ss << "\n";
 		return ss.str();
 	}
 
@@ -67,7 +59,6 @@ public:
 	{
 		std::stringstream ss;
 		int four = 0;
-		ss << "\n";
 		ss << "XMFLOAT3X3"<< "\n";
 		for( float* f : v.m)
 		{
@@ -77,29 +68,26 @@ public:
 				ss << f[i];
 				ss << "\t";
 			}
-			ss << "\n";
 			four ++;
 		}
-		ss << "\n";
 		return ss.str();
 	}
 
 	inline static void Log(string s)
 	{
-		OutputDebugStringA(s.c_str());
+		string line = s + "\n";
+		OutputDebugStringA(line.c_str());
 	}
 
 	inline static string ToString(void * ptr)
 	{
 		std::stringstream ss;
-		ss << "\n";
 		if(ptr)
 		{
 			ss << ptr;
 		}
 		else
 			ss << "Pointer is NULL";
-		ss << "\n";
 		return ss.str();
 	}
 

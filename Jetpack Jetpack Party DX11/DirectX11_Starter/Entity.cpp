@@ -1,4 +1,5 @@
 #pragma once 
+#define WIN32_LEAN_AND_MEAN
 #include "Entity.h"
 #include "Toolkit\Inc\WICTextureLoader.h"
 #include <Windows.h>
@@ -16,6 +17,7 @@ Entity::Entity()
 	totalMeshes = 0;
 	transform = new Transform();
 	material = AssetManager::Instance()->GetMaterial();
+	socketNumber=0;
 }
 
 
@@ -93,8 +95,14 @@ void Entity::Draw()
 		ID3D11DeviceContext* deviceContext = DXConnection::Instance()->deviceContext;
 		deviceContext->VSSetShader(material->vertexShader, NULL, 0);
 		deviceContext->PSSetShader(material->pixelShader, NULL, 0);
-		deviceContext->PSSetShaderResources(0, 1, &material->resourceView);
-		deviceContext->PSSetSamplers(0, 1, &material->samplerState);
+		if (material->resourceView)
+		{
+			deviceContext->PSSetShaderResources(0, 1, &material->resourceView);
+		}		
+		if (material->samplerState)
+		{
+			deviceContext->PSSetSamplers(0, 1, &material->samplerState);
+		}
 	}	
 
 	const UINT stride = sizeof(Vertex);
