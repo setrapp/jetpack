@@ -36,6 +36,7 @@ public:
 	// Methods called by the game loop - override these in
 	// derived classes to implement custom functionality
 	virtual bool Init();
+	virtual void OnFocus(bool givenFocus); 
 	virtual void OnResize(); 
 	virtual void UpdateScene(float dt)=0;
 	virtual void DrawScene()=0; 

@@ -17,15 +17,17 @@ using namespace DirectX;
 class MouseLook
 {
 public :
-	Transform* activeCamera;
+	Transform* looker;
 	XMFLOAT3 rotationValue;
 	XMFLOAT2 speed;
+	bool ignoreMouse;
 
-	MouseLook(Transform* cam, XMFLOAT2 speed) {
-		activeCamera = cam;
+	MouseLook(Transform* looker, XMFLOAT2 speed) {
+		this->looker = looker;
 		rotationValue = XMFLOAT3(0, 0, 0);		
 		this->speed = speed;
-		cam->Rotate(XMFLOAT3());
+		this->looker->SetLocalRotation(XMFLOAT3());
+		ignoreMouse = false;
 	}
 
 	void MouseLook::Update(float dt) {
@@ -33,9 +35,14 @@ public :
 	}	
 
 	XMFLOAT3 MouseLook::MouseMove(WPARAM btnState, float x, float y) {
+		// If mouse looking is being ignored, don't do anything
+		if (ignoreMouse)
+		{
+			return XMFLOAT3();
+		}
+
 		XMFLOAT2 screenCenter = GetClientCenter();
 		XMFLOAT2 deltaRotation = XMFLOAT2(x - screenCenter.x, y - screenCenter.y);
-		//Debug::Log(Debug::ToString(deltaRotation.x) + " " + Debug::ToString(deltaRotation.y));
 		if (deltaRotation.x != 0 || deltaRotation.y != 0) 
 		{
 			rotationValue = XMFLOAT3(rotationValue.x + (deltaRotation.y * this->speed.y), rotationValue.y + (deltaRotation.x * this->speed.x), 0);
@@ -60,7 +67,7 @@ public :
 				rotationValue.y += 2 * PI;
 			}
 
-			activeCamera->SetLocalRotation(rotationValue);
+			looker->SetLocalRotation(rotationValue);
 		}		
 
 		ResetCursor();
@@ -68,7 +75,7 @@ public :
 		return this->rotationValue;
 	}
 
-	XMFLOAT3 MouseLook::XMove(XNEW* xnew) {
+	/*XMFLOAT3 MouseLook::XMove(XNEW* xnew) {
 		if(xnew)
 		{			
 			double x = 0, y = 0;
@@ -104,10 +111,10 @@ public :
 			this->rotationValue.y += x / (2 * PI);
 			this->rotationValue.x *= 0.1f;
 			this->rotationValue.y *= 0.1f;
-			activeCamera->Rotate(this->rotationValue);
+			looker->Rotate(this->rotationValue);
 		}		
 		return this->rotationValue;
-	}
+	}*/
 
 	void MouseLook::ResetCursor()
 	{

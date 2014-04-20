@@ -40,7 +40,6 @@ public:
 	{
 		std::stringstream ss;
 		int four = 0;
-		ss << "XMFLOAT4X4"<< "\n";
 		for( float* f : v.m)
 		{
 			for( int i = 0 ; i < 4; i++)
@@ -59,7 +58,6 @@ public:
 	{
 		std::stringstream ss;
 		int four = 0;
-		ss << "XMFLOAT3X3"<< "\n";
 		for( float* f : v.m)
 		{
 			for( int i = 0 ; i < 3; i++)
@@ -68,6 +66,7 @@ public:
 				ss << f[i];
 				ss << "\t";
 			}
+			ss << "\n";
 			four ++;
 		}
 		return ss.str();

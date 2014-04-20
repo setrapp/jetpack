@@ -42,6 +42,7 @@ public:
 
 	// Overrides for base level methods
 	bool Init();
+	void OnFocus(bool givenFocus);
 	void OnResize();
 	void UpdateScene(float dt);
 	void DrawScene(); 

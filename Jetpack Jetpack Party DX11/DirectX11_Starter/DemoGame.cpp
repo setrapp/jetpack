@@ -30,6 +30,8 @@
 #include <stdlib.h>
 #include <comdef.h>
 #include <iostream>
+/*#include <dxgidebug.h>
+#include <atlbase.h>*/
 #include "Player.h"
 #include "Debug.h"
 #include "XInputValues.h"
@@ -288,6 +290,25 @@ void DemoGame::LoadSoundAssets()
 }
 #pragma endregion
 
+#pragma region Window Focus
+	void DemoGame::OnFocus(bool givenFocus)
+	{
+		DXGame::OnFocus(givenFocus);
+		if (mouseLook)
+		{
+			if (givenFocus)
+			{
+				mouseLook->ResetCursor();
+				mouseLook->ignoreMouse = false;
+			}
+			else
+			{
+				mouseLook->ignoreMouse = true;
+			}
+		}
+	}
+#pragma endregion Window Focus
+
 #pragma region Window Resizing
 // Handles resizing the window and updating our projection matrix to match
 void DemoGame::OnResize()
@@ -300,6 +321,11 @@ void DemoGame::OnResize()
 			100.0f);
 
 	XMStoreFloat4x4(&camera->projection, XMMatrixTranspose(P));
+
+	if (mouseLook)
+	{
+		mouseLook->ResetCursor();
+	}
 }
 #pragma endregion
 
@@ -313,6 +339,9 @@ void DemoGame::UpdateScene(float dt)
 {
 	if (GetAsyncKeyState(VK_ESCAPE))
 	{
+		/*CComPtr<IErrorInfo> debug;
+		HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&debug));
+		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_SUMMARY);*/
 		PostQuitMessage(0);
 	}
 
@@ -343,7 +372,7 @@ void DemoGame::UpdateScene(float dt)
 		GameState newState = menu->Update(dt);
 		if (currentState != newState)
 		{
-			ShowCursor(false);
+			//ShowCursor(false);
 			mouseLook->ResetCursor();
 			currentState = newState;
 		}
