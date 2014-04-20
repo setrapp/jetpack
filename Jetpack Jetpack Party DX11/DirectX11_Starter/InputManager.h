@@ -14,6 +14,7 @@
 #include "Debug.h"
 #include <math.h>
 #include "XInputValues.h"
+#include "XNew.h"
 
 //Max int value in XINPUTVALUES + 1
 #define xMap 20 + 1
@@ -113,7 +114,6 @@ public:
 						if(!keyStates[FORWARD])
 						{
 							keyStates[FORWARD] = 1;
-							//Debug::Log("Inside\n");
 							return 1;
 						}
 					}
@@ -183,7 +183,6 @@ public:
 						if(state.Gamepad.sThumbLY == xDefaultVals[LY])
 							result = 0;
 
-						//Debug::Log("FORWARD " + Debug::ToString(result));
 						return result;
 					}
 					if(key == BACKWARD)
@@ -194,7 +193,6 @@ public:
 						if(state.Gamepad.sThumbLY == xDefaultVals[LY])
 							result = 0;
 
-						//Debug::Log("BACKWARD " + Debug::ToString(result));
 						return result;
 					}
 					if(key == RIGHT)
@@ -205,7 +203,6 @@ public:
 						if(state.Gamepad.sThumbLX == xDefaultVals[LX])
 							result = 0;
 
-						//Debug::Log("RIGHT " + Debug::ToString(result));
 						return result;
 					}
 					if(key == LEFT)
@@ -216,7 +213,6 @@ public:
 						if(state.Gamepad.sThumbLX == xDefaultVals[LX])
 							result = 0;
 
-						//Debug::Log("LEFT " + Debug::ToString(result));
 						return result;
 					}						
 				}
@@ -238,23 +234,19 @@ public:
 				{
 					XINPUT_STATE state = xcontroller->GetState();
 					if(key == FORWARD)
-					{//
-						//Debug::Log("FORWARD " + Debug::ToString(state.Gamepad.sThumbLY > xDefaultVals[LY] ? (float)1: 0));						
+					{//					
 						return state.Gamepad.sThumbLY > xDefaultVals[LY] ? 1: 0;
 					}
 					if(key == BACKWARD)
-					{					
-						//Debug::Log("BOTTOM " + Debug::ToString(state.Gamepad.sThumbLY < xDefaultVals[LY]? (float)1 : 0));						
+					{									
 						return state.Gamepad.sThumbLY < xDefaultVals[LY]? 1 : 0;
 					}
 					if(key == RIGHT)
-					{
-						//Debug::Log("RIGHT " + Debug::ToString((float)(state.Gamepad.sThumbLX  / -xDefaultVals[LX]< 0 ? 1 : 0)));						
+					{						
 						return state.Gamepad.sThumbLX > xDefaultVals[LX] ? 1 : 0;
 					}
 					if(key == LEFT)
 					{
-						//Debug::Log("LEFT " + Debug::ToString((float)(state.Gamepad.sThumbLX  / -xDefaultVals[LX]< 0 ? 1 : 0)));
 						return state.Gamepad.sThumbLX < -xDefaultVals[LX] ? 1 : 0;
 					}						
 				}				

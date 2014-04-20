@@ -109,6 +109,8 @@
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\XInputValues.h" />
+    <ClInclude Include="..\XNew.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="AudioWaveManager.h" />
     <ClInclude Include="Camera.h" />
