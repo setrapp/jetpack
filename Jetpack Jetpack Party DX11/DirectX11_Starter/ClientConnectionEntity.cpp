@@ -15,6 +15,7 @@ void ClientConnectionEntity::sendMessage(string sentMessage){
 	int iResult;
 	// Send an initial buffer
 	//iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
+	sentMessage+="<EOF>";
 	iResult = send(ConnectSocket, sentMessage.c_str(), 512, 0);
 	if (iResult == SOCKET_ERROR) {
 		printf("send failed: %d\n", WSAGetLastError());
@@ -102,7 +103,7 @@ void ClientConnectionEntity::listenForResponse(void* stuff){
 	int buflen= DEFAULT_BUFLEN;
 	int iResult= 0;
 	char* receiveBuffer= new char[DEFAULT_BUFLEN];
-	string s= "SOCKET REQUEST";
+	string s= "SOCKET REQUEST<EOF>";
 	send(connectedSocket, s.c_str(), 512, 0);
 	int counter=0;
 	do {

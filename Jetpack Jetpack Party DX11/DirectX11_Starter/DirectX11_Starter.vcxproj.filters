@@ -118,7 +118,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ClientConnectionEntity.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Networking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -224,9 +224,6 @@
     <ClInclude Include="XController.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
-    <ClInclude Include="ClientConnectionEntity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="XInputValues.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -238,6 +235,9 @@
     </ClInclude>
     <ClInclude Include="..\XNew.h">
       <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientConnectionEntity.h">
+      <Filter>Header Files\Networking</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
