@@ -61,6 +61,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 {
 	ipMan = new InputManager(INPUTMODES::XCONTROLLER);
+	xnew = new XNEW(ipMan->GetXController());
 	flag = true;
 	windowCaption = L"Jetpack Jetpack Party!";
 	windowWidth = 800;
@@ -331,7 +332,7 @@ void DemoGame::UpdateScene(float dt)
 		{
 			e->Update(dt);
 		}
-
+		//mouseLook->XMove(xnew);
 		entities[1]->transform->Rotate(XMFLOAT3(0, 5 * dt, 0));	
 	}
 

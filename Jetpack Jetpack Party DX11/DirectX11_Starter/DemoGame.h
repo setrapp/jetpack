@@ -23,6 +23,7 @@
 #include "Debug.h"
 #include "InputManager.h"
 #include <queue>
+#include "XNew.h"
 
 using namespace DirectX;
 
@@ -95,6 +96,7 @@ private:
 
 	bool mouseCursorVisibility;
 	bool flag;
+	XNEW* xnew;
 	InputManager* ipMan;
 };
 

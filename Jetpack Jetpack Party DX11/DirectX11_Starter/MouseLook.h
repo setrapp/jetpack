@@ -9,7 +9,7 @@
 #include "Player.h"
 #include "Debug.h"
 #include "InputManager.h"
-
+#include "XNew.h"
 
 using namespace std;
 using namespace DirectX;
@@ -68,51 +68,46 @@ public :
 		return this->rotationValue;
 	}
 
-	//XMFLOAT3 MouseLook::XMove(InputManager* man) {
-	//	if(man->GetModes() != INPUTMODES::KEYBOARD) {
-	//		double x = 0, y = 0;
-	//		if(man->GetXKeyDown(KeyType::LEFT)) {
-	//			x = -1 * speed.x;
-	//		}
-	//		else
-	//			if(man->GetXKeyDown(KeyType::RIGHT))
-	//				x = 1 * speed.x;
+	XMFLOAT3 MouseLook::XMove(XNEW* xnew) {
+		if(xnew)
+		{			
+			double x = 0, y = 0;
+			if (rotationValue.x >= 2 * PI)
+			{
+				rotationValue.x -= 2 * PI;
+			} 
+			else if (rotationValue.x <= -2 * PI)
+			{
+				rotationValue.x += 2 * PI;
+			}
 
-	//		if(man->GetXKeyDown(KeyType::FORWARD))
-	//			y = speed.x;
-	//		else
-	//			if(man->GetXKeyDown(KeyType::BACKWARD))
-	//				y = -speed.x;
+			// Keep y rotation between 0 and (+/-)360
+			if (rotationValue.y >= 2 * PI)
+			{
+				rotationValue.y -= 2 * PI;
+			}
+			else if (rotationValue.y <= -2 * PI)
+			{
+				rotationValue.y += 2 * PI;
+			}
+			if(xnew->XCHANGED(XINPUTVALUES::LX))
+				x+=speed.y;
 
-	//		if(x)
-	//		{
-	//			// Keep x rotation between 0 and (+/-)360
-	//		if (rotationValue.x >= 2 * PI)
-	//		{
-	//			rotationValue.x -= 2 * PI;
-	//		} 
-	//		else if (rotationValue.x <= -2 * PI)
-	//		{
-	//			rotationValue.x += 2 * PI;
-	//		}
+			if(xnew->XCHANGED(XINPUTVALUES::LY))
+				y+=speed.x;
 
-	//		// Keep y rotation between 0 and (+/-)360
-	//		if (rotationValue.y >= 2 * PI)
-	//		{
-	//			rotationValue.y -= 2 * PI;
-	//		}
-	//		else if (rotationValue.y <= -2 * PI)
-	//		{
-	//			rotationValue.y += 2 * PI;
-	//		}
+			Debug::Log("\nX : " + Debug::ToString(x));
+			Debug::Log("\nY : " + Debug::ToString(y));
+			Debug::Log(Debug::ToString(XMFLOAT4(this->rotationValue.x, this->rotationValue.y, this->rotationValue.z, 0)));
 
-	//			this->rotationValue.y += x;
-	//			this->rotationValue.x += y;
-	//			activeCamera->SetLocalRotation(rotationValue);				
-	//		}
-	//	}
-	//	return this->rotationValue;
-	//}
+			this->rotationValue.x += y / (2 * PI);
+			this->rotationValue.y += x / (2 * PI);
+			this->rotationValue.x *= 0.1f;
+			this->rotationValue.y *= 0.1f;
+			activeCamera->Rotate(this->rotationValue);
+		}		
+		return this->rotationValue;
+	}
 
 	void MouseLook::ResetCursor()
 	{
