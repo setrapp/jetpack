@@ -142,6 +142,8 @@
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="XController.h" />
+    <ClInclude Include="XInputValues.h" />
+    <ClInclude Include="XNew.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\SimplePixelShader.hlsl">

@@ -32,7 +32,7 @@
 #include <iostream>
 #include "Player.h"
 #include "Debug.h"
-
+#include "XInputValues.h"
 
 #pragma region Win32 Entry Point (WinMain)
 
@@ -60,7 +60,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 {
-	inputManager = new InputManager(INPUTMODES::XCONTROLLER);
+	ipMan = new InputManager(INPUTMODES::XCONTROLLER);
 	flag = true;
 	windowCaption = L"Jetpack Jetpack Party!";
 	windowWidth = 800;
@@ -447,7 +447,6 @@ void DemoGame::DrawScene()
 
 void DemoGame::FixedUpdate() 
 {    
-
 }
 
 

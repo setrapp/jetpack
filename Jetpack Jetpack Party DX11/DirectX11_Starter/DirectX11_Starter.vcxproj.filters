@@ -215,6 +215,12 @@
     <ClInclude Include="XController.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
+    <ClInclude Include="XNew.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="XInputValues.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Toolkit\Src\Shaders\DGSLPhong.hlsl">

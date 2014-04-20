@@ -8,6 +8,8 @@
 #include "ControllableCamera.h"
 #include "Player.h"
 #include "Debug.h"
+#include "InputManager.h"
+
 
 using namespace std;
 using namespace DirectX;
@@ -58,12 +60,58 @@ public :
 			}
 
 			activeCamera->SetLocalRotation(rotationValue);
-		}
-		
+		}		
+
 		ResetCursor();
 
 		return this->rotationValue;
 	}
+
+	//XMFLOAT3 MouseLook::XMove(InputManager* man) {
+	//	if(man->GetModes() != INPUTMODES::KEYBOARD) {
+	//		double x = 0, y = 0;
+	//		if(man->GetXKeyDown(KeyType::LEFT)) {
+	//			x = -1 * speed.x;
+	//		}
+	//		else
+	//			if(man->GetXKeyDown(KeyType::RIGHT))
+	//				x = 1 * speed.x;
+
+	//		if(man->GetXKeyDown(KeyType::FORWARD))
+	//			y = speed.x;
+	//		else
+	//			if(man->GetXKeyDown(KeyType::BACKWARD))
+	//				y = -speed.x;
+
+	//		if(x)
+	//		{
+	//			// Keep x rotation between 0 and (+/-)360
+	//		if (rotationValue.x >= 2 * PI)
+	//		{
+	//			rotationValue.x -= 2 * PI;
+	//		} 
+	//		else if (rotationValue.x <= -2 * PI)
+	//		{
+	//			rotationValue.x += 2 * PI;
+	//		}
+
+	//		// Keep y rotation between 0 and (+/-)360
+	//		if (rotationValue.y >= 2 * PI)
+	//		{
+	//			rotationValue.y -= 2 * PI;
+	//		}
+	//		else if (rotationValue.y <= -2 * PI)
+	//		{
+	//			rotationValue.y += 2 * PI;
+	//		}
+
+	//			this->rotationValue.y += x;
+	//			this->rotationValue.x += y;
+	//			activeCamera->SetLocalRotation(rotationValue);				
+	//		}
+	//	}
+	//	return this->rotationValue;
+	//}
 
 	void MouseLook::ResetCursor()
 	{

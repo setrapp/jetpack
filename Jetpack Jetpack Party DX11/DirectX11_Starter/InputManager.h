@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <map>
 #include "Debug.h"
+#include <math.h>
 #include "XInputValues.h"
 
 //Max int value in XINPUTVALUES + 1
@@ -27,7 +28,8 @@ using namespace std;
 
 typedef enum INPUTMODES {
 	KEYBOARD = 1,
-	XCONTROLLER = 2
+	XCONTROLLER = 2,
+	BOTH = 0
 };
 
 typedef enum KeyType {
@@ -97,7 +99,8 @@ public:
 	}
 
 
-	//Returns a number between 0 and 1, 0 means no input, 1 means full input. Anywhere mid way is because of the GamePad.
+	//Returns a number between 0 and 1, 0 means no input, 1 means full input. Gets absolute value of Gamepad. 
+	//Eg: if up is pressed in gamepad, it will return 1 only once. 
 	inline double GetKey(KeyType key) const
 	{
 		double result = 0.0;
@@ -110,7 +113,7 @@ public:
 						if(!keyStates[FORWARD])
 						{
 							keyStates[FORWARD] = 1;
-							Debug::Log("Inside\n");
+							//Debug::Log("Inside\n");
 							return 1;
 						}
 					}
@@ -174,39 +177,47 @@ public:
 					XINPUT_STATE state = xcontroller->GetState();
 					if(key == FORWARD)
 					{
-						result = xVals[LY];
-						result = state.Gamepad.sThumbLY - xVals[LY];
-						xVals[LY] = state.Gamepad.sThumbLY;
-						result *= 0.001;
-						//Debug::Log(Debug::ToString(result));
+						result = abs(state.Gamepad.sThumbLY)  / abs(xVals[LY]) >= 0 ? 1 : 0;
+						xVals [LY] = state.Gamepad.sThumbLY;	
+
+						if(state.Gamepad.sThumbLY == xDefaultVals[LY])
+							result = 0;
+
+						//Debug::Log("FORWARD " + Debug::ToString(result));
 						return result;
 					}
 					if(key == BACKWARD)
 					{					
-						result = xVals[LY];
-						result = state.Gamepad.sThumbLY - xVals[LY];
-						xVals[LY] = state.Gamepad.sThumbLY;
-						result *= 0.001;
-						//Debug::Log(Debug::ToString(result));
-						return -1 * result;
+						result = state.Gamepad.sThumbLY  / xVals[LY] < 0 ? 1 : 0;
+						xVals [LY] = state.Gamepad.sThumbLY;
+
+						if(state.Gamepad.sThumbLY == xDefaultVals[LY])
+							result = 0;
+
+						//Debug::Log("BACKWARD " + Debug::ToString(result));
+						return result;
 					}
 					if(key == RIGHT)
 					{
-						result = xVals[LX];
-						result = state.Gamepad.sThumbLY - xVals[LX];
-						xVals[LX] = state.Gamepad.sThumbLY;
-						result *= 0.001;
-						//Debug::Log(Debug::ToString(result));
-						return 1 * result;
+						result = state.Gamepad.sThumbLX  / xVals[LX] >= 0 ? 1 : 0;
+						xVals [LX] = state.Gamepad.sThumbLY;
+
+						if(state.Gamepad.sThumbLX == xDefaultVals[LX])
+							result = 0;
+
+						//Debug::Log("RIGHT " + Debug::ToString(result));
+						return result;
 					}
 					if(key == LEFT)
 					{
-						result = xVals[LX];
-						result = state.Gamepad.sThumbLY - xVals[LX];
-						xVals[LX] = state.Gamepad.sThumbLY;
-						result *= 0.001;
-						Debug::Log(Debug::ToString(result));
-						return -1 * result;
+						result = state.Gamepad.sThumbLX  / xVals[LX] < 0 ? 1 : 0;
+						xVals [LX] = state.Gamepad.sThumbLY;
+
+						if(state.Gamepad.sThumbLX == xDefaultVals[LX])
+							result = 0;
+
+						//Debug::Log("LEFT " + Debug::ToString(result));
+						return result;
 					}						
 				}
 			}
@@ -227,24 +238,24 @@ public:
 				{
 					XINPUT_STATE state = xcontroller->GetState();
 					if(key == FORWARD)
-					{
-									Debug::Log("FORWARD " + Debug::ToString((float)(state.Gamepad.sThumbLY  / -xDefaultVals[LY]< 0 ? 1 : 0)));						
-						return state.Gamepad.sThumbLY / xDefaultVals[LY] < 0 ? 1: 0;
+					{//
+						//Debug::Log("FORWARD " + Debug::ToString(state.Gamepad.sThumbLY > xDefaultVals[LY] ? (float)1: 0));						
+						return state.Gamepad.sThumbLY > xDefaultVals[LY] ? 1: 0;
 					}
 					if(key == BACKWARD)
 					{					
-								Debug::Log("BOTTOM " + Debug::ToString((float)(state.Gamepad.sThumbLY  / -xDefaultVals[LY]< 0 ? 1 : 0)));						
-						return state.Gamepad.sThumbLY / -xDefaultVals[LY] < 0 ? 0 : 1;
+						//Debug::Log("BOTTOM " + Debug::ToString(state.Gamepad.sThumbLY < xDefaultVals[LY]? (float)1 : 0));						
+						return state.Gamepad.sThumbLY < xDefaultVals[LY]? 1 : 0;
 					}
 					if(key == RIGHT)
 					{
-						Debug::Log("RIGHT " + Debug::ToString((float)(state.Gamepad.sThumbLX  / -xDefaultVals[LX]< 0 ? 1 : 0)));						
-						return state.Gamepad.sThumbLX / xDefaultVals[LX] < 0 ? 0 : 1;
+						//Debug::Log("RIGHT " + Debug::ToString((float)(state.Gamepad.sThumbLX  / -xDefaultVals[LX]< 0 ? 1 : 0)));						
+						return state.Gamepad.sThumbLX > xDefaultVals[LX] ? 1 : 0;
 					}
 					if(key == LEFT)
 					{
-						Debug::Log("LEFT " + Debug::ToString((float)(state.Gamepad.sThumbLX  / -xDefaultVals[LX]< 0 ? 1 : 0)));
-						return state.Gamepad.sThumbLX / -xDefaultVals[LX] < 0 ? 1 : 0;
+						//Debug::Log("LEFT " + Debug::ToString((float)(state.Gamepad.sThumbLX  / -xDefaultVals[LX]< 0 ? 1 : 0)));
+						return state.Gamepad.sThumbLX < -xDefaultVals[LX] ? 1 : 0;
 					}						
 				}				
 			}			
@@ -307,9 +318,9 @@ public:
 		}
 	}
 
-	XBOX360CONTROLLER GetXController() const
+	XBOX360CONTROLLER* GetXController() const
 	{
-		return *xcontroller;
+		return xcontroller;
 	}
 
 	bool Vibrate(int left = 0, int right = 0) const
@@ -318,6 +329,16 @@ public:
 			return xcontroller->Vibrate(left, right);
 		else
 			return false;
+	}
+
+	inline INPUTMODES GetModes() const {
+		if(keyboard && xinput)
+			return (INPUTMODES)0;
+		if(keyboard)
+			return INPUTMODES::KEYBOARD;
+		if(xinput)
+			return INPUTMODES::XCONTROLLER;
+
 	}
 
 protected:

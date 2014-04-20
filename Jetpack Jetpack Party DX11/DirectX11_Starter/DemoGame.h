@@ -89,7 +89,6 @@ private:
 	Menu* menu;
 	MouseLook* mouseLook;
 
-	InputManager* inputManager;
 	bool mouseCursorVisibility;
 	bool flag;
 	InputManager* ipMan;
