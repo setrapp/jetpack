@@ -14,7 +14,7 @@ public:
 
 	~SpriteRenderer(void)
 	{
-		
+		delete spriteBatch;
 	}
 
 	inline void SpriteRenderer::SetColor(FLOAT* color)

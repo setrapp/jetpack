@@ -30,7 +30,7 @@ public:
 
 	~FontRenderer(void)
 	{
-		
+		delete font;
 	}
 
 private: 	

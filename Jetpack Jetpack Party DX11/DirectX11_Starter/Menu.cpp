@@ -41,7 +41,6 @@ void Menu::Render()
 
 Menu::~Menu(void)
 {
-	delete fontRenderer;
 	delete guiMan;
 }
 

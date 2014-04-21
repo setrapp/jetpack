@@ -74,11 +74,8 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 
 DemoGame::~DemoGame()
 {
-	ReleaseMacro(vertexShader);
-	ReleaseMacro(pixelShader);
 	ReleaseMacro(vsModelConstantBuffer);
 	ReleaseMacro(materialsAndLightsConstantBuffer);
-	ReleaseMacro(inputLayout);
 
 	delete ipMan;
 	delete xnew;
@@ -111,16 +108,16 @@ bool DemoGame::Init()
 	if( !DXGame::Init() )
 		return false;
 
-	AssetManager* assetManager = new AssetManager();
+	assetManager = new AssetManager();
 
-	/*spriteRenderer = new SpriteRenderer(deviceContext);
+	spriteRenderer = new SpriteRenderer(deviceContext);
 	fontRenderer = new FontRenderer(device, L"../Assets/font.spritefont");	
 	fontRenderer->setSpriteBatch(spriteRenderer->GetSpriteBatch());	
-	menu = new Menu(fontRenderer);*/
+	menu = new Menu(fontRenderer);
 
-	//LoadShadersAndInputLayout();
+	LoadShadersAndInputLayout();
 
-	//AssetManager::Instance()->StoreMaterial(new Material());
+	AssetManager::Instance()->StoreMaterial(new Material());
 
 	/*XMFLOAT3 cameraPosition;
 	XMStoreFloat3(&cameraPosition, XMVectorSet(0, 10, -50, 0));
@@ -243,14 +240,14 @@ void DemoGame::LoadShadersAndInputLayout()
 
 	// Load Vertex Shaders --------------------------------------
 	vertexShader = AssetManager::Instance()->CreateAndStoreVertexShader("../Debug/SimpleVertexShader.cso", vertexDesc, ARRAYSIZE(vertexDesc), &inputLayout);
-
+	
 	// Load Pixel Shaders ---------------------------------------
 	pixelShader = AssetManager::Instance()->CreateAndStorePixelShader("../Debug/SimplePixelShader.cso");
 	texturePixelShader = AssetManager::Instance()->CreateAndStorePixelShader("../Debug/TexturePixelShader.cso", "texture");
 
 	// Constant buffers ----------------------------------------
 	// Vertex Shader Per Model Constant Buffer
-	D3D11_BUFFER_DESC cBufferDesc;
+	/*D3D11_BUFFER_DESC cBufferDesc;
 	cBufferDesc.ByteWidth			= sizeof(vsModelConstantBufferData);
 	cBufferDesc.Usage				= D3D11_USAGE_DEFAULT;
 	cBufferDesc.BindFlags			= D3D11_BIND_CONSTANT_BUFFER;
@@ -272,7 +269,7 @@ void DemoGame::LoadShadersAndInputLayout()
 	HR(device->CreateBuffer(
 		&cBufferDesc,
 		NULL,
-		&materialsAndLightsConstantBuffer));
+		&materialsAndLightsConstantBuffer));*/
 }
 
 void DemoGame::LoadSoundAssets()
