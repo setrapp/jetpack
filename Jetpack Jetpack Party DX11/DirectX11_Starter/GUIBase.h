@@ -11,8 +11,11 @@
 enum AnimationType
 {
 	LEFTTORIGHT,
-	RIGHTTOLEFT
+	RIGHTTOLEFT,
+	TOPTOBOTTOM,
+	BOTTOMTOTOP
 };
+
 
 class GUIBase
 {
@@ -27,8 +30,8 @@ public : Rect* rect;
 
 		 //You can have the width declared as 0. It will be taken care of considering the size of string.
 		 //0 Height will make the rect only as long as the font size
-
-		 GUIBase(Rect* rect, wchar_t* str, AnimationType anim, FontRenderer* renderer, FXMVECTOR color = Colors::White, XMFLOAT2 Scale =XMFLOAT2(1, 1), float rotation = 0, float depth = 1, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
+		 //Item count represents how late you want the animation to affect for the item. Set it to 0 to have all items show up at once.
+		 GUIBase(Rect* rect, wchar_t* str, int itemCount, AnimationType anim, FontRenderer* renderer, FXMVECTOR color = Colors::White, XMFLOAT2 Scale =XMFLOAT2(1, 1), float rotation = 0, float depth = 1, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
 		 {
 			 this->str = str;
 			 this->rect = rect;
@@ -54,16 +57,26 @@ public : Rect* rect;
 			 hover = false;
 			 offset = 250;
 			 this->animation = anim;
+			 RECT rect1;
+			 GetWindowRect(GetActiveWindow(), &rect1);
 			 if(animation == AnimationType::LEFTTORIGHT)
 			 {
-				 basePosition = XMFLOAT2(this->rect->x - offset, this->rect->y);
+				 basePosition = XMFLOAT2(this->rect->x - rect1.left - rect1.right - offset * itemCount, this->rect->y);
 			 }
 			 else
-			 {
-				 RECT rect1;
-				 GetWindowRect(GetActiveWindow(), &rect1);
-				 basePosition = XMFLOAT2(this->rect->x + offset + rect1.left + rect1.right, this->rect->y);
-			 }
+				 if(animation == AnimationType::RIGHTTOLEFT)
+				 {					 
+					 basePosition = XMFLOAT2(this->rect->x + rect1.left + rect1.right + offset * itemCount, this->rect->y);
+				 }
+				 else
+					 if(animation == AnimationType::TOPTOBOTTOM)
+					 {
+						 basePosition = XMFLOAT2(this->rect->x, this->rect->y - rect1.left - rect1.right- offset * itemCount);
+					 }
+					 else
+					 {
+						 basePosition = XMFLOAT2(this->rect->x, this->rect->y + offset + rect1.top + rect1.bottom + offset * itemCount);
+					 }
 			 Origin = XMFLOAT2();		
 		 }
 
@@ -141,12 +154,25 @@ private :
 
 	inline void Animate()
 	{
-		if((int)basePosition.x != (int)rect->x)
+		if(animation == AnimationType::LEFTTORIGHT || animation == AnimationType::RIGHTTOLEFT)
+			{
+				if((int)basePosition.x != (int)rect->x)
+				{
+					if(animation == AnimationType::LEFTTORIGHT)
+						basePosition.x++;
+					else
+						basePosition.x--;
+				}
+			}
+		else
 		{
-			if(animation == AnimationType::LEFTTORIGHT)
-				basePosition.x++;
-			else
-				basePosition.x--;
+			if((int)basePosition.y != (int)rect->y)
+			{
+				if(animation == AnimationType::TOPTOBOTTOM)
+						basePosition.y++;
+					else
+						basePosition.y--;
+			}
 		}
 	}
 };

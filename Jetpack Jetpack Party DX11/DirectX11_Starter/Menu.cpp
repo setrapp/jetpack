@@ -3,15 +3,12 @@
 
 Menu::Menu(FontRenderer* renderer) 
 {
-	guiMan = new GUIManager();
-	/*GUIBase* title = new GUIBase(new Rect(0, 0, 0 ,0), L"JETPACK JETPACK PARTY", renderer);
-	guiMan->Add("title", title);*/
-	
-	GUIBase* nG = new GUIBase(new Rect(0, 0, 0 ,0), L"NEW GAME", AnimationType::RIGHTTOLEFT, renderer, Colors::Black);
+	guiMan = new GUIManager();	
+	GUIBase* nG = new GUIBase(new Rect(0, 0, 0 ,0), L"NEW GAME", 1, AnimationType::TOPTOBOTTOM, renderer, Colors::Black);
 	guiMan->Add("NEWGAME", nG);
-	GUIBase* settings = new GUIBase(new Rect(0, 100, 0 ,0), L"SETTINGS", AnimationType::RIGHTTOLEFT, renderer, Colors::Black);
+	GUIBase* settings = new GUIBase(new Rect(0, 100, 0 ,0), L"SETTINGS", 3, AnimationType::TOPTOBOTTOM, renderer, Colors::Black);
 	guiMan->Add("SETTINGS", settings);
-	GUIBase* exit = new GUIBase(new Rect(0, 200, 0 ,0), L"EXIT", AnimationType::RIGHTTOLEFT, renderer, Colors::Black);
+	GUIBase* exit = new GUIBase(new Rect(0, 200, 0 ,0), L"EXIT", 5, AnimationType::TOPTOBOTTOM, renderer, Colors::Black);
 	guiMan->Add("EXIT", exit);			
 	this->fontRenderer = renderer;
 	currstate = GameState::Started;
