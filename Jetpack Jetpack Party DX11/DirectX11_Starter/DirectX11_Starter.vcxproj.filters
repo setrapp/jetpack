@@ -58,6 +58,9 @@
     <Filter Include="Source Files\Networking">
       <UniqueIdentifier>{4602c02e-931a-49e1-a078-4e6b5c40afa6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GUI">
+      <UniqueIdentifier>{32595750-5218-400c-9a1a-cd021f651134}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXGame.cpp">
@@ -238,6 +241,12 @@
     </ClInclude>
     <ClInclude Include="ClientConnectionEntity.h">
       <Filter>Header Files\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIManager.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIBase.h">
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

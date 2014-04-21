@@ -69,7 +69,6 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	windowWidth = 800;
 	windowHeight = 600;
 	currentState = GameState::Started;
-	menu = new Menu(device, deviceContext);
 	camera = new ControllableCamera();
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
 	mouseCursorVisibility = true;
@@ -113,7 +112,8 @@ bool DemoGame::Init()
 
 	spriteRenderer = new SpriteRenderer(deviceContext);
 	fontRenderer = new FontRenderer(device, L"../Assets/font.spritefont");	
-	fontRenderer->setSpriteBatch(spriteRenderer->GetSpriteBatch());
+	fontRenderer->setSpriteBatch(spriteRenderer->GetSpriteBatch());	
+	menu = new Menu(fontRenderer);
 
 	LoadShadersAndInputLayout();
 
@@ -183,11 +183,13 @@ void DemoGame::CreateGeometryBuffers()
 	};
 
 	UINT indices[] = { 0, 2, 1, 3, 0, 1 };
+
 	Entity* gift = new Entity();
 	gift->AddQuad(vertices, indices);
 	gift->Finalize();
 	gift->transform->Translate(XMFLOAT3(-5, 5, 0));
 	entities.push_back(gift);
+
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
 	gift->SetMaterial("gift");
 	gift->GetMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
@@ -270,8 +272,6 @@ void DemoGame::LoadShadersAndInputLayout()
 		&cBufferDesc,
 		NULL,
 		&materialsAndLightsConstantBuffer));
-
-	menu->setRenderers(fontRenderer);
 }
 
 void DemoGame::LoadSoundAssets()
@@ -404,7 +404,7 @@ void DemoGame::DrawScene()
 	if(currentState == GameState::Started)
 	{	
 		spriteRenderer->Begin();
-		menu->Render(deviceContext);
+		menu->Render();
 		spriteRenderer->End();
 		if(!mouseCursorVisibility)
 		{
@@ -494,8 +494,6 @@ void DemoGame::OnMouseDown(WPARAM btnState, int x, int y)
 {
 	prevMousePos.x = x;
 	prevMousePos.y = y;
-	
-	menu->ProcessMouseInput(btnState, x, y);
 	SetCapture(hMainWnd);
 }
 

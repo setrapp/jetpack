@@ -1,56 +1,47 @@
 #include "Menu.h"
 #include <DirectXMath.h>
 
-Menu::Menu(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
+Menu::Menu(FontRenderer* renderer) 
 {
-	this->device = device;
-	this->deviceContext = deviceContext;
-	newGameArea = new Rect();
-	newGameArea->x = 0;
-	newGameArea->y = 0;
-	newGameFlag = false;
+	guiMan = new GUIManager();
+	/*GUIBase* title = new GUIBase(new Rect(0, 0, 0 ,0), L"JETPACK JETPACK PARTY", renderer);
+	guiMan->Add("title", title);*/
+	
+	GUIBase* nG = new GUIBase(new Rect(0, 0, 0 ,0), L"NEW GAME", renderer, Colors::Black);
+	guiMan->Add("NEWGAME", nG);
+	GUIBase* settings = new GUIBase(new Rect(0, 100, 0 ,0), L"SETTINGS", renderer, Colors::Black);
+	guiMan->Add("title", settings);
+	GUIBase* exit = new GUIBase(new Rect(0, 200, 0 ,0), L"EXIT", renderer, Colors::Black);
+	guiMan->Add("EXIT", exit);		
+	
+	this->fontRenderer = renderer;
+	currstate = GameState::Started;
 }
 
-void Menu::ProcessMouseInput(WPARAM btnState, int x, int y)
-{	
-	if(newGameArea->Contains(x, y))
-	{
-		newGameFlag = true;
-	}
-}
-
-void Menu::setRenderers(FontRenderer* f)
+void Menu::OnClickNewGame()
 {
-	this->fontRenderer = f;
-	auto p = fontRenderer->GetSpriteFont()->MeasureString(L"NEW GAME");
-	newGameArea->width = p.m128_f32[0];
-	newGameArea->height = p.m128_f32[1];
+	Menu::currstate = GameState::Playing;
 }
 
 GameState Menu::Update(float dt)
-{
-	GameState currstate;
-	if(newGameFlag)
-	{
-		currstate = GameState::Playing;
-	}
+{	
+	guiMan->Update(dt);
+	if(guiMan->_guiElements["NEWGAME"]->Contains())
+		return GameState::Playing;	
 	else
-	{
-		currstate = GameState::Started;
-	}
-	return currstate;	
+		return GameState::Started;
+
+	if(guiMan->_guiElements["EXIT"]->Contains())
+		exit(1);
 }
 
-void Menu::Render(ID3D11DeviceContext* deviceContext)
+void Menu::Render()
 {
-	fontRenderer->GetSpriteFont()->DrawString(fontRenderer->GetSpriteBatch(), L"NEW GAME", XMFLOAT2(newGameArea->x, newGameArea->y), Colors::Green, 0, XMFLOAT2(0,0), 1, SpriteEffects_None, 0);	
-	fontRenderer->GetSpriteFont()->DrawString(fontRenderer->GetSpriteBatch(), L"Exit", XMFLOAT2(0, 100), Colors::Red, 0, XMFLOAT2(0,0), 1, DirectX::SpriteEffects_None,0 );
+	guiMan->Render();
 }
 
 Menu::~Menu(void)
 {
-	delete newGameArea;
-	delete exitGameArea;
 	delete fontRenderer;
-	delete spriteBatch;
+	delete guiMan;
 }

@@ -129,6 +129,8 @@
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="GeneralUtility\GUMathUtility.h" />
     <ClInclude Include="GeneralUtility\GUParseUtility.h" />
+    <ClInclude Include="GUIBase.h" />
+    <ClInclude Include="GUIManager.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
