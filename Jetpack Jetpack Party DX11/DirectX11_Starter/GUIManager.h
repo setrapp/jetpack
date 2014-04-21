@@ -49,6 +49,15 @@ public:
 		return false;
 	}
 
+		 void Resize()
+		 {
+			auto i = _guiElements.begin();
+			while(i != _guiElements.end())
+			{
+				i->second->Resize();
+				i++;
+			}
+		 }
 
 	void Update(float dt)
 	{

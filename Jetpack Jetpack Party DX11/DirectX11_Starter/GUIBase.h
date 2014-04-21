@@ -8,6 +8,23 @@
 #include "Menu.h"
 #include <utility>
 
+//Alignments are unstable and not been tested yet. Just FYI. 
+//Use L and T for basic settings. That is tested.
+enum HAlignment
+{
+	//Left
+	L,
+	//Right
+	R,	
+};
+
+enum VAlignment
+{
+	//Top
+	T,
+	//Bottom
+	B
+};
 
 class GUIBase
 {
@@ -23,7 +40,7 @@ public : Rect* rect;
 		 //You can have the width declared as 0. It will be taken care of considering the size of string.
 		 //0 Height will make the rect only as long as the font size
 
-		 GUIBase(Rect* rect, wchar_t* str, FontRenderer* renderer, FXMVECTOR color = Colors::White, float rotation = 0, float depth = 1, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
+		 GUIBase(Rect* rect, wchar_t* str, HAlignment hallign, VAlignment valign, FontRenderer* renderer, FXMVECTOR color = Colors::White, float rotation = 0, float depth = 1, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
 		 {
 			 this->str = str;
 			 this->rect = rect;
@@ -45,7 +62,32 @@ public : Rect* rect;
 			 this->depth = depth;
 			 this->spriteFX = spriteEffects;		
 			 contains = false;
+			 this->halign = halign;
+			 this->valign = valign;
+			 Origin = XMFLOAT2();			 
+			 Resize();
 		 }
+
+		 void Resize()
+		 {
+			 if(halign == HAlignment::L)
+			 { Origin.x = 0; return ;}
+			 
+			 if(valign == VAlignment::T)
+				{ Origin.y = 0; return ;}
+
+			 
+			 RECT rect;
+			 GetWindowRect(GetActiveWindow(), &rect);
+
+			 if(halign == HAlignment::R)
+				 Origin.x = rect.right;
+
+
+			 if(valign == VAlignment::B)
+				 Origin.y = rect.bottom;
+		 }
+
 
 		 void Update (LPPOINT point, float dt)
 		 {			
@@ -72,4 +114,7 @@ private :
 	DirectX::SpriteEffects spriteFX;
 	float depth;
 	bool contains;
+	XMFLOAT2 Origin;
+	HAlignment halign;
+	VAlignment valign;
 };

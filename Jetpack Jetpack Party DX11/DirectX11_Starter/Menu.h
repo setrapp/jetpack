@@ -22,6 +22,7 @@ public:
 	GameState Update(float dt);
 	void Render();
 	void OnClickNewGame();
+	void WindowResize();
 
 private:
 	FontRenderer* fontRenderer;

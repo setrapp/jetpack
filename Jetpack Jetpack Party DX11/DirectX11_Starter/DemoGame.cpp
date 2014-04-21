@@ -320,6 +320,8 @@ void DemoGame::OnResize()
 			0.1f,
 			100.0f);
 
+
+
 	XMStoreFloat4x4(&camera->projection, XMMatrixTranspose(P));
 
 	if (mouseLook)
