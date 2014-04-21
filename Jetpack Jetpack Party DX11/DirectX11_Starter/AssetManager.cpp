@@ -39,6 +39,10 @@ AssetManager::~AssetManager()
 	delete pixelShaders;
 	materials->erase(materials->begin(), materials->end());
 	delete materials;
+	models->erase(models->begin(), models->end());
+	delete models;
+
+	delete soundManager;
 }
 	
 // Input Layouts

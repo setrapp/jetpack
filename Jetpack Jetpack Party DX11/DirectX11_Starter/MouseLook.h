@@ -26,7 +26,10 @@ public :
 		this->looker = looker;
 		rotationValue = XMFLOAT3(0, 0, 0);		
 		this->speed = speed;
-		this->looker->SetLocalRotation(XMFLOAT3());
+		if (this->looker)
+		{
+			this->looker->SetLocalRotation(XMFLOAT3());
+		}
 		ignoreMouse = false;
 	}
 
@@ -67,7 +70,10 @@ public :
 				rotationValue.y += 2 * PI;
 			}
 
-			looker->SetLocalRotation(rotationValue);
+			if (looker)
+			{
+				looker->SetLocalRotation(rotationValue);
+			}
 		}		
 
 		ResetCursor();

@@ -27,7 +27,7 @@ public:
 	virtual void Update(float dt, VertexShaderModelConstantBuffer* vsConstantBufferdata);
 
 public:
-	Transform* transform;
+	Transform transform;
 
 private:
 	XMFLOAT4X4 oldWorldMatrix;
