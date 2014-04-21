@@ -7,11 +7,11 @@ Menu::Menu(FontRenderer* renderer)
 	/*GUIBase* title = new GUIBase(new Rect(0, 0, 0 ,0), L"JETPACK JETPACK PARTY", renderer);
 	guiMan->Add("title", title);*/
 	
-	GUIBase* nG = new GUIBase(new Rect(0, 0, 0 ,0), L"NEW GAME", renderer, Colors::Black);
+	GUIBase* nG = new GUIBase(new Rect(0, 0, 0 ,0), L"NEW GAME", AnimationType::RIGHTTOLEFT, renderer, Colors::Black);
 	guiMan->Add("NEWGAME", nG);
-	GUIBase* settings = new GUIBase(new Rect(0, 100, 0 ,0), L"SETTINGS", renderer, Colors::Black);
+	GUIBase* settings = new GUIBase(new Rect(0, 100, 0 ,0), L"SETTINGS", AnimationType::RIGHTTOLEFT, renderer, Colors::Black);
 	guiMan->Add("SETTINGS", settings);
-	GUIBase* exit = new GUIBase(new Rect(0, 200, 0 ,0), L"EXIT", renderer, Colors::Black);
+	GUIBase* exit = new GUIBase(new Rect(0, 200, 0 ,0), L"EXIT", AnimationType::RIGHTTOLEFT, renderer, Colors::Black);
 	guiMan->Add("EXIT", exit);			
 	this->fontRenderer = renderer;
 	currstate = GameState::Started;

@@ -8,6 +8,12 @@
 #include "Menu.h"
 #include <utility>
 
+enum AnimationType
+{
+	LEFTTORIGHT,
+	RIGHTTOLEFT
+};
+
 class GUIBase
 {
 public : Rect* rect;
@@ -22,7 +28,7 @@ public : Rect* rect;
 		 //You can have the width declared as 0. It will be taken care of considering the size of string.
 		 //0 Height will make the rect only as long as the font size
 
-		 GUIBase(Rect* rect, wchar_t* str, FontRenderer* renderer, FXMVECTOR color = Colors::White, XMFLOAT2 Scale =XMFLOAT2(1, 1), float rotation = 0, float depth = 1, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
+		 GUIBase(Rect* rect, wchar_t* str, AnimationType anim, FontRenderer* renderer, FXMVECTOR color = Colors::White, XMFLOAT2 Scale =XMFLOAT2(1, 1), float rotation = 0, float depth = 1, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
 		 {
 			 this->str = str;
 			 this->rect = rect;
@@ -46,11 +52,24 @@ public : Rect* rect;
 			 clicked = false;
 			 this->scale = Scale;
 			 hover = false;
+			 offset = 250;
+			 this->animation = anim;
+			 if(animation == AnimationType::LEFTTORIGHT)
+			 {
+				 basePosition = XMFLOAT2(this->rect->x - offset, this->rect->y);
+			 }
+			 else
+			 {
+				 RECT rect1;
+				 GetWindowRect(GetActiveWindow(), &rect1);
+				 basePosition = XMFLOAT2(this->rect->x + offset + rect1.left + rect1.right, this->rect->y);
+			 }
 			 Origin = XMFLOAT2();		
 		 }
 
 		 void Update (LPPOINT point, float dt)
 		 {			
+			Animate();
 			RECT rect1;
 			GetWindowRect(GetActiveWindow(), &rect1);
 			 //Inside the rect or not ?					MOUSE LEFT IS PRESSED
@@ -73,7 +92,7 @@ public : Rect* rect;
 		 void Render()
 		 {
 			 auto sp = this->fontRenderer->GetSpriteFont();
-			 sp->DrawString(fontRenderer->GetSpriteBatch(), str, XMLoadFloat2(&XMFLOAT2(rect->x, rect->y)), XMLoadFloat4(&this->color), rotation, XMLoadFloat2(&XMFLOAT2(0, 0)), XMLoadFloat2(&scale), spriteFX, depth);
+			 sp->DrawString(fontRenderer->GetSpriteBatch(), str, XMLoadFloat2(&XMFLOAT2(basePosition.x, basePosition.y)), XMLoadFloat4(&this->color), rotation, XMLoadFloat2(&XMFLOAT2(0, 0)), XMLoadFloat2(&scale), spriteFX, depth);
 		 }
 
 		 inline bool Clicked()	const
@@ -115,5 +134,19 @@ private :
 	float depth;
 	bool clicked;
 	bool hover;
+	XMFLOAT2 basePosition;
 	XMFLOAT2 Origin;
+	float offset;
+	AnimationType animation;
+
+	inline void Animate()
+	{
+		if((int)basePosition.x != (int)rect->x)
+		{
+			if(animation == AnimationType::LEFTTORIGHT)
+				basePosition.x++;
+			else
+				basePosition.x--;
+		}
+	}
 };
