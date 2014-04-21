@@ -7,11 +7,11 @@ Menu::Menu(FontRenderer* renderer)
 	/*GUIBase* title = new GUIBase(new Rect(0, 0, 0 ,0), L"JETPACK JETPACK PARTY", renderer);
 	guiMan->Add("title", title);*/
 	
-	GUIBase* nG = new GUIBase(new Rect(0, 0, 0 ,0), L"NEW GAME", HAlignment::L, VAlignment::T, renderer, Colors::Black);
+	GUIBase* nG = new GUIBase(new Rect(0, 0, 0 ,0), L"NEW GAME", renderer, Colors::Black);
 	guiMan->Add("NEWGAME", nG);
-	GUIBase* settings = new GUIBase(new Rect(0, 100, 0 ,0), L"SETTINGS", HAlignment::L, VAlignment::T, renderer, Colors::Black);
-	guiMan->Add("title", settings);
-	GUIBase* exit = new GUIBase(new Rect(0, 200, 0 ,0), L"EXIT", HAlignment::L, VAlignment::T, renderer, Colors::Black);
+	GUIBase* settings = new GUIBase(new Rect(0, 100, 0 ,0), L"SETTINGS", renderer, Colors::Black);
+	guiMan->Add("SETTINGS", settings);
+	GUIBase* exit = new GUIBase(new Rect(0, 200, 0 ,0), L"EXIT", renderer, Colors::Black);
 	guiMan->Add("EXIT", exit);			
 	this->fontRenderer = renderer;
 	currstate = GameState::Started;
@@ -25,12 +25,44 @@ void Menu::OnClickNewGame()
 GameState Menu::Update(float dt)
 {	
 	guiMan->Update(dt);
-	if(guiMan->_guiElements["NEWGAME"]->Contains())
+	if(guiMan->_guiElements["NEWGAME"]->Clicked())
 		return GameState::Playing;	
 
-	if(guiMan->_guiElements["EXIT"]->Contains())
+	if(guiMan->_guiElements["EXIT"]->Clicked())
 		exit(1);
 
+	if(guiMan->_guiElements["NEWGAME"]->IsMouseHovering())
+	{
+		guiMan->_guiElements["NEWGAME"]->SetColor(XMFLOAT4(1, 1, 1, 1));
+		guiMan->_guiElements["NEWGAME"]->SetScale(XMFLOAT2(1.105f, 1.105f));
+	}
+	else
+	{
+		guiMan->_guiElements["NEWGAME"]->SetColor(XMFLOAT4(0, 0, 0, 1));
+		guiMan->_guiElements["NEWGAME"]->SetScale(XMFLOAT2(1, 1));
+	}
+
+	if(guiMan->_guiElements["EXIT"]->IsMouseHovering())
+	{
+		guiMan->_guiElements["EXIT"]->SetColor(XMFLOAT4(1, 1, 1, 1));
+		guiMan->_guiElements["EXIT"]->SetScale(XMFLOAT2(1.105f, 1.105f));
+	}
+	else
+	{
+		guiMan->_guiElements["EXIT"]->SetColor(XMFLOAT4(0, 0, 0, 1));
+		guiMan->_guiElements["EXIT"]->SetScale(XMFLOAT2(1, 1));
+	}
+
+	if(guiMan->_guiElements["SETTINGS"]->IsMouseHovering())
+	{
+		guiMan->_guiElements["SETTINGS"]->SetColor(XMFLOAT4(1, 1, 1, 1));
+		guiMan->_guiElements["SETTINGS"]->SetScale(XMFLOAT2(1.105f, 1.105f)); 
+	}
+	else
+	{
+		guiMan->_guiElements["SETTINGS"]->SetColor(XMFLOAT4(0, 0, 0, 1));
+		guiMan->_guiElements["SETTINGS"]->SetScale(XMFLOAT2(1, 1));
+	}
 	return GameState::Started;
 }
 
@@ -48,5 +80,4 @@ Menu::~Menu(void)
 
 void Menu::WindowResize()
 {
-	guiMan->Resize();
 }

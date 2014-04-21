@@ -36,28 +36,20 @@ public:
 			_guiElements[name] = (_guiElement);
 	}
 	
-	bool Remove(GUIBase* _guiElement) 
+	bool Remove(char* _guiElementName) 
 	{
-	/*	if(_guiElement){
-			auto f = find(_guiElements.begin(), _guiElements.end(), _guiElement);
+		{
+			auto f = _guiElements.find(_guiElementName);
 			if(f != _guiElements.end())
 			{
 				_guiElements.erase(f);
 				return true;
 			}
-		}*/
+		}
 		return false;
 	}
 
-		 void Resize()
-		 {
-			auto i = _guiElements.begin();
-			while(i != _guiElements.end())
-			{
-				i->second->Resize();
-				i++;
-			}
-		 }
+		 
 
 	void Update(float dt)
 	{

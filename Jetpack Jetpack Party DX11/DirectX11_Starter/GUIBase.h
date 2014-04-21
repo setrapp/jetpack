@@ -8,24 +8,6 @@
 #include "Menu.h"
 #include <utility>
 
-//Alignments are unstable and not been tested yet. Just FYI. 
-//Use L and T for basic settings. That is tested.
-enum HAlignment
-{
-	//Left
-	L,
-	//Right
-	R,	
-};
-
-enum VAlignment
-{
-	//Top
-	T,
-	//Bottom
-	B
-};
-
 class GUIBase
 {
 public : Rect* rect;
@@ -40,7 +22,7 @@ public : Rect* rect;
 		 //You can have the width declared as 0. It will be taken care of considering the size of string.
 		 //0 Height will make the rect only as long as the font size
 
-		 GUIBase(Rect* rect, wchar_t* str, HAlignment hallign, VAlignment valign, FontRenderer* renderer, FXMVECTOR color = Colors::White, float rotation = 0, float depth = 1, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
+		 GUIBase(Rect* rect, wchar_t* str, FontRenderer* renderer, FXMVECTOR color = Colors::White, XMFLOAT2 Scale =XMFLOAT2(1, 1), float rotation = 0, float depth = 1, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
 		 {
 			 this->str = str;
 			 this->rect = rect;
@@ -61,69 +43,77 @@ public : Rect* rect;
 			 this->rotation = rotation;
 			 this->depth = depth;
 			 this->spriteFX = spriteEffects;		
-			 contains = false;
-			 this->halign = halign;
-			 this->valign = valign;
-			 Origin = XMFLOAT2();			 
-			 Resize();
+			 clicked = false;
+			 this->scale = Scale;
+			 hover = false;
+			 Origin = XMFLOAT2();		
 		 }
-
-		 void Resize()
-		 {
-			 if(halign == HAlignment::L)
-			 { Origin.x = 0; return ;}
-			 
-			 if(valign == VAlignment::T)
-				{ Origin.y = 0; return ;}
-
-			 
-			 RECT rect;
-			 GetWindowRect(GetActiveWindow(), &rect);
-
-			 if(halign == HAlignment::R)
-				 Origin.x = rect.right;
-
-
-			 if(valign == VAlignment::B)
-				 Origin.y = rect.bottom;
-		 }
-
 
 		 void Update (LPPOINT point, float dt)
 		 {			
-			 RECT rect1;
+			RECT rect1;
 			GetWindowRect(GetActiveWindow(), &rect1);
 			 //Inside the rect or not ?					MOUSE LEFT IS PRESSED
-			 
-			 if(((GetKeyState(VK_LBUTTON) & 0x80) != 0))
-			 {
-				 int x, y;
+			int x, y;
 				 x = point->x - rect1.left;
 				 y = point->y - rect1.top - 21;
-				 if(rect->Contains(x, y))
-					 contains = true;
+				 
+			 if(rect->Contains(x, y))
+			 {
+				 hover = true;
+				 if(((GetKeyState(VK_LBUTTON) & 0x80) != 0))
+				 {			 
+					clicked = true;
+				 }
 			 }
+			 else
+				 hover = false;
 		 }
 
 		 void Render()
 		 {
 			 auto sp = this->fontRenderer->GetSpriteFont();
-			 sp->DrawString(fontRenderer->GetSpriteBatch(), str, XMFLOAT2(rect->x, rect->y), XMLoadFloat4(&this->color), rotation, XMFLOAT2(0, 0), 1, spriteFX, depth);
+			 sp->DrawString(fontRenderer->GetSpriteBatch(), str, XMLoadFloat2(&XMFLOAT2(rect->x, rect->y)), XMLoadFloat4(&this->color), rotation, XMLoadFloat2(&XMFLOAT2(0, 0)), XMLoadFloat2(&scale), spriteFX, depth);
 		 }
 
-		 bool Contains()
+		 inline bool Clicked()	const
 		 {
-			 return contains;
+			 return clicked;
+		 }
+
+		 inline bool IsMouseHovering() const
+		 {
+			 return hover;
+		 }
+
+		 inline void SetColor(XMFLOAT4 Color)
+		 {
+			 this->color = Color;
+		 }
+
+		 inline void SetRotation(float rot)
+		 {
+			 this->rotation = rot;
+		 }
+
+		 inline void SetSpriteEffects(SpriteEffects fx)
+		 {
+			 this->spriteFX = fx;
+		 }
+
+		 inline void SetScale(XMFLOAT2 scale)
+		 {
+			 this->scale = scale;
 		 }
 
 private :
+	XMFLOAT2 scale;
 	FontRenderer* fontRenderer;
 	XMFLOAT4 color;
 	float rotation;
 	DirectX::SpriteEffects spriteFX;
 	float depth;
-	bool contains;
+	bool clicked;
+	bool hover;
 	XMFLOAT2 Origin;
-	HAlignment halign;
-	VAlignment valign;
 };
