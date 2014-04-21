@@ -61,6 +61,11 @@ private:
 public:
 	//Give the input modes. You can pass KEYBOARD | XCONTROLLER
 	InputManager(INPUTMODES mode){
+		keyStates = NULL;
+		xVals = NULL;
+		xDefaultVals = NULL;			
+		xcontroller = NULL;
+
 		this->mode = mode;
 		{
 			if(mode == 0) {
@@ -77,13 +82,13 @@ public:
 
 				if(keyboard)
 				{
-					keyStates = (int*)malloc(sizeof(int*) * maxMappedControls);					
+					keyStates = new int[maxMappedControls];					
 				}
 
 				if(xinput)
 				{
-					xVals = (float*) malloc(sizeof(float*) * xMap);
-					xDefaultVals = (float*) malloc(sizeof(float*) * xMap);				
+					xVals = new float[xMap];
+					xDefaultVals = new float[xMap];			
 					xcontroller = new XBOX360CONTROLLER(1);
 						
 					SetXDefaults();
@@ -95,8 +100,10 @@ public:
 
 	~InputManager(void)
 	{
-		delete xVals;
-		delete keyStates;
+		delete [] xVals;
+		delete [] xDefaultVals;
+		delete []  keyStates;
+		delete xcontroller;
 	}
 
 
@@ -371,7 +378,8 @@ protected:
 			xDefaultVals[LY] = state.Gamepad.sThumbLY;
 			xDefaultVals[RY] = state.Gamepad.sThumbRY;
 		}
-	}
+	}			
+
 
 private:
 	int* keyStates;

@@ -13,7 +13,7 @@ void ControllableCamera::Update(float dt, VertexShaderModelConstantBuffer* vsCon
 
 	// Slow the character a bit so that it comes to a nice stop over time.
 	XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), groundSpeedDampening));
-	transform->Translate(transform->InverseTransformDirection(XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt)));
+	transform.Translate(transform.InverseTransformDirection(XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt)));
 
 	Camera::Update(dt, vsConstantBufferdata);
 }
@@ -58,26 +58,26 @@ void ControllableCamera::CheckInput(float dt)
 
 	if(GetAsyncKeyState('Y'))
 	{
-		transform->Rotate(XMFLOAT3(0, -1 * dt, 0));
+		transform.Rotate(XMFLOAT3(0, -1 * dt, 0));
 	}
 	if(GetAsyncKeyState('H'))
 	{
-		transform->Rotate(XMFLOAT3(0, 1 * dt, 0));
+		transform.Rotate(XMFLOAT3(0, 1 * dt, 0));
 	}
 	if(GetAsyncKeyState('T'))
 	{
-		transform->Rotate(XMFLOAT3(-1 * dt, 0 , 0));
+		transform.Rotate(XMFLOAT3(-1 * dt, 0 , 0));
 	}
 	if(GetAsyncKeyState('G'))
 	{
-		transform->Rotate(XMFLOAT3(1 * dt, 0, 0));
+		transform.Rotate(XMFLOAT3(1 * dt, 0, 0));
 	}
 	if(GetAsyncKeyState('U'))
 	{
-		transform->Rotate(XMFLOAT3(0, 0, -1 * dt));
+		transform.Rotate(XMFLOAT3(0, 0, -1 * dt));
 	}
 	if(GetAsyncKeyState('O'))
 	{
-		transform->Rotate(XMFLOAT3(0, 0, 1 * dt));
+		transform.Rotate(XMFLOAT3(0, 0, 1 * dt));
 	}
 }

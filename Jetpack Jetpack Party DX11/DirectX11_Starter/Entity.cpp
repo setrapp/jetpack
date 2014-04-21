@@ -15,7 +15,6 @@ Entity::Entity()
 {
 	totalIndices = 0;
 	totalMeshes = 0;
-	transform = new Transform();
 	material = AssetManager::Instance()->GetMaterial();
 	socketNumber=0;
 }
@@ -23,7 +22,6 @@ Entity::Entity()
 
 Entity::~Entity(void)
 {
-	delete transform;
 	ReleaseMacro(vertexBuffer);
 	ReleaseMacro(indexBuffer);
 }
@@ -31,7 +29,7 @@ Entity::~Entity(void)
 
 XMFLOAT4X4 Entity::GetWorldMatrix() const
 {
-	return this->transform->GetWorldMatrix();
+	return this->transform.GetWorldMatrix();
 }
 
 void Entity::AddQuad(Vertex* v, UINT* i)
