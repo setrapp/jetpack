@@ -26,7 +26,7 @@ public:
 	}
 	inline bool Rect::Contains(int x, int y) const
 	{
-		if(x > this->x && x < this->width && y > this->y && y < this->height)
+		if(x >= this->x && x <= this->width + this->x && y > this->y && y < this->height + this->y)
 		{
 			return true;
 		}

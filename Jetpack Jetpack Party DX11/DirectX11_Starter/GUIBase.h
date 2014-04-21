@@ -54,7 +54,7 @@ public : Rect* rect;
 
 			 if(rect->height == 0)
 			 {
-			 	rect->height = sp->MeasureString(str).m128_i16[1];
+			 	rect->height = sp->MeasureString(str).m128_f32[1];
 			 }
 
 			 XMStoreFloat4(&this->color, color);
@@ -91,9 +91,18 @@ public : Rect* rect;
 
 		 void Update (LPPOINT point, float dt)
 		 {			
+			 RECT rect1;
+			GetWindowRect(GetActiveWindow(), &rect1);
 			 //Inside the rect or not ?					MOUSE LEFT IS PRESSED
-			 if(rect->Contains(point->x, point->y) && ((GetKeyState(VK_LBUTTON) & 0x80) != 0))
-				 contains = true;
+			 
+			 if(((GetKeyState(VK_LBUTTON) & 0x80) != 0))
+			 {
+				 int x, y;
+				 x = point->x - rect1.left;
+				 y = point->y - rect1.top - 21;
+				 if(rect->Contains(x, y))
+					 contains = true;
+			 }
 		 }
 
 		 void Render()

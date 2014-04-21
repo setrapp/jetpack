@@ -27,11 +27,11 @@ GameState Menu::Update(float dt)
 	guiMan->Update(dt);
 	if(guiMan->_guiElements["NEWGAME"]->Contains())
 		return GameState::Playing;	
-	else
-		return GameState::Started;
 
 	if(guiMan->_guiElements["EXIT"]->Contains())
 		exit(1);
+
+	return GameState::Started;
 }
 
 void Menu::Render()
