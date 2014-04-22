@@ -110,17 +110,23 @@ public :
 			 sp->DrawString(fontRenderer->GetSpriteBatch(), str, XMLoadFloat2(&XMFLOAT2(basePosition.x, basePosition.y)), XMLoadFloat4(&this->color), rotation, XMLoadFloat2(&XMFLOAT2(0, 0)), XMLoadFloat2(&scale), spriteFX, depth);
 		 }
 
-		 inline bool Clicked()	const
+		 const inline bool Clicked()
 		 {
-			 return clicked;
+			 if(clicked)
+			 {
+ 					clicked = !clicked;
+					return !clicked;
+			 }
+			 else
+				 return clicked;
 		 }
 
-		 inline bool IsMouseHovering() const
+		 const inline bool IsMouseHovering() const
 		 {
 			 return hover;
 		 }
 
-		 inline void SetColor(XMFLOAT4 Color)
+		 inline void SetColor(const XMFLOAT4 Color)
 		 {
 			 this->color = Color;
 		 }
@@ -130,7 +136,7 @@ public :
 			 this->rotation = rot;
 		 }
 
-		 inline void SetSpriteEffects(SpriteEffects fx)
+		 inline void SetSpriteEffects(const SpriteEffects fx)
 		 {
 			 this->spriteFX = fx;
 		 }

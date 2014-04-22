@@ -6,6 +6,7 @@
 #include <vector>
 #include "dxerr.h"
 #include "DXConnection.h"
+#include "GameState.h"
 
 using namespace DirectX;
 using namespace std;
@@ -69,4 +70,25 @@ struct Vertex
 	XMFLOAT3 Position;
 	XMFLOAT3 Normal;
 	XMFLOAT2 UV;
+};
+
+class Helper
+{
+	public: 
+	static	GameState GoBackOnce(GameState state)
+	{
+		switch(state){
+		case GameState::Lost : return GameState::Started;
+			break;
+		case GameState::Paused: return GameState::Paused;
+			break;
+		case GameState::Playing: return GameState::Paused;
+			break;
+		case GameState::Started: return GameState::Started;
+			break;
+		case GameState::Won: return GameState::Started;
+			break;
+		default: return GameState::Started;
+		}
+	}
 };

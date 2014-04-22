@@ -2,8 +2,8 @@
 #define _DEMOGAME_H
 #pragma once
 #define WIN32_LEAN_AND_MEAN
-#include "FontRenderer.h"
-#include "Sprite.h"
+#include "FontManager.h"
+#include "SpriteRenderer.h"
 #include "Vertex.h"
 #include "Common.h"
 #include <DirectXMath.h>
@@ -83,15 +83,12 @@ private:
 	// Keeps track of the old mouse position.  Useful for 
 	// determining how far the mouse moved in a single frame.
 	POINT prevMousePos;
-	//Camera* camera;
+
 	Light* light;
+
 	std::vector<Entity*> entities;
 
 	SpriteRenderer* spriteRenderer;
-	FontRenderer* fontRenderer;
-
-	//DirectX::XMFLOAT4X4 viewMatrix;
-	//DirectX::XMFLOAT4X4 projectionMatrix;
 
 	ControllableCamera* camera;
 	GameState currentState;

@@ -28,6 +28,9 @@
     <Filter Include="Header Files\Core\Physics">
       <UniqueIdentifier>{b8954814-22cb-481e-8ead-604e425aa62e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core\Camera">
+      <UniqueIdentifier>{13f8993d-c62d-4edc-8220-fde93d3d44f2}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Core\Font">
       <UniqueIdentifier>{a89fb1b5-aa1f-49d5-a46b-6e7e67266987}</UniqueIdentifier>
     </Filter>
@@ -116,6 +119,9 @@
     </ClCompile>
     <ClCompile Include="ClientConnectionEntity.cpp">
       <Filter>Source Files\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="FontManager.cpp">
+      <Filter>Header Files\Core\Font</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -236,11 +242,14 @@
     <ClInclude Include="Rect.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Header Files\Core\GameObject</Filter>
+    <ClInclude Include="FontManager.h">
+      <Filter>Header Files\Core\Font</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
-      <Filter>Header Files\Core\GameObject</Filter>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header Files\Core\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>Header Files\Core\Font</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

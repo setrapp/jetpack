@@ -111,10 +111,8 @@ bool DemoGame::Init()
 
 	AssetManager* assetManager = new AssetManager();
 
-	spriteRenderer = new SpriteRenderer(deviceContext);
-	fontRenderer = new FontRenderer(device, L"../Assets/font.spritefont");	
-	fontRenderer->setSpriteBatch(spriteRenderer->GetSpriteBatch());	
-	menu = new Menu(fontRenderer);
+	spriteRenderer = new SpriteRenderer(deviceContext);	
+	menu = new Menu(FontManager::GetInstance()->AddFont("MENUFONT", device, spriteRenderer->GetSpriteBatch(), L"../Assets/font.spritefont"));
 
 	LoadShadersAndInputLayout();
 
@@ -344,10 +342,15 @@ void DemoGame::UpdateScene(float dt)
 {	
 	if (IPMan::GetIPMan()->GetBack())
 	{
-		/*CComPtr<IErrorInfo> debug;
-		HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&debug));
-		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_SUMMARY);*/
-		PostQuitMessage(0);
+		currentState = Helper::GoBackOnce(currentState);
+#ifndef _PAUSEMENU
+		if(currentState == GameState::Paused)
+			currentState = GameState::Started;
+#endif
+		///*CComPtr<IErrorInfo> debug;
+		//HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&debug));
+		//debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_SUMMARY);*/
+		//PostQuitMessage(0);
 	}
 
 	assetManager->Instance()->GetSoundManager()->Update();
