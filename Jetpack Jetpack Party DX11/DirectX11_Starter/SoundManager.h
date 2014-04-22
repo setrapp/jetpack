@@ -6,6 +6,7 @@
 #include "Toolkit\Audio\WAVFileReader.h"
 #include "Toolkit\Audio\SoundCommon.h"
 #include "SoundInstance.h"
+#include "InputManager.h"
 #include "AudioWaveManager.h"
 
 using namespace DirectX;
@@ -100,12 +101,12 @@ public:
 	//always call this
 	void SoundManager::Update()
 	{
-		if(GetAsyncKeyState('M') && GetAsyncKeyState('M') != oldkeystate)
+		if(IPMan::GetIPMan()->GetSpecialKeyboardState('M') && IPMan::GetIPMan()->GetSpecialKeyboardState('M') != oldkeystate)
 		{
 			mute = !mute;
 			Mute(mute);
 		}
-		oldkeystate = GetAsyncKeyState('M');
+		oldkeystate = IPMan::GetIPMan()->GetSpecialKeyboardState('M');
 		engineSfx->Update();
 	}
 
@@ -119,12 +120,12 @@ public:
 			iterator++;
 		}
 
-		if(GetAsyncKeyState('M') && GetAsyncKeyState('M') != oldkeystate)
+		if(IPMan::GetIPMan()->GetSpecialKeyboardState('M') && IPMan::GetIPMan()->GetSpecialKeyboardState('M') != oldkeystate)
 		{
 			mute = !mute;
 			Mute(mute);
 		}
-		oldkeystate = GetAsyncKeyState('M');
+		oldkeystate = IPMan::GetIPMan()->GetSpecialKeyboardState('M');
 		engineSfx->Update();
 	}
 

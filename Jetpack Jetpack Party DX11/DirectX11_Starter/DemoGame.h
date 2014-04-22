@@ -24,6 +24,7 @@
 #include "InputManager.h"
 #include <queue>
 #include "XNew.h"
+#include "InputManager.h"
 
 using namespace DirectX;
 
@@ -32,6 +33,8 @@ using namespace DirectX;
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 #endif
+
+
 
 // Demo class which extends the base DXGame class
 class DemoGame : public DXGame
@@ -97,8 +100,6 @@ private:
 
 	bool mouseCursorVisibility;
 	bool flag;
-	XNEW* xnew;
-	InputManager* ipMan;
 };
 
 #endif

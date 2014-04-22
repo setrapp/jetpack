@@ -1,6 +1,6 @@
 #pragma once
 #include "XInputValues.h"
-#include "XController.h"
+#include "DirectX11_Starter\XController.h"
 #include <Xinput.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -12,6 +12,7 @@
 #include "Mesh.h"
 #include "ModelLoad\MLModelViewer.h"
 #include "SoundManager.h"
+#include "InputManager.h"
 
 using namespace std;
 

@@ -117,19 +117,19 @@ void Player::CheckInput(float dt)
 {
 	networkSendTimer-=dt;
 	bool cubeInputReceived= false;
-	if(GetAsyncKeyState(VK_UP) || GetAsyncKeyState('W'))
+	if(IPMan::GetIPMan()->GetKey(KeyType::FORWARD))
 	{
 		velocity.z += 0.8f;
 	}
-	if(GetAsyncKeyState(VK_DOWN) || GetAsyncKeyState('S'))
+	if(IPMan::GetIPMan()->GetKey(KeyType::BACKWARD))
 	{
 		velocity.z -= 0.8f;
 	}
-	if(GetAsyncKeyState(VK_LEFT) || GetAsyncKeyState('A'))
+	if(IPMan::GetIPMan()->GetKey(KeyType::LEFT))
 	{
 		velocity.x -= 0.8f;
 	}
-	if(GetAsyncKeyState(VK_RIGHT) || GetAsyncKeyState('D'))
+	if(IPMan::GetIPMan()->GetKey(KeyType::RIGHT))
 	{
 		velocity.x += 0.8f;
 	}

@@ -35,6 +35,9 @@
 #include "Player.h"
 #include "Debug.h"
 #include "XInputValues.h"
+#include "InputManager.h"
+
+InputManager* IPMan::inputManager = NULL;
 
 #pragma region Win32 Entry Point (WinMain)
 
@@ -62,8 +65,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 {
-	ipMan = new InputManager(INPUTMODES::XCONTROLLER);
-	xnew = new XNEW(ipMan->GetXController());
 	flag = true;
 	windowCaption = L"Jetpack Jetpack Party!";
 	windowWidth = 800;
@@ -220,6 +221,8 @@ void DemoGame::CreateGeometryBuffers()
 	XMStoreFloat3(&target, XMLoadFloat3(&player->transform->GetTranslation()) + (3 * XMLoadFloat3(&player->transform->GetForward())));
 	XMFLOAT3 up = player->transform->GetUp();
 	camera->LookAt(eye, target, up);
+
+	IPMan * w = new IPMan(INPUTMODES::KEYBOARD);
 }
 
 #pragma endregion
@@ -338,8 +341,8 @@ void DemoGame::OnResize()
 XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
 bool scaleSmall = true;
 void DemoGame::UpdateScene(float dt)
-{
-	if (GetAsyncKeyState(VK_ESCAPE))
+{	
+	if (IPMan::GetIPMan()->GetBack())
 	{
 		/*CComPtr<IErrorInfo> debug;
 		HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&debug));

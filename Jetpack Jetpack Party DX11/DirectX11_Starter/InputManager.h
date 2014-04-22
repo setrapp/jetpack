@@ -379,4 +379,27 @@ private:
 	float* xDefaultVals;
 	XBOX360CONTROLLER* xcontroller;
 };
+
+
+class IPMan
+{
+private : static InputManager* inputManager;
+public: 
+	IPMan(INPUTMODES mode)
+	{
+		if(!inputManager)
+			{
+				inputManager = new InputManager(mode);
+			}
+	}
+	
+	static InputManager* GetIPMan()
+		{
+			if(!inputManager)
+				throw "No modes defined";
+			return inputManager;
+		}
+};
+
+
 #endif 
