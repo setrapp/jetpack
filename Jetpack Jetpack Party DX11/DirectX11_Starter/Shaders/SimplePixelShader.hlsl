@@ -61,7 +61,7 @@ float4 main(VertexToPixel input) : SV_TARGET
 		specularIntensity = pow(specularIntensity, inShininess);
 		if (specularIntensity > 0)
 		{
-			specular = inSpecular * light.specular * specularIntensity;
+			specular = inSpecular * light.specular * specularIntensity + 0.01;
 		}
 	}
 

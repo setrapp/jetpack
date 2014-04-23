@@ -25,6 +25,7 @@
 #include <queue>
 #include "XNew.h"
 #include "InputManager.h"
+#include "ParticleSystem.h"
 
 using namespace DirectX;
 
@@ -83,6 +84,8 @@ private:
 	// Keeps track of the old mouse position.  Useful for 
 	// determining how far the mouse moved in a single frame.
 	POINT prevMousePos;
+
+	ParticleSystem* ps ;
 
 	Light* light;
 	std::vector<Entity*> entities;

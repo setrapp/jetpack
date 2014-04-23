@@ -9,6 +9,7 @@
 #include "Common.h"
 #include "GUIBase.h"
 #include "GUIManager.h"
+#include <vector>
 
 using namespace std;
 using namespace DirectX;
@@ -17,7 +18,8 @@ using namespace DirectX;
 class Menu
 {
 public:
-	Menu(FontRenderer* renderer);
+	//You can pass multiple FontRenderers to it
+	Menu(int no, FontRenderer* renderer, ...);
 	~Menu(void);
 	GameState Update(float dt);
 	void Render();
@@ -25,7 +27,7 @@ public:
 	void WindowResize();
 
 private:
-	FontRenderer* fontRenderer;
+	vector<FontRenderer*> fontRenderer;
 	GUIManager* guiMan;
 	GameState currstate;
 	

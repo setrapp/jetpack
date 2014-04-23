@@ -141,6 +141,8 @@
     <ClInclude Include="ModelLoad\MLMaterialLoader.h" />
     <ClInclude Include="ModelLoad\MLModelViewer.h" />
     <ClInclude Include="MouseLook.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Renderer.h" />

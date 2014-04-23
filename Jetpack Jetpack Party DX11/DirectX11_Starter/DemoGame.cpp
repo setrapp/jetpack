@@ -36,6 +36,7 @@
 #include "Debug.h"
 #include "XInputValues.h"
 #include "InputManager.h"
+#include "ParticleSystem.h"
 
 InputManager* IPMan::inputManager = NULL;
 
@@ -112,7 +113,7 @@ bool DemoGame::Init()
 	AssetManager* assetManager = new AssetManager();
 
 	spriteRenderer = new SpriteRenderer(deviceContext);	
-	menu = new Menu(FontManager::GetInstance()->AddFont("MENUFONT", device, spriteRenderer->GetSpriteBatch(), L"../Assets/font.spritefont"));
+	menu = new Menu(2, FontManager::GetInstance()->AddFont("MENUFONT", device, spriteRenderer->GetSpriteBatch(), L"../Assets/font.spritefont"),  FontManager::GetInstance()->AddFont("menu", device, spriteRenderer->GetSpriteBatch(), L"../Assets/Fonts/Menu.spritefont"));
 
 	LoadShadersAndInputLayout();
 
@@ -221,6 +222,9 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT3 up = player->transform->GetUp();
 	camera->LookAt(eye, target, up);
 
+	AssetManager::Instance()->StoreMaterial(new Material(L"../Assets/particle.jpg"), "particle");
+	ps = new ParticleSystem("particle",100 , XMFLOAT3(), XMFLOAT3(10, 1, 1), XMFLOAT2(1, 1));
+
 	IPMan * w = new IPMan(INPUTMODES::KEYBOARD);
 }
 
@@ -237,9 +241,9 @@ void DemoGame::LoadShadersAndInputLayout()
 	// We can't set up the input layout yet since we need the actual vert shader
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT,	D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+		{"POSITION"		, 0		, DXGI_FORMAT_R32G32B32_FLOAT	, 0		, 0									, D3D11_INPUT_PER_VERTEX_DATA	, 0},
+		{"NORMAL"		, 0		, DXGI_FORMAT_R32G32B32_FLOAT	, 0		, D3D11_APPEND_ALIGNED_ELEMENT		, D3D11_INPUT_PER_VERTEX_DATA	, 0},
+		{"TEXCOORD"		, 0		, DXGI_FORMAT_R32G32_FLOAT		, 0		, D3D11_APPEND_ALIGNED_ELEMENT		, D3D11_INPUT_PER_VERTEX_DATA	, 0}
 	};
 
 	// Load Vertex Shaders --------------------------------------
@@ -321,8 +325,6 @@ void DemoGame::OnResize()
 			AspectRatio(),
 			0.1f,
 			100.0f);
-
-
 
 	XMStoreFloat4x4(&camera->projection, XMMatrixTranspose(P));
 

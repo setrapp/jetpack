@@ -1,16 +1,23 @@
 #include "Menu.h"
 #include <DirectXMath.h>
 
-Menu::Menu(FontRenderer* renderer) 
+Menu::Menu(int noOfRenderers, FontRenderer* renderer, ...) 
 {
+	va_list ap;
+	va_start(ap, noOfRenderers);
+	for(int i = 0; i < noOfRenderers; i++)
+	{
+		auto p = va_arg(ap, FontRenderer*);
+		this->fontRenderer.push_back(p);
+	}
+	va_end(ap);
 	guiMan = new GUIManager();	
-	GUIBase* nG = new GUIBase(new Rect(0, 0, 0 ,0), L"NEW GAME", AnimationType::TOPTOBOTTOM, renderer, 1000, 1, Colors::Black);
+	GUIBase* nG = new GUIBase(new Rect(0, 0, 0 ,0), L"NEW GAME", AnimationType::TOPTOBOTTOM, fontRenderer.at(0), 1000, 1, Colors::Black);
 	guiMan->Add("NEWGAME", nG);
-	GUIBase* settings = new GUIBase(new Rect(0, 100, 0 ,0), L"SETTINGS", AnimationType::LEFTTORIGHT, renderer, 1000, 3, Colors::Black);
+	GUIBase* settings = new GUIBase(new Rect(0, 100, 0 ,0), L"SETTINGS", AnimationType::LEFTTORIGHT, fontRenderer.at(0), 1000, 3, Colors::Black);
 	guiMan->Add("SETTINGS", settings);
-	GUIBase* exit = new GUIBase(new Rect(0, 200, 0 ,0), L"EXIT", AnimationType::BOTTOMTOTOP, renderer, 1000, 5, Colors::Black);
+	GUIBase* exit = new GUIBase(new Rect(0, 200, 0 ,0), L"EXIT", AnimationType::BOTTOMTOTOP, fontRenderer.at(0), 1000, 5, Colors::Black);
 	guiMan->Add("EXIT", exit);			
-	this->fontRenderer = renderer;
 	currstate = GameState::Started;
 }
 
@@ -70,7 +77,6 @@ void Menu::Render()
 
 Menu::~Menu(void)
 {
-	delete fontRenderer;
 	delete guiMan;
 }
 

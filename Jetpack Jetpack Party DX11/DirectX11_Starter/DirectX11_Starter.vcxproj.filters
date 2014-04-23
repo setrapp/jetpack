@@ -58,6 +58,9 @@
     <Filter Include="Header Files\GUI">
       <UniqueIdentifier>{32595750-5218-400c-9a1a-cd021f651134}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Particle">
+      <UniqueIdentifier>{5795f37a-eeca-45be-a34b-9600e357ce08}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXGame.cpp">
@@ -250,6 +253,12 @@
     </ClInclude>
     <ClInclude Include="SpriteRenderer.h">
       <Filter>Header Files\Core\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Header Files\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Header Files\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
