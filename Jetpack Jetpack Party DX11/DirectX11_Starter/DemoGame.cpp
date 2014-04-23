@@ -110,9 +110,9 @@ bool DemoGame::Init()
 
 	assetManager = new AssetManager();
 
-	spriteRenderer = new SpriteRenderer(deviceContext);
+	//spriteRenderer = new SpriteRenderer(deviceContext);
 	fontRenderer = new FontRenderer(device, L"../Assets/font.spritefont");	
-	fontRenderer->setSpriteBatch(spriteRenderer->GetSpriteBatch());	
+	//fontRenderer->setSpriteBatch(spriteRenderer->GetSpriteBatch());	
 	menu = new Menu(fontRenderer);
 
 	LoadShadersAndInputLayout();
