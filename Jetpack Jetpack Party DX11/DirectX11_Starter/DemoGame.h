@@ -85,7 +85,6 @@ private:
 	POINT prevMousePos;
 
 	Light* light;
-
 	std::vector<Entity*> entities;
 
 	SpriteRenderer* spriteRenderer;
