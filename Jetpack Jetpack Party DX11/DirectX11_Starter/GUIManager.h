@@ -51,7 +51,7 @@ public:
 
 		 
 
-	void Update(float dt)
+	void Update(const float dt)
 	{
 		ShowCursor(true);
 		POINT point;

@@ -32,14 +32,14 @@ Transform::~Transform()
 }
 
 // Translate locally.
-void Transform::Translate(XMFLOAT3 translation)
+void Transform::Translate(const XMFLOAT3 translation)
 {
 	XMStoreFloat3(&this->translation, XMVector3Transform(XMLoadFloat3(&this->translation), XMMatrixTranslation(translation.x, translation.y, translation.z)));
 	UpdateLocalAndWorld();
 }
 
 // Rotate locally.
-void Transform::Rotate(XMFLOAT3 rotation)
+void Transform::Rotate(const XMFLOAT3 rotation)
 {
 	XMFLOAT3X3 rotationMatrix;
 	XMStoreFloat3x3(&rotationMatrix, XMMatrixIdentity());
@@ -50,7 +50,7 @@ void Transform::Rotate(XMFLOAT3 rotation)
 }
 
 // Rotate locally.
-void Transform::Rotate(XMFLOAT3X3 rotation)
+void Transform::Rotate(const XMFLOAT3X3 rotation)
 {
 	XMMATRIX rotationMatrix = XMLoadFloat3x3(&rotation);
 	XMStoreFloat3x3(&this->rotation, XMMatrixMultiply(XMLoadFloat3x3(&this->rotation), rotationMatrix));
@@ -62,7 +62,7 @@ void Transform::Rotate(XMFLOAT3X3 rotation)
 }
 
 // Scale locally.
-void Transform::Scale(XMFLOAT3 scale)
+void Transform::Scale(const XMFLOAT3 scale)
 {
 	XMStoreFloat3(&this->scale, XMVector3Transform(XMLoadFloat3(&this->scale), XMMatrixScaling(scale.x, scale.y, scale.z)));
 	UpdateLocalAndWorld();
@@ -251,13 +251,13 @@ void Transform::SetLocalRotation(XMFLOAT3 newEulerAngles)
 	ApplyRotation(&rotation);
 }
 
-void Transform::SetLocalRotation(XMFLOAT3 axis, float newAngle)
+void Transform::SetLocalRotation(const XMFLOAT3 axis, const float newAngle)
 {
 	XMMATRIX rotation = XMMatrixRotationAxis(XMLoadFloat3(&axis), newAngle);
 	ApplyRotation(&rotation);
 }
 
-void Transform::SetLocalRotation(XMFLOAT3X3 newRotation)
+void Transform::SetLocalRotation(const XMFLOAT3X3 newRotation)
 {
 	ApplyRotation(&XMLoadFloat3x3(&newRotation));
 }

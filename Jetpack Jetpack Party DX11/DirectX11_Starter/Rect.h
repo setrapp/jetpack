@@ -24,7 +24,8 @@ public:
 	~Rect(void)
 	{
 	}
-	inline bool Rect::Contains(int x, int y) const
+
+	const inline bool Rect::Contains(const int x, const int y)
 	{
 		if(x >= this->x && x <= this->width + this->x && y > this->y && y < this->height + this->y)
 		{

@@ -49,16 +49,16 @@ public:
 	Transform::~Transform();
 
 	// Translate locally.
-	void Transform::Translate(XMFLOAT3 translation);
+	void Transform::Translate(const XMFLOAT3 translation);
 
 	// Rotate locally.
-	void Transform::Rotate(XMFLOAT3 rotation);
+	void Transform::Rotate(const XMFLOAT3 rotation);
 
 	// Rotate locally.
-	void Transform::Rotate(XMFLOAT3X3 rotation);
+	void Transform::Rotate(const XMFLOAT3X3 rotation);
 
 	// Scale locally.
-	void Transform::Scale(XMFLOAT3 scale);
+	void Transform::Scale(const XMFLOAT3 scale);
 
 	void Transform::LookAt(XMFLOAT3 eye, XMFLOAT3 lookAt, XMFLOAT3 up);
 
@@ -80,7 +80,7 @@ public:
 	XMFLOAT3 TransformDirection(XMFLOAT3 localDirection) const;
 
 	// Transform direction from world space to local space.
-	XMFLOAT3 InverseTransformDirection(XMFLOAT3 worldDirection) const;
+	XMFLOAT3 InverseTransformDirection(const XMFLOAT3 worldDirection) const;
 
 	// Get world translation.
 	XMFLOAT3 GetTranslation() const;
@@ -89,10 +89,10 @@ public:
 	XMFLOAT3 GetLocalTranslation() const;
 
 	// Set world translation
-	void SetTranslation(XMFLOAT3 newPosition);
+	void SetTranslation(const XMFLOAT3 newPosition);
 
 	// Set local translation
-	void SetLocalTranslation(XMFLOAT3 newPosition);
+	void SetLocalTranslation(const XMFLOAT3 newPosition);
 
 	XMFLOAT3X3 GetRotation() const;
 
@@ -100,9 +100,9 @@ public:
 
 	void SetLocalRotation(XMFLOAT3 newEulerAngles);
 
-	void SetLocalRotation(XMFLOAT3 axis, float newAngle);
+	void SetLocalRotation(const XMFLOAT3 axis, const float newAngle);
 	
-	void SetLocalRotation(XMFLOAT3X3 newRotation);
+	void SetLocalRotation(const XMFLOAT3X3 newRotation);
 
 	bool IsUniformScale() const;
 

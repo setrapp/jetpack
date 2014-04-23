@@ -134,6 +134,7 @@ bool DemoGame::Init()
 	XMMATRIX W = XMMatrixIdentity();
 	for( Entity* e : entities)
 		XMStoreFloat4x4(&e->GetWorldMatrix(), XMMatrixTranspose(W));	
+
 	LoadSoundAssets();
 
 	//mouseLook = new MouseLook(camera->transform, XMFLOAT2(0.001f, 0.001f));
@@ -287,8 +288,8 @@ void DemoGame::LoadSoundAssets()
 	#ifdef _DEBUG
     assetManager->Instance()->GetSoundManager()->Mute(true);
 	#endif
-
 }
+
 #pragma endregion
 
 #pragma region Window Focus
