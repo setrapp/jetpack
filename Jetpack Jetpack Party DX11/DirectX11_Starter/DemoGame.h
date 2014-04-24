@@ -90,7 +90,7 @@ private:
 
 	SpriteRenderer* spriteRenderer;
 
-	ControllableCamera* camera;
+	Camera* camera;
 	GameState currentState;
 	Menu* menu;
 	MouseLook* mouseLook;
