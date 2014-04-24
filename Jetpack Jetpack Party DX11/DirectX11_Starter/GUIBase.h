@@ -21,7 +21,7 @@ class GUIBase
 {
 public : 
 	Rect* rect;
-	const wchar_t* str;
+	wchar_t* str;
 		 ~GUIBase()
 		 {
 
@@ -30,7 +30,7 @@ public :
 		 //You can have the width declared as 0. It will be taken care of considering the size of string.
 		 //0 Height will make the rect only as long as the font size
 		 //Item count represents how late you want the animation to affect for the item. Set it to 0 to have all items show up at once.
-		 GUIBase(Rect* rect, const wchar_t* str,  const AnimationType anim, FontRenderer* renderer, const float animationSpeed, const int itemCount, FXMVECTOR color = Colors::White, XMFLOAT2 Scale =XMFLOAT2(1, 1), float rotation = 0, float depth = 1, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
+		 GUIBase(Rect* rect, wchar_t* str, int itemCount, AnimationType anim, FontRenderer* renderer, float animationSpeed, FXMVECTOR color = Colors::White, XMFLOAT2 Scale =XMFLOAT2(1, 1), float rotation = 0, float depth = 1, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
 		 {
 			 this->str = str;
 			 this->rect = rect;
@@ -89,7 +89,7 @@ public :
 			int x, y;
 				 x = point->x - rect1.left;
 				 y = point->y - rect1.top - 21;
-				 
+
 			 if(rect->Contains(x, y))
 			 {
 				 hover = true;
@@ -129,7 +129,7 @@ public :
 			 this->color = Color;
 		 }
 
-		 inline void SetRotation(const float rot)
+		 inline void SetRotation(float rot)
 		 {
 			 this->rotation = rot;
 		 }
@@ -142,11 +142,6 @@ public :
 		 inline void SetScale(XMFLOAT2 scale)
 		 {
 			 this->scale = scale;
-		 }
-
-		 inline void SetPosition(const XMFLOAT2 pos)
-		 {
-			 basePosition = pos;
 		 }
 
 private :

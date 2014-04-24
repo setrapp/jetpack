@@ -4,11 +4,11 @@
 Menu::Menu(FontRenderer* renderer) 
 {
 	guiMan = new GUIManager();	
-	GUIBase* nG = new GUIBase(new Rect(0, 0, 0 ,0), L"NEW GAME", AnimationType::TOPTOBOTTOM, renderer, 1000, 1, Colors::Black);
+	GUIBase* nG = new GUIBase(new Rect(0, 0, 0 ,0), L"NEW GAME", 1, AnimationType::TOPTOBOTTOM, renderer, 1000, Colors::Black);
 	guiMan->Add("NEWGAME", nG);
-	GUIBase* settings = new GUIBase(new Rect(0, 100, 0 ,0), L"SETTINGS", AnimationType::LEFTTORIGHT, renderer, 1000, 3, Colors::Black);
+	GUIBase* settings = new GUIBase(new Rect(0, 100, 0 ,0), L"SETTINGS", 3, AnimationType::LEFTTORIGHT, renderer, 1000, Colors::Black);
 	guiMan->Add("SETTINGS", settings);
-	GUIBase* exit = new GUIBase(new Rect(0, 200, 0 ,0), L"EXIT", AnimationType::BOTTOMTOTOP, renderer, 1000, 5, Colors::Black);
+	GUIBase* exit = new GUIBase(new Rect(0, 200, 0 ,0), L"EXIT", 5, AnimationType::BOTTOMTOTOP, renderer, 1000, Colors::Black);
 	guiMan->Add("EXIT", exit);	
 	this->fontRenderer = renderer;
 	currstate = GameState::Started;

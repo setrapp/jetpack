@@ -339,7 +339,11 @@ void DemoGame::UpdateScene(float dt)
 
 	if (IPMan::GetIPMan()->GetBack())
 	{
-		currentState = GameState::Started;
+		currentState = Helper::GoBackOnce(currentState);
+#ifndef _PAUSEMENU
+		if(currentState == GameState::Paused)
+			currentState = GameState::Started;
+#endif
 	}
 
 	assetManager->Instance()->GetSoundManager()->Update();

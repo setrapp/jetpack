@@ -17,12 +17,9 @@ public:
 		delete spriteBatch;
 	}
 
-	inline void SpriteRenderer::SetColor(FLOAT color[4])
+	inline void SpriteRenderer::SetColor(FLOAT* color)
 	{
-		COLOR[0] = color[0];
-		COLOR[1] = color[1];
-		COLOR[2] = color[2];
-		COLOR[3] = color[3];
+		this->COLOR = color;
 	}
 
 	void SpriteRenderer::ClearScreen(ID3D11DeviceContext* deviceContext, ID3D11RenderTargetView* renderTargetView, ID3D11DepthStencilView* depthStencilView)
@@ -64,7 +61,7 @@ public:
 	}
 
 private: 
-	FLOAT COLOR[4];
+	FLOAT* COLOR;
 	DirectX::SpriteBatch* spriteBatch;
 	ID3D11DeviceContext* deviceContext;
 	ID3D11BlendState* blendState;
