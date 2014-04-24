@@ -8,12 +8,15 @@ FontManager::FontManager()
 
 FontManager::~FontManager()
 {
-	delete instance;
+	if (this == instance)
+	{
+		instance = NULL;
+	}
+
 	delete device;
 	for(auto f : fonts)
 	{
-		f.second->~FontRenderer();
-		delete f.first;
+		delete f.second;
 	}
 }
 
@@ -25,15 +28,17 @@ FontRenderer* FontManager::AddFont(char* fontName, ID3D11Device* device, DirectX
 	}
 
 	FontRenderer* f = new FontRenderer(spBatch, device, path);
-	fonts.insert(std::make_pair(fontName, f)); // [fontNamef;
+	fonts.insert(std::make_pair(fontName, f));
 	
 	return f;
 }
 
 void FontManager::DeleteFont(char* fontName)
 {
-	if(fonts.find(fontName) != fonts.end())
+	std::map<char *const, FontRenderer*>::iterator it = fonts.find(fontName);
+	if(it != fonts.end())
 	{
+		delete it->second;
 		fonts.erase(fontName);
 	}
 
@@ -45,7 +50,7 @@ FontRenderer* FontManager::GetFont(char* fontName) const
 		return fonts.find(fontName)->second;
 }
 
-FontManager* FontManager::GetInstance() 
+FontManager* FontManager::Instance() 
 {	
 	if(!instance)
 		instance = new FontManager();

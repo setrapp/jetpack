@@ -3,15 +3,15 @@
 
 Menu::Menu(FontRenderer* renderer) 
 {
-	guiMan = new GUIManager();	
+	//guiMan = new GUIManager();	
 	/*GUIBase* nG = new GUIBase(new Rect(0, 0, 0 ,0), L"NEW GAME", AnimationType::TOPTOBOTTOM, renderer, 1000, 1, Colors::Black);
 	guiMan->Add("NEWGAME", nG);
 	GUIBase* settings = new GUIBase(new Rect(0, 100, 0 ,0), L"SETTINGS", AnimationType::LEFTTORIGHT, renderer, 1000, 3, Colors::Black);
 	guiMan->Add("SETTINGS", settings);
 	GUIBase* exit = new GUIBase(new Rect(0, 200, 0 ,0), L"EXIT", AnimationType::BOTTOMTOTOP, renderer, 1000, 5, Colors::Black);
-	guiMan->Add("EXIT", exit);			
+	guiMan->Add("EXIT", exit);*/			
 	this->fontRenderer = renderer;
-	currstate = GameState::Started;*/
+	currstate = GameState::Started;
 }
 
 void Menu::OnClickNewGame()
@@ -70,7 +70,7 @@ void Menu::Render()
 
 Menu::~Menu(void)
 {
-	delete guiMan;
+	//delete guiMan;
 }
 
 

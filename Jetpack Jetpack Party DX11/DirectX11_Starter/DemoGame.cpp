@@ -78,23 +78,18 @@ DemoGame::~DemoGame()
 	ReleaseMacro(vsModelConstantBuffer);
 	ReleaseMacro(materialsAndLightsConstantBuffer);
 
-	//delete ipMan;
-	//delete xnew;
-
 	delete assetManager;
+	delete FontManager::Instance();
 
 	for(int i = 0 ; i < entities.size(); i++)
 	{
 		delete entities.at(i);
 	}
-	entities.clear();
-	
 	
 	delete light;
 	delete camera;
 	delete menu;
 	delete mouseLook;
-	//delete fontRenderer;
 	delete spriteRenderer;
 }
 
@@ -112,24 +107,23 @@ bool DemoGame::Init()
 	assetManager = new AssetManager();
 
 	spriteRenderer = new SpriteRenderer(deviceContext);
-	menu = new Menu(FontManager::GetInstance()->AddFont("MENUFONT", device, spriteRenderer->GetSpriteBatch(), L"../Assets/font.spritefont"));
-	//fontRenderer->setSpriteBatch(spriteRenderer->GetSpriteBatch());	
+	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer->GetSpriteBatch(), L"../Assets/font.spritefont"));	
 
 	LoadShadersAndInputLayout();
 
 	AssetManager::Instance()->StoreMaterial(new Material());
 
-	/*XMFLOAT3 cameraPosition;
+	XMFLOAT3 cameraPosition;
 	XMStoreFloat3(&cameraPosition, XMVectorSet(0, 10, -50, 0));
 	XMFLOAT3 cameraTarget;
 	XMStoreFloat3(&cameraTarget, XMVectorSet(0, 0, 0, 0));
 	XMFLOAT3 cameraUp;
 	XMStoreFloat3(&cameraUp, XMVectorSet(0, 1, 0, 0));
 
-	camera->LookAt(cameraPosition, cameraTarget, cameraUp);*/
+	camera->LookAt(cameraPosition, cameraTarget, cameraUp);
 
 	// Set up buffers and such
-	//CreateGeometryBuffers();
+	CreateGeometryBuffers();
 	this->deltaTime = 0;
 	
 	//LoadSoundAssets();
@@ -149,19 +143,19 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 
 	// Attempt to load model
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
+	/*AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
 	Player* player = new Player();
 	//player->AddModel(AssetManager::Instance()->GetModel("camera"));
 	entities.push_back(player);
 	//player->Finalize();
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
 	player->SetMaterial("camera");
-	mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
+	mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));*/
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
 
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/cube.obj", "cube");
+	/*AssetManager::Instance()->CreateAndStoreModel("../Assets/cube.obj", "cube");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicJetMan.obj", "jetman");
 	Entity* cube = new Entity();
 	cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
@@ -172,6 +166,7 @@ void DemoGame::CreateGeometryBuffers()
 	cube->transform.SetParent(&player->transform);
 	//cube->transform->SetParent(&emptyEntity->transform);
 	//emptyEntity->transform->SetParent(&player->transform);
+	*/
 
 	Vertex vertices[] = 
 	{
@@ -211,14 +206,14 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(0.0f, 0.2f, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "floor");
 	floor->SetMaterial("floor");
 	
-	camera->transform.SetParent(&player->transform);
+	/*camera->transform.SetParent(&player->transform);
 	player->transform.Translate(XMFLOAT3(1, 0, 0));
 	XMFLOAT3 eye = camera->transform.GetTranslation();
 	XMStoreFloat3(&eye, XMLoadFloat3(&camera->transform.GetTranslation()) + (5 * XMLoadFloat3(&player->transform.GetUp())));
 	XMFLOAT3 target;
 	XMStoreFloat3(&target, XMLoadFloat3(&player->transform.GetTranslation()) + (3 * XMLoadFloat3(&player->transform.GetForward())));
 	XMFLOAT3 up = player->transform.GetUp();
-	camera->LookAt(eye, target, up);
+	camera->LookAt(eye, target, up);*/
 
 	IPMan * w = new IPMan(INPUTMODES::KEYBOARD);
 }
