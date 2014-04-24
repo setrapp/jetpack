@@ -9,11 +9,10 @@ class Mesh
 {
 public:
 	Mesh(UINT* i);
-	~Mesh(void);
 	UINT* GetIndices();
 
 private:	
-	UINT* indices;
+	UINT indices[3];
 };
 
 struct Model 
