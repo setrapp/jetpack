@@ -1062,15 +1062,17 @@ int parseModelData(void** data, int* dataTypes, int* dataSizes, int dataCount, c
 				//retrieve vertex index
 				char* slashScan = guScanLine(scan, &substringBuffer, slashesFound, delimiterCount, 0);	
 				if(slashScan == NULL)
-					return freeReadModelReturn(delimiterIndices, '-');
+					return freeReadModelReturn(delimiterIndices, MODEL_UNUSABLE);
 				if(!guParseUShort(slashScan, &vertIndex, GU_BASE_DECIMAL, GU_DEFAULT_DIGITS_MAX))
 					return freeReadModelReturn(delimiterIndices, MODEL_UNUSABLE);
 				//retrieve texture index
+				texIndex = 0;
 				slashScan = guScanLine(scan, &substringBuffer, slashesFound, delimiterCount, 1);	
 				if(slashScan == NULL)
 					texIndex = 0;
 				if(!guParseUShort(slashScan, &texIndex, GU_BASE_DECIMAL, GU_DEFAULT_DIGITS_MAX))
 					texIndex = 0;
+				free(slashesFound);
 			}
 			//add value to data if not just counting
 			if(!isCountOnly)

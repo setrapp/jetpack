@@ -58,6 +58,11 @@ void Entity::AddTriangle(Vertex* v, UINT* i)
 }
 
 void Entity::AddModel(Model* model) {
+	if (!model)
+	{
+		return;
+	}
+
 	int oldVertexCount = vertices.size();
 	for (int i = 0; i < model->vertices.size(); i++)
 	{

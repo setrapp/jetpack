@@ -227,12 +227,11 @@ Material* AssetManager::GetMaterial(string name)
 // Model
 Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 {
-	//Model* model = new Model();
+	Model* model = new Model();
 
-	const char* filePathCStr = filePath.c_str();
-	MLModel3D* objModel = mlModel3DLoadOBJ(filePathCStr);
-	//delete filePathCStr;
-	/*bool hasUVs = mlModel3DGetTextureVertexCount(objModel) > 1;
+	MLModel3D* objModel = mlModel3DLoadOBJ(filePath.c_str());
+	
+	bool hasUVs = mlModel3DGetTextureVertexCount(objModel) > 1;
 
 	// Load Vertices.
 	unsigned int vertexCount = mlModel3DGetFaceCount(objModel);
@@ -266,11 +265,11 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 		mlIndices[2] = mlFace3DGetVertex3(face);
 
 		model->meshes.push_back(Mesh(mlIndices));
-	}*/
+	}
 
 	MLModel3DDelete(objModel);
 
-	return NULL;//StoreModel(model, name);
+	return StoreModel(model, name);
 }
 Model* AssetManager::StoreModel(Model* model, string name)
 {

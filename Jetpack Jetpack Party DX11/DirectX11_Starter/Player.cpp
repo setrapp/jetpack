@@ -11,6 +11,12 @@ Player::Player()
 	
 }
 
+Player::~Player()
+{
+	delete clientEntity;
+	delete networkedCube;
+}
+
 void Player::Update(float dt)
 {
 	// Check for user input.

@@ -9,10 +9,10 @@ class Player : public Entity
 {
 public:
 	Player();
+	~Player();
 	void Update(float dt);
 
 public:
-	Camera* camera;
 	XMFLOAT3 cameraPos;
 	ClientConnectionEntity* clientEntity;
 	Entity* networkedCube;

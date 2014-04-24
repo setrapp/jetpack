@@ -143,32 +143,32 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 
 	// Attempt to load model
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
-	/*Player* player = new Player();
+	//AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
+	//Player* player = new Player();
 	//player->AddModel(AssetManager::Instance()->GetModel("camera"));
-	entities.push_back(player);
+	//entities.push_back(player);
 	//player->Finalize();
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
-	player->SetMaterial("camera");
-	mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
+	//AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
+	//player->SetMaterial("camera");
+	//mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
 
-	Entity* emptyEntity = new Entity();
-	entities.push_back(emptyEntity);*/
+	//Entity* emptyEntity = new Entity();
+	//entities.push_back(emptyEntity);
 
-	/*AssetManager::Instance()->CreateAndStoreModel("../Assets/cube.obj", "cube");
+	//AssetManager::Instance()->CreateAndStoreModel("../Assets/cube.obj", "cube");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicJetMan.obj", "jetman");
-	Entity* cube = new Entity();
+	/*Entity* cube = new Entity();
 	cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
 	cube->Finalize();
 	cube->transform.Translate(XMFLOAT3(0, -5, 0));
 	cube->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
-	entities.push_back(cube);
-	cube->transform.SetParent(&player->transform);
+	entities.push_back(cube);*/
+	//cube->transform.SetParent(&player->transform);
 	//cube->transform->SetParent(&emptyEntity->transform);
 	//emptyEntity->transform->SetParent(&player->transform);
-	*/
+	
 
-	/*Vertex vertices[] = 
+	Vertex vertices[] = 
 	{
 		{ XMFLOAT3(+1.0f, +1.0f, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 0) },
 		{ XMFLOAT3(-1.0f, -1.0f, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 1) },
@@ -187,7 +187,7 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
 	gift->SetMaterial("gift");
 	gift->GetMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
-	gift->LoadTexture(L"../Assets/RedGift.png");*/
+	//gift->LoadTexture(L"../Assets/RedGift.png");
 
 	Vertex floorVertices[] = 
 	{

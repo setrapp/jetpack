@@ -28,6 +28,7 @@ public:
 	char recvbuf[DEFAULT_BUFLEN];
 	volatile std::queue<char*>* receivedChat;
 	ClientConnectionEntity(void);
+	~ClientConnectionEntity();
 	void sendMessage(string sentMessage);
 	void connectClient(string address);
 	static void listenForResponse(void* stuff);

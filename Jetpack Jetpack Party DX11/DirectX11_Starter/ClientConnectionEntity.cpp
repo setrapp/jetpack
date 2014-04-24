@@ -8,6 +8,11 @@ ClientConnectionEntity::ClientConnectionEntity(void)
 	networkMessages = queue<string>();
 }
 
+ClientConnectionEntity::~ClientConnectionEntity()
+{
+	// TODO: need to figure out how to deallocate memory	
+}
+
 
 void ClientConnectionEntity::sendMessage(string sentMessage){
 	
