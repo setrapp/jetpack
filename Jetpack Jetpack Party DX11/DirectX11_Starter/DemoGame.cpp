@@ -68,7 +68,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	windowWidth = 800;
 	windowHeight = 600;
 	currentState = GameState::Started;
-	camera = new ControllableCamera();
+	camera = new Camera();//ControllableCamera();
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
 	mouseCursorVisibility = true;
 }
@@ -127,10 +127,6 @@ bool DemoGame::Init()
 	this->deltaTime = 0;
 	
 	LoadSoundAssets();
-
-
-	// Create temporary mouse look
-	mouseLook = new MouseLook(NULL, XMFLOAT2(0, 0));
 
 	return true;
 }
@@ -215,7 +211,7 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT3 up = player->transform.GetUp();
 	camera->LookAt(eye, target, up);
 
-	//IPMan * w = new IPMan(INPUTMODES::KEYBOARD);
+	IPMan * w = new IPMan(INPUTMODES::KEYBOARD);
 }
 
 #pragma endregion
@@ -335,8 +331,6 @@ XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
 bool scaleSmall = true;
 void DemoGame::UpdateScene(float dt)
 {	
-	return;
-
 	if (IPMan::GetIPMan()->GetBack())
 	{
 		currentState = Helper::GoBackOnce(currentState);
@@ -351,11 +345,11 @@ void DemoGame::UpdateScene(float dt)
 	{
 		this->deltaTime = dt;
 
-		while (!AssetManager::Instance()->addedEntities.empty())
+		/*while (!AssetManager::Instance()->addedEntities.empty())
 		{
 			entities.push_back(AssetManager::Instance()->addedEntities.front());
 			AssetManager::Instance()->addedEntities.pop();
-		}
+		}*/
 
 
 		for(Entity* e: entities)
@@ -363,7 +357,7 @@ void DemoGame::UpdateScene(float dt)
 			e->Update(dt);
 		}
 		//mouseLook->XMove(xnew);
-		//entities[1]->transform->Rotate(XMFLOAT3(0, 5 * dt, 0));	
+		entities[1]->transform.Rotate(XMFLOAT3(0, 5 * dt, 0));	
 	}
 
 	camera->Update(dt, &vsModelConstantBufferData);	
@@ -373,7 +367,6 @@ void DemoGame::UpdateScene(float dt)
 		GameState newState = menu->Update(dt);
 		if (currentState != newState)
 		{
-			//ShowCursor(false);
 			mouseLook->ResetCursor();
 			currentState = newState;
 		}
