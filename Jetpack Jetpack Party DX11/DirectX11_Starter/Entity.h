@@ -21,7 +21,6 @@ public:
 	virtual void Update(float dt);
 	void Draw();
 	void LoadTexture(wchar_t* path);
-	DirectX::XMFLOAT4X4 GetWorldMatrix() const;
 	Material* GetMaterial();
 	inline Material GetMaterialSafe() const;
 	void SetMaterial(string name = "default");

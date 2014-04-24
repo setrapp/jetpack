@@ -146,9 +146,6 @@
     <ClInclude Include="Material.h">
       <Filter>Header Files\Core\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Header Files\Core\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Rigidbody.h">
       <Filter>Header Files\Core\Physics</Filter>
     </ClInclude>
@@ -250,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="SpriteRenderer.h">
       <Filter>Header Files\Core\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\Core\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
