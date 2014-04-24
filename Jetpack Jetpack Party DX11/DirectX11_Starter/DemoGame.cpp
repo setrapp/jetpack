@@ -143,8 +143,8 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 
 	// Attempt to load model
-	/*AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
-	Player* player = new Player();
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/test.obj", "camera");
+	/*Player* player = new Player();
 	//player->AddModel(AssetManager::Instance()->GetModel("camera"));
 	entities.push_back(player);
 	//player->Finalize();
@@ -168,7 +168,7 @@ void DemoGame::CreateGeometryBuffers()
 	//emptyEntity->transform->SetParent(&player->transform);
 	*/
 
-	Vertex vertices[] = 
+	/*Vertex vertices[] = 
 	{
 		{ XMFLOAT3(+1.0f, +1.0f, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 0) },
 		{ XMFLOAT3(-1.0f, -1.0f, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 1) },
@@ -187,7 +187,7 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
 	gift->SetMaterial("gift");
 	gift->GetMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
-	gift->LoadTexture(L"../Assets/RedGift.png");
+	gift->LoadTexture(L"../Assets/RedGift.png");*/
 
 	Vertex floorVertices[] = 
 	{
@@ -199,7 +199,7 @@ void DemoGame::CreateGeometryBuffers()
 
 	UINT floorIndices[] = { 0, 2, 1, 3, 0, 1 };
 	Entity* floor = new Entity();
-	floor->AddQuad(floorVertices, floorIndices);
+	floor->AddTriangle(floorVertices, floorIndices);
 	floor->Finalize();
 	floor->transform.Translate(XMFLOAT3(-5, 5, 0));
 	entities.push_back(floor);
@@ -215,7 +215,7 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT3 up = player->transform.GetUp();
 	camera->LookAt(eye, target, up);*/
 
-	IPMan * w = new IPMan(INPUTMODES::KEYBOARD);
+	//IPMan * w = new IPMan(INPUTMODES::KEYBOARD);
 }
 
 #pragma endregion
@@ -335,6 +335,8 @@ XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
 bool scaleSmall = true;
 void DemoGame::UpdateScene(float dt)
 {	
+	return;
+
 	if (IPMan::GetIPMan()->GetBack())
 	{
 			currentState = GameState::Started;

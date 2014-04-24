@@ -18,5 +18,5 @@ private:
 struct Model 
 {
 	vector<Vertex> vertices;
-	vector<Mesh*> meshes;
+	vector<Mesh> meshes;
 };                                                                                                                                                                                                                                                                                                      

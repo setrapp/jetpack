@@ -33,7 +33,6 @@ private:
 	ID3D11Buffer* indexBuffer;
 	ID3D11Buffer* vertexBuffer;
 	vector<Vertex> vertices;
-	LONG totalMeshes;			 
 	vector<Mesh*> meshes; 
 	Material* material;
 	LONG totalIndices;

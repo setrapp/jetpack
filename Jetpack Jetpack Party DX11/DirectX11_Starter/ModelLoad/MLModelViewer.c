@@ -73,7 +73,7 @@ struct _ml_model3D
 	unsigned int numVertices, numFaces, numTextureVertices, numMaterials;
 	MLVertex3D* vertices;
 	MLFace3D* faces;
-	int* textures;
+	//int* textures;
 	MLTexelXY* textureVertices;
 	MLModelMaterial** materials;
 	MLModelMaterial* currentMaterial;
@@ -129,6 +129,8 @@ void MLModel3DDelete(MLModel3D* deletee)
 	int i = 0;
 	if(!deletee)
         return;
+	if(deletee->filename)
+		free((char*)deletee->filename);
     if(deletee->vertices != NULL)
 		free(deletee->vertices);
 	if(deletee->textureVertices != NULL)
@@ -478,7 +480,7 @@ MLModel3D* mlModel3DLoadOBJ(const char* filename)
 
 	//create new model and using vertex and face arrays
 	model =  MLModel3DCreate(verts, vertexCount, faces, faceCount, texVerts, textureVertexCount, mats, matCount);
-	model->filename = filename;
+	model->filename = guCopyString(filename, NULL, GU_DEFAULT_BUFFER_SIZE);
 
 	//return pointer to model
 	return model;

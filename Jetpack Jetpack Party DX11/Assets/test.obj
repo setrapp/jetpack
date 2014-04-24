@@ -1,0 +1,12 @@
+# Blender3D v249 OBJ File: cube.blend
+# www.blender3d.org
+#mtllib cube.mtl
+#v 1.000000 -1.000000 -1.000000
+#v -1.000000 -1.000000 -1.000000
+#v 1.000000 1.000000 -1.000000
+#vt 1.000000 0.000000
+#vt 0.000000 0.000000
+#vt 0.000000 1.000000
+#usemtl Material
+#s off
+#f 3 1 2

@@ -14,7 +14,6 @@ using namespace DirectX;
 Entity::Entity()
 {
 	totalIndices = 0;
-	totalMeshes = 0;
 	material = AssetManager::Instance()->GetMaterial();
 	socketNumber=0;
 }
@@ -22,6 +21,10 @@ Entity::Entity()
 
 Entity::~Entity(void)
 {
+	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end(); it++)
+	{
+		delete *it;
+	}
 	ReleaseMacro(vertexBuffer);
 	ReleaseMacro(indexBuffer);
 }
@@ -39,7 +42,6 @@ void Entity::AddQuad(Vertex* v, UINT* i)
 	Mesh* m2 = new Mesh(i + 3);
 	meshes.push_back(m1);
 	meshes.push_back(m2);
-	totalMeshes += 2;
 }
 
 void Entity::AddTriangle(Vertex* v, UINT* i)
@@ -53,7 +55,6 @@ void Entity::AddTriangle(Vertex* v, UINT* i)
 		vertices.push_back(v[i]);
 	Mesh* m = new Mesh(i);
 	meshes.push_back(m);
-	totalMeshes ++;
 }
 
 void Entity::AddModel(Model* model) {
@@ -64,7 +65,7 @@ void Entity::AddModel(Model* model) {
 	}
 	for (int i = 0; i < model->meshes.size(); i++)
 	{
-		UINT* modelIndices = model->meshes[i]->GetIndices();
+		UINT* modelIndices = model->meshes[i].GetIndices();
 		UINT indices[3];
 		for (int j = 0; j < 3; j++)
 		{
@@ -72,7 +73,6 @@ void Entity::AddModel(Model* model) {
 		}
 		Mesh* mesh = new Mesh(indices);
 		meshes.push_back(mesh);
-		totalMeshes++;
 	}
 }
 
@@ -140,7 +140,13 @@ inline vector<Mesh*> Entity::GetMeshes() const
 
 void Entity::Finalize()
 {
+	if (meshes.size() < 1 || vertices.size() < 1)
+	{
+		return;
+	}
+
 	vector<UINT> indicesAll;
+	long totalMeshes = meshes.size();
 	for(int i = 0; i < totalMeshes; i++)
 	{
 		UINT* indices = meshes.at(i)->GetIndices();

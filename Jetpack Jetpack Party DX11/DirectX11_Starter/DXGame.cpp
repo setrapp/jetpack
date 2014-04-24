@@ -349,7 +349,7 @@ int DXGame::Run()
 			{
 				// Standard game loop type stuff
 				CalculateFrameStats();
-				//UpdateScene(timer.DeltaTime());
+				UpdateScene(timer.DeltaTime());
 				//DrawScene();
 				elapsedTime += (LONG64)(timer.DeltaTime() * 10000);
                 if(((__int64)elapsedTime > 60))
