@@ -32,5 +32,4 @@ public:
 
 private: 	
 	DirectX::SpriteFont* font;
-	DirectX::SpriteBatch* spriteBatch;
 };

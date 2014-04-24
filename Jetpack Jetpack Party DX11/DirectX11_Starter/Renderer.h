@@ -20,7 +20,8 @@ public:
 		return spriteBatch;
 	}
 
-private: DirectX::SpriteBatch* spriteBatch;
+protected: 
+	DirectX::SpriteBatch* spriteBatch;
 
 };
 #endif
