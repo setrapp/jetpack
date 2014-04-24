@@ -24,9 +24,7 @@ public :
 	const wchar_t* str;
 		 ~GUIBase()
 		 {
-			 delete rect;
-			 delete str;
-			 delete fontRenderer;
+
 		 }
 
 		 //You can have the width declared as 0. It will be taken care of considering the size of string.

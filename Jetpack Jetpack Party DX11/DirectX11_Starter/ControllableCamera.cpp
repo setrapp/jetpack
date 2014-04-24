@@ -14,7 +14,7 @@ void ControllableCamera::Update(float dt, VertexShaderModelConstantBuffer* vsCon
 
 	// Slow the character a bit so that it comes to a nice stop over time.
 	XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), groundSpeedDampening));
-	transform->Translate(transform->InverseTransformDirection(XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt)));
+	transform.Translate(transform.InverseTransformDirection(XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt)));
 
 	Camera::Update(dt, vsConstantBufferdata);
 }
@@ -60,26 +60,26 @@ void ControllableCamera::CheckInput(float dt)
 
 	if(IPMan::GetIPMan()->GetSpecialKeyboardState('Y'))
 	{
-		transform->Rotate(XMFLOAT3(0, -1 * dt, 0));
+		transform.Rotate(XMFLOAT3(0, -1 * dt, 0));
 	}
 	if(IPMan::GetIPMan()->GetSpecialKeyboardState('H'))
 	{
-		transform->Rotate(XMFLOAT3(0, 1 * dt, 0));
+		transform.Rotate(XMFLOAT3(0, 1 * dt, 0));
 	}
 	if(IPMan::GetIPMan()->GetSpecialKeyboardState('T'))
 	{
-		transform->Rotate(XMFLOAT3(-1 * dt, 0 , 0));
+		transform.Rotate(XMFLOAT3(-1 * dt, 0 , 0));
 	}
 	if(IPMan::GetIPMan()->GetSpecialKeyboardState('G'))
 	{
-		transform->Rotate(XMFLOAT3(1 * dt, 0, 0));
+		transform.Rotate(XMFLOAT3(1 * dt, 0, 0));
 	}
 	if(IPMan::GetIPMan()->GetSpecialKeyboardState('U'))
 	{
-		transform->Rotate(XMFLOAT3(0, 0, -1 * dt));
+		transform.Rotate(XMFLOAT3(0, 0, -1 * dt));
 	}
 	if(IPMan::GetIPMan()->GetSpecialKeyboardState('O'))
 	{
-		transform->Rotate(XMFLOAT3(0, 0, 1 * dt));
+		transform.Rotate(XMFLOAT3(0, 0, 1 * dt));
 	}
 }

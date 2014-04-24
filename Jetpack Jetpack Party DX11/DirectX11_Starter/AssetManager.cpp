@@ -1,4 +1,5 @@
 #include "AssetManager.h"
+#include "Debug.h"
 
 AssetManager* AssetManager::instance = NULL;
 AssetManager* AssetManager::Instance() 
@@ -15,7 +16,7 @@ AssetManager::AssetManager()
 		instance = this;
 	}
 
-	soundManager = new SoundManager();
+	//soundManager = new SoundManager();
 	inputLayouts = new map<ID3D11VertexShader*, ID3D11InputLayout*>();
 	vertexShaders = new map<string, ID3D11VertexShader*>();
 	pixelShaders = new map<string, ID3D11PixelShader*>();
@@ -30,15 +31,37 @@ AssetManager::~AssetManager()
 		instance = NULL;
 	}
 
-	// TODO: Actually free the memory of elements stored in vectors (erase only destroys the pointer)
-	inputLayouts->erase(inputLayouts->begin(), inputLayouts->end());
+	for(map<ID3D11VertexShader*, ID3D11InputLayout*>::iterator it = inputLayouts->begin(); it != inputLayouts->end(); it++)
+	{
+		ReleaseMacro(it->second);
+	}
 	delete inputLayouts;
-	vertexShaders->erase(vertexShaders->begin(), vertexShaders->end());
+
+	for(map<string, ID3D11VertexShader*>::iterator it = vertexShaders->begin(); it != vertexShaders->end(); it++)
+	{
+		ReleaseMacro(it->second);
+	}
 	delete vertexShaders;
-	pixelShaders->erase(pixelShaders->begin(), pixelShaders->end());
+
+	for(map<string, ID3D11PixelShader*>::iterator it = pixelShaders->begin(); it != pixelShaders->end(); it++)
+	{
+		ReleaseMacro(it->second);
+	}
 	delete pixelShaders;
-	materials->erase(materials->begin(), materials->end());
+
+	for(map<string, Material*>::iterator it = materials->begin(); it != materials->end(); it++)
+	{
+		delete it->second;
+	}
 	delete materials;
+
+	for(map<string, Model*>::iterator it = models->begin(); it != models->end(); it++)
+	{
+		delete it->second;
+	}
+	delete models;
+
+	//delete soundManager;
 }
 	
 // Input Layouts
@@ -60,7 +83,7 @@ ID3D11InputLayout* AssetManager::CreateAndStoreInputLayout(ID3D11VertexShader* v
 	// If the first attempt failed, destroy the element that is colliding and replace it.
 	if(!existing.second)
 	{
-		inputLayouts->erase(existing.first);
+		delete existing.first->second;
 		inputLayouts->insert(newLayout);
 	}
 
@@ -102,17 +125,17 @@ ID3D11VertexShader* AssetManager::CreateAndStoreVertexShader(string shaderPath, 
 	// If the first attempt failed, destroy the element that is colliding and replace it.
 	if(!existing.second)
 	{
-		vertexShaders->erase(existing.first);
+		delete existing.first->second;
 		vertexShaders->insert(newShader);
 	}
 
 	int a = vsBlob->GetBufferSize();
 
 	// Before cleaning up the data, create the input layout
-	ID3D11InputLayout* newInputLayout = CreateAndStoreInputLayout(vertexShader, vsBlob, vertexDescription, numVertDescElements);
+	/*ID3D11InputLayout* newInputLayout = CreateAndStoreInputLayout(vertexShader, vsBlob, vertexDescription, numVertDescElements);
 	if (inputLayout) {
 		*inputLayout = newInputLayout;
-	}
+	}*/
 
 	ReleaseMacro(vsBlob);
 	delete widePath;
@@ -155,7 +178,7 @@ ID3D11PixelShader* AssetManager::CreateAndStorePixelShader(string shaderPath, st
 	// If the first attempt failed, destroy the element that is colliding and replace it.
 	if(!existing.second)
 	{
-		pixelShaders->erase(existing.first);
+		delete existing.first->second;
 		pixelShaders->insert(newShader);
 	}
 
@@ -185,7 +208,7 @@ Material* AssetManager::StoreMaterial(Material* material, string name)
 	// If the first attempt failed, destroy the element that is colliding and replace it.
 	if(!existing.second)
 	{
-		materials->erase(existing.first);
+		delete existing.first->second;
 		materials->insert(newMaterial);
 	}
 
@@ -256,7 +279,7 @@ Model* AssetManager::StoreModel(Model* model, string name)
 	// If the first attempt failed, destroy the element that is colliding and replace it.
 	if(!existing.second)
 	{
-		models->erase(existing.first);
+		delete existing.first->second;
 		models->insert(newModel);
 	}	
 	return model;

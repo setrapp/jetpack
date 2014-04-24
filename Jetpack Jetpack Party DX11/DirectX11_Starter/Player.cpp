@@ -18,7 +18,7 @@ void Player::Update(float dt)
 	
 	// Slow the character a bit so that it comes to a nice stop over time.
 	XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), groundSpeedDampening));
-	transform->Translate(transform->InverseTransformDirection(XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt)));
+	transform.Translate(transform.InverseTransformDirection(XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt)));
 
 	while(!clientEntity->networkMessages.empty()){
 
@@ -44,8 +44,8 @@ void Player::Update(float dt)
 				cube->socketNumber= targetSocket;
 				cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
 				cube->Finalize();
-				cube->transform->Translate(XMFLOAT3(0, -4, 0));
-				cube->transform->Rotate(XMFLOAT3(0, PI / 2, 0));
+				cube->transform.Translate(XMFLOAT3(0, -4, 0));
+				cube->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
 				networkedEntities[cube->socketNumber]=cube;
 				AssetManager::Instance()->addedEntities.push(cube);
 
@@ -58,9 +58,9 @@ void Player::Update(float dt)
 				}
 
 				XMFLOAT3 newVector= XMFLOAT3(strtod(vectorParts.at(0).c_str(),0),strtod(vectorParts.at(1).c_str(),0),strtod(vectorParts.at(2).c_str(),0));
-				XMFLOAT3 currentTransform=networkedEntities[targetSocket]->transform->GetLocalTranslation();
+				XMFLOAT3 currentTransform=networkedEntities[targetSocket]->transform.GetLocalTranslation();
 				//calculates how much to translate the body in question
-				networkedEntities[targetSocket]->transform->Translate(XMFLOAT3(newVector.x-currentTransform.x,newVector.y-currentTransform.y,newVector.z-currentTransform.z));
+				networkedEntities[targetSocket]->transform.Translate(XMFLOAT3(newVector.x-currentTransform.x,newVector.y-currentTransform.y,newVector.z-currentTransform.z));
 			}
 
 
@@ -71,9 +71,9 @@ void Player::Update(float dt)
 			cube->socketNumber= atoi(stringParts.at(1).c_str());
 			cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
 			cube->Finalize();
-			cube->transform->Translate(XMFLOAT3(0, -4, 0));
-			cube->transform->Rotate(XMFLOAT3(0, PI / 2, 0));
-			cube->transform->SetParent(this->transform);
+			cube->transform.Translate(XMFLOAT3(0, -4, 0));
+			cube->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
+			cube->transform.SetParent(&this->transform);
 			networkedEntities[cube->socketNumber]=cube;
 			AssetManager::Instance()->addedEntities.push(cube);
 			break;
@@ -94,10 +94,10 @@ void Player::Update(float dt)
 					}
 
 					XMFLOAT3 newVector= XMFLOAT3(strtod(vectorParts.at(0).c_str(),0),strtod(vectorParts.at(1).c_str(),0),strtod(vectorParts.at(2).c_str(),0));
-					XMFLOAT3 currentTransform=networkedEntities[targetSocket]->transform->GetLocalTranslation();
+					XMFLOAT3 currentTransform=networkedEntities[targetSocket]->transform.GetLocalTranslation();
 
 					//calculates how much to translate the body in question
-					networkedEntities[targetSocket]->transform->Translate(XMFLOAT3(newVector.x-currentTransform.x,newVector.y-currentTransform.y,newVector.z-currentTransform.z));
+					networkedEntities[targetSocket]->transform.Translate(XMFLOAT3(newVector.x-currentTransform.x,newVector.y-currentTransform.y,newVector.z-currentTransform.z));
 				}
 
 			}
@@ -141,8 +141,8 @@ void Player::CheckInput(float dt)
 			Entity* cube = new Entity();
 			cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
 			cube->Finalize();
-			cube->transform->Translate(XMFLOAT3(0, -4, 0));
-			cube->transform->Rotate(XMFLOAT3(0, PI / 2, 0));
+			cube->transform.Translate(XMFLOAT3(0, -4, 0));
+			cube->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
 			networkedCube= cube;
 			AssetManager::Instance()->addedEntities.push(cube);
 
@@ -153,7 +153,7 @@ void Player::CheckInput(float dt)
 	if(GetAsyncKeyState(VK_NUMPAD1)){
 		if(clientEntity->isConnected){
 			cubeInputReceived=true;
-			networkedCube->transform->Translate(XMFLOAT3(dt, 0, 0));
+			networkedCube->transform.Translate(XMFLOAT3(dt, 0, 0));
 
 		}
 
@@ -162,7 +162,7 @@ void Player::CheckInput(float dt)
 	if(GetAsyncKeyState(VK_NUMPAD5)){
 		if(clientEntity->isConnected){
 			cubeInputReceived=true;
-			networkedCube->transform->Translate(XMFLOAT3(0, 0, dt));
+			networkedCube->transform.Translate(XMFLOAT3(0, 0, dt));
 		}
 
 	}
@@ -170,7 +170,7 @@ void Player::CheckInput(float dt)
 	if(GetAsyncKeyState(VK_NUMPAD2)){
 		if(clientEntity->isConnected){
 			cubeInputReceived=true;
-			networkedCube->transform->Translate(XMFLOAT3(0, 0,-1* dt));
+			networkedCube->transform.Translate(XMFLOAT3(0, 0,-1* dt));
 		}
 
 	}
@@ -178,7 +178,7 @@ void Player::CheckInput(float dt)
 	if(GetAsyncKeyState(VK_NUMPAD3)){
 		if(clientEntity->isConnected){
 			cubeInputReceived=true;
-			networkedCube->transform->Translate(XMFLOAT3(-1* dt, 0, 0));
+			networkedCube->transform.Translate(XMFLOAT3(-1* dt, 0, 0));
 		}
 	}
 
@@ -231,7 +231,7 @@ void Player::CheckInput(float dt)
 
 
 	if(clientEntity->isConnected && networkSendTimer<0.0f && cubeInputReceived){
-		XMFLOAT3 curTransform= networkedCube->transform->GetLocalTranslation();
+		XMFLOAT3 curTransform= networkedCube->transform.GetLocalTranslation();
 		networkSendTimer=0.2f;
 		std::ostringstream ss1;
 		ss1 << curTransform.x;
