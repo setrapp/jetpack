@@ -183,7 +183,7 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
 	gift->SetMaterial("gift");
 	gift->GetMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
-	//gift->LoadTexture(L"../Assets/RedGift.png");
+	gift->LoadTexture(L"../Assets/RedGift.png");
 
 	Vertex floorVertices[] = 
 	{
