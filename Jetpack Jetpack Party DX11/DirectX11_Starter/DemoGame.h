@@ -68,6 +68,7 @@ private:
 
 	float deltaTime;
 	AssetManager* assetManager;
+	IPMan* input;
 	// Our basic shaders for this example
 	ID3D11PixelShader* pixelShader;
 	ID3D11PixelShader* texturePixelShader;

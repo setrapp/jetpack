@@ -71,6 +71,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	camera = new Camera();//ControllableCamera();
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
 	mouseCursorVisibility = true;
+	mouseLook = NULL;
 }
 
 DemoGame::~DemoGame()
@@ -79,6 +80,7 @@ DemoGame::~DemoGame()
 	ReleaseMacro(materialsAndLightsConstantBuffer);
 
 	delete assetManager;
+	delete input;
 	delete FontManager::Instance();
 
 	for(int i = 0 ; i < entities.size(); i++)
@@ -106,8 +108,8 @@ bool DemoGame::Init()
 
 	assetManager = new AssetManager();
 
-	spriteRenderer = new SpriteRenderer(deviceContext);
-	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer->GetSpriteBatch(), L"../Assets/font.spritefont"));	
+	//spriteRenderer = new SpriteRenderer(deviceContext);
+	//menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer->GetSpriteBatch(), L"../Assets/font.spritefont"));	
 
 	LoadShadersAndInputLayout();
 
@@ -126,7 +128,9 @@ bool DemoGame::Init()
 	CreateGeometryBuffers();
 	this->deltaTime = 0;
 	
-	LoadSoundAssets();
+	//LoadSoundAssets();
+
+	//input = new IPMan(INPUTMODES::KEYBOARD);
 
 	return true;
 }
@@ -139,14 +143,14 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 
 	// Attempt to load model
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
+	/*AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
 	Player* player = new Player();
 	player->AddModel(AssetManager::Instance()->GetModel("camera"));
 	entities.push_back(player);
 	player->Finalize();
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
 	player->SetMaterial("camera");
-	mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
+	mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));*/
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
@@ -183,7 +187,7 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
 	gift->SetMaterial("gift");
 	gift->GetMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
-	gift->LoadTexture(L"../Assets/RedGift.png");
+	//gift->LoadTexture(L"../Assets/RedGift.png");
 
 	Vertex floorVertices[] = 
 	{
@@ -202,16 +206,14 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(0.0f, 0.2f, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "floor");
 	floor->SetMaterial("floor");
 	
-	camera->transform.SetParent(&player->transform);
+	/*camera->transform.SetParent(&player->transform);
 	player->transform.Translate(XMFLOAT3(1, 0, 0));
 	XMFLOAT3 eye = camera->transform.GetTranslation();
 	XMStoreFloat3(&eye, XMLoadFloat3(&camera->transform.GetTranslation()) + (5 * XMLoadFloat3(&player->transform.GetUp())));
 	XMFLOAT3 target;
 	XMStoreFloat3(&target, XMLoadFloat3(&player->transform.GetTranslation()) + (3 * XMLoadFloat3(&player->transform.GetForward())));
 	XMFLOAT3 up = player->transform.GetUp();
-	camera->LookAt(eye, target, up);
-
-	IPMan * w = new IPMan(INPUTMODES::KEYBOARD);
+	camera->LookAt(eye, target, up);*/
 }
 
 #pragma endregion
@@ -357,7 +359,7 @@ void DemoGame::UpdateScene(float dt)
 			e->Update(dt);
 		}
 		//mouseLook->XMove(xnew);
-		entities[1]->transform.Rotate(XMFLOAT3(0, 5 * dt, 0));	
+		//entities[1]->transform.Rotate(XMFLOAT3(0, 5 * dt, 0));	
 	}
 
 	camera->Update(dt, &vsModelConstantBufferData);	
@@ -504,7 +506,7 @@ void DemoGame::OnMouseMove(WPARAM btnState, int x, int y)
 		flag = false;
 		prevMousePos.x = x;
 		prevMousePos.y = y;
-		if(currentState == Playing)
+		if(currentState == Playing && mouseLook)
 		{
 			mouseLook->MouseMove(btnState, x, y);		
 		}
