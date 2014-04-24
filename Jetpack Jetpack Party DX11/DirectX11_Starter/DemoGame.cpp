@@ -126,11 +126,11 @@ bool DemoGame::Init()
 	CreateGeometryBuffers();
 	this->deltaTime = 0;
 	
-	//LoadSoundAssets();
+	LoadSoundAssets();
 
 
 	// Create temporary mouse look
-	//mouseLook = new MouseLook(NULL, XMFLOAT2(0, 0));
+	mouseLook = new MouseLook(NULL, XMFLOAT2(0, 0));
 
 	return true;
 }
@@ -143,26 +143,26 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 
 	// Attempt to load model
-	//AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
-	//Player* player = new Player();
-	//player->AddModel(AssetManager::Instance()->GetModel("camera"));
-	//entities.push_back(player);
-	//player->Finalize();
-	//AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
-	//player->SetMaterial("camera");
-	//mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
+	Player* player = new Player();
+	player->AddModel(AssetManager::Instance()->GetModel("camera"));
+	entities.push_back(player);
+	player->Finalize();
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
+	player->SetMaterial("camera");
+	mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
 
-	//Entity* emptyEntity = new Entity();
-	//entities.push_back(emptyEntity);
+	Entity* emptyEntity = new Entity();
+	entities.push_back(emptyEntity);
 
-	//AssetManager::Instance()->CreateAndStoreModel("../Assets/cube.obj", "cube");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/cube.obj", "cube");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicJetMan.obj", "jetman");
-	/*Entity* cube = new Entity();
+	Entity* cube = new Entity();
 	cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
 	cube->Finalize();
 	cube->transform.Translate(XMFLOAT3(0, -5, 0));
 	cube->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
-	entities.push_back(cube);*/
+	entities.push_back(cube);
 	//cube->transform.SetParent(&player->transform);
 	//cube->transform->SetParent(&emptyEntity->transform);
 	//emptyEntity->transform->SetParent(&player->transform);
@@ -245,7 +245,7 @@ void DemoGame::LoadShadersAndInputLayout()
 
 	// Constant buffers ----------------------------------------
 	// Vertex Shader Per Model Constant Buffer
-	/*D3D11_BUFFER_DESC cBufferDesc;
+	D3D11_BUFFER_DESC cBufferDesc;
 	cBufferDesc.ByteWidth			= sizeof(vsModelConstantBufferData);
 	cBufferDesc.Usage				= D3D11_USAGE_DEFAULT;
 	cBufferDesc.BindFlags			= D3D11_BIND_CONSTANT_BUFFER;
@@ -267,7 +267,7 @@ void DemoGame::LoadShadersAndInputLayout()
 	HR(device->CreateBuffer(
 		&cBufferDesc,
 		NULL,
-		&materialsAndLightsConstantBuffer));*/
+		&materialsAndLightsConstantBuffer));
 }
 
 void DemoGame::LoadSoundAssets()
@@ -289,7 +289,7 @@ void DemoGame::LoadSoundAssets()
 #pragma region Window Focus
 void DemoGame::OnFocus(bool givenFocus)
 {
-	/*DXGame::OnFocus(givenFocus);
+	DXGame::OnFocus(givenFocus);
 	if (mouseLook)
 	{
 		if (givenFocus)
@@ -301,7 +301,7 @@ void DemoGame::OnFocus(bool givenFocus)
 		{
 			mouseLook->ignoreMouse = true;
 		}
-	}*/
+	}
 }
 #pragma endregion Window Focus
 
@@ -318,12 +318,12 @@ void DemoGame::OnResize()
 
 
 
-	/*XMStoreFloat4x4(&camera->projection, XMMatrixTranspose(P));
+	XMStoreFloat4x4(&camera->projection, XMMatrixTranspose(P));
 
 	if (mouseLook)
 	{
 		mouseLook->ResetCursor();
-	}*/
+	}
 }
 #pragma endregion
 
@@ -339,7 +339,7 @@ void DemoGame::UpdateScene(float dt)
 
 	if (IPMan::GetIPMan()->GetBack())
 	{
-			currentState = GameState::Started;
+		currentState = GameState::Started;
 	}
 
 	assetManager->Instance()->GetSoundManager()->Update();
@@ -420,18 +420,17 @@ void DemoGame::DrawScene()
 		&vsModelConstantBuffer);
 #endif
 	if (currentState == GameState::Playing) {		
-		/*if(mouseCursorVisibility)
+		if(mouseCursorVisibility)
 		{
 			mouseCursorVisibility = false;
 			ShowCursor(mouseCursorVisibility);
-		}*/
+		}
 		// Update light constant buffer for vertex and pixel shader.
-		/*materialsAndLightsConstantBufferData.light = light->GetShaderLight();
+		materialsAndLightsConstantBufferData.light = light->GetShaderLight();
 		materialsAndLightsConstantBufferData.material = AssetManager::Instance()->GetMaterial("default")->GetShaderMaterial();
 		DXConnection::Instance()->deviceContext->UpdateSubresource(materialsAndLightsConstantBuffer, 0, NULL, &materialsAndLightsConstantBufferData, 0, 0);
 		DXConnection::Instance()->deviceContext->VSSetConstantBuffers(1, 1, &materialsAndLightsConstantBuffer);
 		DXConnection::Instance()->deviceContext->PSSetConstantBuffers(1, 1, &materialsAndLightsConstantBuffer);
-		*/
 
 		for(Entity* e :entities) 
 		{
