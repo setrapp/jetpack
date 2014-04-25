@@ -40,6 +40,10 @@ void Material::Init()
 
 Material::~Material(void)
 {
+	// TODO This stuff should probably be owned by AssetManager. Not trivial to port though. //
+	ReleaseMacro(texture);
+	ReleaseMacro(resourceView);
+	ReleaseMacro(samplerState);
 }
 
 void Material::ApplyTexture(wchar_t* path)
@@ -59,7 +63,6 @@ void Material::ApplyTexture(wchar_t* path)
 	sBufferDesc.Filter = D3D11_FILTER_ANISOTROPIC;
 	sBufferDesc.MaxAnisotropy = 16;
 	sBufferDesc.MipLODBias = 0;
-	//sBufferDesc.ComparisonFunc = D3D11_Comparesion;
 
 	DXConnection::Instance()->device->CreateSamplerState(
 		&sBufferDesc,

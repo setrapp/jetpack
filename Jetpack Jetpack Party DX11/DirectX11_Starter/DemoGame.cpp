@@ -142,14 +142,14 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 
 	// Attempt to load model
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
+	//AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
 	Player* player = new Player();
 	//player->AddModel(AssetManager::Instance()->GetModel("camera"));
 	entities.push_back(player);
 	//player->Finalize();
 	//AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
 	//player->SetMaterial("camera");
-	//mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
+	mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
@@ -160,11 +160,11 @@ void DemoGame::CreateGeometryBuffers()
 	cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
 	cube->Finalize();
 	cube->transform.Translate(XMFLOAT3(0, -5, 0));
-	cube->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
+	cube->transform.Rotate(XMFLOAT3(0, -PI / 2, 0));
 	entities.push_back(cube);
-	//cube->transform.SetParent(&player->transform);
-	//cube->transform->SetParent(&emptyEntity->transform);
-	//emptyEntity->transform->SetParent(&player->transform);
+	cube->transform.SetParent(&player->transform);
+	cube->transform.SetParent(&emptyEntity->transform);
+	emptyEntity->transform.SetParent(&player->transform);
 	
 
 	Vertex vertices[] = 
@@ -186,7 +186,7 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
 	gift->SetMaterial("gift");
 	gift->GetMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
-	//gift->LoadTexture(L"../Assets/RedGift.png");
+	gift->LoadTexture(L"../Assets/RedGift.png");
 
 	Vertex floorVertices[] = 
 	{
@@ -205,14 +205,14 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(0.0f, 0.2f, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "floor");
 	floor->SetMaterial("floor");
 	
-	/*camera->transform.SetParent(&player->transform);
+	camera->transform.SetParent(&player->transform);
 	player->transform.Translate(XMFLOAT3(1, 0, 0));
 	XMFLOAT3 eye = camera->transform.GetTranslation();
 	XMStoreFloat3(&eye, XMLoadFloat3(&camera->transform.GetTranslation()) + (5 * XMLoadFloat3(&player->transform.GetUp())));
 	XMFLOAT3 target;
 	XMStoreFloat3(&target, XMLoadFloat3(&player->transform.GetTranslation()) + (3 * XMLoadFloat3(&player->transform.GetForward())));
 	XMFLOAT3 up = player->transform.GetUp();
-	camera->LookAt(eye, target, up);*/
+	camera->LookAt(eye, target, up);
 }
 
 #pragma endregion

@@ -196,6 +196,33 @@ ID3D11PixelShader* AssetManager::GetPixelShader(string name)
 	return shader;
 }
 
+// Textures
+/*void AssetManager::StoreTexture2D(wchar_t* path, string name = "default")
+{
+	ID3D11Resource* texture;
+	HR (CreateWICTextureFromFile(
+		DXConnection::Instance()->device, 
+		DXConnection::Instance()->deviceContext, 
+		path, 
+		&texture, 
+		&this->resourceView));
+
+	D3D11_SAMPLER_DESC sBufferDesc;
+	sBufferDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sBufferDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sBufferDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sBufferDesc.Filter = D3D11_FILTER_ANISOTROPIC;
+	sBufferDesc.MaxAnisotropy = 16;
+	sBufferDesc.MipLODBias = 0;
+
+	DXConnection::Instance()->device->CreateSamplerState(
+		&sBufferDesc,
+		&this->samplerState);
+	int a = 0;
+}
+ID3D11Texture2D AssetManager::GetTexture2D(string name = "default");*/
+
+
 // Materials
 Material* AssetManager::StoreMaterial(Material* material, string name)
 {
