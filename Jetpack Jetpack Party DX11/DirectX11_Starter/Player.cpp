@@ -6,9 +6,10 @@ Player::Player()
 	velocity = XMFLOAT3(0, 0, 0);
 	maxSpeed = 2000;
 	groundSpeedDampening = 0.95f;
+	groundSpeedDampening = 0.99f;
 	clientEntity = new ClientConnectionEntity();
 	networkSendTimer=0.0f;
-	
+	grounded = true;
 }
 
 Player::~Player()
@@ -23,7 +24,11 @@ void Player::Update(float dt)
 	CheckInput(dt);
 	
 	// Slow the character a bit so that it comes to a nice stop over time.
-	XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), groundSpeedDampening));
+	if (grounded) {
+		XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), groundSpeedDampening));
+	} else {
+		XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), airSpeedDampening));
+	}
 	transform.Translate(transform.InverseTransformDirection(XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt)));
 
 	while(!clientEntity->networkMessages.empty()){

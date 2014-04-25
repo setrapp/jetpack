@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "ClientConnectionEntity.h"
 #include <queue>
+#include "Jetpack.h"
 
 class Player : public Entity
 {
@@ -26,5 +27,7 @@ private:
 	XMFLOAT3 velocity;
 	float maxSpeed;
 	float groundSpeedDampening;
-
+	float airSpeedDampening;
+	bool grounded;
+	Jetpack jetpack;
 };
