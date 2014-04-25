@@ -251,6 +251,9 @@
     <ClInclude Include="Mesh.h">
       <Filter>Header Files\Core\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="Jetpack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Toolkit\Src\Shaders\DGSLPhong.hlsl">

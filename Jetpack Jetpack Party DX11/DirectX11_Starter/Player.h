@@ -29,5 +29,5 @@ private:
 	float groundSpeedDampening;
 	float airSpeedDampening;
 	bool grounded;
-	Jetpack jetpack;
+	Jetpack* jetpack;
 };

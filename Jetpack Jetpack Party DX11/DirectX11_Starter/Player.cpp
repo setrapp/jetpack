@@ -10,10 +10,12 @@ Player::Player()
 	clientEntity = new ClientConnectionEntity();
 	networkSendTimer=0.0f;
 	grounded = true;
+	jetpack = new Jetpack();
 }
 
 Player::~Player()
 {
+	delete jetpack;
 	delete clientEntity;
 	delete networkedCube;
 }
@@ -22,6 +24,8 @@ void Player::Update(float dt)
 {
 	// Check for user input.
 	CheckInput(dt);
+
+	jetpack->Update();
 	
 	// Slow the character a bit so that it comes to a nice stop over time.
 	if (grounded) {

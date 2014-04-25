@@ -134,6 +134,7 @@
     <ClInclude Include="GUIBase.h" />
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="Jetpack.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Menu.h" />
