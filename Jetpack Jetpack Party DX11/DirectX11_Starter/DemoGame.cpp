@@ -127,7 +127,7 @@ bool DemoGame::Init()
 	CreateGeometryBuffers();
 	this->deltaTime = 0;
 	
-	//LoadSoundAssets();
+	LoadSoundAssets();
 
 	input = new IPMan(INPUTMODES::KEYBOARD);
 

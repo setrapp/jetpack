@@ -13,10 +13,8 @@ public :
 	{
 		if(engine)
 			{
-				unique_ptr<SoundEffect> temp;
-				temp.reset(new SoundEffect(engine, path));				
-				effect = temp.get()->CreateInstance(SOUND_EFFECT_INSTANCE_FLAGS::SoundEffectInstance_Use3D);			
-				temp.release();
+				effectEffect.reset(new SoundEffect(engine, path));				
+				effect = effectEffect.get()->CreateInstance(SOUND_EFFECT_INSTANCE_FLAGS::SoundEffectInstance_Use3D);			
 				if(!effect)
 				{
 					throw 1;
@@ -28,8 +26,8 @@ public :
 
 	~SoundInstance(void)
 	{
-		effect.release();
 		delete effect.release();
+		delete effectEffect.release();
 	}
 
 	inline void SoundInstance::Play(bool loop)
@@ -102,6 +100,8 @@ public :
 	}
 
 private:
+	std::unique_ptr<SoundEffect> effectEffect;
 	std::unique_ptr<SoundEffectInstance> effect;
+	
 };
 }

@@ -39,6 +39,10 @@ public:
 
 	~SoundManager(void)
 	{
+		for (std::map<SoundId, SoundInstance*>::iterator it = SoundMap->begin(); it != SoundMap->end(); it++)
+		{
+			delete it->second;
+		}
 		delete SoundMap;
 		delete engineSfx;
 		delete waveformatex;
