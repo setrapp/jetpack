@@ -396,17 +396,23 @@ public:
 	IPMan(INPUTMODES mode)
 	{
 		if(!inputManager)
-			{
-				inputManager = new InputManager(mode);
-			}
+		{
+			inputManager = new InputManager(mode);
+		}
+	}
+
+	~IPMan()
+	{
+		delete inputManager;
+		inputManager = NULL;
 	}
 	
 	static InputManager* GetIPMan()
-		{
-			if(!inputManager)
-				throw "No modes defined";
-			return inputManager;
-		}
+	{
+		if(!inputManager)
+			throw "No modes defined";
+		return inputManager;
+	}
 };
 
 

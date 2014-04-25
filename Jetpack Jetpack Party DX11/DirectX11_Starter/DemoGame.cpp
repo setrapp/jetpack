@@ -68,7 +68,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	windowWidth = 800;
 	windowHeight = 600;
 	currentState = GameState::Started;
-	camera = new Camera();//ControllableCamera();
+	camera = new ControllableCamera();
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
 	mouseCursorVisibility = true;
 	mouseLook = NULL;
@@ -129,7 +129,7 @@ bool DemoGame::Init()
 	
 	//LoadSoundAssets();
 
-	//input = new IPMan(INPUTMODES::KEYBOARD);
+	input = new IPMan(INPUTMODES::KEYBOARD);
 
 	return true;
 }
