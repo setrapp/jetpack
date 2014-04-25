@@ -9,7 +9,7 @@ Menu::Menu(FontRenderer* renderer)
 	GUIBase* settings = new GUIBase(new Rect(0, 100, 0 ,0), L"SETTINGS", 3, AnimationType::LEFTTORIGHT, renderer, 1000, Colors::Black);
 	guiMan->Add("SETTINGS", settings);
 	GUIBase* exit = new GUIBase(new Rect(0, 200, 0 ,0), L"EXIT", 5, AnimationType::BOTTOMTOTOP, renderer, 1000, Colors::Black);
-	guiMan->Add("EXIT", exit);	
+	guiMan->Add("EXIT", exit);
 	this->fontRenderer = renderer;
 	currstate = GameState::Started;
 }

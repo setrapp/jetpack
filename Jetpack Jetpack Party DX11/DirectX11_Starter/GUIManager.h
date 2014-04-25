@@ -25,6 +25,7 @@ public:
 			map<char*, GUIBase*>::iterator i = _guiElements.begin();
 			while(i != _guiElements.end())
 			{
+				//delete i->first;
 				delete i->second;
 				i++;
 			}

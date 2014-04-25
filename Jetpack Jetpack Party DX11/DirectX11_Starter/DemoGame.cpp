@@ -108,9 +108,8 @@ bool DemoGame::Init()
 
 	assetManager = new AssetManager();
 
-	//spriteRenderer = new SpriteRenderer(deviceContext);
-	//menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer->GetSpriteBatch(), L"../Assets/font.spritefont"));	
-
+	spriteRenderer = new SpriteRenderer(deviceContext);
+	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer->GetSpriteBatch(), L"../Assets/font.spritefont"));	
 	LoadShadersAndInputLayout();
 
 	AssetManager::Instance()->StoreMaterial(new Material());
