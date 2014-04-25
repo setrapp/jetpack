@@ -4,9 +4,9 @@
 Player::Player()
 {
 	velocity = XMFLOAT3(0, 0, 0);
-	maxSpeed = 20;
+	maxSpeed = 2000;
 	groundSpeedDampening = 0.95f;
-	clientEntity = NULL;//new ClientConnectionEntity();
+	clientEntity = new ClientConnectionEntity();
 	networkSendTimer=0.0f;
 	
 }
@@ -121,19 +121,19 @@ void Player::CheckInput(float dt)
 	bool cubeInputReceived= false;
 	if(IPMan::GetIPMan()->GetKey(KeyType::FORWARD))
 	{
-		velocity.z += 0.8f;
+		velocity.z += 100;//0.8f;
 	}
 	if(IPMan::GetIPMan()->GetKey(KeyType::BACKWARD))
 	{
-		velocity.z -= 0.8f;
+		velocity.z -= 100;//0.8f;
 	}
 	if(IPMan::GetIPMan()->GetKey(KeyType::LEFT))
 	{
-		velocity.x -= 0.8f;
+		velocity.x -= 100;//0.8f;
 	}
 	if(IPMan::GetIPMan()->GetKey(KeyType::RIGHT))
 	{
-		velocity.x += 0.8f;
+		velocity.x += 100;//0.8f;
 	}
 
 
