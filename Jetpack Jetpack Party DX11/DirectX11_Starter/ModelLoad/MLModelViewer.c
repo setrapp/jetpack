@@ -73,7 +73,7 @@ struct _ml_model3D
 	unsigned int numVertices, numFaces, numTextureVertices, numMaterials;
 	MLVertex3D* vertices;
 	MLFace3D* faces;
-	int* textures;
+	//int* textures;
 	MLTexelXY* textureVertices;
 	MLModelMaterial** materials;
 	MLModelMaterial* currentMaterial;
@@ -129,6 +129,8 @@ void MLModel3DDelete(MLModel3D* deletee)
 	int i = 0;
 	if(!deletee)
         return;
+	if(deletee->filename)
+		free((char*)deletee->filename);
     if(deletee->vertices != NULL)
 		free(deletee->vertices);
 	if(deletee->textureVertices != NULL)
@@ -154,331 +156,349 @@ MLModel3D* mlModel3DLoadOBJ(const char* filename)
 	 * vt:		Texture Vertex
 	 * vn:		Normal (not used here because face normals are calculated later)
 	 * f:		Face (vertex indices order: vertexIndex/textureVertexIndex/normalIndex)
-		* Note that if a face is defined as a quad rather than a triangle, it will be converted into two triangular faces
-	* mtllib:	Material Library file
-	* usemtl:	Material to be used until next call
+	 *		Note that if a face is defined as a quad rather than a triangle, it will be converted into two triangular faces
+	 * mtllib:	Material Library file
+	 * usemtl:	Material to be used until next call
 	 */
 
-	unsigned int i = 0;  //counter
+	unsigned int i = 0; //counter
+	int failed = 0;		//failure check
 
 	//extract path from filename for future use
 	char* filePath = guExtractFilePath(filename, NULL, NULL, GU_DIRECTORY_DELIMITER);
 
 	//--- Declare data reading varibles (define what can be) ---//
-	int readSize = GU_DEFAULT_BUFFER_SIZE;		//reading max length
-	char* read;                                 //character buffer for reading file
-	char* substringBuffer;						//character buffer for holding substrings when parsing
-	void** data;                                //data to be used
-	int* dataTypes;                             //type of data
-	int* dataSizes;                             //elements of data
-	unsigned int maxDataCount = 8;				//max elements of data
+	int readSize = GU_DEFAULT_BUFFER_SIZE;	//reading max length
+	char* read = NULL;                      //character buffer for reading file
+	char* substringBuffer = NULL;			//character buffer for holding substrings when parsing
+	void** data = NULL;                     //data to be used
+	int* dataTypes = NULL;                  //type of data
+	int* dataSizes = NULL;                  //elements of data
+	unsigned int maxDataCount = 8;			//max elements of data
 
 	//--- Declare structures that will be used in creating Model ---//
-	MLVertex3D* verts;					//array of physical vertices
-	MLTexelXY* texVerts;                //array of texture vertices
-	MLFace3D* faces;					//array of faces
-	char** matLibs;						//array of material libraries (not actual materials)
-	int* matLibNameLengths;				//size of each material library's filename
-	MLMaterialSwitch* matSwitches;		//materials switches at faces
-	MLModel3D* model;					//model to be created
-	char featureType = '\0';			//type of feature being defined
+	MLVertex3D* verts = NULL;				//array of physical vertices
+	MLTexelXY* texVerts = NULL;             //array of texture vertices
+	MLFace3D* faces = NULL;					//array of faces
+	char** matLibs = NULL;					//array of material libraries (not actual materials)
+	int* matLibNameLengths = NULL;			//size of each material library's filename
+	MLMaterialSwitch* matSwitches = NULL;	//materials switches at faces
+	MLModel3D* model = NULL;				//model to be created
+	char featureType = '\0';				//type of feature being defined
 	unsigned int vertexCount = 0, faceCount = 0, textureVertexCount = 0, matLibCount = 0, matSwitchCount = 0;
 	char defaultSwitchName[] = {'-'};
 
 	//--- Declare structures that will be used in linking materials ---//
 	unsigned int matCount;						//number of mats found
-	MLModelMaterial** mats;						//array of constructed materials
-	GLushort* faceMats;							//array of indices of materials connected to model faces
+	MLModelMaterial** mats = NULL;				//array of constructed materials
+	GLushort* faceMats = NULL;					//array of indices of materials connected to model faces
 
 	//attempt to open model file
 	FILE* objFile;
+
 	if(!guAttemptFileOpen(&objFile, filename, ".obj", GU_DEFAULT_BUFFER_SIZE, 3))
-		return NULL;
+		failed = 1;
 
-	//allocate memory for temporary data storage
-	data = (void**)malloc(sizeof(void*) * maxDataCount);
-	dataTypes = (int*)malloc(sizeof(int) * maxDataCount);
-	dataSizes = (int*)malloc(sizeof(int) * maxDataCount);
-	for(i = 0; i < maxDataCount; i++)
-		data[i] = (void*)malloc(sizeof(void*));
-
-	//-- Parse through the the file once to calculate the number of each feature ---//	
-	//setup stream reading buffer
-	readSize = GU_DEFAULT_BUFFER_SIZE;
-	read =(char*)malloc(sizeof(char)*readSize);
-	
-	//allocate buffer to hold substrings
-	substringBuffer = (char*)malloc(sizeof(char) * 256);
-
-	//counts
-	while((featureType = parseModelData(NULL, NULL, NULL, 0, read, substringBuffer, GU_DEFAULT_BUFFER_SIZE, objFile, 1)) != MODEL_END)
+	if (!failed)
 	{
-		//count model feature
-		switch(featureType)
+		//allocate memory for temporary data storage
+		data = (void**)malloc(sizeof(void*) * maxDataCount);
+		dataTypes = (int*)malloc(sizeof(int) * maxDataCount);
+		dataSizes = (int*)malloc(sizeof(int) * maxDataCount);
+		for(i = 0; i < maxDataCount; i++)
+			data[i] = (void*)malloc(sizeof(void*));
+
+		//-- Parse through the the file once to calculate the number of each feature ---//	
+		//setup stream reading buffer
+		readSize = GU_DEFAULT_BUFFER_SIZE;
+		read =(char*)malloc(sizeof(char)*readSize);
+	
+		//allocate buffer to hold substrings
+		substringBuffer = (char*)malloc(sizeof(char) * 256);
+
+		//counts
+		while((featureType = parseModelData(NULL, NULL, NULL, 0, read, substringBuffer, GU_DEFAULT_BUFFER_SIZE, objFile, 1)) != MODEL_END)
 		{
-            case  MODEL_VERTEX:						//vertex
-                vertexCount++;
-                break;
-            case MODEL_TEXTURE_VERTEX:				//texture vertex
-                textureVertexCount++;
-                break;
-            case MODEL_FACE:						//one face
-                faceCount++;
-                break;
-            case MODEL_SPLIT_FACE:					//two faces
-                faceCount += 2;
-                break;
-            case MODEL_MAT_LIB:						//material library filename
-                matLibCount++;
-                break;
-            case MODEL_MAT_NAME:					//switch material being used
-                matSwitchCount++;
-                break;
-            default:
-                break;
-            }
-	}
-
-	//---Reset counters and prepare to actually read data in second pass ---//
-	//allocate memory for vertex and face arrays
-	verts = (MLVertex3D*)malloc(sizeof(MLVertex3D)*(vertexCount+1));
-	texVerts = (MLTexelXY*)malloc(sizeof(MLTexelXY)*(textureVertexCount+1));
-	faces = (MLFace3D*)malloc(sizeof(MLFace3D)*(faceCount+1));
-	matLibs = (char**)malloc(sizeof(char*)*matLibCount);											//note that this is not an array of actual materials but the files that specify them, materials will be loaded later
-	matLibNameLengths = (int*)malloc(sizeof(int)*matLibCount);										//size of each material library's filename
-	matSwitches = (MLMaterialSwitch*)malloc(sizeof(MLMaterialSwitch) * (matSwitchCount+1));             //materials switches at faces
-	
-	//set the first index of vertices to a default, verts[0] is used to signify no vertex is used (more useful for texture vertices, convention kept for consistency)
-	verts[0].position.x = 0;
-	verts[0].position.y = 0;
-	verts[0].position.z = 0;
-	verts[0].normal.x = 0;
-	verts[0].normal.y = 0;
-	verts[0].normal.z = 0;
-	verts[0].numFacesDefined = 0;
-	verts[0].numFacesAveraged = 0;
-	verts[0].facesAveraged = 0;
-	//set the first index of faces to a default, faces[0] is used to signify no face is used (more useful for texture vertices, convention kept for consistency)
-	faces[0].vert1 = 0;
-	faces[0].vert2 = 0;
-	faces[0].vert3 = 0;
-	faces[0].texVert1 = 0;
-	faces[0].texVert2 = 0;
-	faces[0].texVert3 = 0;
-	faces[0].normal.x = 0;
-	faces[0].normal.y = 0;
-	faces[0].normal.z = 0;
-	//set the first index of texture vertices to a default, textureVerts[0] is used to signify no texture vertex is used
-	texVerts[0].position.x = 0;
-	texVerts[0].position.y = 0;
-	//set the first index of material switch locations to 0 and first index of switched materials to the default to account for faces before first switch
-	matSwitches[0].switchFace = 0;
-	matSwitches[0].name = defaultSwitchName;
-
-	//re-open file (closed by parseModelData at end of file)
-	if((objFile = fopen(filename, "r")) == 0)
-	{
-		printf("%s could not be re-opened", filename);
-		return NULL;
-	}
-	
-	//--- Parse through the file again to populate the vertex and face arrays ---//
-	//reset feature type and feature counts
-	featureType = MODEL_UNUSABLE;
-	vertexCount = 0, faceCount = 0, textureVertexCount = 0, matLibCount = 0, matSwitchCount = 0;
-	//start counting features (not including material libraries) vertices at one to allow for the special zero index case (the zero index is used in the absence of -1 so unsigned numbers can be used)
-	vertexCount++;
-	faceCount++;
-	textureVertexCount++;
-	matSwitchCount++;
-	while((featureType = parseModelData(data, dataTypes, dataSizes, maxDataCount, read, substringBuffer, readSize, objFile, 0)) != MODEL_END)
-	{
-		//objects that could be populated depending on model data retrieved
-		MLVertex3D v;
-		MLTexelXY t;
-		MLFace3D f;
-		MLFace3D f1;
-		MLFace3D f2;
-		
-		//construct model feature
-		switch(featureType)
-		{
-            case MODEL_VERTEX:					//vertex
-                v.position.x = *(GLfloat*)data[0];
-                v.position.y = *(GLfloat*)data[1];
-                v.position.z = *(GLfloat*)data[2];
-                v.normal.x = 0;
-                v.normal.y = 0;
-                v.normal.z = 0;
-                v.numFacesDefined = 0;
-                v.numFacesAveraged = 0;
-                v.facesAveraged = NULL;
-                verts[vertexCount] = v;
-                vertexCount++;
-                break;
-            case MODEL_TEXTURE_VERTEX:			//texture vertex
-                t.position.x = *(GLfloat*)data[0];
-                t.position.y = *(GLfloat*)data[1];
-                texVerts[textureVertexCount] = t;
-                textureVertexCount++;
-                break;
-            case MODEL_FACE:					//one face
-                f.vert1 = *(GLushort*)data[0];
-                f.vert2 = *(GLushort*)data[1];
-                f.vert3 = *(GLushort*)data[2];
-                f.texVert1 = *(GLushort*)data[4];
-                f.texVert2 = *(GLushort*)data[5];
-                f.texVert3 = *(GLushort*)data[6];
-                faces[faceCount] = f;
-                faceCount++;
-                break;
-            case MODEL_SPLIT_FACE:				//two faces 
-                f1.vert1 = *(GLushort*)data[0];
-                f1.vert2 = *(GLushort*)data[1];
-                f1.vert3 = *(GLushort*)data[2];
-                f1.texVert1 = *(GLushort*)data[4];
-                f1.texVert2 = *(GLushort*)data[5];
-                f1.texVert3 = *(GLushort*)data[6];
-                faces[faceCount] = f1;
-                faceCount++;
-                f2.vert1 = *(GLushort*)data[2];
-                f2.vert2 = *(GLushort*)data[3];
-                f2.vert3 = *(GLushort*)data[0];
-                f2.texVert1 = *(GLushort*)data[6];
-                f2.texVert2 = *(GLushort*)data[7];
-                f2.texVert3 = *(GLushort*)data[4];
-                faces[faceCount] = f2;
-                faceCount++;
-                break;
-            case MODEL_MAT_LIB:					//material library filename
-                matLibs[matLibCount] = guCopyString((char*)data[0], NULL, GU_DEFAULT_BUFFER_SIZE);
-                matLibNameLengths[matLibCount] = dataSizes[0];
-                matLibCount++;
-                break;
-            case MODEL_MAT_NAME:				//switch material being used
-                //set material swith location to current face number 
-                //materials will be applied to all following faces until next switch (inclusive of the face at the switch index)
-                matSwitches[matSwitchCount].switchFace = faceCount;				
-
-                //use default material if no material specified at switch
-                if((data == NULL) || (guCompare((char*)data[0], "(null)", 0, GU_DEFAULT_BUFFER_SIZE) == 0) || (guCompare((char*)data[0], "Material", 0, GU_DEFAULT_BUFFER_SIZE) == 0))
-                {
-                    matSwitches[matSwitchCount].name = (char*)malloc(sizeof(char)*2);
-                    matSwitches[matSwitchCount].name[0] = '-';
-                    matSwitches[matSwitchCount].name[1] = '\0';
-                }
-                else
-                    matSwitches[matSwitchCount].name = guCopyString((char*)data[0], NULL, GU_DEFAULT_BUFFER_SIZE);
-
-                matSwitchCount++;
-                break;
-            default:
-                break;
-		}
-	}
-
-	//deallocate data buffers
-	for(i = 0; i < maxDataCount; i++)
-	{
-		//avoid deallocating parsing buffers
-		if(data[i] != read && data[i] != substringBuffer)
-			free(data[i]);
-	}
-	free(data);
-	free(dataTypes);
-	free(dataSizes);
-
-	//deallocate stream reading buffer and substring buffer
-	free(read);
-	read = NULL;
-	free(substringBuffer);
-	substringBuffer = NULL;
-
-	//calculate surface normals
-	for(i = 0; i < faceCount; i++)
-		faces[i].normal = guCalcPlaneNormal(&verts[faces[i].vert1].position, &verts[faces[i].vert2].position, &verts[faces[i].vert3].position);
-
-	//count how many faces are defined by each vertex for vector normal calculations to come
-	for(i = 0; i < faceCount; i++)
-	{
-		verts[faces[i].vert1].numFacesDefined++;
-		verts[faces[i].vert2].numFacesDefined++;
-		verts[faces[i].vert3].numFacesDefined++;
-	}
-	
-	//recalculate vertex normals
-	for(i = 1; i < vertexCount; i++)
-	{
-		unsigned int j;
-		for(j = 1; j < faceCount; j++)
-		{
-			MLFace3D checkFace = faces[j];
-			
-			if(&verts[i] == &verts[checkFace.vert1] || &verts[i] == &verts[checkFace.vert2] || &verts[i] == &verts[checkFace.vert3])
-				recalcVertexNormal(&verts[i], faces, j);
-		}
-	}
-
-	//load materials
-	matCount = 0;
-	for(i = 0; i < matLibCount; i++)
-	{
-		char* matLibPath = guConcat(filePath, matLibs[i], NULL, NULL, GU_DEFAULT_BUFFER_SIZE);
-		free(matLibs[i]);
-		matLibs[i] = matLibPath;
-	}
-	mats = mlModelMaterialLibsLoadMTL(matLibs, matLibCount, &matCount);
-	
-	//deallocate material library list
-	for(i = 0; i < matLibCount; i++)
-		free(matLibs[i]);
-
-	//link face names from model file to materials loaded from libraries
-	faceMats = (GLushort*)malloc(sizeof(MLModelMaterial*)*matSwitchCount+1);
-	faceMats[0] = 0;
-	for(i = 1; i < matSwitchCount; i++)
-	{
-		int matFound = 0;						//is there a material with the same name as the switch
-		if(matSwitches[i].name)					//if there is a name specified at the switch attempt to find the material in library
-		{
-			unsigned int j = 1;
-			for(j = 1; j < matCount && !matFound; j++)
+			//count model feature
+			switch(featureType)
 			{
-				//match faces between model file and material file
-				if(mats[j] && guCompare(matSwitches[i].name, mats[j]->name, 0, GU_DEFAULT_BUFFER_SIZE) == 0)	
-				{
-					faceMats[i] = j;
-					matFound = 1;
+				case  MODEL_VERTEX:						//vertex
+					vertexCount++;
+					break;
+				case MODEL_TEXTURE_VERTEX:				//texture vertex
+					textureVertexCount++;
+					break;
+				case MODEL_FACE:						//one face
+					faceCount++;
+					break;
+				case MODEL_SPLIT_FACE:					//two faces
+					faceCount += 2;
+					break;
+				case MODEL_MAT_LIB:						//material library filename
+					matLibCount++;
+					break;
+				case MODEL_MAT_NAME:					//switch material being used
+					matSwitchCount++;
+					break;
+				default:
+					break;
 				}
+		}
+		
+		//---Reset counters and prepare to actually read data in second pass ---//
+		//allocate memory for vertex and face arrays
+		verts = (MLVertex3D*)malloc(sizeof(MLVertex3D)*(vertexCount+1));
+		texVerts = (MLTexelXY*)malloc(sizeof(MLTexelXY)*(textureVertexCount+1));
+		faces = (MLFace3D*)malloc(sizeof(MLFace3D)*(faceCount+1));
+		matLibs = (char**)malloc(sizeof(char*)*matLibCount);											//note that this is not an array of actual materials but the files that specify them, materials will be loaded later
+		matLibNameLengths = (int*)malloc(sizeof(int)*matLibCount);										//size of each material library's filename
+		matSwitches = (MLMaterialSwitch*)malloc(sizeof(MLMaterialSwitch) * (matSwitchCount+1));         //materials switches at faces
+	
+		//set the first index of vertices to a default, verts[0] is used to signify no vertex is used (more useful for texture vertices, convention kept for consistency)
+		verts[0].position.x = 0;
+		verts[0].position.y = 0;
+		verts[0].position.z = 0;
+		verts[0].normal.x = 0;
+		verts[0].normal.y = 0;
+		verts[0].normal.z = 0;
+		verts[0].numFacesDefined = 0;
+		verts[0].numFacesAveraged = 0;
+		verts[0].facesAveraged = 0;
+		//set the first index of faces to a default, faces[0] is used to signify no face is used (more useful for texture vertices, convention kept for consistency)
+		faces[0].vert1 = 0;
+		faces[0].vert2 = 0;
+		faces[0].vert3 = 0;
+		faces[0].texVert1 = 0;
+		faces[0].texVert2 = 0;
+		faces[0].texVert3 = 0;
+		faces[0].normal.x = 0;
+		faces[0].normal.y = 0;
+		faces[0].normal.z = 0;
+		//set the first index of texture vertices to a default, textureVerts[0] is used to signify no texture vertex is used
+		texVerts[0].position.x = 0;
+		texVerts[0].position.y = 0;
+		//set the first index of material switch locations to 0 and first index of switched materials to the default to account for faces before first switch
+		matSwitches[0].switchFace = 0;
+		matSwitches[0].name = defaultSwitchName;
+
+		//re-open file (closed by parseModelData at end of file)
+		if((objFile = fopen(filename, "r")) == 0)
+		{
+			printf("%s could not be re-opened", filename);
+			failed = 1;
+		}
+	}
+	
+	if(!failed)
+	{
+		//--- Parse through the file again to populate the vertex and face arrays ---//
+		//reset feature type and feature counts
+		featureType = MODEL_UNUSABLE;
+		vertexCount = 0, faceCount = 0, textureVertexCount = 0, matLibCount = 0, matSwitchCount = 0;
+		//start counting features (not including material libraries) vertices at one to allow for the special zero index case (the zero index is used in the absence of -1 so unsigned numbers can be used)
+		vertexCount++;
+		faceCount++;
+		textureVertexCount++;
+
+		while((featureType = parseModelData(data, dataTypes, dataSizes, maxDataCount, read, substringBuffer, readSize, objFile, 0)) != MODEL_END)
+		{
+			//objects that could be populated depending on model data retrieved
+			MLVertex3D v;
+			MLTexelXY t;
+			MLFace3D f;
+			MLFace3D f1;
+			MLFace3D f2;
+		
+			//construct model feature
+			switch(featureType)
+			{
+				case MODEL_VERTEX:					//vertex
+					v.position.x = *(GLfloat*)data[0];
+					v.position.y = *(GLfloat*)data[1];
+					v.position.z = *(GLfloat*)data[2];
+					v.normal.x = 0;
+					v.normal.y = 0;
+					v.normal.z = 0;
+					v.numFacesDefined = 0;
+					v.numFacesAveraged = 0;
+					v.facesAveraged = NULL;
+					verts[vertexCount] = v;
+					vertexCount++;
+					break;
+				case MODEL_TEXTURE_VERTEX:			//texture vertex
+					t.position.x = *(GLfloat*)data[0];
+					t.position.y = *(GLfloat*)data[1];
+					texVerts[textureVertexCount] = t;
+					textureVertexCount++;
+					break;
+				case MODEL_FACE:					//one face
+					f.vert1 = *(GLushort*)data[0];
+					f.vert2 = *(GLushort*)data[1];
+					f.vert3 = *(GLushort*)data[2];
+					f.texVert1 = *(GLushort*)data[4];
+					f.texVert2 = *(GLushort*)data[5];
+					f.texVert3 = *(GLushort*)data[6];
+					faces[faceCount] = f;
+					faceCount++;
+					break;
+				case MODEL_SPLIT_FACE:				//two faces 
+					f1.vert1 = *(GLushort*)data[0];
+					f1.vert2 = *(GLushort*)data[1];
+					f1.vert3 = *(GLushort*)data[2];
+					f1.texVert1 = *(GLushort*)data[4];
+					f1.texVert2 = *(GLushort*)data[5];
+					f1.texVert3 = *(GLushort*)data[6];
+					faces[faceCount] = f1;
+					faceCount++;
+					f2.vert1 = *(GLushort*)data[2];
+					f2.vert2 = *(GLushort*)data[3];
+					f2.vert3 = *(GLushort*)data[0];
+					f2.texVert1 = *(GLushort*)data[6];
+					f2.texVert2 = *(GLushort*)data[7];
+					f2.texVert3 = *(GLushort*)data[4];
+					faces[faceCount] = f2;
+					faceCount++;
+					break;
+				case MODEL_MAT_LIB:					//material library filename
+					matLibs[matLibCount] = guCopyString((char*)data[0], NULL, GU_DEFAULT_BUFFER_SIZE);
+					matLibNameLengths[matLibCount] = dataSizes[0];
+					matLibCount++;
+					break;
+				case MODEL_MAT_NAME:				//switch material being used
+					//set material swith location to current face number 
+					//materials will be applied to all following faces until next switch (inclusive of the face at the switch index)
+					matSwitches[matSwitchCount].switchFace = faceCount;				
+
+					//use default material if no material specified at switch
+					if((data == NULL) || (guCompare((char*)data[0], "(null)", 0, GU_DEFAULT_BUFFER_SIZE) == 0) || (guCompare((char*)data[0], "Material", 0, GU_DEFAULT_BUFFER_SIZE) == 0))
+					{
+						matSwitches[matSwitchCount].name = (char*)malloc(sizeof(char)*2);
+						matSwitches[matSwitchCount].name[0] = '-';
+						matSwitches[matSwitchCount].name[1] = '\0';
+					}
+					else
+						matSwitches[matSwitchCount].name = guCopyString((char*)data[0], NULL, GU_DEFAULT_BUFFER_SIZE);
+
+					matSwitchCount++;
+					break;
+				default:
+					break;
 			}
 		}
 
-		//if no match found, use default
-		if(!matFound)
-			faceMats[i] = 0;
-	}
+		//deallocate data buffers
+		for(i = 0; i < maxDataCount; i++)
+		{
+			//avoid deallocating parsing buffers
+			if(data[i] != read && data[i] != substringBuffer)
+				free(data[i]);
+		}
+		free(data);
+		free(dataTypes);
+		free(dataSizes);
 
-	//connect faces to materials
-	for(i = 0; i < matSwitchCount; i++)
-	{
-		unsigned int j = 0;
-		unsigned int matBegin = matSwitches[i].switchFace;												//first face using material
-		unsigned int matEnd = (i == matSwitchCount-1 ? faceCount : matSwitches[i+1].switchFace);		//first face not using material, use end of face array if no more switches exist
+		//deallocate stream reading buffer and substring buffer
+		free(read);
+		read = NULL;
+		free(substringBuffer);
+		substringBuffer = NULL;
+
+		//calculate surface normals
+		for(i = 0; i < faceCount; i++)
+			faces[i].normal = guCalcPlaneNormal(&verts[faces[i].vert1].position, &verts[faces[i].vert2].position, &verts[faces[i].vert3].position);
+
+		//count how many faces are defined by each vertex for vector normal calculations to come
+		for(i = 0; i < faceCount; i++)
+		{
+			verts[faces[i].vert1].numFacesDefined++;
+			verts[faces[i].vert2].numFacesDefined++;
+			verts[faces[i].vert3].numFacesDefined++;
+		}
+
+		//recalculate vertex normals
+		for(i = 1; i < vertexCount; i++)
+		{
+			unsigned int j;
+			for(j = 1; j < faceCount; j++)
+			{
+				MLFace3D checkFace = faces[j];
+			
+				if(&verts[i] == &verts[checkFace.vert1] || &verts[i] == &verts[checkFace.vert2] || &verts[i] == &verts[checkFace.vert3])
+					recalcVertexNormal(&verts[i], faces, j);
+			}
+		}
+
+		//deallocate vertex face references
+		for(i = 1; i < vertexCount; i++)
+		{
+			free(verts[i].facesAveraged);
+			verts[i].facesAveraged = NULL;
+		}
+
+		//load materials
+		matCount = 0;
+		for(i = 0; i < matLibCount; i++)
+		{
+			char* matLibPath = guConcat(filePath, matLibs[i], NULL, NULL, GU_DEFAULT_BUFFER_SIZE);
+			free(matLibs[i]);
+			matLibs[i] = matLibPath;
+		}
+		mats = mlModelMaterialLibsLoadMTL(matLibs, matLibCount, &matCount);	
+
+		//deallocate material library list
+		for(i = 0; i < matLibCount; i++)
+			free(matLibs[i]);
+
+		//link face names from model file to materials loaded from libraries
+		faceMats = (GLushort*)malloc(sizeof(MLModelMaterial*)*matSwitchCount+1);
+		faceMats[0] = 0;
+		for(i = 1; i < matSwitchCount; i++)
+		{
+			int matFound = 0;						//is there a material with the same name as the switch
+			if(matSwitches[i].name)					//if there is a name specified at the switch attempt to find the material in library
+			{
+				unsigned int j = 1;
+				for(j = 1; j < matCount && !matFound; j++)
+				{
+					//match faces between model file and material file
+					if(mats[j] && guCompare(matSwitches[i].name, mats[j]->name, 0, GU_DEFAULT_BUFFER_SIZE) == 0)	
+					{
+						faceMats[i] = j;
+						matFound = 1;
+					}
+				}
+			}
+
+			//if no match found, use default
+			if(!matFound)
+				faceMats[i] = 0;
+		}
+
+		//connect faces to materials
+		for(i = 0; i < matSwitchCount; i++)
+		{
+			unsigned int j = 0;
+			unsigned int matBegin = matSwitches[i].switchFace;												//first face using material
+			unsigned int matEnd = (i == matSwitchCount-1 ? faceCount : matSwitches[i+1].switchFace);		//first face not using material, use end of face array if no more switches exist
 	
-		//apply current material to all faces before next switch
-		for(j = matBegin; j < matEnd; j++)
-			faces[j].materialIndex = faceMats[i];
+			//apply current material to all faces before next switch
+			for(j = matBegin; j < matEnd; j++)
+				faces[j].materialIndex = faceMats[i];
+		}
+
+		//create new model and using vertex and face arrays
+		model =  MLModel3DCreate(verts, vertexCount, faces, faceCount, texVerts, textureVertexCount, mats, matCount);
+		model->filename = guCopyString(filename, NULL, GU_DEFAULT_BUFFER_SIZE);
 	}
 
 	//deallocate buffers that are no longer needed
 	free(matLibs);
 	free(matLibNameLengths);
+	for(i = 0; i < matSwitchCount; i++)
+		free(matSwitches[i].name);
 	free(matSwitches);
 	free(faceMats);
-
-	//create new model and using vertex and face arrays
-	model =  MLModel3DCreate(verts, vertexCount, faces, faceCount, texVerts, textureVertexCount, mats, matCount);
-	model->filename = filename;
+	free(filePath);
 
 	//return pointer to model
 	return model;
@@ -503,6 +523,8 @@ void mlModel3DLoadModelTextures(MLModel3D* targetModel)
 					printf("The file, %s, could not be opened on an absolute or relative path", targetModel->materials[i]->textureMapDi->filename);
 		*/
 	}
+
+	free(filePath);
 }
 
 //draw model
@@ -892,17 +914,19 @@ int parseModelData(void** data, int* dataTypes, int* dataSizes, int dataCount, c
 	
 	//declare delimiter trackers
 	int delimiterCount;
-	int* delimiterIndices;
-	
+	int* delimiterIndices = NULL;
+
 	//fail if no space was given to store data and not just counting features
 	if(data == NULL && !isCountOnly)
-		return freeReadModelReturn(NULL, MODEL_UNUSABLE);
+		return freeReadModelReturn(delimiterIndices, MODEL_UNUSABLE);
 	
 	//initialize data if not just counting
 	if(!isCountOnly)
 	{
 		for(i = 0; i < dataCount; i++)
 		{
+			if(data[i] != read && data[i] != substringBuffer)
+				free(data[i]);
 			data[i] = NULL;
 			dataTypes[i] = GU_NO_TYPE;
 			dataSizes[i] = 0;
@@ -914,12 +938,12 @@ int parseModelData(void** data, int* dataTypes, int* dataSizes, int dataCount, c
 	{
 		//close file
 		fclose(file);
-		return freeReadModelReturn(NULL, MODEL_END);
+		return freeReadModelReturn(delimiterIndices, MODEL_END);
 	}
 	
 	//read next line from file
 	if(!fgets(read, readSize, file))
-		return freeReadModelReturn(NULL, MODEL_UNUSABLE);
+		return freeReadModelReturn(delimiterIndices, MODEL_UNUSABLE);
 
 	//find the locations of ' ' in the read line for parsing
 	delimiterCount = 0;
@@ -1007,18 +1031,17 @@ int parseModelData(void** data, int* dataTypes, int* dataSizes, int dataCount, c
 		//if the number of vertice is below three the face is not usable
 		if(numVerts < 3)
 			return freeReadModelReturn(delimiterIndices, MODEL_UNUSABLE);
-		
-		//determine if texture coordinates are included in face
-		slashes = 0;													//keep track of '/' count
-		guFindDelimiters(read, '/', &slashes, GU_DEFAULT_BUFFER_SIZE);	//count '/' in line (do not need the actual list at this point
-		slashes -= 2;													//discount beginning and termination indices
-		textured = slashes > 0;											//flag as textured if any '/' appear (obj format lists faces as vertexCoor/textureCoor/normalCoor)
 
-		//return freeReadModelReturn(delimiterIndices, failure if not enough memory has been allocated to store data and the function is supposed to be populating data
+		//determine if texture coordinates are included in face
+		slashes = 0;															//keep track of '/' count
+		free(guFindDelimiters(read, '/', &slashes, GU_DEFAULT_BUFFER_SIZE));	//count '/' in line (do not need the actual list at this point
+		slashes -= 2;															//discount beginning and termination indices
+		textured = slashes > 0;													//flag as textured if any '/' appear (obj format lists faces as vertexCoor/textureCoor/normalCoor)
+
 		if(dataCount < 8 && !isCountOnly)			//note that the data size must be enough for quad faces with textures, regardless of actual line data
 			return freeReadModelReturn(delimiterIndices, MODEL_UNUSABLE);
 
-		//find xyz coordinates one at a time
+		//find vertices one at a time
 		for (i = 1; i < numVerts+1; i++)
 		{
 			unsigned short vertIndex = 0, texIndex = 0;
@@ -1036,18 +1059,20 @@ int parseModelData(void** data, int* dataTypes, int* dataSizes, int dataCount, c
 			{
 				int innerSlashes;                                                                           //keep track of '/' within the current scan
 				int* slashesFound = guFindDelimiters(scan, '/', &innerSlashes, GU_DEFAULT_DIGITS_MAX);		//find '/' within the current scan rather than the whole line
-				//retrieve vertex coordinate
+				//retrieve vertex index
 				char* slashScan = guScanLine(scan, &substringBuffer, slashesFound, delimiterCount, 0);	
 				if(slashScan == NULL)
-					return freeReadModelReturn(delimiterIndices, '-');
+					return freeReadModelReturn(delimiterIndices, MODEL_UNUSABLE);
 				if(!guParseUShort(slashScan, &vertIndex, GU_BASE_DECIMAL, GU_DEFAULT_DIGITS_MAX))
 					return freeReadModelReturn(delimiterIndices, MODEL_UNUSABLE);
-				//retrieve texture coordinate
+				//retrieve texture index
+				texIndex = 0;
 				slashScan = guScanLine(scan, &substringBuffer, slashesFound, delimiterCount, 1);	
 				if(slashScan == NULL)
 					texIndex = 0;
 				if(!guParseUShort(slashScan, &texIndex, GU_BASE_DECIMAL, GU_DEFAULT_DIGITS_MAX))
 					texIndex = 0;
+				free(slashesFound);
 			}
 			//add value to data if not just counting
 			if(!isCountOnly)

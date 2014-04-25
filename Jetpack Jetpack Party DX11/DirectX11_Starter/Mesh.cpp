@@ -3,30 +3,14 @@
 #include "Vertex.h"
 #include <stdio.h>
 
-Mesh::Mesh(UINT* i, short noOfIndices)
+Mesh::Mesh(UINT* i)
 {
-	// TODO does this line need to exist
-	indices = (UINT*)calloc(noOfIndices, sizeof(UINT));
-	indices = i;
-	totalIndices = noOfIndices;
+	indices[0] = i[0];
+	indices[1] = i[1];
+	indices[2] = i[2];
 }
 
-
-Mesh::~Mesh(void)
+UINT* Mesh::GetIndices()
 {
-	delete indices;
-}
-
-UINT* Mesh::GetIndices(short* total)
-{
-	*total = totalIndices;
 	return indices;
-}
-		
-
-void Update(float dt);
-
-void Mesh::Draw()
-{	
-	
 }

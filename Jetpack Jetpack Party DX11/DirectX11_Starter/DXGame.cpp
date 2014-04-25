@@ -58,7 +58,7 @@ DXGame::DXGame(HINSTANCE hInstance)
 	// Zero out the viewport struct
 	ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
 	DXGame::sysEvent =true;
-
+	elapsedTime = 0;
 	// Grabs a pointer to this DXGame object so we can forward
 	// Windows messages to the object's message handling function
 	dxGame = this;
@@ -246,6 +246,8 @@ float DXGame::AspectRatio() const
 	return (float)windowWidth / windowHeight;
 }
 
+void DXGame::OnFocus(bool givenFocus) {}
+
 // When the window is resized, the underlying buffers (textures) must
 // also be resized to match.  
 void DXGame::OnResize()
@@ -349,6 +351,13 @@ int DXGame::Run()
 				CalculateFrameStats();
 				UpdateScene(timer.DeltaTime());
 				DrawScene();
+				elapsedTime += (LONG64)(timer.DeltaTime() * 10000);
+                if(((__int64)elapsedTime > 60))
+                {
+                    elapsedTime %= 60;
+                    FixedUpdate();
+                }
+
 			}
 		}
 	}
@@ -431,7 +440,13 @@ LRESULT DXGame::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			timer.Start();
 		}
 		return 0;
-
+		// WM_SETFOCUS is sent when the window recieves keyboard focus.
+	case WM_SETFOCUS:
+		OnFocus(true);
+		return 0;
+	case WM_KILLFOCUS:
+		OnFocus(false);
+		return 0;
 		// WM_SIZE is sent when the user resizes the window.  
 	case WM_SIZE:
 		// Save the new client area dimensions.

@@ -8,19 +8,15 @@
 class Mesh
 {
 public:
-	Mesh(UINT* i, short noOfIndices);
-	~Mesh(void);
-	void Update(float dt);
-	void Draw();
-	UINT* GetIndices(short *total);
+	Mesh(UINT* i);
+	UINT* GetIndices();
 
 private:	
-	short totalIndices;
-	UINT* indices;
+	UINT indices[3];
 };
 
 struct Model 
 {
 	vector<Vertex> vertices;
-	vector<Mesh*> meshes;
-};
+	vector<Mesh> meshes;
+};                                                                                                                                                                                                                                                                                                      

@@ -1,4 +1,5 @@
 #include "ControllableCamera.h"
+#include "InputManager.h"
 
 ControllableCamera::ControllableCamera()
 {
@@ -9,39 +10,39 @@ ControllableCamera::ControllableCamera()
 
 void ControllableCamera::Update(float dt, VertexShaderModelConstantBuffer* vsConstantBufferdata)
 {
-	CheckInput(dt);
-	
+	CheckInput(dt);	
 
 	// Slow the character a bit so that it comes to a nice stop over time.
 	XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), groundSpeedDampening));
-	transform->Translate(transform->InverseTransformDirection(XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt)));
+	transform.Translate(transform.InverseTransformDirection(XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt)));
 
 	Camera::Update(dt, vsConstantBufferdata);
 }
 
 void ControllableCamera::CheckInput(float dt)
 {
-	if(GetAsyncKeyState('K'))
+	
+	if(IPMan::GetIPMan()->GetSpecialKeyboardState('K'))
 	{
 		velocity.z -= 0.8f;
 	}
-	if(GetAsyncKeyState('I'))
+	if(IPMan::GetIPMan()->GetSpecialKeyboardState('I'))
 	{
 		velocity.z += 0.8f;
 	}
-	if(GetAsyncKeyState('L'))
+	if(IPMan::GetIPMan()->GetSpecialKeyboardState('L'))
 	{
 		velocity.x += 0.8f;
 	}
-	if(GetAsyncKeyState('J'))
+	if(IPMan::GetIPMan()->GetSpecialKeyboardState('J'))
 	{
 		velocity.x -= 0.8f;
 	}
-	if(GetAsyncKeyState('B'))
+	if(IPMan::GetIPMan()->GetSpecialKeyboardState('B'))
 	{
 		velocity.y -= 0.8f;
 	}
-	if(GetAsyncKeyState('N'))
+	if(IPMan::GetIPMan()->GetSpecialKeyboardState('N'))
 	{
 		velocity.y += 0.8f;
 	}
@@ -57,28 +58,28 @@ void ControllableCamera::CheckInput(float dt)
 		velocity.z = velocity.z * (maxSpeed / velocityMag);
 	}
 
-	if(GetAsyncKeyState('Y'))
+	if(IPMan::GetIPMan()->GetSpecialKeyboardState('Y'))
 	{
-		transform->Rotate(XMFLOAT3(0, -20 * dt, 0));
+		transform.Rotate(XMFLOAT3(0, -1 * dt, 0));
 	}
-	if(GetAsyncKeyState('H'))
+	if(IPMan::GetIPMan()->GetSpecialKeyboardState('H'))
 	{
-		transform->Rotate(XMFLOAT3(0, 20 * dt, 0));
+		transform.Rotate(XMFLOAT3(0, 1 * dt, 0));
 	}
-	if(GetAsyncKeyState('T'))
+	if(IPMan::GetIPMan()->GetSpecialKeyboardState('T'))
 	{
-		transform->Rotate(XMFLOAT3(-20 * dt, 0 , 0));
+		transform.Rotate(XMFLOAT3(-1 * dt, 0 , 0));
 	}
-	if(GetAsyncKeyState('G'))
+	if(IPMan::GetIPMan()->GetSpecialKeyboardState('G'))
 	{
-		transform->Rotate(XMFLOAT3(20 * dt, 0, 0));
+		transform.Rotate(XMFLOAT3(1 * dt, 0, 0));
 	}
-	if(GetAsyncKeyState('U'))
+	if(IPMan::GetIPMan()->GetSpecialKeyboardState('U'))
 	{
-		transform->Rotate(XMFLOAT3(0, 0, -1 * dt));
+		transform.Rotate(XMFLOAT3(0, 0, -1 * dt));
 	}
-	if(GetAsyncKeyState('O'))
+	if(IPMan::GetIPMan()->GetSpecialKeyboardState('O'))
 	{
-		transform->Rotate(XMFLOAT3(0, 0, 1 * dt));
+		transform.Rotate(XMFLOAT3(0, 0, 1 * dt));
 	}
 }

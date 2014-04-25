@@ -5,11 +5,14 @@
 
 #include <map>
 #include <string>
+#include <queue>
 #include "Common.h"
+#include "Entity.h"
 #include "Material.h"
 #include "Mesh.h"
 #include "ModelLoad\MLModelViewer.h"
 #include "SoundManager.h"
+#include "InputManager.h"
 
 using namespace std;
 
@@ -43,11 +46,11 @@ public:
 	Model* StoreModel(Model* model, string name = "default");
 	Model* GetModel(string name = "default");
 	SoundManager* GetSoundManager();
-
 	static AssetManager* Instance();
+	std::queue<Entity*> addedEntities;
+
 private:
 	static AssetManager* instance;
-
 	map<ID3D11VertexShader*, ID3D11InputLayout*>* inputLayouts;
 	map<string, ID3D11VertexShader*>* vertexShaders;
 	map<string, ID3D11PixelShader*>* pixelShaders;

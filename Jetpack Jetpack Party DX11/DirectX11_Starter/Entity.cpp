@@ -1,4 +1,5 @@
 #pragma once 
+#define WIN32_LEAN_AND_MEAN
 #include "Entity.h"
 #include "Toolkit\Inc\WICTextureLoader.h"
 #include <Windows.h>
@@ -13,23 +14,19 @@ using namespace DirectX;
 Entity::Entity()
 {
 	totalIndices = 0;
-	totalMeshes = 0;
-	transform = new Transform();
 	material = AssetManager::Instance()->GetMaterial();
+	socketNumber=0;
 }
 
 
 Entity::~Entity(void)
 {
-	delete transform;
+	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end(); it++)
+	{
+		delete *it;
+	}
 	ReleaseMacro(vertexBuffer);
 	ReleaseMacro(indexBuffer);
-}
-
-
-XMFLOAT4X4 Entity::GetWorldMatrix()
-{
-	return this->transform->GetWorldMatrix();
 }
 
 void Entity::AddQuad(Vertex* v, UINT* i)
@@ -39,11 +36,12 @@ void Entity::AddQuad(Vertex* v, UINT* i)
 		i[j] += vertices.size();
 	}
 
-	Mesh* m = new Mesh(i, 6);
 	for(int i = 0; i < 4; i++)
 		vertices.push_back(v[i]);
-	meshes.push_back(m);
-	totalMeshes ++;
+	Mesh* m1 = new Mesh(i);
+	Mesh* m2 = new Mesh(i + 3);
+	meshes.push_back(m1);
+	meshes.push_back(m2);
 }
 
 void Entity::AddTriangle(Vertex* v, UINT* i)
@@ -53,14 +51,18 @@ void Entity::AddTriangle(Vertex* v, UINT* i)
 		i[j] += vertices.size();
 	}
 
-	Mesh* m = new Mesh(i, 3);
 	for(int i = 0; i < 4; i++)
 		vertices.push_back(v[i]);
+	Mesh* m = new Mesh(i);
 	meshes.push_back(m);
-	totalMeshes ++;
 }
 
 void Entity::AddModel(Model* model) {
+	if (!model)
+	{
+		return;
+	}
+
 	int oldVertexCount = vertices.size();
 	for (int i = 0; i < model->vertices.size(); i++)
 	{
@@ -68,16 +70,14 @@ void Entity::AddModel(Model* model) {
 	}
 	for (int i = 0; i < model->meshes.size(); i++)
 	{
-		short totalIndices;
-		UINT* modelIndices = model->meshes[i]->GetIndices(&totalIndices);
-		UINT* indices = new UINT[totalIndices];
-		for (int j = 0; j < totalIndices; j++)
+		UINT* modelIndices = model->meshes[i].GetIndices();
+		UINT indices[3];
+		for (int j = 0; j < 3; j++)
 		{
 			indices[j] = modelIndices[j] + oldVertexCount;
 		}
-		Mesh* mesh = new Mesh(indices, totalIndices);
+		Mesh* mesh = new Mesh(indices);
 		meshes.push_back(mesh);
-		totalMeshes++;
 	}
 }
 
@@ -93,8 +93,14 @@ void Entity::Draw()
 		ID3D11DeviceContext* deviceContext = DXConnection::Instance()->deviceContext;
 		deviceContext->VSSetShader(material->vertexShader, NULL, 0);
 		deviceContext->PSSetShader(material->pixelShader, NULL, 0);
-		deviceContext->PSSetShaderResources(0, 1, &material->resourceView);
-		deviceContext->PSSetSamplers(0, 1, &material->samplerState);
+		if (material->resourceView)
+		{
+			deviceContext->PSSetShaderResources(0, 1, &material->resourceView);
+		}		
+		if (material->samplerState)
+		{
+			deviceContext->PSSetSamplers(0, 1, &material->samplerState);
+		}
 	}	
 
 	const UINT stride = sizeof(Vertex);
@@ -122,7 +128,7 @@ Material* Entity::GetMaterial()
 }
 
 
-Material Entity::GetMaterialSafe()
+inline Material Entity::GetMaterialSafe() const
 {
 	return *this->material;
 }
@@ -132,19 +138,24 @@ void Entity::SetMaterial(string name)
 	material = AssetManager::Instance()->GetMaterial(name);
 }
 
-vector<Mesh*> Entity::GetMeshes()
+inline vector<Mesh*> Entity::GetMeshes() const 
 {
 	return meshes;
 }
 
 void Entity::Finalize()
 {
+	if (meshes.size() < 1 || vertices.size() < 1)
+	{
+		return;
+	}
+
 	vector<UINT> indicesAll;
+	long totalMeshes = meshes.size();
 	for(int i = 0; i < totalMeshes; i++)
 	{
-		short temp;
-		UINT* indices = meshes.at(i)->GetIndices(&temp);
-		for(short j= 0; j < temp; j++)
+		UINT* indices = meshes.at(i)->GetIndices();
+		for(short j= 0; j < 3; j++)
 		{
 			indicesAll.push_back(indices[j]);
 		}

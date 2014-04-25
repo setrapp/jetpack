@@ -30,15 +30,37 @@ AssetManager::~AssetManager()
 		instance = NULL;
 	}
 
-	// TODO: Actually free the memory of elements stored in vectors (erase only destroys the pointer)
-	inputLayouts->erase(inputLayouts->begin(), inputLayouts->end());
+	for(map<ID3D11VertexShader*, ID3D11InputLayout*>::iterator it = inputLayouts->begin(); it != inputLayouts->end(); it++)
+	{
+		ReleaseMacro(it->second);
+	}
 	delete inputLayouts;
-	vertexShaders->erase(vertexShaders->begin(), vertexShaders->end());
+
+	for(map<string, ID3D11VertexShader*>::iterator it = vertexShaders->begin(); it != vertexShaders->end(); it++)
+	{
+		ReleaseMacro(it->second);
+	}
 	delete vertexShaders;
-	pixelShaders->erase(pixelShaders->begin(), pixelShaders->end());
+
+	for(map<string, ID3D11PixelShader*>::iterator it = pixelShaders->begin(); it != pixelShaders->end(); it++)
+	{
+		ReleaseMacro(it->second);
+	}
 	delete pixelShaders;
-	materials->erase(materials->begin(), materials->end());
+
+	for(map<string, Material*>::iterator it = materials->begin(); it != materials->end(); it++)
+	{
+		delete it->second;
+	}
 	delete materials;
+
+	for(map<string, Model*>::iterator it = models->begin(); it != models->end(); it++)
+	{
+		delete it->second;
+	}
+	delete models;
+
+	delete soundManager;
 }
 	
 // Input Layouts
@@ -208,6 +230,7 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 	Model* model = new Model();
 
 	MLModel3D* objModel = mlModel3DLoadOBJ(filePath.c_str());
+	
 	bool hasUVs = mlModel3DGetTextureVertexCount(objModel) > 1;
 
 	// Load Vertices.
@@ -236,13 +259,15 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 		MLFace3D const* face = mlModel3DGetFace(objModel, i);
 
 		// Retrieve vertices that make up current face.
-		UINT* mlIndices = new UINT[3];
+		UINT mlIndices[3];
 		mlIndices[0] = mlFace3DGetVertex1(face);
 		mlIndices[1] = mlFace3DGetVertex2(face);
 		mlIndices[2] = mlFace3DGetVertex3(face);
 
-		model->meshes.push_back(new Mesh(mlIndices, 3));
+		model->meshes.push_back(Mesh(mlIndices));
 	}
+
+	MLModel3DDelete(objModel);
 
 	return StoreModel(model, name);
 }

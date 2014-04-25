@@ -9,12 +9,10 @@ class Renderer
 public:
 	Renderer::Renderer(void)
 	{
-
 	}
 
 	virtual Renderer::~Renderer(void)
 	{
-
 	}
 
 	virtual DirectX::SpriteBatch* Renderer::GetSpriteBatch()
@@ -22,7 +20,8 @@ public:
 		return spriteBatch;
 	}
 
-private: DirectX::SpriteBatch* spriteBatch;
+protected: 
+	DirectX::SpriteBatch* spriteBatch;
 
 };
 #endif

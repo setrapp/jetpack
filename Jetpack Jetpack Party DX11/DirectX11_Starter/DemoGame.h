@@ -1,7 +1,9 @@
 #ifndef _DEMOGAME_H
+#define _DEMOGAME_H
 #pragma once
-#include "FontRenderer.h"
-#include "Sprite.h"
+#define WIN32_LEAN_AND_MEAN
+#include "FontManager.h"
+#include "SpriteRenderer.h"
 #include "Vertex.h"
 #include "Common.h"
 #include <DirectXMath.h>
@@ -19,6 +21,10 @@
 #include "SoundManager.h"
 #include "MouseLook.h"
 #include "Debug.h"
+#include "InputManager.h"
+#include <queue>
+#include "XNew.h"
+#include "InputManager.h"
 
 using namespace DirectX;
 
@@ -27,6 +33,8 @@ using namespace DirectX;
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 #endif
+
+
 
 // Demo class which extends the base DXGame class
 class DemoGame : public DXGame
@@ -37,9 +45,13 @@ public:
 
 	// Overrides for base level methods
 	bool Init();
+	void OnFocus(bool givenFocus);
 	void OnResize();
 	void UpdateScene(float dt);
 	void DrawScene(); 
+
+	//Locked at 60FPS
+	void FixedUpdate();
 
 	// For handing mouse input
 	void OnMouseDown(WPARAM btnState, int x, int y);
@@ -71,16 +83,14 @@ private:
 	// Keeps track of the old mouse position.  Useful for 
 	// determining how far the mouse moved in a single frame.
 	POINT prevMousePos;
-	//Camera* camera;
+
 	Light* light;
+
 	std::vector<Entity*> entities;
+
 	SpriteRenderer* spriteRenderer;
-	FontRenderer* fontRenderer;
 
-	//DirectX::XMFLOAT4X4 viewMatrix;
-	//DirectX::XMFLOAT4X4 projectionMatrix;
-
-	ControllableCamera* camera;
+	Camera* camera;
 	GameState currentState;
 	Menu* menu;
 	MouseLook* mouseLook;

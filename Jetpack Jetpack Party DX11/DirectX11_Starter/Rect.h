@@ -7,27 +7,31 @@ public:
 	int x, y, width, height;	
 	Rect(void)
 	{
+		x =0;
+		y = 0;
+		width = 0;
+		height = 0;
 	}
+
+	Rect(int x, int y, int width, int height)
+	{
+		this->x = x;
+		this->y = y;
+		this->width = width;
+		this->height = height;
+	}
+
 	~Rect(void)
 	{
 	}
-	bool Rect::Contains(int x, int y)
+
+	const inline bool Rect::Contains(const int x, const int y)
 	{
-		if(x > this->x && x < this->width && y > this->y && y < this->height)
+		if(x >= this->x && x <= this->width + this->x && y > this->y && y < this->height + this->y)
 		{
-			//delete p;
 			return true;
 		}
-		//delete p;
 		return false;
 	}
-
 };
-//class Point
-//{
-//public :
-//	Point();
-//	~Point();
-//	int x, y;
-//};
 #endif

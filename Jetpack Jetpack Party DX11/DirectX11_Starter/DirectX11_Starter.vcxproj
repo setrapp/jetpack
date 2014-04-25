@@ -57,6 +57,7 @@
       <BrowseInformation>true</BrowseInformation>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WholeProgramOptimization>false</WholeProgramOptimization>
+      <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -89,12 +90,14 @@
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ClientConnectionEntity.cpp" />
     <ClCompile Include="ControllableCamera.cpp" />
     <ClCompile Include="DemoGame.cpp" />
     <ClCompile Include="DXConnection.cpp" />
     <ClCompile Include="dxerr.cpp" />
     <ClCompile Include="DXGame.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GeneralUtility\GUMathUtility.cpp" />
     <ClCompile Include="GeneralUtility\GUParseUtility.cpp" />
@@ -108,9 +111,12 @@
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\XInputValues.h" />
+    <ClInclude Include="..\XNew.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="AudioWaveManager.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ClientConnectionEntity.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="ControllableCamera.h" />
     <ClInclude Include="Debug.h" />
@@ -119,32 +125,34 @@
     <ClInclude Include="dxerr.h" />
     <ClInclude Include="DXGame.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="FontManager.h" />
     <ClInclude Include="FontRenderer.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="GeneralUtility\GUMathUtility.h" />
     <ClInclude Include="GeneralUtility\GUParseUtility.h" />
-    <ClInclude Include="Input.h" />
+    <ClInclude Include="GUIBase.h" />
+    <ClInclude Include="GUIManager.h" />
     <ClInclude Include="InputManager.h" />
-    <ClInclude Include="KeyboardInput.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ModelLoad\MLMaterialLoader.h" />
     <ClInclude Include="ModelLoad\MLModelViewer.h" />
-    <ClInclude Include="MouseInput.h" />
     <ClInclude Include="MouseLook.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Response.h" />
     <ClInclude Include="Rigidbody.h" />
     <ClInclude Include="SoundInstance.h" />
     <ClInclude Include="SoundManager.h" />
-    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="XController.h" />
+    <ClInclude Include="XInputValues.h" />
+    <ClInclude Include="XNew.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\SimplePixelShader.hlsl">

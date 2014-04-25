@@ -80,7 +80,7 @@ MLModelMaterial** mlModelMaterialLibsLoadMTL(char** matLibs, int matLibCount, un
 	unsigned int matCount = 1;										//total count of materials, including a single default
 	MLModelMaterial** mats;											//list of pointers to materials loaded
 	unsigned int matIndex = 1;										//index in list of material to be added (starts at 1 to allow for default)
-
+	
 	//count non-default materials
 	for(i = 0; i < matLibCount; i++)
 	{
@@ -113,12 +113,15 @@ MLModelMaterial** mlModelMaterialLibsLoadMTL(char** matLibs, int matLibCount, un
 			free(mats[0]);
 			mats[0] = libMats[0];
 		}
+
+		free(libMats);
 	}
 
 	//output number of materials found
 	if(numMatsOut)
 		*numMatsOut = matCount;
 
+	free(perLibCounts);
 	return mats;
 }
 

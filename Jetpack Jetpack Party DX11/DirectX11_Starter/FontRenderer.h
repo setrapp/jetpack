@@ -2,21 +2,18 @@
 #include "Toolkit\Inc\SpriteFont.h"
 #include <d3d11.h>
 #include "Renderer.h"
+#include "Toolkit\Inc\SpriteBatch.h"
+
 
 class FontRenderer	: Renderer
 {
 public:
-	FontRenderer::FontRenderer( ID3D11Device* device, wchar_t* spriteFontFile)
+	FontRenderer::FontRenderer(DirectX::SpriteBatch* spBatch, ID3D11Device* device, wchar_t* spriteFontFile)
 	{
 		font = new DirectX::SpriteFont(device, spriteFontFile);
+		this->spriteBatch = spBatch;
 	}
 
-
-	void FontRenderer::setSpriteBatch(DirectX::SpriteBatch* sp)
-	{
-		if(!this->spriteBatch)
-			this->spriteBatch = sp;
-	}
 
 	DirectX::SpriteFont* FontRenderer::GetSpriteFont()
 	{
@@ -30,11 +27,9 @@ public:
 
 	~FontRenderer(void)
 	{
-		
+		delete font;
 	}
 
 private: 	
 	DirectX::SpriteFont* font;
-	DirectX::SpriteBatch* spriteBatch;
 };
-
