@@ -14,7 +14,7 @@ class Entity
 {
 public:
 	Entity();
-	~Entity();
+	virtual ~Entity();
 	void AddTriangle(Vertex* v, UINT* u);
 	void AddQuad(Vertex* v, UINT* u);
 	void AddModel(Model* model);

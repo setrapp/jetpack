@@ -142,14 +142,14 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 
 	// Attempt to load model
-	/*AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
 	Player* player = new Player();
-	player->AddModel(AssetManager::Instance()->GetModel("camera"));
+	//player->AddModel(AssetManager::Instance()->GetModel("camera"));
 	entities.push_back(player);
-	player->Finalize();
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
-	player->SetMaterial("camera");
-	mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));*/
+	//player->Finalize();
+	//AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
+	//player->SetMaterial("camera");
+	//mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
@@ -312,8 +312,6 @@ void DemoGame::OnResize()
 			AspectRatio(),
 			0.1f,
 			100.0f);
-
-
 
 	XMStoreFloat4x4(&camera->projection, XMMatrixTranspose(P));
 

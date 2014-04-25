@@ -26,7 +26,7 @@ GameState Menu::Update(const float dt)
 		return GameState::Playing;	
 
 	if(guiMan->_guiElements["EXIT"]->Clicked())
-		exit(1);
+		PostQuitMessage(0);
 
 	if(guiMan->_guiElements["NEWGAME"]->IsMouseHovering())
 	{

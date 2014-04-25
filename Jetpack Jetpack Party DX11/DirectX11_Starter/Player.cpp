@@ -6,7 +6,7 @@ Player::Player()
 	velocity = XMFLOAT3(0, 0, 0);
 	maxSpeed = 20;
 	groundSpeedDampening = 0.95f;
-	clientEntity = new ClientConnectionEntity();
+	clientEntity = NULL;//new ClientConnectionEntity();
 	networkSendTimer=0.0f;
 	
 }
@@ -111,10 +111,6 @@ void Player::Update(float dt)
 		clientEntity->networkMessages.pop();
 			
 	}
-
-
-
-
 
 	Entity::Update(dt);
 }
@@ -236,7 +232,7 @@ void Player::CheckInput(float dt)
 	}*/
 
 
-	if(clientEntity->isConnected && networkSendTimer<0.0f && cubeInputReceived){
+	if(clientEntity && clientEntity->isConnected && networkSendTimer<0.0f && cubeInputReceived){
 		XMFLOAT3 curTransform= networkedCube->transform.GetLocalTranslation();
 		networkSendTimer=0.2f;
 		std::ostringstream ss1;
