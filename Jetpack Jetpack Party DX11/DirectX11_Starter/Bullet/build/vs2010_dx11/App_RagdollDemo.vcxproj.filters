@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Demos">
+      <UniqueIdentifier>{2827D846-16DF-B940-965F-A718C63C65FF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demos\RagdollDemo">
+      <UniqueIdentifier>{E61C58C9-54B9-764D-9EDF-66896DCED078}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Demos\RagdollDemo\RagdollDemo.h">
+      <Filter>Demos\RagdollDemo</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Demos\RagdollDemo\main.cpp">
+      <Filter>Demos\RagdollDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Demos\RagdollDemo\RagdollDemo.cpp">
+      <Filter>Demos\RagdollDemo</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\bullet.rc" />
+  </ItemGroup>
+</Project>

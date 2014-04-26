@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Demos">
+      <UniqueIdentifier>{1C3733FB-E8BC-DF4D-AB29-38F98206B2E4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demos\DynamicControlDemo">
+      <UniqueIdentifier>{4B119615-6D47-F242-B232-54754A7CA9AE}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Demos\DynamicControlDemo\MotorDemo.h">
+      <Filter>Demos\DynamicControlDemo</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Demos\DynamicControlDemo\main.cpp">
+      <Filter>Demos\DynamicControlDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Demos\DynamicControlDemo\MotorDemo.cpp">
+      <Filter>Demos\DynamicControlDemo</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\bullet.rc" />
+  </ItemGroup>
+</Project>
