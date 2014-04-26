@@ -82,6 +82,7 @@ DemoGame::~DemoGame()
 	delete assetManager;
 	delete input;
 	delete FontManager::Instance();
+	delete deferredRenderer;
 
 	for(int i = 0 ; i < entities.size(); i++)
 	{
@@ -115,13 +116,14 @@ bool DemoGame::Init()
 	AssetManager::Instance()->StoreMaterial(new Material());
 
 	XMFLOAT3 cameraPosition;
-	XMStoreFloat3(&cameraPosition, XMVectorSet(0, 10, -50, 0));
+	XMStoreFloat3(&cameraPosition, XMVectorSet(0, 0, -50, 0));
 	XMFLOAT3 cameraTarget;
 	XMStoreFloat3(&cameraTarget, XMVectorSet(0, 0, 0, 0));
 	XMFLOAT3 cameraUp;
 	XMStoreFloat3(&cameraUp, XMVectorSet(0, 1, 0, 0));
 
 	camera->LookAt(cameraPosition, cameraTarget, cameraUp);
+	XMStoreFloat4x4(&deferredView, XMMatrixTranspose(XMMatrixLookAtLH(XMLoadFloat3(&cameraPosition), XMLoadFloat3(&cameraTarget), XMLoadFloat3(&cameraUp))));
 
 	// Set up buffers and such
 	CreateGeometryBuffers();
@@ -130,6 +132,8 @@ bool DemoGame::Init()
 	LoadSoundAssets();
 
 	input = new IPMan(INPUTMODES::KEYBOARD);
+
+	deferredRenderer = new DeferredRenderer(windowWidth, windowHeight);
 
 	return true;
 }
@@ -141,6 +145,22 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 blue	= XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 
+	// Create orthographic and projection plane for deferred rendering.
+	float halfWindowWidth = windowWidth / 2, halfWindowHieght= windowHeight / 2;
+	XMStoreFloat4x4(&deferredView, XMMatrixTranspose(XMMatrixLookAtLH(XMLoadFloat3(&XMFLOAT3(0, 0, -50)), XMLoadFloat3(&XMFLOAT3(0, 0, 0)), XMLoadFloat3(&XMFLOAT3(0, 1, 0)))));
+	XMStoreFloat4x4(&deferredProjection, XMMatrixTranspose(XMMatrixOrthographicLH(windowWidth * 2, windowHeight * 2, 0.1f, 100.0f)));
+	Vertex deferredVertices[] = 
+	{
+		{ XMFLOAT3(+halfWindowWidth, +halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 0) },
+		{ XMFLOAT3(-halfWindowWidth, -halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 1) },
+		{ XMFLOAT3(+halfWindowWidth, -halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 1) },		
+		{ XMFLOAT3(-halfWindowWidth, +halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 0) },
+	};
+	UINT deferredIndices[] = { 0, 2, 1, 3, 0, 1 };
+	deferredPlane = new Entity();
+	deferredPlane->AddQuad(deferredVertices, deferredIndices);
+	deferredPlane->Finalize();
+	
 	// Attempt to load model
 	//AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
 	Player* player = new Player();
@@ -183,10 +203,10 @@ void DemoGame::CreateGeometryBuffers()
 	gift->transform.Translate(XMFLOAT3(-5, 5, 0));
 	entities.push_back(gift);
 
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
+	/*AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
 	gift->SetMaterial("gift");
 	gift->GetMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
-	gift->LoadTexture(L"../Assets/RedGift.png");
+	gift->LoadTexture(L"../Assets/RedGift.png");*/
 
 	Vertex floorVertices[] = 
 	{
@@ -307,11 +327,11 @@ void DemoGame::OnFocus(bool givenFocus)
 void DemoGame::OnResize()
 {
 	DXGame::OnResize();
-		XMMATRIX P = XMMatrixPerspectiveFovLH(
-			0.25f * 3.1415926535f,
-			AspectRatio(),
-			0.1f,
-			100.0f);
+	XMMATRIX P = XMMatrixPerspectiveFovLH(
+		0.25f * 3.1415926535f,
+		AspectRatio(),
+		0.1f,
+		100.0f);
 
 	XMStoreFloat4x4(&camera->projection, XMMatrixTranspose(P));
 
@@ -384,10 +404,13 @@ void DemoGame::UpdateScene(float dt)
 // Clear the screen, redraw everything, present
 void DemoGame::DrawScene()
 {
+	deferredRenderer->SetTargets();
+	deferredRenderer->ClearTargets(clearColor);
+
+	//TODO take this out when defered rendering works.
 	deviceContext->ClearRenderTargetView(
 		renderTargetView,
 		clearColor);
-
 	deviceContext->ClearDepthStencilView(
 		depthStencilView, 
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
@@ -467,6 +490,31 @@ void DemoGame::DrawScene()
 		}
 	}
 	flag = true;
+
+	// Prepare render to back buffer.
+	dxConnection->deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+	deviceContext->ClearRenderTargetView(renderTargetView, clearColor);
+	deviceContext->ClearDepthStencilView( depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+	// Create deferred vertex shader constant buffer to hold matrices.
+	VertexShaderModelConstantBuffer deferredVSConstantBuffer;
+	deferredVSConstantBuffer.world = deferredPlane->transform.GetWorldMatrix();
+	deferredVSConstantBuffer.inverseTranspose = deferredPlane->transform.GetWorldMatrix();
+	deferredVSConstantBuffer.view = deferredView;
+	deferredVSConstantBuffer.projection = deferredProjection;
+
+	// Update vertex shader constant buffer with deferred buffer.
+	DXConnection::Instance()->deviceContext->UpdateSubresource(vsModelConstantBuffer, 0, nullptr, &deferredVSConstantBuffer, 0, 0);
+
+	// Create deferred pixel shader constant buffer to hold materials.
+	MaterialsAndLightsConstantBuffer perPrimitiveMaterialConstantBuffer;
+	perPrimitiveMaterialConstantBuffer.light = materialsAndLightsConstantBufferData.light;
+	perPrimitiveMaterialConstantBuffer.material = deferredPlane->GetMaterial()->GetShaderMaterial();
+
+	// Update pixel shader constant buffer with deferred materials buffer.
+	DXConnection::Instance()->deviceContext->UpdateSubresource(materialsAndLightsConstantBuffer, 0, nullptr, &perPrimitiveMaterialConstantBuffer, 0, 0);
+
+	deferredPlane->Draw();
 
 	HR(swapChain->Present(0, 0));
 }

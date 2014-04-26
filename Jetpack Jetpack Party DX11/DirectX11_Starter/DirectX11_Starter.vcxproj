@@ -91,6 +91,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ClientConnectionEntity.cpp" />
     <ClCompile Include="ControllableCamera.cpp" />
+    <ClCompile Include="DeferredRenderer.cpp" />
     <ClCompile Include="DemoGame.cpp" />
     <ClCompile Include="DXConnection.cpp" />
     <ClCompile Include="dxerr.cpp" />
@@ -119,6 +120,7 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="ControllableCamera.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="DeferredRenderer.h" />
     <ClInclude Include="DemoGame.h" />
     <ClInclude Include="DXConnection.h" />
     <ClInclude Include="dxerr.h" />

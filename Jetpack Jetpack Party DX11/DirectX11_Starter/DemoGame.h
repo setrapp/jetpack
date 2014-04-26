@@ -25,6 +25,7 @@
 #include <queue>
 #include "XNew.h"
 #include "InputManager.h"
+#include "DeferredRenderer.h"
 
 using namespace DirectX;
 
@@ -80,6 +81,11 @@ private:
 	VertexShaderModelConstantBuffer vsModelConstantBufferData;
 	ID3D11Buffer* materialsAndLightsConstantBuffer;
 	MaterialsAndLightsConstantBuffer materialsAndLightsConstantBufferData;
+	DeferredRenderer* deferredRenderer;
+	XMFLOAT4X4 deferredView;
+	XMFLOAT4X4 deferredProjection;
+	Entity* deferredPlane;
+
 
 	// Keeps track of the old mouse position.  Useful for 
 	// determining how far the mouse moved in a single frame.
