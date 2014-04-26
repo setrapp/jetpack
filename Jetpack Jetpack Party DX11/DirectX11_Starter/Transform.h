@@ -39,11 +39,12 @@ private:
 	XMFLOAT4X4 localMatrix;
 	XMFLOAT3 translation;
 	XMFLOAT3 scale;
-	XMFLOAT3X3 rotation;
 	Transform* parent;
 	vector<Transform*>children;
 	
 public:
+
+	XMFLOAT3X3 rotation;
 	Transform::Transform();
 
 	Transform::~Transform();

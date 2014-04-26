@@ -25,6 +25,7 @@ public:
 	inline Material GetMaterialSafe() const;
 	void SetMaterial(string name = "default");
 	inline vector<Mesh*> GetMeshes() const;
+	string getNetworkString();
 	Transform transform;
 	int socketNumber;
 	void Finalize();

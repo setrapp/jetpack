@@ -138,6 +138,7 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MessageTypes.h" />
     <ClInclude Include="ModelLoad\MLMaterialLoader.h" />
     <ClInclude Include="ModelLoad\MLModelViewer.h" />
     <ClInclude Include="MouseLook.h" />

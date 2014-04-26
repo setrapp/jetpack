@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Camera.h"
 #include "ClientConnectionEntity.h"
+#include "MessageTypes.h";
 #include <queue>
 
 class Player : public Entity

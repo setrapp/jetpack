@@ -344,11 +344,11 @@ void DemoGame::UpdateScene(float dt)
 	{
 		this->deltaTime = dt;
 
-		/*while (!AssetManager::Instance()->addedEntities.empty())
+		while (!AssetManager::Instance()->addedEntities.empty())
 		{
 			entities.push_back(AssetManager::Instance()->addedEntities.front());
 			AssetManager::Instance()->addedEntities.pop();
-		}*/
+		}
 
 
 		for(Entity* e: entities)
