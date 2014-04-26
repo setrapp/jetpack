@@ -85,6 +85,7 @@ private:
 	XMFLOAT4X4 deferredView;
 	XMFLOAT4X4 deferredProjection;
 	Entity* deferredPlane;
+	ID3D11DepthStencilState* deferredDepthlessState;
 
 
 	// Keeps track of the old mouse position.  Useful for 

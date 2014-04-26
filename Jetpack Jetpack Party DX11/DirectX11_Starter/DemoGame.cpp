@@ -109,6 +109,16 @@ bool DemoGame::Init()
 
 	assetManager = new AssetManager();
 
+	// Create depthless state for rendering to deferred plane.
+	D3D11_DEPTH_STENCIL_DESC deferredDepthlessDesc;
+	deviceContext->OMGetDepthStencilState(&deferredDepthlessState, NULL);
+	if (deferredDepthlessState)
+	{
+		deferredDepthlessState->GetDesc(&deferredDepthlessDesc);
+	}
+	deferredDepthlessDesc.DepthEnable = false;
+	device->CreateDepthStencilState(&deferredDepthlessDesc, &deferredDepthlessState);
+
 	spriteRenderer = new SpriteRenderer(deviceContext);
 	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer->GetSpriteBatch(), L"../Assets/font.spritefont"));	
 	LoadShadersAndInputLayout();
@@ -404,8 +414,8 @@ void DemoGame::UpdateScene(float dt)
 // Clear the screen, redraw everything, present
 void DemoGame::DrawScene()
 {
-	deferredRenderer->SetTargets();
-	deferredRenderer->ClearTargets(clearColor);
+	//deferredRenderer->SetTargets();
+	//deferredRenderer->ClearTargets(clearColor);
 
 	//TODO take this out when defered rendering works.
 	deviceContext->ClearRenderTargetView(
@@ -492,9 +502,13 @@ void DemoGame::DrawScene()
 	flag = true;
 
 	// Prepare render to back buffer.
-	dxConnection->deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+	ID3D11DepthStencilState* depthStencilState;
+	deviceContext->OMGetDepthStencilState(&depthStencilState, NULL);
+	deviceContext->OMSetDepthStencilState(deferredDepthlessState, NULL);
+	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
 	deviceContext->ClearRenderTargetView(renderTargetView, clearColor);
 	deviceContext->ClearDepthStencilView( depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
 
 	// Create deferred vertex shader constant buffer to hold matrices.
 	VertexShaderModelConstantBuffer deferredVSConstantBuffer;
@@ -517,6 +531,9 @@ void DemoGame::DrawScene()
 	deferredPlane->Draw();
 
 	HR(swapChain->Present(0, 0));
+
+	// Reset to usual 3D rendering settings.
+	deviceContext->OMSetDepthStencilState(depthStencilState, NULL);
 }
 
 

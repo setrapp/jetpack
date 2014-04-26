@@ -44,7 +44,7 @@ public:
 	{
 		// Store states that about to change.
 		deviceContext->OMGetBlendState(&blendState, blendVector, &blendMask);
-		deviceContext->OMGetDepthStencilState(&depthStencilState, &pStencil);
+		deviceContext->OMGetDepthStencilState(&depthStencilState, NULL);
 		deviceContext->RSGetState(&rasterizerState);
 
 		this->spriteBatch->Begin(DirectX::SpriteSortMode::SpriteSortMode_FrontToBack, nullptr,nullptr,nullptr,nullptr,nullptr, DirectX::XMMatrixIdentity());
@@ -56,7 +56,7 @@ public:
 
 		// Reset states to what they were before begin.
 		deviceContext->OMSetBlendState(blendState, blendVector, blendMask);
-		deviceContext->OMSetDepthStencilState(depthStencilState, pStencil);
+		deviceContext->OMSetDepthStencilState(depthStencilState, NULL);
 		deviceContext->RSSetState(rasterizerState);
 	}
 
@@ -68,6 +68,5 @@ private:
 	FLOAT blendVector[4];
 	UINT blendMask;
 	ID3D11DepthStencilState* depthStencilState;
-	UINT pStencil;
 	ID3D11RasterizerState* rasterizerState;
 };
