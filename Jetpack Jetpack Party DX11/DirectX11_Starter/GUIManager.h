@@ -54,7 +54,6 @@ public:
 
 	void Update(const float dt)
 	{
-		ShowCursor(true);
 		POINT point;
 		if(GetCursorPos(&point)) 
 		{

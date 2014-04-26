@@ -4,9 +4,11 @@
 class Jetpack
 {
 public:
-	virtual void Update();
-	virtual void CheckInput();
+	Jetpack();
+	virtual void Update(XMFLOAT3* velocity);
+	virtual void CheckInput(XMFLOAT3* velocity);
 
-private:
-	XMFLOAT3 velocity;
+public:
+	bool allowInputForces;
+	float maxSpeed;
 };

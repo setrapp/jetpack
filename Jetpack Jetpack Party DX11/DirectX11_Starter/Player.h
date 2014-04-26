@@ -26,6 +26,7 @@ private:
 private:
 	XMFLOAT3 velocity;
 	float maxSpeed;
+	float terminalVelocity;
 	float groundSpeedDampening;
 	float airSpeedDampening;
 	bool grounded;

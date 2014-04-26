@@ -123,6 +123,9 @@
     <ClCompile Include="FontManager.cpp">
       <Filter>Header Files\Core\Font</Filter>
     </ClCompile>
+    <ClCompile Include="Jetpack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXGame.h">

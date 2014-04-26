@@ -82,6 +82,8 @@ public:
 	// Transform direction from world space to local space.
 	XMFLOAT3 InverseTransformDirection(const XMFLOAT3 worldDirection) const;
 
+	XMFLOAT3 ClampVector(XMFLOAT3* vector, float maxMagnitude, float minMagnitude);
+
 	// Get world translation.
 	XMFLOAT3 GetTranslation() const;
 

@@ -1,15 +1,25 @@
 #include "Jetpack.h"
 #include "InputManager.h"
 
-void Jetpack::Update()
+Jetpack::Jetpack()
 {
-	CheckInput();
+	allowInputForces = false;
+	maxSpeed = 200;
 }
 
-void Jetpack::CheckInput()
+void Jetpack::Update(XMFLOAT3* velocity)
 {
-	/*if(IPMan::GetIPMan()->GetKey(KeyType::SPACE))
+	CheckInput(velocity);
+}
+
+void Jetpack::CheckInput(XMFLOAT3* velocity)
+{
+	if (velocity && allowInputForces)
 	{
-		velocity.z += 100;//0.8f;
-	}*/
+		// TODO: This should use IPMan
+		if(GetAsyncKeyState(VK_SPACE))
+		{
+			velocity->y += 10.0f;
+		}
+	}
 }

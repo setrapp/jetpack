@@ -106,6 +106,25 @@ bool DemoGame::Init()
 	if( !DXGame::Init() )
 		return false;
 
+	// Set Cull Mode.
+	ID3D11RasterizerState* rasterizerState;
+	D3D11_RASTERIZER_DESC rasterizerDesc;
+	deviceContext->RSGetState(&rasterizerState);
+	if (rasterizerState)
+	{
+		rasterizerState->GetDesc(&rasterizerDesc);
+	}
+	else
+	{
+		ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
+		rasterizerDesc.CullMode = D3D11_CULL_NONE;
+		rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+	}
+	HRESULT hr = device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
+	if (FAILED(hr))
+		int a = 0;
+	deviceContext->RSSetState(rasterizerState);
+
 	assetManager = new AssetManager();
 
 	spriteRenderer = new SpriteRenderer(deviceContext);
@@ -149,7 +168,10 @@ void DemoGame::CreateGeometryBuffers()
 	//player->Finalize();
 	//AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
 	//player->SetMaterial("camera");
-	mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
+	mouseLook = new MouseLook(&camera->transform, XMFLOAT2(0.01f, 0.01f));
+	mouseLook->ClampX(0, 0);
+	mouseLook->ClampY(-60, 60);
+	mouseLook->UnclampY();
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
@@ -198,7 +220,7 @@ void DemoGame::CreateGeometryBuffers()
 
 	UINT floorIndices[] = { 0, 2, 1, 3, 0, 1 };
 	Entity* floor = new Entity();
-	floor->AddTriangle(floorVertices, floorIndices);
+	floor->AddQuad(floorVertices, floorIndices);
 	floor->Finalize();
 	floor->transform.Translate(XMFLOAT3(-5, 5, 0));
 	entities.push_back(floor);
@@ -311,7 +333,7 @@ void DemoGame::OnResize()
 			0.25f * 3.1415926535f,
 			AspectRatio(),
 			0.1f,
-			100.0f);
+			1000.0f);
 
 	XMStoreFloat4x4(&camera->projection, XMMatrixTranspose(P));
 
@@ -356,7 +378,7 @@ void DemoGame::UpdateScene(float dt)
 			e->Update(dt);
 		}
 		//mouseLook->XMove(xnew);
-		//entities[1]->transform.Rotate(XMFLOAT3(0, 5 * dt, 0));	
+		//entities[1]->transform.Rotate(XMFLOAT3(0, 5 * dt, 0));
 	}
 
 	camera->Update(dt, &vsModelConstantBufferData);	

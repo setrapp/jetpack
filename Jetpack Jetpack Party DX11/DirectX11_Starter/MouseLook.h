@@ -20,6 +20,9 @@ public :
 	Transform* looker;
 	XMFLOAT3 rotationValue;
 	XMFLOAT2 speed;
+	float minXDegrees, maxXDegrees;
+	float minYDegrees, maxYDegrees;
+	bool clampX, clampY;
 	bool ignoreMouse;
 
 	MouseLook(Transform* looker, XMFLOAT2 speed) {
@@ -50,24 +53,56 @@ public :
 		{
 			rotationValue = XMFLOAT3(rotationValue.x + (deltaRotation.y * this->speed.y), rotationValue.y + (deltaRotation.x * this->speed.x), 0);
 			
-			// Keep x rotation between 0 and (+/-)360
-			if (rotationValue.x >= 2 * PI)
+			// Keep x rotation either within clamp range or between (+/-)360.
+			if (clampX)
 			{
-				rotationValue.x -= 2 * PI;
-			} 
-			else if (rotationValue.x <= -2 * PI)
+				float maxXRadians = maxXDegrees * PI / 180;
+				float minXRadians = minXDegrees * PI / 180;
+				if (rotationValue.x >= maxXRadians)
+				{
+					rotationValue.x = maxXRadians;
+				} 
+				else if (rotationValue.x <= minXRadians)
+				{
+					rotationValue.x = minXRadians;
+				}
+			}
+			else
 			{
-				rotationValue.x += 2 * PI;
+				if (rotationValue.x >= 2 * PI)
+				{
+					rotationValue.x -= 2 * PI;
+				} 
+				else if (rotationValue.x <= -2 * PI)
+				{
+					rotationValue.x += 2 * PI;
+				}
 			}
 
-			// Keep y rotation between 0 and (+/-)360
-			if (rotationValue.y >= 2 * PI)
+			// Keep y rotation either within clamp range or between (+/-)360.
+			if (clampY)
 			{
-				rotationValue.y -= 2 * PI;
+				float maxYRadians = maxYDegrees * PI / 180;
+				float minYRadians = minYDegrees * PI / 180;
+				if (rotationValue.y >= maxYRadians)
+				{
+					rotationValue.y = maxYRadians;
+				} 
+				else if (rotationValue.y <= minYRadians)
+				{
+					rotationValue.y = minYRadians;
+				}
 			}
-			else if (rotationValue.y <= -2 * PI)
+			else
 			{
-				rotationValue.y += 2 * PI;
+				if (rotationValue.y >= 2 * PI)
+				{
+					rotationValue.y -= 2 * PI;
+				}
+				else if (rotationValue.y <= -2 * PI)
+				{
+					rotationValue.y += 2 * PI;
+				}
 			}
 
 			if (looker)
@@ -79,6 +114,38 @@ public :
 		ResetCursor();
 
 		return this->rotationValue;
+	}
+
+	// X Rotation Clamping.
+	void UnclampX()
+	{
+		clampX = false;
+	}
+	void ClampX()
+	{
+		clampX = true;
+	}
+	void ClampX(float minDegrees, float maxDegrees)
+	{
+		clampX = true;
+		minXDegrees = minDegrees;
+		maxXDegrees = maxDegrees;
+	}
+
+	// Y Rotation Clamping.
+	void UnclampY()
+	{
+		clampY = false;
+	}
+	void ClampY()
+	{
+		clampY = true;
+	}
+	void ClampY(float minDegrees, float maxDegrees)
+	{
+		clampY = true;
+		minYDegrees = minDegrees;
+		maxYDegrees = maxDegrees;
 	}
 
 	/*XMFLOAT3 MouseLook::XMove(XNEW* xnew) {

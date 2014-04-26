@@ -196,6 +196,27 @@ XMFLOAT3 Transform::InverseTransformDirection(XMFLOAT3 worldDirection) const
 	return worldDirection;
 }
 
+XMFLOAT3 Transform::ClampVector(XMFLOAT3* vector, float maxMagnitude, float minMagnitude)
+{
+	if (minMagnitude > maxMagnitude)
+	{
+		return *vector;
+	}
+	XMVECTOR vec = XMLoadFloat3(vector);
+	XMFLOAT3 vecMag3;
+	XMStoreFloat3(&vecMag3, XMVector3Length(vec));
+	float velocityMag = vecMag3.x;
+	if (velocityMag > maxMagnitude) {
+		vector->x *= (maxMagnitude / velocityMag);
+		vector->y *= (maxMagnitude / velocityMag);
+		vector->z *= (maxMagnitude / velocityMag);
+	} else if (velocityMag < minMagnitude) {
+		vector->x *= (minMagnitude / velocityMag);
+		vector->y *= (minMagnitude / velocityMag);
+		vector->z *= (minMagnitude / velocityMag);
+	}
+}
+
 // Get world translation.
 XMFLOAT3 Transform::GetTranslation() const
 {
