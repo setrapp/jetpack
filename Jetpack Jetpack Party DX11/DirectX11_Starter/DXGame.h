@@ -20,6 +20,7 @@
 #include "dxerr.h"
 #include "GameTimer.h"
 #include "DXConnection.h"
+#include "BulletInit.h"
 
 class DXGame
 {
