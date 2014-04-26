@@ -10,7 +10,14 @@ ClientConnectionEntity::ClientConnectionEntity(void)
 
 ClientConnectionEntity::~ClientConnectionEntity()
 {
-	// TODO: need to figure out how to deallocate memory	
+	// TODO Figure out how to dealloacte memory.
+	/*while (receivedChat->size() > 0)
+	{
+		char* frontChat = receivedChat->front;
+		receivedChat->pop();
+		delete frontChat;
+	}
+	delete receivedChat;*/
 }
 
 

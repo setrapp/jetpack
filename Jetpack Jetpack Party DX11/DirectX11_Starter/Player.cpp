@@ -4,15 +4,18 @@
 Player::Player()
 {
 	velocity = XMFLOAT3(0, 0, 0);
-	maxSpeed = 20;
+	maxSpeed = 2000;
 	groundSpeedDampening = 0.95f;
-	clientEntity = NULL;//new ClientConnectionEntity();
+	groundSpeedDampening = 0.99f;
+	clientEntity = new ClientConnectionEntity();
 	networkSendTimer=0.0f;
-	
+	grounded = true;
+	jetpack = new Jetpack();
 }
 
 Player::~Player()
 {
+	delete jetpack;
 	delete clientEntity;
 	delete networkedCube;
 }
@@ -21,9 +24,15 @@ void Player::Update(float dt)
 {
 	// Check for user input.
 	CheckInput(dt);
+
+	jetpack->Update();
 	
 	// Slow the character a bit so that it comes to a nice stop over time.
-	XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), groundSpeedDampening));
+	if (grounded) {
+		XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), groundSpeedDampening));
+	} else {
+		XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), airSpeedDampening));
+	}
 	transform.Translate(transform.InverseTransformDirection(XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt)));
 
 	while(!clientEntity->networkMessages.empty()){
@@ -121,19 +130,19 @@ void Player::CheckInput(float dt)
 	bool cubeInputReceived= false;
 	if(IPMan::GetIPMan()->GetKey(KeyType::FORWARD))
 	{
-		velocity.z += 0.8f;
+		velocity.z += 100;//0.8f;
 	}
 	if(IPMan::GetIPMan()->GetKey(KeyType::BACKWARD))
 	{
-		velocity.z -= 0.8f;
+		velocity.z -= 100;//0.8f;
 	}
 	if(IPMan::GetIPMan()->GetKey(KeyType::LEFT))
 	{
-		velocity.x -= 0.8f;
+		velocity.x -= 100;//0.8f;
 	}
 	if(IPMan::GetIPMan()->GetKey(KeyType::RIGHT))
 	{
-		velocity.x += 0.8f;
+		velocity.x += 100;//0.8f;
 	}
 
 
