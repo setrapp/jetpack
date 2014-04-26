@@ -53,7 +53,7 @@
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\inc;$(SolutionDir)\Toolkit\inc;%(AdditionalIncludeDirectories);$(DXSDK_DIR)\Lib\x64;$(ProjectDir)\Additional Packages\bullet-2.82-r2704\src\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\inc;$(SolutionDir)\Toolkit\inc;%(AdditionalIncludeDirectories);$(DXSDK_DIR)\Lib\x64;$(ProjectDir)\Bullet\src</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -62,8 +62,8 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;BulletDynamics_vs2010_debug.lib;BulletCollision_vs2010_debug.lib;LinearMath_vs2010_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)\Additional Packages\bullet-2.82-r2704\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;BulletCollision_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;LinearMath_vs2010_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)\Bullet\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -89,6 +89,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ClientConnectionEntity.cpp" />
@@ -116,7 +117,7 @@
     <ClInclude Include="..\XNew.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="AudioWaveManager.h" />
-    <ClInclude Include="BulletInit.h" />
+    <ClInclude Include="BulletManager.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ClientConnectionEntity.h" />
     <ClInclude Include="Common.h" />
@@ -176,6 +177,12 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Bullet\build\vs2010_dx11\BulletCollision.vcxproj">
+      <Project>{3b6c779f-684e-824f-8082-e3eca2da75d7}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Bullet\build\vs2010_dx11\LinearMath.vcxproj">
+      <Project>{65e61ba4-768a-4241-bfbd-6b488bb303ff}</Project>
+    </ProjectReference>
     <ProjectReference Include="Toolkit\Audio\DirectXTKAudio_Desktop_2012_DXSDK.vcxproj">
       <Project>{4f150a30-cecb-49d1-8283-6a3f57438cf5}</Project>
     </ProjectReference>

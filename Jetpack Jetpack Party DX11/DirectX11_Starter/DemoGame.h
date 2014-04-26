@@ -25,6 +25,7 @@
 #include <queue>
 #include "XNew.h"
 #include "InputManager.h"
+#include "BulletManager.h"
 
 using namespace DirectX;
 
@@ -68,6 +69,7 @@ private:
 
 	float deltaTime;
 	AssetManager* assetManager;
+	BulletManager* bulletManager;
 	// Our basic shaders for this example
 	ID3D11PixelShader* pixelShader;
 	ID3D11PixelShader* texturePixelShader;

@@ -84,6 +84,7 @@ DXGame::~DXGame(void)
 	// Release the context and finally the device
 	ReleaseMacro(deviceContext);
 	ReleaseMacro(device);
+
 }
 #pragma endregion
 

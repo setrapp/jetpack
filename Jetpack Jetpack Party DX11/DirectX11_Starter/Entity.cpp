@@ -16,6 +16,7 @@ Entity::Entity()
 	totalIndices = 0;
 	material = AssetManager::Instance()->GetMaterial();
 	socketNumber=0;
+	colShape = NULL;
 }
 
 

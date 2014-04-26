@@ -8,7 +8,10 @@ Player::Player()
 	groundSpeedDampening = 0.95f;
 	clientEntity = new ClientConnectionEntity();
 	networkSendTimer=0.0f;
-	
+
+	//Box Collider
+	colShape = new btBoxShape(btVector3(btScalar(1.0f),btScalar(1.0f),btScalar(1.0f)));
+
 }
 
 Player::~Player()
@@ -109,7 +112,7 @@ void Player::Update(float dt)
 			}
 		}
 		clientEntity->networkMessages.pop();
-			
+		
 	}
 
 

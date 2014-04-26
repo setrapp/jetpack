@@ -35,6 +35,7 @@
 #include "XInputValues.h"
 #include "InputManager.h"
 
+
 InputManager* IPMan::inputManager = NULL;
 
 #pragma region Win32 Entry Point (WinMain)
@@ -71,6 +72,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	camera = new Camera();//ControllableCamera();
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
 	mouseCursorVisibility = true;
+	
 }
 
 DemoGame::~DemoGame()
@@ -105,6 +107,9 @@ bool DemoGame::Init()
 		return false;
 
 	assetManager = new AssetManager();
+
+	bulletManager = new BulletManager();
+	bulletManager->BulletInit();
 
 	spriteRenderer = new SpriteRenderer(deviceContext);
 	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer->GetSpriteBatch(), L"../Assets/font.spritefont"));	
@@ -212,6 +217,58 @@ void DemoGame::CreateGeometryBuffers()
 	camera->LookAt(eye, target, up);
 
 	IPMan * w = new IPMan(INPUTMODES::KEYBOARD);
+
+	{
+		//Physics:
+		btAlignedObjectArray<btCollisionShape*> collisionShapes;
+		collisionShapes.push_back(player->colShape);
+		btTransform startTransform;
+		startTransform.setIdentity();
+		startTransform.setOrigin(btVector3(2,10,0));
+
+		btStaticPlaneShape* plane = new btStaticPlaneShape(btVector3(0,1,0),0.0f);
+
+		btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
+
+		btScalar	mass(1.f);
+
+		//rigidbody is dynamic if and only if mass is non zero, otherwise static
+		bool isDynamic = (mass != 0.f);
+
+		btVector3 localInertia(0,0,0);
+		if (isDynamic)
+			player->colShape->calculateLocalInertia(mass,localInertia);
+
+			
+		
+			//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
+			
+			btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,player->colShape,localInertia);
+			btRigidBody* body = new btRigidBody(rbInfo);
+
+			bulletManager->dynamicsWorld->addRigidBody(body);
+
+			/// Do some simulation
+			///-----stepsimulation_start-----
+			//for (int i=0;i<100;i++)
+			//{
+			//	bulletManager->dynamicsWorld->stepSimulation(1.f/60.f,10);
+			//	
+			//	//print positions of all objects
+			//	for (int j=bulletManager->dynamicsWorld->getNumCollisionObjects()-1; j>=0 ;j--)
+			//	{
+			//		btCollisionObject* obj = bulletManager->dynamicsWorld->getCollisionObjectArray()[j];
+			//		btRigidBody* body = btRigidBody::upcast(obj);
+			//		if (body && body->getMotionState())
+			//		{
+			//			btTransform trans;
+			//			body->getMotionState()->getWorldTransform(trans);
+			//			printf("world pos = %f,%f,%f\n",float(trans.getOrigin().getX()),float(trans.getOrigin().getY()),float(trans.getOrigin().getZ()));
+			//		}
+			//	}
+			//}
+
+	}
 }
 
 #pragma endregion
@@ -380,6 +437,9 @@ void DemoGame::UpdateScene(float dt)
 	&vsModelConstantBufferData,
 	0,
 	0);
+
+
+	bulletManager->dynamicsWorld->stepSimulation(dt);
 }
 
 // Clear the screen, redraw everything, present

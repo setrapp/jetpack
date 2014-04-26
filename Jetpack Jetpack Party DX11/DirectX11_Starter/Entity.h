@@ -9,6 +9,7 @@
 #include "Material.h"
 #include "Transform.h"
 #include "Rigidbody.h"
+#include "BulletManager.h"
 
 class Entity
 {
@@ -29,6 +30,11 @@ public:
 	int socketNumber;
 	void Finalize();
 
+public:
+	//Rigid Body
+	btCollisionShape* colShape;
+	btRigidBody* rigidBody;
+
 private:
 	ID3D11Buffer* indexBuffer;
 	ID3D11Buffer* vertexBuffer;
@@ -36,6 +42,7 @@ private:
 	vector<Mesh*> meshes; 
 	Material* material;
 	LONG totalIndices;
+
 };
 
 #endif
