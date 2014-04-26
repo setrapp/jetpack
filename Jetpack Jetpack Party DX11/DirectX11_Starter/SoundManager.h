@@ -105,12 +105,12 @@ public:
 	//always call this
 	void SoundManager::Update()
 	{
-		if(IPMan::GetIPMan()->GetSpecialKeyboardState('M') && IPMan::GetIPMan()->GetSpecialKeyboardState('M') != oldkeystate)
+		if(IPMan::GetIPMan()->GetKey('M') && IPMan::GetIPMan()->GetKey('M') != oldkeystate)
 		{
 			mute = !mute;
 			Mute(mute);
 		}
-		oldkeystate = IPMan::GetIPMan()->GetSpecialKeyboardState('M');
+		oldkeystate = IPMan::GetIPMan()->GetKey('M');
 		engineSfx->Update();
 	}
 
@@ -124,12 +124,12 @@ public:
 			iterator++;
 		}
 
-		if(IPMan::GetIPMan()->GetSpecialKeyboardState('M') && IPMan::GetIPMan()->GetSpecialKeyboardState('M') != oldkeystate)
+		if(IPMan::GetIPMan()->GetKey('M') && IPMan::GetIPMan()->GetKey('M') != oldkeystate)
 		{
 			mute = !mute;
 			Mute(mute);
 		}
-		oldkeystate = IPMan::GetIPMan()->GetSpecialKeyboardState('M');
+		oldkeystate = IPMan::GetIPMan()->GetKey('M');
 		engineSfx->Update();
 	}
 

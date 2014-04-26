@@ -22,27 +22,27 @@ void ControllableCamera::Update(float dt, VertexShaderModelConstantBuffer* vsCon
 void ControllableCamera::CheckInput(float dt)
 {
 	
-	if(IPMan::GetIPMan()->GetSpecialKeyboardState('K'))
+	if(IPMan::GetIPMan()->GetKey('K'))
 	{
 		velocity.z -= 0.8f;
 	}
-	if(IPMan::GetIPMan()->GetSpecialKeyboardState('I'))
+	if(IPMan::GetIPMan()->GetKey('I'))
 	{
 		velocity.z += 0.8f;
 	}
-	if(IPMan::GetIPMan()->GetSpecialKeyboardState('L'))
+	if(IPMan::GetIPMan()->GetKey('L'))
 	{
 		velocity.x += 0.8f;
 	}
-	if(IPMan::GetIPMan()->GetSpecialKeyboardState('J'))
+	if(IPMan::GetIPMan()->GetKey('J'))
 	{
 		velocity.x -= 0.8f;
 	}
-	if(IPMan::GetIPMan()->GetSpecialKeyboardState('B'))
+	if(IPMan::GetIPMan()->GetKey('B'))
 	{
 		velocity.y -= 0.8f;
 	}
-	if(IPMan::GetIPMan()->GetSpecialKeyboardState('N'))
+	if(IPMan::GetIPMan()->GetKey('N'))
 	{
 		velocity.y += 0.8f;
 	}
@@ -58,27 +58,29 @@ void ControllableCamera::CheckInput(float dt)
 		velocity.z = velocity.z * (maxSpeed / velocityMag);
 	}
 
-	if(IPMan::GetIPMan()->GetSpecialKeyboardState('Y'))
+	if(IPMan::GetIPMan()->GetKey('Y'))
 	{
 		transform.Rotate(XMFLOAT3(0, -1 * dt, 0));
 	}
-	if(IPMan::GetIPMan()->GetSpecialKeyboardState('H'))
+	if(IPMan::GetIPMan()->GetKey('H'))
 	{
 		transform.Rotate(XMFLOAT3(0, 1 * dt, 0));
 	}
-	if(IPMan::GetIPMan()->GetSpecialKeyboardState('T'))
+	
+	if(IPMan::GetIPMan()->GetKey('T'))
 	{
 		transform.Rotate(XMFLOAT3(-1 * dt, 0 , 0));
 	}
-	if(IPMan::GetIPMan()->GetSpecialKeyboardState('G'))
+	if(IPMan::GetIPMan()->GetKey('G'))
 	{
 		transform.Rotate(XMFLOAT3(1 * dt, 0, 0));
 	}
-	if(IPMan::GetIPMan()->GetSpecialKeyboardState('U'))
+	
+	if(IPMan::GetIPMan()->GetKey('U'))
 	{
 		transform.Rotate(XMFLOAT3(0, 0, -1 * dt));
 	}
-	if(IPMan::GetIPMan()->GetSpecialKeyboardState('O'))
+	if(IPMan::GetIPMan()->GetKey('O'))
 	{
 		transform.Rotate(XMFLOAT3(0, 0, 1 * dt));
 	}
