@@ -47,10 +47,13 @@ namespace ServerApp
                 // Establish the local endpoint for the socket.
                 // The DNS name of the computer
                 // running the listener is "host.contoso.com".
+                //143.24.20.36
                 //24-14-18-8f
                 //01-00-00-7f
-                //143.24.20.36
-                IPEndPoint localEndPoint = new IPEndPoint(new IPAddress(0x0100007f), 8080);
+                
+                //100.66.70.6
+                //06-46-42-64
+                IPEndPoint localEndPoint = new IPEndPoint(new IPAddress(0x06464264), 8080);
 
                 // Create a TCP/IP socket.
                 Socket listener = new Socket(AddressFamily.InterNetwork,

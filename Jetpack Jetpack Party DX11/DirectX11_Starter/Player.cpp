@@ -7,7 +7,7 @@ Player::Player()
 	maxSpeed = 20;
 	groundSpeedDampening = 0.95f;
 	clientEntity = new ClientConnectionEntity();
-	clientEntity->connectClient("127.0.0.1");
+	clientEntity->connectClient("138.91.117.6");
 	networkSendTimer=0.0f;
 	loggedIn=false;
 	
