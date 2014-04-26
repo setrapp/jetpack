@@ -7,7 +7,9 @@ Player::Player()
 	maxSpeed = 20;
 	groundSpeedDampening = 0.95f;
 	clientEntity = new ClientConnectionEntity();
+	clientEntity->connectClient("127.0.0.1");
 	networkSendTimer=0.0f;
+	loggedIn=false;
 	
 }
 
@@ -46,8 +48,6 @@ void Player::Update(float dt)
 
 			this->socketNumber= atoi(stringParts.at(1).c_str());
 
-
-
 			for(int i=2; i<(int)stringParts.size()-1; i+=2){
 				int targetSocket= atoi(stringParts.at(i).c_str());
 
@@ -61,23 +61,17 @@ void Player::Update(float dt)
 				networkedEntities[cube->socketNumber]=cube;
 				AssetManager::Instance()->addedEntities.push(cube);
 
-				std::vector<std::string> vectorParts;
+				std::vector<std::string>* vectorParts = breakIntoParts(unparsedPosition);
 
-				string vectorString;
-				std::istringstream stringsplitter(unparsedPosition);
-				while(std::getline(stringsplitter,vectorString, ',')){
-					vectorParts.push_back(vectorString);
-				}
-
-				XMFLOAT3 newVector= XMFLOAT3(strtod(vectorParts.at(0).c_str(),0),strtod(vectorParts.at(1).c_str(),0),strtod(vectorParts.at(2).c_str(),0));
+				XMFLOAT3 newVector= XMFLOAT3(strtod(vectorParts->at(0).c_str(),0),strtod(vectorParts->at(1).c_str(),0),strtod(vectorParts->at(2).c_str(),0));
 				XMFLOAT3 currentTransform=networkedEntities[targetSocket]->transform.GetTranslation();
 				//calculates how much to translate the body in question
 				networkedEntities[targetSocket]->transform.Translate(XMFLOAT3(newVector.x-currentTransform.x,newVector.y-currentTransform.y,newVector.z-currentTransform.z));
 
 
-				XMFLOAT3X3 newRotMatrix= XMFLOAT3X3(strtod(vectorParts.at(3).c_str(),0),strtod(vectorParts.at(4).c_str(),0),strtod(vectorParts.at(5).c_str(),0),
-												  strtod(vectorParts.at(6).c_str(),0),strtod(vectorParts.at(7).c_str(),0),strtod(vectorParts.at(8).c_str(),0),
-												  strtod(vectorParts.at(9).c_str(),0),strtod(vectorParts.at(10).c_str(),0),strtod(vectorParts.at(11).c_str(),0));
+				XMFLOAT3X3 newRotMatrix= XMFLOAT3X3(strtod(vectorParts->at(3).c_str(),0),strtod(vectorParts->at(4).c_str(),0),strtod(vectorParts->at(5).c_str(),0),
+												  strtod(vectorParts->at(6).c_str(),0),strtod(vectorParts->at(7).c_str(),0),strtod(vectorParts->at(8).c_str(),0),
+												  strtod(vectorParts->at(9).c_str(),0),strtod(vectorParts->at(10).c_str(),0),strtod(vectorParts->at(11).c_str(),0));
 
 				networkedEntities[targetSocket]->transform.rotation=newRotMatrix;
 			}
@@ -86,6 +80,7 @@ void Player::Update(float dt)
 			break;
 			//adding a player that recently joined
 		case MessageTypes::Server::AddNewUser:
+			loggedIn=true;
 			cube = new Entity();
 			cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
 			cube->Finalize();
@@ -100,25 +95,19 @@ void Player::Update(float dt)
 		case MessageTypes::Server::MovementUpdate:
 			for(int i=1; i<(int)stringParts.size()-1; i+=2){
 				int targetSocket= atoi(stringParts.at(i).c_str());
-				if(networkedEntities[targetSocket]!=NULL){
+				if((networkedEntities[targetSocket]!=NULL) && targetSocket!=this->socketNumber){
 					string unparsedPosition= stringParts.at(i+1);
 
-					std::vector<std::string> vectorParts;
+					std::vector<std::string>* vectorParts = breakIntoParts(unparsedPosition);
 
-					string vectorString;
-					std::istringstream stringsplitter(unparsedPosition);
-					while(std::getline(stringsplitter,vectorString, ',')){
-						vectorParts.push_back(vectorString);
-					}
-
-					XMFLOAT3 newVector= XMFLOAT3(strtod(vectorParts.at(0).c_str(),0),strtod(vectorParts.at(1).c_str(),0),strtod(vectorParts.at(2).c_str(),0));
+					XMFLOAT3 newVector= XMFLOAT3(strtod(vectorParts->at(0).c_str(),0),strtod(vectorParts->at(1).c_str(),0),strtod(vectorParts->at(2).c_str(),0));
 					XMFLOAT3 currentTransform=networkedEntities[targetSocket]->transform.GetTranslation();
 
 					//calculates how much to translate the body in question
 					networkedEntities[targetSocket]->transform.Translate(XMFLOAT3(newVector.x-currentTransform.x,newVector.y-currentTransform.y,newVector.z-currentTransform.z));
-					XMFLOAT3X3 newRotMatrix= XMFLOAT3X3(strtod(vectorParts.at(3).c_str(),0),strtod(vectorParts.at(4).c_str(),0),strtod(vectorParts.at(5).c_str(),0),
-												  strtod(vectorParts.at(6).c_str(),0),strtod(vectorParts.at(7).c_str(),0),strtod(vectorParts.at(8).c_str(),0),
-												  strtod(vectorParts.at(9).c_str(),0),strtod(vectorParts.at(10).c_str(),0),strtod(vectorParts.at(11).c_str(),0));
+					XMFLOAT3X3 newRotMatrix= XMFLOAT3X3(strtod(vectorParts->at(3).c_str(),0),strtod(vectorParts->at(4).c_str(),0),strtod(vectorParts->at(5).c_str(),0),
+												  strtod(vectorParts->at(6).c_str(),0),strtod(vectorParts->at(7).c_str(),0),strtod(vectorParts->at(8).c_str(),0),
+												  strtod(vectorParts->at(9).c_str(),0),strtod(vectorParts->at(10).c_str(),0),strtod(vectorParts->at(11).c_str(),0));
 					networkedEntities[targetSocket]->transform.rotation=newRotMatrix;
 
 
@@ -162,8 +151,9 @@ void Player::CheckInput(float dt)
 
 	if(GetAsyncKeyState('V'))
 	{
-		if(!clientEntity->isConnected){
-			clientEntity->connectClient("127.0.0.1");
+		if(clientEntity->isConnected && !loggedIn){
+			clientEntity->sendMessage(MessageTypes::Client::Login,"");
+			loggedIn=true;
 		}
 	}
 
@@ -184,5 +174,15 @@ void Player::CheckInput(float dt)
 		clientEntity->sendMessage(MessageTypes::Client::MovementUpdate,getNetworkString());
 
 	}
+}
+
+vector<string>* Player::breakIntoParts(string s){
+	vector<string>* vectorParts= new vector<string>();
+	string vectorString;
+	std::istringstream stringsplitter(s);
+	while(std::getline(stringsplitter,vectorString, ',')){
+		vectorParts->push_back(vectorString);
+	}
+	return vectorParts;
 }
 

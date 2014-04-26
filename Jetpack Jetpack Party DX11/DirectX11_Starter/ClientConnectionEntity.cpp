@@ -23,7 +23,6 @@ void ClientConnectionEntity::sendMessage(MessageTypes::Client msgType, string se
 
 	int iResult;
 	// Send an initial buffer
-	//iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
 	sentMessage+="<EOF>";
 	iResult = send(ConnectSocket, sentMessage.c_str(), 512, 0);
 	if (iResult == SOCKET_ERROR) {
@@ -112,11 +111,11 @@ void ClientConnectionEntity::listenForResponse(void* stuff){
 	int buflen= DEFAULT_BUFLEN;
 	int iResult= 0;
 	char* receiveBuffer= new char[DEFAULT_BUFLEN];
-	string toConnect(to_string((int)MessageTypes::Client::Login));
+	/*string toConnect(to_string((int)MessageTypes::Client::Login));
 	toConnect+="\n";
 	toConnect+="<EOF>";
 	string s= toConnect;
-	send(connectedSocket, s.c_str(), 512, 0);
+	send(connectedSocket, s.c_str(), 512, 0);*/
 	int counter=0;
 	do {
 		for(int i=0; i<DEFAULT_BUFLEN; i++){

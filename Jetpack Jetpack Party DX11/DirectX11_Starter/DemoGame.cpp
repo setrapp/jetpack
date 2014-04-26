@@ -160,7 +160,7 @@ void DemoGame::CreateGeometryBuffers()
 	cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
 	cube->Finalize();
 	cube->transform.Translate(XMFLOAT3(0, -5, 0));
-	cube->transform.Rotate(XMFLOAT3(0, -PI / 2, 0));
+	//cube->transform.Rotate(XMFLOAT3(0, -PI / 2, 0));
 	entities.push_back(cube);
 	cube->transform.SetParent(&player->transform);
 	cube->transform.SetParent(&emptyEntity->transform);
