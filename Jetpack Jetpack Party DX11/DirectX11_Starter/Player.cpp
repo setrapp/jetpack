@@ -188,22 +188,22 @@ void Player::CheckInput(float dt)
 		if(IPMan::GetIPMan()->GetKey(KeyType::FORWARD))
 		{
 			velocity.z += forwardAcceleration * dt;
-		cubeInputReceived=true;
+			cubeInputReceived=true;
 		}
 		if(IPMan::GetIPMan()->GetKey(KeyType::BACKWARD))
 		{
 			velocity.z -= backwardAcceleration * dt;
-		cubeInputReceived=true;
+			cubeInputReceived=true;
 		}
 		if(IPMan::GetIPMan()->GetKey(KeyType::LEFT))
 		{
 			velocity.x -= strafeAcceleration * dt;
-		cubeInputReceived=true;
+			cubeInputReceived=true;
 		}
 		if(IPMan::GetIPMan()->GetKey(KeyType::RIGHT))
 		{
 			velocity.x += strafeAcceleration * dt;
-		cubeInputReceived=true;
+			cubeInputReceived=true;
 		}
 
 		// TODO should use IPMan
@@ -226,7 +226,6 @@ void Player::CheckInput(float dt)
 		XMFLOAT3 curTransform= transform.GetTranslation();
 		networkSendTimer=0.2f;
 		clientEntity->sendMessage(MessageTypes::Client::MovementUpdate,getNetworkString());
-
 	}
 }
 

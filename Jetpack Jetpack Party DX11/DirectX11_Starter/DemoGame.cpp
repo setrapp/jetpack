@@ -159,7 +159,7 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 green	= XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT4 blue	= XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-
+	// Attempt to load model
 	Player* player = new Player();
 	entities.push_back(player);
 	mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
