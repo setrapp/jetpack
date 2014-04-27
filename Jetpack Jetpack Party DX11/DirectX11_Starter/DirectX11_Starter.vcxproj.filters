@@ -257,6 +257,9 @@
     <ClInclude Include="Jetpack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MessageTypes.h">
+      <Filter>Header Files\Networking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Toolkit\Src\Shaders\DGSLPhong.hlsl">

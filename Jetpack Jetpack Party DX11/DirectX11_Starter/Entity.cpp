@@ -199,3 +199,35 @@ void Entity::Finalize()
 
 	this->totalIndices = size;
 }
+
+string Entity::getNetworkString(){
+	XMFLOAT3 curTransform= transform.GetTranslation();
+	XMFLOAT3X3 curRotation = transform.GetRotation();
+	std::ostringstream ss1;
+	ss1 << curTransform.x;
+	ss1 << ",";
+	ss1 << curTransform.y;
+	ss1 << ",";
+	ss1 << curTransform.z;
+	ss1 << ",";
+	ss1 << curRotation._11;
+	ss1 << ",";
+	ss1 << curRotation._12;
+	ss1 << ",";
+	ss1 << curRotation._13;
+	ss1 << ",";
+	ss1 << curRotation._21;
+	ss1 << ",";
+	ss1 << curRotation._22;
+	ss1 << ",";
+	ss1 << curRotation._23;
+	ss1 << ",";
+	ss1 << curRotation._31;
+	ss1 << ",";
+	ss1 << curRotation._32;
+	ss1 << ",";
+	ss1 << curRotation._33;
+	string s1= ss1.str();
+	
+	return s1;
+}

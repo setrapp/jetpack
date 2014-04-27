@@ -1,0 +1,40 @@
+Splash Screen 
+	- Main Menu Title Image
+	- JetPack Man Cursor Object
+	- Images or Button for "Start Game", "Settings", and "Exit"
+	Audio
+		- *Enter, Click, DING!* - SFX for select
+		- *Woosh!* - SFX - for select animation
+		- Main Menu Music
+Character Selection Screen
+	- Images for all the characters (Faces)
+	- Body color
+	- "Locked" overlay
+	Audio
+		SFX
+		- "Cursor Move" / "Next Select" noise
+		- "Selection confirmation" noise
+JetPack select screen
+	- Picture of packs
+	- star image for rating system
+	- locked overlay (same overlay as char select screen?)
+In-Game
+	- Player Model
+	- Track Model
+	- Image for Mini-map
+	Audio
+		- SFX
+			- crash
+			- explosion
+			- respawn
+			- boost ring (captured)
+			- jetpack engines
+		- Dialouge
+		- Soundtrack
+		- Folley
+			- environment
+			- boost rings (foley)
+Credits Screen
+	Audio
+		Main menu theme continues to play here
+		

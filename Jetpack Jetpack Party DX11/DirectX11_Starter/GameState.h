@@ -4,6 +4,7 @@ enum GameState
 {
 	Started,
 	Playing,
+	GameLobby,
 	Paused,
 	Won,
 	Lost

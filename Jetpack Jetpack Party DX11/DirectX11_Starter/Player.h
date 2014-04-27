@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Camera.h"
 #include "ClientConnectionEntity.h"
+#include "MessageTypes.h";
 #include <queue>
 #include "Jetpack.h"
 
@@ -19,6 +20,8 @@ public:
 	Entity* networkedCube;
 	std::map<int,Entity*> networkedEntities;
 	float networkSendTimer;
+	vector<string>* breakIntoParts(string s);
+	bool loggedIn;
 
 private:
 	void CheckInput(float dt);

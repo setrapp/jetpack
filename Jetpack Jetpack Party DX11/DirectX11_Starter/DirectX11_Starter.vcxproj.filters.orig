@@ -31,9 +31,6 @@
     <Filter Include="Header Files\Core\Camera">
       <UniqueIdentifier>{13f8993d-c62d-4edc-8220-fde93d3d44f2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Core\GUI">
-      <UniqueIdentifier>{124f7d67-4415-403e-a66d-5b9e7b11f22b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Core\Font">
       <UniqueIdentifier>{a89fb1b5-aa1f-49d5-a46b-6e7e67266987}</UniqueIdentifier>
     </Filter>
@@ -51,6 +48,15 @@
     </Filter>
     <Filter Include="Source Files\ModelLoading">
       <UniqueIdentifier>{8832b5cd-f068-4934-acc7-29ceeaa143c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Networking">
+      <UniqueIdentifier>{28ffae39-5a3c-4f18-a241-f3d2ae0c3ca4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Networking">
+      <UniqueIdentifier>{4602c02e-931a-49e1-a078-4e6b5c40afa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GUI">
+      <UniqueIdentifier>{32595750-5218-400c-9a1a-cd021f651134}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -102,9 +108,6 @@
     <ClCompile Include="Light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GreaterMesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ControllableCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -113,6 +116,12 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientConnectionEntity.cpp">
+      <Filter>Source Files\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="FontManager.cpp">
+      <Filter>Header Files\Core\Font</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -137,9 +146,6 @@
     <ClInclude Include="Material.h">
       <Filter>Header Files\Core\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Header Files\Core\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Rigidbody.h">
       <Filter>Header Files\Core\Physics</Filter>
     </ClInclude>
@@ -152,35 +158,8 @@
     <ClInclude Include="FontRenderer.h">
       <Filter>Header Files\Core\Font</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Menu.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Rect.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Sfx.h">
-      <Filter>Header Files\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyboardInput.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Response.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="MouseInput.h">
-      <Filter>Header Files\Input</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
@@ -209,16 +188,12 @@
     <ClInclude Include="Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GreaterMesh.h">
-      <Filter>Header Files\Core\GameObject</Filter>
-    </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="ControllableCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>Header Files\Core\GameObject</Filter>
-=======
+    </ClInclude>
     <ClInclude Include="SoundInstance.h">
       <Filter>Header Files\Sound</Filter>
     </ClInclude>
@@ -227,7 +202,57 @@
     </ClInclude>
     <ClInclude Include="AudioWaveManager.h">
       <Filter>Header Files\Sound</Filter>
->>>>>>> 36f4cef1886aa7bd6685ef5d6caf55643ea065e5
+    </ClInclude>
+    <ClInclude Include="MouseLook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="XController.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="XInputValues.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="XNew.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\XInputValues.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\XNew.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientConnectionEntity.h">
+      <Filter>Header Files\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIManager.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIBase.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="FontManager.h">
+      <Filter>Header Files\Core\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header Files\Core\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>Header Files\Core\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\Core\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageTypes.h">
+      <Filter>Header Files\Networking</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -243,8 +268,5 @@
     <FxCompile Include="Shaders\TexturePixelShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

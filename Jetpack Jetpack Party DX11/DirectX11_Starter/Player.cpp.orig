@@ -4,6 +4,7 @@
 Player::Player()
 {
 	velocity = XMFLOAT3(0, 0, 0);
+<<<<<<< HEAD
 	maxSpeed = 200;
 	forwardAcceleration = 100.0f;
 	backwardAcceleration = 100.0f;
@@ -12,12 +13,19 @@ Player::Player()
 	terminalVelocity = 300;
 	groundSpeedDampening = 0.1f;
 	airSpeedDampening = 0.7f;
+	clientEntity = new ClientConnectionEntity();
+	networkSendTimer=0.0f;
 	grounded = true;
 	jetpack = new Jetpack();
+=======
+	maxSpeed = 20;
+	groundSpeedDampening = 0.95f;
 	clientEntity = new ClientConnectionEntity();
-	clientEntity->connectClient("127.0.0.1");//("138.91.117.6");
+	clientEntity->connectClient("138.91.117.6");
 	networkSendTimer=0.0f;
 	loggedIn=false;
+	
+>>>>>>> 4b0596ded2a3f5b753c139aa261dda1ac36f4feb
 }
 
 Player::~Player()
@@ -183,27 +191,24 @@ void Player::CheckInput(float dt)
 {
 	networkSendTimer-=dt;
 	bool cubeInputReceived= false;
+<<<<<<< HEAD
 	if (grounded)
 	{
 		if(IPMan::GetIPMan()->GetKey(KeyType::FORWARD))
 		{
 			velocity.z += forwardAcceleration * dt;
-		cubeInputReceived=true;
 		}
 		if(IPMan::GetIPMan()->GetKey(KeyType::BACKWARD))
 		{
 			velocity.z -= backwardAcceleration * dt;
-		cubeInputReceived=true;
 		}
 		if(IPMan::GetIPMan()->GetKey(KeyType::LEFT))
 		{
 			velocity.x -= strafeAcceleration * dt;
-		cubeInputReceived=true;
 		}
 		if(IPMan::GetIPMan()->GetKey(KeyType::RIGHT))
 		{
 			velocity.x += strafeAcceleration * dt;
-		cubeInputReceived=true;
 		}
 
 		// TODO should use IPMan
@@ -211,6 +216,27 @@ void Player::CheckInput(float dt)
 		{
 			grounded = false;
 		}
+=======
+	if(IPMan::GetIPMan()->GetKey(KeyType::FORWARD))
+	{
+		cubeInputReceived=true;
+		velocity.z += 0.8f;
+	}
+	if(IPMan::GetIPMan()->GetKey(KeyType::BACKWARD))
+	{
+		cubeInputReceived=true;
+		velocity.z -= 0.8f;
+	}
+	if(IPMan::GetIPMan()->GetKey(KeyType::LEFT))
+	{
+		cubeInputReceived=true;
+		velocity.x -= 0.8f;
+	}
+	if(IPMan::GetIPMan()->GetKey(KeyType::RIGHT))
+	{
+		cubeInputReceived=true;
+		velocity.x += 0.8f;
+>>>>>>> 4b0596ded2a3f5b753c139aa261dda1ac36f4feb
 	}
 
 
@@ -222,6 +248,33 @@ void Player::CheckInput(float dt)
 		}
 	}
 
+<<<<<<< HEAD
+	if(clientEntity && clientEntity->isConnected && networkSendTimer<0.0f && cubeInputReceived){
+		XMFLOAT3 curTransform= networkedCube->transform.GetLocalTranslation();
+		networkSendTimer=0.2f;
+		std::ostringstream ss1;
+		ss1 << curTransform.x;
+		std::string s1(ss1.str());
+		std::ostringstream ss2;
+		ss2 << curTransform.y;
+		std::string s2(ss2.str());
+		std::ostringstream ss3;
+		ss3 << curTransform.z;
+		std::string s3(ss3.str());
+
+		clientEntity->sendMessage(s1+","+ s2+","+ s3);
+=======
+	// Clamp to max speed.
+	XMVECTOR velocityVec = XMLoadFloat3(&velocity);
+	XMFLOAT3 velocityMag3;
+	XMStoreFloat3(&velocityMag3, XMVector3Length(velocityVec));
+	float velocityMag = velocityMag3.x;
+	if (velocityMag > maxSpeed) {
+		velocity.x = velocity.x * (maxSpeed / velocityMag);
+		velocity.y = velocity.y * (maxSpeed / velocityMag);
+		velocity.z = velocity.z * (maxSpeed / velocityMag);
+	}
+
 	if(clientEntity && clientEntity->isConnected && networkSendTimer<0.0f && cubeInputReceived && loggedIn){
 		XMFLOAT3 curTransform= transform.GetTranslation();
 		networkSendTimer=0.2f;
@@ -229,6 +282,7 @@ void Player::CheckInput(float dt)
 
 	}
 }
+>>>>>>> 4b0596ded2a3f5b753c139aa261dda1ac36f4feb
 
 vector<string>* Player::breakIntoParts(string s){
 	vector<string>* vectorParts= new vector<string>();

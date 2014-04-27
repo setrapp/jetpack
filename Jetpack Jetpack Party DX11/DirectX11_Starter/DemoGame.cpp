@@ -146,7 +146,7 @@ bool DemoGame::Init()
 	CreateGeometryBuffers();
 	this->deltaTime = 0;
 	
-	//LoadSoundAssets();
+	LoadSoundAssets();
 
 	input = new IPMan(INPUTMODES::KEYBOARD);
 
@@ -160,10 +160,8 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 blue	= XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 
-	// Attempt to load model
 	Player* player = new Player();
 	entities.push_back(player);
-	
 	mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
 	mouseLook->ClampX(0, 0);
 
@@ -353,16 +351,16 @@ void DemoGame::UpdateScene(float dt)
 #endif
 	}
 
-	//assetManager->Instance()->GetSoundManager()->Update();
+	assetManager->Instance()->GetSoundManager()->Update();
 	if(currentState == GameState::Playing)
 	{
 		this->deltaTime = dt;
 
-		/*while (!AssetManager::Instance()->addedEntities.empty())
+		while (!AssetManager::Instance()->addedEntities.empty())
 		{
 			entities.push_back(AssetManager::Instance()->addedEntities.front());
 			AssetManager::Instance()->addedEntities.pop();
-		}*/
+		}
 
 
 		for(Entity* e: entities)
