@@ -450,28 +450,35 @@ MLModel3D* mlModel3DLoadOBJ(const char* filename)
 			free(matLibs[i]);
 
 		//link face names from model file to materials loaded from libraries
-		faceMats = (GLushort*)malloc(sizeof(MLModelMaterial*)*matSwitchCount+1);
-		faceMats[0] = 0;
-		for(i = 1; i < matSwitchCount; i++)
+		if (matSwitchCount > 0)
 		{
-			int matFound = 0;						//is there a material with the same name as the switch
-			if(matSwitches[i].name)					//if there is a name specified at the switch attempt to find the material in library
+			faceMats = (GLushort*)malloc(sizeof(MLModelMaterial*)*matSwitchCount+1);
+			faceMats[0] = 0;
+			for(i = 1; i < matSwitchCount; i++)
 			{
-				unsigned int j = 1;
-				for(j = 1; j < matCount && !matFound; j++)
+				int matFound = 0;						//is there a material with the same name as the switch
+				if(matSwitches[i].name)					//if there is a name specified at the switch attempt to find the material in library
 				{
-					//match faces between model file and material file
-					if(mats[j] && guCompare(matSwitches[i].name, mats[j]->name, 0, GU_DEFAULT_BUFFER_SIZE) == 0)	
+					unsigned int j = 1;
+					for(j = 1; j < matCount && !matFound; j++)
 					{
-						faceMats[i] = j;
-						matFound = 1;
+						//match faces between model file and material file
+						if(mats[j] && guCompare(matSwitches[i].name, mats[j]->name, 0, GU_DEFAULT_BUFFER_SIZE) == 0)	
+						{
+							faceMats[i] = j;
+							matFound = 1;
+						}
 					}
 				}
-			}
 
-			//if no match found, use default
-			if(!matFound)
-				faceMats[i] = 0;
+				//if no match found, use default
+				if(!matFound)
+					faceMats[i] = 0;
+			}
+		}
+		else 
+		{
+			faceMats = NULL;
 		}
 
 		//connect faces to materials

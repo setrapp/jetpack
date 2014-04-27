@@ -34,6 +34,10 @@ public :
 			this->looker->SetLocalRotation(XMFLOAT3());
 		}
 		ignoreMouse = false;
+		minXDegrees = maxXDegrees = 0;
+		minYDegrees = maxYDegrees = 0;
+		clampX = false;
+		clampY = false;
 	}
 
 	void MouseLook::Update(float dt) {

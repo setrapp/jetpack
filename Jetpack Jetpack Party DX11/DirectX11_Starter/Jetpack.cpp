@@ -3,23 +3,50 @@
 
 Jetpack::Jetpack()
 {
+	active = false;
 	allowInputForces = false;
-	maxSpeed = 200;
+	maxSpeed = 1000;
+	forwardAcceleration = 100.0f;
+	backwardAcceleration = 100.0f;
+	strafeAcceleration = 100.0f;
+	ascentAcceleration = 200.0f;
 }
 
-void Jetpack::Update(XMFLOAT3* velocity)
+void Jetpack::Update(float dt, XMFLOAT3* velocity)
 {
-	CheckInput(velocity);
+	CheckInput(dt, velocity);
 }
 
-void Jetpack::CheckInput(XMFLOAT3* velocity)
+void Jetpack::CheckInput(float dt, XMFLOAT3* velocity)
 {
 	if (velocity && allowInputForces)
 	{
+		if(IPMan::GetIPMan()->GetKey(KeyType::FORWARD))
+		{
+			velocity->z += forwardAcceleration * dt;
+		}
+		if(IPMan::GetIPMan()->GetKey(KeyType::BACKWARD))
+		{
+			velocity->z -= backwardAcceleration * dt;
+		}
+		if(IPMan::GetIPMan()->GetKey(KeyType::LEFT))
+		{
+			velocity->x -= strafeAcceleration * dt;
+		}
+		if(IPMan::GetIPMan()->GetKey(KeyType::RIGHT))
+		{
+			velocity->x += strafeAcceleration * dt;
+		}
+
 		// TODO: This should use IPMan
 		if(GetAsyncKeyState(VK_SPACE))
 		{
-			velocity->y += 10.0f;
+			velocity->y += ascentAcceleration * dt;
+			active = true;
+		}
+		else
+		{
+			active = false;
 		}
 	}
 }
