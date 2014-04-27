@@ -117,7 +117,7 @@ bool DemoGame::Init()
 	else
 	{
 		ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
-		rasterizerDesc.CullMode = D3D11_CULL_NONE;
+		rasterizerDesc.CullMode = D3D11_CULL_BACK;
 		rasterizerDesc.FillMode = D3D11_FILL_SOLID;
 	}
 	HRESULT hr = device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
@@ -161,22 +161,15 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 
 	// Attempt to load model
-	//AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
 	Player* player = new Player();
-	//player->AddModel(AssetManager::Instance()->GetModel("camera"));
 	entities.push_back(player);
-	//player->Finalize();
-	//AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
-	//player->SetMaterial("camera");
-	mouseLook = new MouseLook(&camera->transform, XMFLOAT2(0.01f, 0.01f));
+	
+	mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
 	mouseLook->ClampX(0, 0);
-	mouseLook->ClampY(-60, 60);
-	mouseLook->UnclampY();
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
 
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/cube.obj", "cube");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicJetMan.obj", "jetman");
 	Entity* cube = new Entity();
 	cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
@@ -210,7 +203,7 @@ void DemoGame::CreateGeometryBuffers()
 	gift->GetMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 	gift->LoadTexture(L"../Assets/RedGift.png");
 
-	Vertex floorVertices[] = 
+	/*Vertex floorVertices[] = 
 	{
 		{ XMFLOAT3(+100.0f, -10.0f, +100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 0) },
 		{ XMFLOAT3(-100.0f, -10.0f, -100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 1) },
@@ -218,13 +211,15 @@ void DemoGame::CreateGeometryBuffers()
 		{ XMFLOAT3(-100.0f, -10.0f, +100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 0) },
 	};
 
-	UINT floorIndices[] = { 0, 2, 1, 3, 0, 1 };
+	UINT floorIndices[] = { 0, 2, 1, 3, 0, 1 };*/
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Terrain.obj", "terrain");
 	Entity* floor = new Entity();
-	floor->AddQuad(floorVertices, floorIndices);
+	//floor->AddQuad(floorVertices, floorIndices);
+	floor->AddModel(AssetManager::Instance()->GetModel("terrain"));
 	floor->Finalize();
-	floor->transform.Translate(XMFLOAT3(-5, 5, 0));
+	floor->transform.Translate(XMFLOAT3(-1000, -10, -1000));
 	entities.push_back(floor);
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(0.0f, 0.2f, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "floor");
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.1f, 0.3f, 0.2f, 1), XMFLOAT4(0.0f, 0.5f, 0.2f, 1), XMFLOAT4(0.0f, 0.0f, 0.0f, 1), 16), "floor");
 	floor->SetMaterial("floor");
 	
 	camera->transform.SetParent(&player->transform);
@@ -346,10 +341,7 @@ void DemoGame::OnResize()
 
 #pragma region Game Loop
 
-// Updates the local constant buffer and 
-// push it to the buffer on the device
-XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
-bool scaleSmall = true;
+// Update the scene.
 void DemoGame::UpdateScene(float dt)
 {	
 	if (IPMan::GetIPMan()->GetBack())

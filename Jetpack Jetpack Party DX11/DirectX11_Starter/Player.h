@@ -26,6 +26,10 @@ private:
 private:
 	XMFLOAT3 velocity;
 	float maxSpeed;
+	float forwardAcceleration;
+	float backwardAcceleration;
+	float strafeAcceleration;
+	float gravityAcceleration;
 	float terminalVelocity;
 	float groundSpeedDampening;
 	float airSpeedDampening;

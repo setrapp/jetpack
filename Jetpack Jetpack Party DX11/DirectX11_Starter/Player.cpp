@@ -4,10 +4,14 @@
 Player::Player()
 {
 	velocity = XMFLOAT3(0, 0, 0);
-	maxSpeed = 20;
-	terminalVelocity = 100;
-	groundSpeedDampening = 0.95f;
-	airSpeedDampening = 0.999f;
+	maxSpeed = 200;
+	forwardAcceleration = 100.0f;
+	backwardAcceleration = 100.0f;
+	strafeAcceleration = 100.0f;
+	gravityAcceleration = 100.0f;
+	terminalVelocity = 300;
+	groundSpeedDampening = 0.1f;
+	airSpeedDampening = 0.7f;
 	clientEntity = new ClientConnectionEntity();
 	networkSendTimer=0.0f;
 	grounded = true;
@@ -28,46 +32,55 @@ void Player::Update(float dt)
 
 	// Update jetpack.
 	jetpack->allowInputForces = !grounded;
-	jetpack->Update(&velocity);
+	jetpack->Update(dt, &velocity);
 
 	// Clamp velocity withing max speed.
 	transform.ClampVector(&velocity, (grounded ? maxSpeed : jetpack->maxSpeed), 0);
 
+	// Apply world space accelerations.
+	XMFLOAT3 worldVelocity = transform.TransformDirection(velocity);
+
 	// TODO gravity should be handled by rigid body.
-	XMFLOAT3 position = transform.GetTranslation();
-	if (position.y > 0)
-	{
-		XMFLOAT3 gravity = transform.TransformDirection(XMFLOAT3(0, -0.15, 0));
-		XMFLOAT3 fallingVelocity = velocity;
-		fallingVelocity.x += gravity.x;
-		fallingVelocity.y += gravity.y;
-		fallingVelocity.z += gravity.z;
-		transform.ClampVector(&fallingVelocity, terminalVelocity, 0);
-		XMFLOAT3 fallingMag, velMag;
-		XMStoreFloat3(&fallingMag, XMVector3LengthSq(XMLoadFloat3(&fallingVelocity)));
-		XMStoreFloat3(&velMag, XMVector3LengthSq(XMLoadFloat3(&velocity)));
-		if (fallingMag.x > velMag.x)
+	//if (!jetpack->active)
+	//{
+		XMFLOAT3 position = transform.GetTranslation();
+		if (position.y > 0)
 		{
-			velocity.x = fallingVelocity.x;
-			velocity.y = fallingVelocity.y;
-			velocity.z = fallingVelocity.z;
+			if (worldVelocity.y > -terminalVelocity)
+			{
+				XMFLOAT3 gravity = XMFLOAT3(0, worldVelocity.y - (gravityAcceleration * dt), 0);
+				transform.ClampVector(&gravity, terminalVelocity, 0);
+				worldVelocity.y = gravity.y;
+			}
+		} 
+		else if (!grounded && worldVelocity.y < 0)
+		{
+			grounded = true;
+			transform.SetTranslation(XMFLOAT3(position.x, 0, position.z));
+			worldVelocity.y = 0;
 		}
-	} 
-	else if (!grounded)
-	{
-		grounded = true;
-		transform.SetTranslation(XMFLOAT3(position.x, 0, position.z));
-	}
+	//}
+	velocity = transform.InverseTransformDirection(worldVelocity);
+
+	// Apply world velocity.
+	XMFLOAT3 dtVelocity;
+	XMStoreFloat3(&dtVelocity, XMVectorScale(XMLoadFloat3(&velocity), dt));
+	transform.Translate(dtVelocity);
 
 	// Slow the character a bit so that it comes to a nice stop over time.
 	if (grounded) {
-		XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), groundSpeedDampening));
+		XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), (1 - ((1 - groundSpeedDampening) * dt))));
 	} else {
-		XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), airSpeedDampening));
+		XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), (1 - ((1 - airSpeedDampening) * dt))));
 	}
 
-	// Apply velocity.
-	transform.Translate(transform.InverseTransformDirection(XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt)));
+	// Stop character if not moving much.
+	XMFLOAT3 velMag;
+	XMStoreFloat3(&velMag, XMVector3LengthSq(XMLoadFloat3(&velocity)));
+	if (velMag.x > 0 && velMag.x < 0.001f)
+	{
+		velocity.x = velocity.y = velocity.z = 0;
+	}
 
 	while(!clientEntity->networkMessages.empty()){
 
@@ -166,19 +179,19 @@ void Player::CheckInput(float dt)
 	{
 		if(IPMan::GetIPMan()->GetKey(KeyType::FORWARD))
 		{
-			velocity.z += 0.8f;
+			velocity.z += forwardAcceleration * dt;
 		}
 		if(IPMan::GetIPMan()->GetKey(KeyType::BACKWARD))
 		{
-			velocity.z -= 0.8f;
+			velocity.z -= backwardAcceleration * dt;
 		}
 		if(IPMan::GetIPMan()->GetKey(KeyType::LEFT))
 		{
-			velocity.x -= 0.8f;
+			velocity.x -= strafeAcceleration * dt;
 		}
 		if(IPMan::GetIPMan()->GetKey(KeyType::RIGHT))
 		{
-			velocity.x += 0.8f;
+			velocity.x += strafeAcceleration * dt;
 		}
 
 		// TODO should use IPMan
@@ -235,41 +248,6 @@ void Player::CheckInput(float dt)
 			networkedCube->transform.Translate(XMFLOAT3(-1* dt, 0, 0));
 		}
 	}
-
-	/*if(GetAsyncKeyState('A'))
-	{
-		transform->Rotate(XMFLOAT3(0, -1 * dt, 0));
-	}
-	if(GetAsyncKeyState('D'))
-	{
-		transform->Rotate(XMFLOAT3(0, 1 * dt, 0));
-	}
-	if(GetAsyncKeyState('W'))
-	{
-		transform->Rotate(XMFLOAT3(-1 * dt, 0 , 0));
-	}
-	if(GetAsyncKeyState('S'))
-	{
-		transform->Rotate(XMFLOAT3(1 * dt, 0, 0));
-	}
-	if(GetAsyncKeyState('Q'))
-	{
-		transform->Rotate(XMFLOAT3(0, 0, -1 * dt));
-	}
-	if(GetAsyncKeyState('E'))
-	{
-		transform->Rotate(XMFLOAT3(0, 0, 1 * dt));
-	}
-
-	if(GetAsyncKeyState('X'))
-	{
-		transform->Scale(XMFLOAT3(1 + dt, 1 + dt, 1 + dt));
-	}
-	if(GetAsyncKeyState('Z'))
-	{
-		transform->Scale(XMFLOAT3(1 - dt, 1 - dt, 1 - dt));
-	}*/
-
 
 	if(clientEntity && clientEntity->isConnected && networkSendTimer<0.0f && cubeInputReceived){
 		XMFLOAT3 curTransform= networkedCube->transform.GetLocalTranslation();

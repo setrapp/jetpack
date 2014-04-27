@@ -93,7 +93,7 @@ public :
 		if(effect)
 		{
 			if(mute)
-				effect->SetVolume(0);			
+				effect->SetVolume(0);
 			else
 				effect->SetVolume(1);
 		}

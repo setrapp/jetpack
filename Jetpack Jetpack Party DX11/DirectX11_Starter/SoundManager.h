@@ -167,6 +167,7 @@ public:
 		auto w = Contains(name);
 		if(w != SoundMap->end())
 		{
+			Debug::Log("hi");
 			w->second->ChangeVolume(volume);
 		}
 	}
