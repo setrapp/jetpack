@@ -168,7 +168,7 @@ void Player::CheckInput(float dt)
 		velocity.z = velocity.z * (maxSpeed / velocityMag);
 	}
 
-	if(clientEntity && clientEntity->isConnected && networkSendTimer<0.0f && cubeInputReceived){
+	if(clientEntity && clientEntity->isConnected && networkSendTimer<0.0f && cubeInputReceived && loggedIn){
 		XMFLOAT3 curTransform= transform.GetTranslation();
 		networkSendTimer=0.2f;
 		clientEntity->sendMessage(MessageTypes::Client::MovementUpdate,getNetworkString());
