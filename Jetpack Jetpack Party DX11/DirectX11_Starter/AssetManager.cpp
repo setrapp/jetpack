@@ -290,8 +290,43 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 		mlIndices[0] = mlFace3DGetVertex1(face);
 		mlIndices[1] = mlFace3DGetVertex2(face);
 		mlIndices[2] = mlFace3DGetVertex3(face);
+		Mesh newMesh(mlIndices);
 
-		model->meshes.push_back(Mesh(mlIndices));
+		// Get material of current case.
+		short mlFaceMat = mlFace3DGetMaterial(face);
+		Material* faceMaterial;
+		if (mlFaceMat > 0)
+		{
+			MLModelMaterial const* mlMaterial = mlModel3DGetMaterial(objModel, mlFaceMat);
+			string materialName(mlModel3DGetFilename(objModel));
+			materialName += ": ";
+			char const* mlMatName = mlMaterial->name;
+			if (!mlMatName)
+			{
+				mlMatName = "Default";
+			}
+			materialName += mlMatName;
+			faceMaterial = GetMaterial(materialName);
+			if (!faceMaterial)
+			{
+				float const* ambient = mlMaterial->ambient;
+				float const* diffuse = mlMaterial->diffuse;
+				float const* specular = mlMaterial->specular;
+				float shininess = mlMaterial->shininess;
+				faceMaterial = new Material(XMFLOAT4(ambient[0], ambient[1], ambient[2], ambient[3]),
+											XMFLOAT4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]),
+											XMFLOAT4(specular[0], specular[1], specular[2], specular[3]),
+											shininess);
+				StoreMaterial(faceMaterial, materialName);
+			}
+		}
+		else
+		{
+			faceMaterial = AssetManager::Instance()->GetMaterial();
+		}
+		newMesh.SetMaterial(faceMaterial);
+		
+		model->meshes.push_back(newMesh);
 	}
 
 	MLModel3DDelete(objModel);

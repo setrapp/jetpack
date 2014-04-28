@@ -286,6 +286,9 @@ int guIndexOf(char const* searchString, char goalCharacter, int startIndex, int 
 //note that passing in c-strings that are not terminated by '\0' is dangerous, for this reason the function will terminate early if no such termination is found before the maximum size is reached
 int guCompare(char const* cString1, char const* cString2, int caseSensitive_bool, int maxSize)
 {
+	if (!cString1 || !cString2)
+		return GU_NULL_STRING;
+
     //declare counter
 	int i = 0;
 	

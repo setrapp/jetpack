@@ -214,11 +214,11 @@ void DemoGame::CreateGeometryBuffers()
 	Entity* floor = new Entity();
 	//floor->AddQuad(floorVertices, floorIndices);
 	floor->AddModel(AssetManager::Instance()->GetModel("terrain"));
-	floor->Finalize();
 	floor->transform.Translate(XMFLOAT3(-1000, -10, -1000));
 	entities.push_back(floor);
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.1f, 0.3f, 0.2f, 1), XMFLOAT4(0.0f, 0.5f, 0.2f, 1), XMFLOAT4(0.0f, 0.0f, 0.0f, 1), 16), "floor");
 	floor->SetBaseMaterial("floor");
+	floor->Finalize();
 	
 	camera->transform.SetParent(&player->transform);
 	player->transform.Translate(XMFLOAT3(1, 0, 0));

@@ -76,6 +76,7 @@ void Entity::AddModel(Model* model) {
 			indices[j] = modelIndices[j] + oldVertexCount;
 		}
 		Mesh* mesh = new Mesh(indices);
+		mesh->SetMaterial(model->meshes[i].GetMaterial());
 		meshes.push_back(mesh);
 	}
 }
@@ -121,14 +122,6 @@ void Entity::Draw(EntityDrawArgs const* drawArgs)
 	// Update vertex shader constant buffer with per primitive buffer.
 	DXConnection::Instance()->deviceContext->UpdateSubresource(drawArgs->vsModelConstantBuffer, 0, nullptr, &perPrimitiveVSConstantBuffer, 0, 0);
 
-	// Create per primitive pixel shader constant buffer to hold materials.
-	MaterialsAndLightsConstantBuffer perPrimitiveMaterialConstantBuffer;
-	perPrimitiveMaterialConstantBuffer.light = drawArgs->materialsAndLightsConstantBufferData->light;
-	perPrimitiveMaterialConstantBuffer.material = baseMaterial->GetShaderMaterial();
-
-	// Update pixel shader constant buffer with per primitive materials buffer.
-	DXConnection::Instance()->deviceContext->UpdateSubresource(drawArgs->materialsAndLightsConstantBuffer, 0, nullptr, &perPrimitiveMaterialConstantBuffer, 0, 0);
-
 	// Prepare index buffers categorized by material.
 	for (map<Material*, pair<ID3D11Buffer*, LONG>>::iterator it = indexBuffers.begin(); it != indexBuffers.end(); it++)
 	{
@@ -137,6 +130,15 @@ void Entity::Draw(EntityDrawArgs const* drawArgs)
 		{
 			useMaterial = AssetManager::Instance()->GetMaterial();
 		}
+
+		// Create per primitive pixel shader constant buffer to hold materials.
+		MaterialsAndLightsConstantBuffer perPrimitiveMaterialConstantBuffer;
+		perPrimitiveMaterialConstantBuffer.light = drawArgs->materialsAndLightsConstantBufferData->light;
+		perPrimitiveMaterialConstantBuffer.material = useMaterial->GetShaderMaterial();
+
+		// Update pixel shader constant buffer with per primitive materials buffer.
+		DXConnection::Instance()->deviceContext->UpdateSubresource(drawArgs->materialsAndLightsConstantBuffer, 0, nullptr, &perPrimitiveMaterialConstantBuffer, 0, 0);
+
 		ID3D11DeviceContext* deviceContext = DXConnection::Instance()->deviceContext;
 		deviceContext->VSSetShader(useMaterial->vertexShader, NULL, 0);
 		deviceContext->PSSetShader(useMaterial->pixelShader, NULL, 0);
@@ -207,7 +209,8 @@ void Entity::Finalize()
 	long totalMeshes = meshes.size();
 	for(int i = 0; i < totalMeshes; i++)
 	{
-		map<Material*, vector<UINT>*>::iterator matIt = indicesAll.find(meshes[i]->GetMaterial());
+		Material* meshMaterial = meshes[i]->GetMaterial();
+		map<Material*, vector<UINT>*>::iterator matIt = indicesAll.find(meshMaterial);
 		vector<UINT>* materialIndices;
 		if (matIt != indicesAll.end())
 		{
@@ -216,7 +219,7 @@ void Entity::Finalize()
 		else
 		{
 			materialIndices = new vector<UINT>;
-			indicesAll.insert(pair<Material*, vector<UINT>*>(meshes[i]->GetMaterial(), materialIndices));
+			indicesAll.insert(pair<Material*, vector<UINT>*>(meshMaterial, materialIndices));
 		}
 		UINT* indices = meshes.at(i)->GetIndices();
 		for(short j= 0; j < 3; j++)
