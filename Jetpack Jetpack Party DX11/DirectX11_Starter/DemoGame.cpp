@@ -192,14 +192,14 @@ void DemoGame::CreateGeometryBuffers()
 
 	Entity* gift = new Entity();
 	gift->AddQuad(vertices, indices);
-	gift->Finalize();
+	
 	gift->transform.Translate(XMFLOAT3(-5, 5, 0));
 	entities.push_back(gift);
-
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
-	gift->SetMaterial("gift");
-	gift->GetMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
+	gift->SetBaseMaterial("gift");
+	gift->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 	gift->LoadTexture(L"../Assets/RedGift.png");
+	gift->Finalize();
 
 	/*Vertex floorVertices[] = 
 	{
@@ -218,7 +218,7 @@ void DemoGame::CreateGeometryBuffers()
 	floor->transform.Translate(XMFLOAT3(-1000, -10, -1000));
 	entities.push_back(floor);
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.1f, 0.3f, 0.2f, 1), XMFLOAT4(0.0f, 0.5f, 0.2f, 1), XMFLOAT4(0.0f, 0.0f, 0.0f, 1), 16), "floor");
-	floor->SetMaterial("floor");
+	floor->SetBaseMaterial("floor");
 	
 	camera->transform.SetParent(&player->transform);
 	player->transform.Translate(XMFLOAT3(1, 0, 0));
@@ -440,42 +440,18 @@ void DemoGame::DrawScene()
 		DXConnection::Instance()->deviceContext->VSSetConstantBuffers(1, 1, &materialsAndLightsConstantBuffer);
 		DXConnection::Instance()->deviceContext->PSSetConstantBuffers(1, 1, &materialsAndLightsConstantBuffer);
 
+		// Store entity drawing arguments.
+		EntityDrawArgs entityDrawArgs;
+		entityDrawArgs.vsModelConstantBuffer = vsModelConstantBuffer;
+		entityDrawArgs.vsModelConstantBufferData = &vsModelConstantBufferData;
+		entityDrawArgs.materialsAndLightsConstantBuffer = materialsAndLightsConstantBuffer;
+		entityDrawArgs.materialsAndLightsConstantBufferData = &materialsAndLightsConstantBufferData;
+		
+		// Draw entities.
 		for(Entity* e :entities) 
 		{
-			// Compute the inverse transpose of the entity's world matrix for use by normals in the shaders. Ignore translation.
-			// If the entity is scaled uniformly, cheat and use the world matrix because scales will work.
-			XMFLOAT3X3 rotationScale;
-			XMStoreFloat3x3(&rotationScale, XMLoadFloat4x4(&e->transform.GetWorldMatrix()));
-			XMFLOAT4X4 inverseTranspose;
-			if (e->transform.IsUniformScale())
-			{
-				XMStoreFloat4x4(&inverseTranspose, XMLoadFloat3x3(&rotationScale));
-			}
-			else
-			{
-				XMStoreFloat4x4(&inverseTranspose, XMMatrixTranspose(XMMatrixInverse(nullptr, XMLoadFloat3x3(&rotationScale))));
-			}
 			
-
-			// Create per primitive vertex shader constant buffer to hold matrices.
-			VertexShaderModelConstantBuffer perPrimitiveVSConstantBuffer;
-			perPrimitiveVSConstantBuffer.world = e->transform.GetWorldMatrix();
-			perPrimitiveVSConstantBuffer.inverseTranspose = inverseTranspose;
-			perPrimitiveVSConstantBuffer.view = vsModelConstantBufferData.view;
-			perPrimitiveVSConstantBuffer.projection = vsModelConstantBufferData.projection;
-
-			// Update vertex shader constant buffer with per primitive buffer.
-			DXConnection::Instance()->deviceContext->UpdateSubresource(vsModelConstantBuffer, 0, nullptr, &perPrimitiveVSConstantBuffer, 0, 0);
-
-			// Create per primitive pixel shader constant buffer to hold materials.
-			MaterialsAndLightsConstantBuffer perPrimitiveMaterialConstantBuffer;
-			perPrimitiveMaterialConstantBuffer.light = materialsAndLightsConstantBufferData.light;
-			perPrimitiveMaterialConstantBuffer.material = e->GetMaterial()->GetShaderMaterial();
-
-			// Update pixel shader constant buffer with per primitive materials buffer.
-			DXConnection::Instance()->deviceContext->UpdateSubresource(materialsAndLightsConstantBuffer, 0, nullptr, &perPrimitiveMaterialConstantBuffer, 0, 0);
-			
-			e->Draw();
+			e->Draw(&entityDrawArgs);
 		}
 	}
 	flag = true;

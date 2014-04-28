@@ -13,8 +13,7 @@ using namespace DirectX;
 
 Entity::Entity()
 {
-	totalIndices = 0;
-	material = AssetManager::Instance()->GetMaterial();
+	baseMaterial = AssetManager::Instance()->GetMaterial();
 	socketNumber=0;
 }
 
@@ -25,8 +24,8 @@ Entity::~Entity(void)
 	{
 		delete *it;
 	}
-	ReleaseMacro(vertexBuffer);
-	ReleaseMacro(indexBuffer);
+	//ReleaseMacro(vertexBuffer);
+	//ReleaseMacro(indexBuffer);
 }
 
 void Entity::AddQuad(Vertex* v, UINT* i)
@@ -86,56 +85,110 @@ void Entity::Update(float dt)
 	
 }
 
-void Entity::Draw()
+void Entity::Draw(EntityDrawArgs const* drawArgs)
 {
-	if(material)
+	if (!drawArgs)
 	{
-		ID3D11DeviceContext* deviceContext = DXConnection::Instance()->deviceContext;
-		deviceContext->VSSetShader(material->vertexShader, NULL, 0);
-		deviceContext->PSSetShader(material->pixelShader, NULL, 0);
-		if (material->resourceView)
-		{
-			deviceContext->PSSetShaderResources(0, 1, &material->resourceView);
-		}		
-		if (material->samplerState)
-		{
-			deviceContext->PSSetSamplers(0, 1, &material->samplerState);
-		}
-	}	
+		return;
+	}
 
+	// Prepare vertex buffer.
 	const UINT stride = sizeof(Vertex);
 	UINT offset = 0;
-
 	DXConnection::Instance()->deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-	DXConnection::Instance()->deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-	DXConnection::Instance()->deviceContext->DrawIndexed(
-		this->totalIndices,	// The number of indices we're using in this draw
+	// Compute the inverse transpose of the entity's world matrix for use by normals in the shaders. Ignore translation.
+	// If the entity is scaled uniformly, cheat and use the world matrix because scales will work.
+	XMFLOAT3X3 rotationScale;
+	XMStoreFloat3x3(&rotationScale, XMLoadFloat4x4(&transform.GetWorldMatrix()));
+	XMFLOAT4X4 inverseTranspose;
+	if (transform.IsUniformScale())
+	{
+		XMStoreFloat4x4(&inverseTranspose, XMLoadFloat3x3(&rotationScale));
+	}
+	else
+	{
+		XMStoreFloat4x4(&inverseTranspose, XMMatrixTranspose(XMMatrixInverse(nullptr, XMLoadFloat3x3(&rotationScale))));
+	}
+
+	// Create per primitive vertex shader constant buffer to hold matrices.
+	VertexShaderModelConstantBuffer perPrimitiveVSConstantBuffer;
+	perPrimitiveVSConstantBuffer.world = transform.GetWorldMatrix();
+	perPrimitiveVSConstantBuffer.inverseTranspose = inverseTranspose;
+	perPrimitiveVSConstantBuffer.view = drawArgs->vsModelConstantBufferData->view;
+	perPrimitiveVSConstantBuffer.projection = drawArgs->vsModelConstantBufferData->projection;
+
+	// Update vertex shader constant buffer with per primitive buffer.
+	DXConnection::Instance()->deviceContext->UpdateSubresource(drawArgs->vsModelConstantBuffer, 0, nullptr, &perPrimitiveVSConstantBuffer, 0, 0);
+
+	// Create per primitive pixel shader constant buffer to hold materials.
+	MaterialsAndLightsConstantBuffer perPrimitiveMaterialConstantBuffer;
+	perPrimitiveMaterialConstantBuffer.light = drawArgs->materialsAndLightsConstantBufferData->light;
+	perPrimitiveMaterialConstantBuffer.material = baseMaterial->GetShaderMaterial();
+
+	// Update pixel shader constant buffer with per primitive materials buffer.
+	DXConnection::Instance()->deviceContext->UpdateSubresource(drawArgs->materialsAndLightsConstantBuffer, 0, nullptr, &perPrimitiveMaterialConstantBuffer, 0, 0);
+
+	// Prepare index buffers categorized by material.
+	for (map<Material*, pair<ID3D11Buffer*, LONG>>::iterator it = indexBuffers.begin(); it != indexBuffers.end(); it++)
+	{
+		Material* useMaterial = it->first;
+		if (!useMaterial)
+		{
+			useMaterial = AssetManager::Instance()->GetMaterial();
+		}
+		ID3D11DeviceContext* deviceContext = DXConnection::Instance()->deviceContext;
+		deviceContext->VSSetShader(useMaterial->vertexShader, NULL, 0);
+		deviceContext->PSSetShader(useMaterial->pixelShader, NULL, 0);
+		if (useMaterial->resourceView)
+		{
+			deviceContext->PSSetShaderResources(0, 1, &useMaterial->resourceView);
+		}		
+		if (useMaterial->samplerState)
+		{
+			deviceContext->PSSetSamplers(0, 1, &useMaterial->samplerState);
+		}
+
+		DXConnection::Instance()->deviceContext->IASetIndexBuffer(it->second.first, DXGI_FORMAT_R32_UINT, 0);
+
+		DXConnection::Instance()->deviceContext->DrawIndexed(
+		it->second.second,	// The number of indices we're using in this draw
 		0,
 		0);
+	}	
 }
 
 
 void Entity::LoadTexture(wchar_t* path)
 {	
-	this->material->ApplyTexture(path);
+	this->baseMaterial->ApplyTexture(path);
 }
 
 
-Material* Entity::GetMaterial()
+Material* Entity::GetBaseMaterial()
 {
-	return this->material;
+	return this->baseMaterial;
 }
 
 
-inline Material Entity::GetMaterialSafe() const
+inline Material Entity::GetBaseMaterialSafe() const
 {
-	return *this->material;
+	return *this->baseMaterial;
 }
 
-void Entity::SetMaterial(string name)
+void Entity::SetBaseMaterial(string name, bool forceOnAllMeshes)
 {
-	material = AssetManager::Instance()->GetMaterial(name);
+	Material* newBaseMaterial = AssetManager::Instance()->GetMaterial(name);
+	Material* defaultMaterial = AssetManager::Instance()->GetMaterial();
+	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end(); it++)
+	{
+		Material* meshMaterial = (*it)->GetMaterial();
+		if (forceOnAllMeshes || meshMaterial == baseMaterial || meshMaterial == defaultMaterial)
+		{
+			(*it)->SetMaterial(newBaseMaterial);
+		}
+	}
+	baseMaterial = newBaseMaterial;
 }
 
 inline vector<Mesh*> Entity::GetMeshes() const 
@@ -150,36 +203,53 @@ void Entity::Finalize()
 		return;
 	}
 
-	vector<UINT> indicesAll;
+	map<Material*, vector<UINT>*> indicesAll;
 	long totalMeshes = meshes.size();
 	for(int i = 0; i < totalMeshes; i++)
 	{
+		map<Material*, vector<UINT>*>::iterator matIt = indicesAll.find(meshes[i]->GetMaterial());
+		vector<UINT>* materialIndices;
+		if (matIt != indicesAll.end())
+		{
+			materialIndices = matIt->second;
+		}
+		else
+		{
+			materialIndices = new vector<UINT>;
+			indicesAll.insert(pair<Material*, vector<UINT>*>(meshes[i]->GetMaterial(), materialIndices));
+		}
 		UINT* indices = meshes.at(i)->GetIndices();
 		for(short j= 0; j < 3; j++)
 		{
-			indicesAll.push_back(indices[j]);
+			materialIndices->push_back(indices[j]);
 		}
 	}
 
-	long size = indicesAll.size();
-	UINT* indexPtr = &indicesAll.at(0);
+	for (map<Material*, vector<UINT>*>::iterator it = indicesAll.begin(); it != indicesAll.end(); it++)
+	{
+		vector<UINT>* materialIndices = it->second;
+		long size = materialIndices->size();
+		UINT* indexPtr = &materialIndices->at(0);
 
-	//// Create the index buffer
-	D3D11_BUFFER_DESC ibd;
-    ibd.Usage					= D3D11_USAGE_IMMUTABLE;
-    ibd.ByteWidth				= sizeof(UINT) * size; // Number of indices
-    ibd.BindFlags				= D3D11_BIND_INDEX_BUFFER;
-    ibd.CPUAccessFlags			= 0;
-    ibd.MiscFlags				= 0;
-	ibd.StructureByteStride		= 0;
+		//// Create the index buffer
+		D3D11_BUFFER_DESC ibd;
+		ibd.Usage					= D3D11_USAGE_IMMUTABLE;
+		ibd.ByteWidth				= sizeof(UINT) * size; // Number of indices
+		ibd.BindFlags				= D3D11_BIND_INDEX_BUFFER;
+		ibd.CPUAccessFlags			= 0;
+		ibd.MiscFlags				= 0;
+		ibd.StructureByteStride		= 0;
 
-    D3D11_SUBRESOURCE_DATA initialIndexData;
-    initialIndexData.pSysMem	= indexPtr;
+		D3D11_SUBRESOURCE_DATA initialIndexData;
+		initialIndexData.pSysMem	= indexPtr;
 
-    HR(DXConnection::Instance()->device->CreateBuffer(
-		&ibd,
-		&initialIndexData,
-		&indexBuffer));
+		ID3D11Buffer* indexBuffer;
+		HR(DXConnection::Instance()->device->CreateBuffer(
+			&ibd,
+			&initialIndexData,
+			&indexBuffer));
+		indexBuffers.insert(pair<Material*, pair<ID3D11Buffer*, LONG>>(it->first, pair<ID3D11Buffer*, LONG>(indexBuffer, size)));
+	}
 
 	D3D11_BUFFER_DESC vbd;
     vbd.Usage					= D3D11_USAGE_IMMUTABLE;
@@ -197,7 +267,7 @@ void Entity::Finalize()
 		&initialVertexData,
 		&vertexBuffer));
 
-	this->totalIndices = size;
+	
 }
 
 string Entity::getNetworkString(){

@@ -261,7 +261,7 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 	bool hasUVs = mlModel3DGetTextureVertexCount(objModel) > 1;
 
 	// Load Vertices.
-	unsigned int vertexCount = mlModel3DGetFaceCount(objModel);
+	unsigned int vertexCount = mlModel3DGetVertexCount(objModel);
 	for (int i = 0; i < vertexCount; i++) {
 		MLVertex3D const*  mlVertex = mlModel3DGetVertex(objModel, i);
 		GUPoint3D guPoint = mlVertex3DGetPosition(mlVertex);

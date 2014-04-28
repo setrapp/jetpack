@@ -14,3 +14,13 @@ UINT* Mesh::GetIndices()
 {
 	return indices;
 }
+
+Material* Mesh::GetMaterial()
+{
+	return material;
+}
+
+void Mesh::SetMaterial(Material* newMaterial)
+{
+	material = newMaterial;
+}
