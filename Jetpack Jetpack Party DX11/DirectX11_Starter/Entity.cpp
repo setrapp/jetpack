@@ -270,7 +270,10 @@ void Entity::Finalize()
 		&initialVertexData,
 		&vertexBuffer));
 
-	
+	for(map<Material*, vector<UINT>*>::iterator it = indicesAll.begin(); it != indicesAll.end(); it++)
+	{
+		delete it->second;
+	}
 }
 
 string Entity::getNetworkString(){
