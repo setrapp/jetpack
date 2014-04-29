@@ -1,16 +1,23 @@
 #include "Menu.h"
 #include <DirectXMath.h>
+#include "GUIText.h"
+#include "GUITextBox.h"
+
 
 Menu::Menu(FontRenderer* renderer) 
 {
 	guiMan = new GUIManager();	
-	GUIBase* nG = new GUIBase(new Rect(0, 0, 0 ,0), L"NEW GAME", 1, AnimationType::TOPTOBOTTOM, renderer, 1000, Colors::Black);
+	GUIText* nG = new GUIText(new Rect(0, 0, 0 ,0), L"NEW GAME", 1, AnimationType::TOPTOBOTTOM, renderer, 1000, Colors::Black);
 	guiMan->Add("NEWGAME", nG);
-	GUIBase* settings = new GUIBase(new Rect(0, 100, 0 ,0), L"SETTINGS", 3, AnimationType::LEFTTORIGHT, renderer, 1000, Colors::Black);
+	GUIText* settings = new GUIText(new Rect(0, 100, 0 ,0), L"SETTINGS", 3, AnimationType::LEFTTORIGHT, renderer, 1000, Colors::Black);
 	guiMan->Add("SETTINGS", settings);
-	GUIBase* exit = new GUIBase(new Rect(0, 200, 0 ,0), L"EXIT", 5, AnimationType::BOTTOMTOTOP, renderer, 1000, Colors::Black);
+	GUIText* exit = new GUIText(new Rect(0, 200, 0 ,0), L"EXIT", 5, AnimationType::BOTTOMTOTOP, renderer, 1000, Colors::Black);
 	guiMan->Add("EXIT", exit);
+
+	
 	this->fontRenderer = renderer;
+	
+GUITextBox* b = new GUITextBox(new Rect(0, 200, 0 ,0), L"EXIT", 5, AnimationType::BOTTOMTOTOP, this->fontRenderer, 1000, Colors::Black);
 	currstate = GameState::Started;
 }
 

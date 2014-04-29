@@ -24,7 +24,6 @@
 #include <Windows.h>
 #include <d3dcompiler.h>
 #include "DemoGame.h"
-
 #include "Common.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,7 +33,9 @@
 #include "Debug.h"
 #include "XInputValues.h"
 #include "InputManager.h"
+#define DIRECTINPUT_VERSION 0x0800
 
+using namespace std;
 InputManager* IPMan::inputManager = NULL;
 
 #pragma region Win32 Entry Point (WinMain)
@@ -73,6 +74,9 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	mouseCursorVisibility = true;
 	mouseLook = NULL;
 }
+
+		
+	
 
 DemoGame::~DemoGame()
 {
@@ -342,6 +346,7 @@ void DemoGame::OnResize()
 // Update the scene.
 void DemoGame::UpdateScene(float dt)
 {	
+	(IPMan::GetIPMan()->GetAllKeys());
 	if (IPMan::GetIPMan()->GetBack())
 	{
 		currentState = Helper::GoBackOnce(currentState);

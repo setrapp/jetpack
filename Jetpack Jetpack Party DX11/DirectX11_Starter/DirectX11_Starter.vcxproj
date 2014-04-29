@@ -113,6 +113,7 @@
   <ItemGroup>
     <ClInclude Include="..\XInputValues.h" />
     <ClInclude Include="..\XNew.h" />
+    <ClInclude Include="AnimationBase.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="AudioWaveManager.h" />
     <ClInclude Include="Camera.h" />
@@ -133,7 +134,9 @@
     <ClInclude Include="GeneralUtility\GUMathUtility.h" />
     <ClInclude Include="GeneralUtility\GUParseUtility.h" />
     <ClInclude Include="GUIBase.h" />
+    <ClInclude Include="GUIText.h" />
     <ClInclude Include="GUIManager.h" />
+    <ClInclude Include="GUITextBox.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Jetpack.h" />
     <ClInclude Include="Light.h" />

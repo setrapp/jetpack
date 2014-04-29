@@ -9,6 +9,7 @@
 #include "Common.h"
 #include "GUIBase.h"
 #include "GUIManager.h"
+#include "GUITextBox.h"
 
 using namespace std;
 using namespace DirectX;
@@ -28,6 +29,6 @@ private:
 	FontRenderer* fontRenderer;
 	GUIManager* guiMan;
 	GameState currstate;
-	
+	GUITextBox* b ;
 };
 #endif
