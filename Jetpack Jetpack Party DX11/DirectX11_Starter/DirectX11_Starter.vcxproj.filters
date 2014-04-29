@@ -126,6 +126,9 @@
     <ClCompile Include="Jetpack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ManeuverJetpack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXGame.h">
@@ -259,6 +262,9 @@
     </ClInclude>
     <ClInclude Include="MessageTypes.h">
       <Filter>Header Files\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="ManeuverJetpack.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

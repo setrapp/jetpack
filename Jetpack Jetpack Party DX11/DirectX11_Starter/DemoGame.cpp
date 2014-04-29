@@ -68,7 +68,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	windowWidth = 800;
 	windowHeight = 600;
 	currentState = GameState::Started;
-	camera = new ControllableCamera();
+	camera = new Camera();//ControllableCamera();
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
 	mouseCursorVisibility = true;
 	mouseLook = NULL;

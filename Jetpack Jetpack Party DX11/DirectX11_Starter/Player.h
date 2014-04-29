@@ -6,6 +6,7 @@
 #include "MessageTypes.h";
 #include <queue>
 #include "Jetpack.h"
+#include "ManeuverJetpack.h"
 
 class Player : public Entity
 {
@@ -27,6 +28,7 @@ private:
 	void CheckInput(float dt);
 
 private:
+	XMFLOAT3 angularVelocity;
 	XMFLOAT3 velocity;
 	float maxSpeed;
 	float forwardAcceleration;
