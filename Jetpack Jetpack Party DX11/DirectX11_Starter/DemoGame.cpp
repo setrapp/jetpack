@@ -162,8 +162,8 @@ void DemoGame::CreateGeometryBuffers()
 	// Attempt to load model
 	Player* player = new Player();
 	entities.push_back(player);
-	mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
-	mouseLook->ClampX(0, 0);
+	//mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
+	//mouseLook->ClampX(0, 0);
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);

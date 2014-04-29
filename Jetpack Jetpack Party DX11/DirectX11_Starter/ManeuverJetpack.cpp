@@ -3,6 +3,10 @@
 
 ManeuverJetpack::ManeuverJetpack()
 {
+	forwardAcceleration = 100.0f;
+	backwardAcceleration = 100.0f;
+	strafeAcceleration = 200.0f;
+	ascentAcceleration = 100.0f;
 	backSpin = 50 * (PI / 180);
 	frontSpin = 50 * (PI / 180);
 	sideSpin = 50 * (PI / 180);
@@ -22,7 +26,7 @@ void ManeuverJetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angular
 	if(GetAsyncKeyState('S'))
 	{
 		velocity->x += strafeAcceleration * dt;
-		angularVelocity->z += sideSpin * dt;
+		angularVelocity->z -= sideSpin * dt;
 		active = true;
 	}
 	if(GetAsyncKeyState('D'))
@@ -34,14 +38,14 @@ void ManeuverJetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angular
 	if(GetAsyncKeyState('F'))
 	{
 		velocity->y += ascentAcceleration * dt;
-		angularVelocity->z += bottomSpin * dt;
+		angularVelocity->z -= bottomSpin * dt;
 		active = true;
 	}
 	// Right Side
 	if(GetAsyncKeyState('J'))
 	{
 		velocity->y += ascentAcceleration * dt;
-		angularVelocity->z -= bottomSpin * dt;
+		angularVelocity->z += bottomSpin * dt;
 		active = true;
 	}
 	if(GetAsyncKeyState('K'))
@@ -53,7 +57,7 @@ void ManeuverJetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angular
 	if(GetAsyncKeyState('L'))
 	{
 		velocity->x -= strafeAcceleration * dt;
-		angularVelocity->z -= sideSpin * dt;
+		angularVelocity->z += sideSpin * dt;
 		active = true;
 	}
 	if(GetAsyncKeyState(VK_OEM_1)) // colon on US standard keyboards

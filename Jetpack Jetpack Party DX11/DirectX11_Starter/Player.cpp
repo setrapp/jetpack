@@ -55,13 +55,13 @@ void Player::Update(float dt)
 			worldVelocity.y = gravity.y;
 		}
 	} 
-	else if (!grounded && worldVelocity.y < 0)
+	else if (position.y < 0 || (!grounded && worldVelocity.y < 0))
 	{
 		grounded = true;
 		transform.SetTranslation(XMFLOAT3(position.x, 0, position.z));
-		transform.SetLocalRotation(XMFLOAT3(0, 0, 0));
+		//transform.SetLocalRotation(XMFLOAT3(0, 0, 0));
 		worldVelocity.y = 0;
-		angularVelocity = XMFLOAT3(0, 0 ,0);
+		//angularVelocity = XMFLOAT3(0, 0 ,0);
 	}
 	velocity = transform.InverseTransformDirection(worldVelocity);
 
