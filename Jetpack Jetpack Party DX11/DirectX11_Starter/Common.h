@@ -11,6 +11,10 @@
 using namespace DirectX;
 using namespace std;
 
+#ifndef PI
+#define PI 3.14159265358979323846f
+#endif
+
 #define Print(x) { if(x) { printf(x); } }
 
 #define ReleaseMacro(x) { if(x){ x->Release(); x = 0; } }

@@ -68,7 +68,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	windowWidth = 800;
 	windowHeight = 600;
 	currentState = GameState::Started;
-	camera = new ControllableCamera();
+	camera = new Camera();//ControllableCamera();
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
 	mouseCursorVisibility = true;
 	mouseLook = NULL;
@@ -162,8 +162,8 @@ void DemoGame::CreateGeometryBuffers()
 	// Attempt to load model
 	Player* player = new Player();
 	entities.push_back(player);
-	mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
-	mouseLook->ClampX(0, 0);
+	//mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
+	//mouseLook->ClampX(0, 0);
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);

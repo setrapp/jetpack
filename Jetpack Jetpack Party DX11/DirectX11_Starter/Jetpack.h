@@ -5,8 +5,8 @@ class Jetpack
 {
 public:
 	Jetpack();
-	virtual void Update(float dt, XMFLOAT3* velocity);
-	virtual void CheckInput(float dt, XMFLOAT3* velocity);
+	virtual void Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
+	virtual void CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
 
 public:
 	bool allowInputForces;

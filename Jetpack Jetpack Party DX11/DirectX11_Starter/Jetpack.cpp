@@ -12,12 +12,13 @@ Jetpack::Jetpack()
 	ascentAcceleration = 200.0f;
 }
 
-void Jetpack::Update(float dt, XMFLOAT3* velocity)
+void Jetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 {
-	CheckInput(dt, velocity);
+	active = false;
+	CheckInput(dt, velocity, angularVelocity);
 }
 
-void Jetpack::CheckInput(float dt, XMFLOAT3* velocity)
+void Jetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 {
 	if (velocity && allowInputForces)
 	{
@@ -43,10 +44,6 @@ void Jetpack::CheckInput(float dt, XMFLOAT3* velocity)
 		{
 			velocity->y += ascentAcceleration * dt;
 			active = true;
-		}
-		else
-		{
-			active = false;
 		}
 	}
 }
