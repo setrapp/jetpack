@@ -221,7 +221,7 @@ void DemoGame::CreateGeometryBuffers()
 	//floor->AddQuad(floorVertices, floorIndices);
 	floor->AddModel(AssetManager::Instance()->GetModel("terrain"));
 	//floor->transform.Translate(XMFLOAT3(-1000, -10, -1000));
-	floor->transform.Scale(XMFLOAT3(100, 100, 100));
+	floor->transform.Scale(XMFLOAT3(1000, 1000, 1000));
 	entities.push_back(floor);
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.1f, 0.3f, 0.2f, 1), XMFLOAT4(0.0f, 0.5f, 0.2f, 1), XMFLOAT4(0.0f, 0.0f, 0.0f, 1), 16), "floor");
 	floor->SetBaseMaterial("floor");
@@ -326,7 +326,8 @@ void DemoGame::OnResize()
 			0.1f,
 			10000.0f);
 
-	XMStoreFloat4x4(&camera->projection, XMMatrixTranspose(P));
+	XMStoreFloat4x4(&playerCamera->projection, XMMatrixTranspose(P));
+	XMStoreFloat4x4(&debugCamera->projection, XMMatrixTranspose(P));
 
 	if (mouseLook)
 	{
@@ -371,10 +372,10 @@ void DemoGame::UpdateScene(float dt)
 
 	if(camera != debugCamera)
 	{
-		XMFLOAT3 debugEye = playerCamera->transform.GetTranslation();
+		XMFLOAT3 debugEye = camera->transform.GetTranslation();
 		XMFLOAT3 debugTarget;
-		XMStoreFloat3(&debugTarget, XMLoadFloat3(&playerCamera->transform.GetTranslation()) + XMLoadFloat3(&playerCamera->transform.GetForward()));
-		XMFLOAT3 debugUp = playerCamera->transform.GetUp();
+		XMStoreFloat3(&debugTarget, XMLoadFloat3(&camera->transform.GetTranslation()) + XMLoadFloat3(&camera->transform.GetForward()));
+		XMFLOAT3 debugUp = camera->transform.GetUp();
 		debugCamera->LookAt(debugEye, debugTarget, debugUp);
 	}
 
@@ -487,8 +488,11 @@ void DemoGame::OnMouseDown(WPARAM btnState, int x, int y)
 	if(btnState == 2)
 	{
 		if (camera != debugCamera)
-		{
+		{	
+			debugCamera->controllable = true;
+			player->controllable = false;
 			camera = debugCamera;
+			mouseLook->SetLooker(&debugCamera->transform);
 		}
 	}
 }
@@ -497,8 +501,10 @@ void DemoGame::OnMouseUp(WPARAM btnState, int x, int y)
 {
 	if(camera == debugCamera)
 	{
+		debugCamera->controllable = false;
+		player->controllable = true;
 		camera = playerCamera;
-		debugCamera->transform.SetLocalRotation(XMFLOAT3(0, 0, 0));
+		mouseLook->SetLooker(NULL);
 	}
 	ReleaseCapture();
 }

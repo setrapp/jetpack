@@ -4,7 +4,7 @@
 ControllableCamera::ControllableCamera()
 {
 	velocity = XMFLOAT3(0, 0, 0);
-	maxSpeed = 20;
+	maxSpeed = 100;
 	groundSpeedDampening = 0.95f;
 	controllable = false;
 }
@@ -28,27 +28,27 @@ void ControllableCamera::CheckInput(float dt)
 	
 	if(IPMan::GetIPMan()->GetKey('S'))
 	{
-		velocity.z -= 0.8f;
+		velocity.z -= 10;
 	}
 	if(IPMan::GetIPMan()->GetKey('W'))
 	{
-		velocity.z += 0.8f;
+		velocity.z += 10;
 	}
 	if(IPMan::GetIPMan()->GetKey('D'))
 	{
-		velocity.x += 0.8f;
+		velocity.x += 10;
 	}
 	if(IPMan::GetIPMan()->GetKey('A'))
 	{
-		velocity.x -= 0.8f;
+		velocity.x -= 10;
 	}
 	if(IPMan::GetIPMan()->GetKey('Q'))
 	{
-		velocity.y -= 0.8f;
+		velocity.y -= 10;
 	}
 	if(IPMan::GetIPMan()->GetKey('E'))
 	{
-		velocity.y += 0.8f;
+		velocity.y += 10;
 	}
 
 	// Clamp to max speed.
