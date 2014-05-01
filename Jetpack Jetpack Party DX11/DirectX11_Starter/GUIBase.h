@@ -5,7 +5,6 @@
 #include "Rect.h"
 #include "FontRenderer.h"
 #include <functional>
-#include "Menu.h"
 #include <utility>
 #include "AnimationBase.h"
 
@@ -35,7 +34,9 @@ protected :
 
 public :
 		virtual const bool IsMouseHovering() const = 0;
-		virtual void Update (LPPOINT point, float dt);
+		virtual void Update (LPPOINT point, float dt)
+		{
+		}
 		virtual const inline bool Clicked() = 0;
 		virtual void Render() const = 0;
 		virtual inline void SetColor(const XMFLOAT4 Color) = 0;

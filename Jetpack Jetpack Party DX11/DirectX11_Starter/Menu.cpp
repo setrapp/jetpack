@@ -2,7 +2,7 @@
 #include <DirectXMath.h>
 #include "GUIText.h"
 #include "GUITextBox.h"
-
+#include "GUITextures.h"
 
 Menu::Menu(FontRenderer* renderer) 
 {
@@ -14,10 +14,12 @@ Menu::Menu(FontRenderer* renderer)
 	GUIText* exit = new GUIText(new Rect(0, 200, 0 ,0), L"EXIT", 5, AnimationType::BOTTOMTOTOP, renderer, 1000, Colors::Black);
 	guiMan->Add("EXIT", exit);
 
+
+	guiMan->Add("Texture", new GUITexture(new RECT(), (wchar_t*)L"../Assets/RedGift.png", renderer->GetSpriteBatch()));
 	
 	this->fontRenderer = renderer;
 	
-GUITextBox* b = new GUITextBox(new Rect(0, 200, 0 ,0), L"EXIT", 5, AnimationType::BOTTOMTOTOP, this->fontRenderer, 1000, Colors::Black);
+GUITextBox* b = new GUITextBox(new Rect(0, 500, 0 ,0), L"EXIT", 5, AnimationType::BOTTOMTOTOP, this->fontRenderer, 1000, Colors::Black);
 	currstate = GameState::Started;
 }
 

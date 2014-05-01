@@ -5,12 +5,11 @@
 #include "Rect.h"
 #include "FontRenderer.h"
 #include <functional>
-#include "Menu.h"
 #include <utility>
 #include "AnimationBase.h"
 #include "GUIBase.h"
 
-class GUIText: GUIBase
+class GUIText: public GUIBase
 {
 public : 
 		 ~GUIText()

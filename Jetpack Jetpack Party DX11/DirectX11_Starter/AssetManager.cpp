@@ -1,4 +1,5 @@
 #include "AssetManager.h"
+#include "SoundManager.h"
 
 AssetManager* AssetManager::instance = NULL;
 AssetManager* AssetManager::Instance() 

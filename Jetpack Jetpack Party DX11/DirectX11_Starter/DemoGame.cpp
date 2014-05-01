@@ -33,6 +33,7 @@
 #include "Debug.h"
 #include "XInputValues.h"
 #include "InputManager.h"
+#include "SoundManager.h"
 #define DIRECTINPUT_VERSION 0x0800
 
 using namespace std;
@@ -132,7 +133,7 @@ bool DemoGame::Init()
 	assetManager = new AssetManager();
 
 	spriteRenderer = new SpriteRenderer(deviceContext);
-	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer->GetSpriteBatch(), L"../Assets/font.spritefont"));	
+	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer->GetSpriteBatch(), L"../Assets/font.spritefont"), spriteRenderer);	
 	LoadShadersAndInputLayout();
 
 	AssetManager::Instance()->StoreMaterial(new Material());

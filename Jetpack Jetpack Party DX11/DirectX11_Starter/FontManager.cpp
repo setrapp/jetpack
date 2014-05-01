@@ -20,14 +20,15 @@ FontManager::~FontManager()
 	}
 }
 
-FontRenderer* FontManager::AddFont(char* fontName, ID3D11Device* device, DirectX::SpriteBatch* spBatch, wchar_t* path) 
+FontRenderer* FontManager::AddFont(char* fontName, ID3D11Device* device, SpriteRenderer* spBatch, wchar_t* path) 
 {
 	if(fonts.find(fontName) != fonts.end())
 	{
 		return fonts.find(fontName)->second;
 	}
 
-	FontRenderer* f = new FontRenderer(spBatch, device, path);
+	FontRenderer* f = new FontRenderer(spBatch->GetSpriteBatch(), device, path);
+	this->spriteRenderer = spBatch;
 	fonts.insert(std::make_pair(fontName, f));
 	
 	return f;

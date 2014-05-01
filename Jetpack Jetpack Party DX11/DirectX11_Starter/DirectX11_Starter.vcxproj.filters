@@ -269,6 +269,9 @@
     <ClInclude Include="GUIBase.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="GUITextures.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Toolkit\Src\Shaders\DGSLPhong.hlsl">

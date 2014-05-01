@@ -8,8 +8,6 @@
 #include "Common.h"
 #include "Rect.h"
 #include "FontRenderer.h"
-#include <functional>
-#include "Menu.h"
 #include <utility>
 #include "AnimationBase.h"
 #include "GUIBase.h"
@@ -20,8 +18,6 @@
 
 using namespace std;
 using namespace DirectX;
-
-
 
 class GUITextBox : public GUIBase
 {

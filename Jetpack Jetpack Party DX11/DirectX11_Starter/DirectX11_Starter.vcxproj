@@ -137,6 +137,7 @@
     <ClInclude Include="GUIText.h" />
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="GUITextBox.h" />
+    <ClInclude Include="GUITextures.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Jetpack.h" />
     <ClInclude Include="Light.h" />

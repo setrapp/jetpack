@@ -18,13 +18,12 @@
 #include "Camera.h"
 #include "AssetManager.h"
 #include "Light.h"
-#include "SoundManager.h"
+//#include "SoundManager.h"
 #include "MouseLook.h"
 #include "Debug.h"
 #include "InputManager.h"
 #include <queue>
 #include "XNew.h"
-#include "InputManager.h"
 #include <dinput.h>
 
 using namespace DirectX;
