@@ -36,6 +36,7 @@
 #include "InputManager.h"
 
 InputManager* IPMan::inputManager = NULL;
+Player* player = NULL;
 
 #pragma region Win32 Entry Point (WinMain)
 
@@ -68,7 +69,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	windowWidth = 800;
 	windowHeight = 600;
 	currentState = GameState::Started;
-	camera = new Camera();//ControllableCamera();
+	camera = new ControllableCamera();
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
 	mouseCursorVisibility = true;
 	mouseLook = NULL;
@@ -150,6 +151,8 @@ bool DemoGame::Init()
 
 	input = new IPMan(INPUTMODES::KEYBOARD);
 
+	mouseLook = new MouseLook(NULL, XMFLOAT2(0.01f, 0.01f));
+
 	return true;
 }
 
@@ -160,10 +163,11 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 blue	= XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 	// Attempt to load model
-	Player* player = new Player();
+	player = new Player();
 	entities.push_back(player);
-	//mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
+	//mouseLook->looker = player;
 	//mouseLook->ClampX(0, 0);
+	AttachCameraToPlayer();
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
@@ -210,24 +214,16 @@ void DemoGame::CreateGeometryBuffers()
 	};
 
 	UINT floorIndices[] = { 0, 2, 1, 3, 0, 1 };*/
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Terrain.obj", "terrain");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicTrack.obj", "terrain");
 	Entity* floor = new Entity();
 	//floor->AddQuad(floorVertices, floorIndices);
 	floor->AddModel(AssetManager::Instance()->GetModel("terrain"));
-	floor->transform.Translate(XMFLOAT3(-1000, -10, -1000));
+	//floor->transform.Translate(XMFLOAT3(-1000, -10, -1000));
+	floor->transform.Scale(XMFLOAT3(100, 100, 100));
 	entities.push_back(floor);
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.1f, 0.3f, 0.2f, 1), XMFLOAT4(0.0f, 0.5f, 0.2f, 1), XMFLOAT4(0.0f, 0.0f, 0.0f, 1), 16), "floor");
 	floor->SetBaseMaterial("floor");
 	floor->Finalize();
-	
-	camera->transform.SetParent(&player->transform);
-	player->transform.Translate(XMFLOAT3(1, 0, 0));
-	XMFLOAT3 eye = camera->transform.GetTranslation();
-	XMStoreFloat3(&eye, XMLoadFloat3(&camera->transform.GetTranslation()) + (5 * XMLoadFloat3(&player->transform.GetUp())));
-	XMFLOAT3 target;
-	XMStoreFloat3(&target, XMLoadFloat3(&player->transform.GetTranslation()) + (3 * XMLoadFloat3(&player->transform.GetForward())));
-	XMFLOAT3 up = player->transform.GetUp();
-	camera->LookAt(eye, target, up);
 }
 
 #pragma endregion
@@ -326,7 +322,7 @@ void DemoGame::OnResize()
 			0.25f * 3.1415926535f,
 			AspectRatio(),
 			0.1f,
-			1000.0f);
+			10000.0f);
 
 	XMStoreFloat4x4(&camera->projection, XMMatrixTranspose(P));
 
@@ -470,16 +466,34 @@ void DemoGame::FixedUpdate()
 #pragma region Mouse Input
 
 // These methods don't do much currently, but can be used for mouse-related input
-
 void DemoGame::OnMouseDown(WPARAM btnState, int x, int y)
 {
 	prevMousePos.x = x;
 	prevMousePos.y = y;
 	SetCapture(hMainWnd);
+
+	// Right mousehold detaches camera
+	if(btnState == 2)
+	{
+		if (!camera->controllable)
+		{
+			camera->controllable = true;
+			player->controllable = false;
+			mouseLook->looker = &camera->transform;
+			camera->transform.SetParent(NULL);
+		}
+	}
 }
 
 void DemoGame::OnMouseUp(WPARAM btnState, int x, int y)
 {
+	if(camera->controllable)
+	{
+		camera->controllable = false;
+		player->controllable = true;
+		AttachCameraToPlayer();
+		mouseLook->looker = NULL;
+	}
 	ReleaseCapture();
 }
 
@@ -501,5 +515,18 @@ void DemoGame::OnMouseMove(WPARAM btnState, int x, int y)
 void DemoGame::OnMouseWheel(WPARAM btnState, int x, int y)
 {
 	//float rot = (float)GET_WHEEL_DELTA_WPARAM(btnState);	
+}
+#pragma endregion
+
+#pragma region CameraAttach
+void DemoGame::AttachCameraToPlayer()
+{
+	camera->transform.SetParent(&player->transform);
+	XMFLOAT3 eye = camera->transform.GetTranslation();
+	XMStoreFloat3(&eye, XMLoadFloat3(&camera->transform.GetTranslation()) + (5 * XMLoadFloat3(&player->transform.GetUp())));
+	XMFLOAT3 target;
+	XMStoreFloat3(&target, XMLoadFloat3(&player->transform.GetTranslation()) + (3 * XMLoadFloat3(&player->transform.GetForward())));
+	XMFLOAT3 up = player->transform.GetUp();
+	camera->LookAt(eye, target, up);
 }
 #pragma endregion

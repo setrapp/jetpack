@@ -9,8 +9,8 @@ Player::Player()
 	forwardAcceleration = 100.0f;
 	backwardAcceleration = 100.0f;
 	strafeAcceleration = 100.0f;
-	gravityAcceleration = 100.0f;
-	terminalVelocity = 300;
+	gravityAcceleration = 150.0f;
+	terminalVelocity = 1000;
 	groundSpeedDampening = 0.1f;
 	airSpeedDampening = 0.7f;
 	grounded = true;
@@ -19,6 +19,7 @@ Player::Player()
 	clientEntity->connectClient("127.0.0.1");//("138.91.117.6");
 	networkSendTimer=0.0f;
 	loggedIn=false;
+	controllable = true;
 }
 
 Player::~Player()
@@ -31,7 +32,10 @@ Player::~Player()
 void Player::Update(float dt)
 {
 	// Check for user input.
-	CheckInput(dt);
+	if (controllable)
+	{
+		CheckInput(dt);
+	}
 
 	// Update jetpack.
 	jetpack->allowInputForces = !grounded;
@@ -55,10 +59,10 @@ void Player::Update(float dt)
 			worldVelocity.y = gravity.y;
 		}
 	} 
-	else if (position.y < 0 || (!grounded && worldVelocity.y < 0))
+	else if (worldVelocity.y <= 0 && (position.y < 0 || !grounded))
 	{
 		grounded = true;
-		transform.SetTranslation(XMFLOAT3(position.x, 0, position.z));
+		//transform.SetTranslation(XMFLOAT3(position.x, 0, position.z)));
 		//transform.SetLocalRotation(XMFLOAT3(0, 0, 0));
 		worldVelocity.y = 0;
 		//angularVelocity = XMFLOAT3(0, 0 ,0);
@@ -224,7 +228,10 @@ void Player::CheckInput(float dt)
 		// TODO should use IPMan
 		if (GetAsyncKeyState(VK_SPACE))
 		{
-			grounded = false;
+			// Reset Rotation
+			transform.SetLocalRotation(XMFLOAT3(0, 0, 0));
+			angularVelocity = (XMFLOAT3(0, 0, 0));
+			//grounded = false;
 		}
 	}
 

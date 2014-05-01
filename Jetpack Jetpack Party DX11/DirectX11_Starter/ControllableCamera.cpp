@@ -6,15 +6,19 @@ ControllableCamera::ControllableCamera()
 	velocity = XMFLOAT3(0, 0, 0);
 	maxSpeed = 20;
 	groundSpeedDampening = 0.95f;
+	controllable = false;
 }
 
 void ControllableCamera::Update(float dt, VertexShaderModelConstantBuffer* vsConstantBufferdata)
 {
-	CheckInput(dt);	
+	if (controllable)
+	{
+		CheckInput(dt);	
 
-	// Slow the character a bit so that it comes to a nice stop over time.
-	XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), groundSpeedDampening));
-	transform.Translate(XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt));
+		// Slow the character a bit so that it comes to a nice stop over time.
+		XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), groundSpeedDampening));
+		transform.Translate(XMFLOAT3(velocity.x * dt, velocity.y * dt, velocity.z * dt));
+	}
 
 	Camera::Update(dt, vsConstantBufferdata);
 }
@@ -22,27 +26,27 @@ void ControllableCamera::Update(float dt, VertexShaderModelConstantBuffer* vsCon
 void ControllableCamera::CheckInput(float dt)
 {
 	
-	if(IPMan::GetIPMan()->GetKey('K'))
+	if(IPMan::GetIPMan()->GetKey('S'))
 	{
 		velocity.z -= 0.8f;
 	}
-	if(IPMan::GetIPMan()->GetKey('I'))
+	if(IPMan::GetIPMan()->GetKey('W'))
 	{
 		velocity.z += 0.8f;
 	}
-	if(IPMan::GetIPMan()->GetKey('L'))
+	if(IPMan::GetIPMan()->GetKey('D'))
 	{
 		velocity.x += 0.8f;
 	}
-	if(IPMan::GetIPMan()->GetKey('J'))
+	if(IPMan::GetIPMan()->GetKey('A'))
 	{
 		velocity.x -= 0.8f;
 	}
-	if(IPMan::GetIPMan()->GetKey('B'))
+	if(IPMan::GetIPMan()->GetKey('Q'))
 	{
 		velocity.y -= 0.8f;
 	}
-	if(IPMan::GetIPMan()->GetKey('N'))
+	if(IPMan::GetIPMan()->GetKey('E'))
 	{
 		velocity.y += 0.8f;
 	}
