@@ -35,11 +35,11 @@ void Player::Update(float dt)
 	if (controllable)
 	{
 		CheckInput(dt);
-	}
 
-	// Update jetpack.
-	jetpack->allowInputForces = !grounded;
-	jetpack->Update(dt, &velocity, &angularVelocity);
+		// Update jetpack.
+		jetpack->allowInputForces = !grounded;
+		jetpack->Update(dt, &velocity, &angularVelocity);
+	}
 
 	// Clamp velocity withing max speed.
 	transform.ClampVector(&velocity, (grounded ? maxSpeed : jetpack->maxSpeed), 0);

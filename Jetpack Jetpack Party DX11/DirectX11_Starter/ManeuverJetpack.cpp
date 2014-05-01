@@ -22,7 +22,7 @@ void ManeuverJetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angular
 	if(GetAsyncKeyState('W'))//('A'))
 	{
 		velocity->z -= backwardAcceleration * dt;
-		angularVelocity->y -= frontSpin * dt;
+		angularVelocity->x -= frontSpin * dt;
 		active = true;
 	}
 	if(GetAsyncKeyState('A'))//(('S'))

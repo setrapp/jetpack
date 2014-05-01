@@ -69,7 +69,9 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	windowWidth = 800;
 	windowHeight = 600;
 	currentState = GameState::Started;
-	camera = new ControllableCamera();
+	playerCamera = new Camera();
+	debugCamera = new ControllableCamera();
+	camera = playerCamera;
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
 	mouseCursorVisibility = true;
 	mouseLook = NULL;
@@ -367,6 +369,15 @@ void DemoGame::UpdateScene(float dt)
 		//entities[1]->transform.Rotate(XMFLOAT3(0, 5 * dt, 0));
 	}
 
+	if(camera != debugCamera)
+	{
+		XMFLOAT3 debugEye = playerCamera->transform.GetTranslation();
+		XMFLOAT3 debugTarget;
+		XMStoreFloat3(&debugTarget, XMLoadFloat3(&playerCamera->transform.GetTranslation()) + XMLoadFloat3(&playerCamera->transform.GetForward()));
+		XMFLOAT3 debugUp = playerCamera->transform.GetUp();
+		debugCamera->LookAt(debugEye, debugTarget, debugUp);
+	}
+
 	camera->Update(dt, &vsModelConstantBufferData);	
 
 	if(currentState == GameState::Started)
@@ -475,24 +486,19 @@ void DemoGame::OnMouseDown(WPARAM btnState, int x, int y)
 	// Right mousehold detaches camera
 	if(btnState == 2)
 	{
-		if (!camera->controllable)
+		if (camera != debugCamera)
 		{
-			camera->controllable = true;
-			player->controllable = false;
-			mouseLook->looker = &camera->transform;
-			camera->transform.SetParent(NULL);
+			camera = debugCamera;
 		}
 	}
 }
 
 void DemoGame::OnMouseUp(WPARAM btnState, int x, int y)
 {
-	if(camera->controllable)
+	if(camera == debugCamera)
 	{
-		camera->controllable = false;
-		player->controllable = true;
-		AttachCameraToPlayer();
-		mouseLook->looker = NULL;
+		camera = playerCamera;
+		debugCamera->transform.SetLocalRotation(XMFLOAT3(0, 0, 0));
 	}
 	ReleaseCapture();
 }
@@ -521,12 +527,12 @@ void DemoGame::OnMouseWheel(WPARAM btnState, int x, int y)
 #pragma region CameraAttach
 void DemoGame::AttachCameraToPlayer()
 {
-	camera->transform.SetParent(&player->transform);
-	XMFLOAT3 eye = camera->transform.GetTranslation();
+	playerCamera->transform.SetParent(&player->transform);
+	XMFLOAT3 eye = playerCamera->transform.GetTranslation();
 	XMStoreFloat3(&eye, XMLoadFloat3(&camera->transform.GetTranslation()) + (5 * XMLoadFloat3(&player->transform.GetUp())));
 	XMFLOAT3 target;
 	XMStoreFloat3(&target, XMLoadFloat3(&player->transform.GetTranslation()) + (3 * XMLoadFloat3(&player->transform.GetForward())));
 	XMFLOAT3 up = player->transform.GetUp();
-	camera->LookAt(eye, target, up);
+	playerCamera->LookAt(eye, target, up);
 }
 #pragma endregion

@@ -201,7 +201,7 @@ XMFLOAT3 Transform::InverseTransformDirection(XMFLOAT3 worldDirection) const
 	return worldDirection;
 }
 
-XMFLOAT3 Transform::ClampVector(XMFLOAT3* vector, float maxMagnitude, float minMagnitude)
+XMFLOAT3 Transform::ClampVector(XMFLOAT3* vector, float maxMagnitude, float minMagnitude) const
 {
 	if (minMagnitude > maxMagnitude)
 	{
@@ -220,6 +220,37 @@ XMFLOAT3 Transform::ClampVector(XMFLOAT3* vector, float maxMagnitude, float minM
 		vector->y *= (minMagnitude / velocityMag);
 		vector->z *= (minMagnitude / velocityMag);
 	}
+}
+
+XMFLOAT3 Transform::RotationToEuler(XMFLOAT3X3 const* rotationMatrix) const
+{
+	XMFLOAT3 eulerAngles(0, 0, 0);
+	if (!rotationMatrix)
+	{
+		return eulerAngles;
+	}
+
+	// Compute the Euler Angles based on the value rotation around the y-axis.
+	// If rotated exactly (+/-)PI/2 around the y-axis, pick a solution from the infinite possiblities.
+	if (rotationMatrix->_31 == 1)
+	{
+		eulerAngles.y = PI / 2;
+		eulerAngles.x = eulerAngles.z + atan2(rotationMatrix->_12, rotationMatrix->_13);
+	}
+	else if (rotationMatrix->_31 == -1)
+	{
+		eulerAngles.y = -PI / 2;
+		eulerAngles.x = -eulerAngles.z + atan2(-rotationMatrix->_12, -rotationMatrix->_13);
+	}
+	else
+	{
+		eulerAngles.y = asin(rotationMatrix->_31);
+		float cosY = cos(eulerAngles.y);
+		eulerAngles.x = -atan2(rotationMatrix->_32 / cosY, rotationMatrix->_33 / cosY);
+		eulerAngles.z = -atan2(rotationMatrix->_21 / cosY, rotationMatrix->_11 / cosY);
+	}
+	
+	return eulerAngles;
 }
 
 // Get world translation.
@@ -266,9 +297,19 @@ XMFLOAT3X3 Transform::GetRotation() const
 	return worldRotation;
 }
 
+XMFLOAT3 Transform::GetEulerAngles() const
+{
+	return RotationToEuler(&GetRotation());
+}
+
 XMFLOAT3X3 Transform::GetLocalRotation() const
 {
 	return rotation;
+}
+
+XMFLOAT3 Transform::GetLocalEulerAngles() const
+{
+	return RotationToEuler(&rotation);
 }
 
 void Transform::SetLocalRotation(XMFLOAT3 newEulerAngles)
