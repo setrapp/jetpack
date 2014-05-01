@@ -14,7 +14,7 @@ Player::Player()
 	groundSpeedDampening = 0.1f;
 	airSpeedDampening = 0.7f;
 	grounded = true;
-	jetpack = new ManeuverJetpack();
+	jetpack = new ManeuverJetpack(this);
 	clientEntity = new ClientConnectionEntity();
 	clientEntity->connectClient("127.0.0.1");//("138.91.117.6");
 	networkSendTimer=0.0f;

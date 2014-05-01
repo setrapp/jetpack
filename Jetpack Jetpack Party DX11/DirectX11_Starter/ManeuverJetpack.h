@@ -5,7 +5,7 @@
 class ManeuverJetpack : public Jetpack
 {
 public:
-	ManeuverJetpack();
+	ManeuverJetpack(Entity* player);
 	void CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
 
 public:
@@ -15,7 +15,7 @@ public:
 	float bottomSpin;
 
 private:
-	/*enum Thruster
+	enum Thruster
 	{
 		BOTTOM_LEFT = 0,
 		BOTTOM_RIGHT,
@@ -25,5 +25,5 @@ private:
 		FRONT_RIGHT,
 		SIDE_LEFT,
 		SIDE_RIGHT
-	};*/
+	};
 };

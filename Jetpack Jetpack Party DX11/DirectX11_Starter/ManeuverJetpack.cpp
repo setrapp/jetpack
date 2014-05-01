@@ -1,9 +1,9 @@
 #include "ManeuverJetpack.h"
 #include "Common.h"
+#include "Entity.h"
+//#include "Player.h"
 
-
-
-ManeuverJetpack::ManeuverJetpack() : Jetpack()
+ManeuverJetpack::ManeuverJetpack(Entity* player) : Jetpack(player)
 {
 	forwardAcceleration = 100.0f;
 	backwardAcceleration = 100.0f;
@@ -13,6 +13,9 @@ ManeuverJetpack::ManeuverJetpack() : Jetpack()
 	frontSpin = 10 * (PI / 180);
 	sideSpin = 10 * (PI / 180);
 	bottomSpin = 10 * (PI / 180);
+	thrusterCount = 8;
+	CreateThrusters();
+	thrusters[Thruster::BOTTOM_LEFT]->transform.SetLocalTranslation(XMFLOAT3(0, 100, 0));
 }
 
 void ManeuverJetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)

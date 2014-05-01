@@ -44,8 +44,8 @@ Player* player = NULL;
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 				   PSTR cmdLine, int showCmd)
 {
-	// Enable run-time memory check for debug builds.
-#if defined(DEBUG) | defined(_DEBUG)
+#if defined(DEBUG) | defined(_DEBUG)	// Enable run-time memory check for debug builds.
+
 	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 #endif
 
@@ -54,6 +54,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 	if( !game.Init() )
 		return 0;	
+	int a = 0;
 
 	return game.Run();
 }
@@ -164,6 +165,11 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 green	= XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT4 blue	= XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicJetMan.obj", "jetman");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Fireball.obj", "fireball");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicTrack.obj", "terrain");
+
 	// Attempt to load model
 	player = new Player();
 	entities.push_back(player);
@@ -176,9 +182,9 @@ void DemoGame::CreateGeometryBuffers()
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
 
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicJetMan.obj", "jetman");
+	
 	Entity* cube = new Entity();
-	cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
+	//cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
 	cube->Finalize();
 	cube->transform.Translate(XMFLOAT3(0, -5, 0));
 	cube->transform.Rotate(XMFLOAT3(0, -PI / 2, 0));
@@ -187,11 +193,10 @@ void DemoGame::CreateGeometryBuffers()
 	cube->transform.SetParent(&emptyEntity->transform);
 	emptyEntity->transform.SetParent(&player->transform);
 
-	/*AssetManager::Instance()->CreateAndStoreModel("../Assets/Fireball.obj", "fireball");
 	for (int i = 0; i < player->jetpack->thrusterCount; i++)
 	{
 		entities.push_back(player->jetpack->thrusters[i]);
-	}*/
+	}
 	
 
 	Vertex vertices[] = 
@@ -224,7 +229,6 @@ void DemoGame::CreateGeometryBuffers()
 	};
 
 	UINT floorIndices[] = { 0, 2, 1, 3, 0, 1 };*/
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicTrack.obj", "terrain");
 	Entity* floor = new Entity();
 	//floor->AddQuad(floorVertices, floorIndices);
 	floor->AddModel(AssetManager::Instance()->GetModel("terrain"));

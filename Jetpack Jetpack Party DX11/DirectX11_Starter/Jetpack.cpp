@@ -3,8 +3,9 @@
 #include "Entity.h"
 #include "AssetManager.h"
 
-Jetpack::Jetpack()
+Jetpack::Jetpack(Entity* player)
 {
+	this->player = player;
 	active = false;
 	allowInputForces = false;
 	maxSpeed = 1000;
@@ -14,21 +15,20 @@ Jetpack::Jetpack()
 	ascentAcceleration = 200.0f;
 	thrusterCount = 0;
 	thrusters = NULL;
-
-	/*for(int i = 0; i < thrusterCount; i++)
-	{
-		thrusters[i] = new Entity();
-		thrusters[i]->AddModel(AssetManager::Instance()->GetModel("fireball"));
-	}*/
 }
 
-Jetpack::Jetpack()
+Jetpack::~Jetpack()
 {
-	/*for(int i = 0; i < thrusterCount; i++)
+	if (thrusters)
 	{
-		delete thrusters[i];
+		// Deleted by game
+		//for(int i = 0; i < thrusterCount; i++)
+		//{
+		//	delete thrusters[i];
+		//	thrusters[i] = NULL;
+		//}
+		delete thrusters;
 	}
-	delete thrusters;*/
 }
 
 void Jetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
@@ -64,5 +64,23 @@ void Jetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity
 			velocity->y += ascentAcceleration * dt;
 			active = true;
 		}
+	}
+}
+
+void Jetpack::CreateThrusters()
+{
+	if (thrusterCount <= 0)
+	{
+		thrusters = NULL;
+		return;
+	}
+
+	thrusters = new Entity*[thrusterCount];
+	for(int i = 0; i < thrusterCount; i++)
+	{
+		thrusters[i] = new Entity();
+		thrusters[i]->AddModel(AssetManager::Instance()->GetModel("fireball"));
+		thrusters[i]->Finalize();
+		thrusters[i]->transform.SetParent(&player->transform);
 	}
 }

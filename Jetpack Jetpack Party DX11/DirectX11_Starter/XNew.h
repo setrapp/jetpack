@@ -1,16 +1,15 @@
 #pragma once
 #include "XInputValues.h"
-#include "XController.h"
 #include <Xinput.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#define maxsize 21
+#define XNEW_MAXSIZE 21
 
 class XNEW
 {
 public :
-	float controllerVals[maxsize];
+	float controllerVals[XNEW_MAXSIZE];
 
 	XNEW(XBOX360CONTROLLER* controller)
 	{
@@ -33,7 +32,7 @@ public :
 	}
 
 private :
-	float controllerValsOld[maxsize];
+	float controllerValsOld[XNEW_MAXSIZE];
 	XNEW() {/*controllerValsOld = (float*)malloc(sizeof(float*) * maxsize);*/ }
 	
 	//XNEW* oldState;
@@ -65,7 +64,7 @@ private :
 	}
 
 	inline void Init() {
-		for(int i =0; i< maxsize; i++)
+		for(int i =0; i< XNEW_MAXSIZE; i++)
 			controllerVals[i] = 0;
 	}
 	inline bool xAvailable() const {		
@@ -78,7 +77,7 @@ private :
 
 	inline void Equate()
 	{
-		for(int i = 0; i < maxsize; i++)
+		for(int i = 0; i < XNEW_MAXSIZE; i++)
 			controllerValsOld[i] = static_cast<float>(controllerVals[i]);
 	}
 
