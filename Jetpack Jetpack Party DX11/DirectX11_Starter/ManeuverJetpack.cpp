@@ -3,7 +3,7 @@
 
 
 
-ManeuverJetpack::ManeuverJetpack()
+ManeuverJetpack::ManeuverJetpack() : Jetpack()
 {
 	forwardAcceleration = 100.0f;
 	backwardAcceleration = 100.0f;

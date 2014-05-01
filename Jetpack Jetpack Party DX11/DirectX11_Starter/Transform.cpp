@@ -6,6 +6,7 @@
 #include <d3d11.h>
 #include <vector>
 #include <math.h>
+#include "Entity.h"
 
 using namespace DirectX;
 using namespace std;
@@ -17,6 +18,7 @@ using namespace std;
 Transform::Transform()
 {
 	parent = NULL;
+	entity = NULL;
 	right = XMFLOAT3(1, 0, 0);
 	up = XMFLOAT3(0, 1, 0);
 	forward = XMFLOAT3(0, 0, 1);

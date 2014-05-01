@@ -38,13 +38,16 @@ public:
 	Transform transform;
 	int socketNumber;
 	void Finalize();
+	bool GetVisible();
+	void SetVisible(bool visibility);
 
-private:
+protected:
 	map<Material*, pair<ID3D11Buffer*, LONG>> indexBuffers;
 	ID3D11Buffer* vertexBuffer;
 	vector<Vertex> vertices;
 	vector<Mesh*> meshes; 
 	Material* baseMaterial;
+	bool visible;
 };
 
 #endif

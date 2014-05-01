@@ -15,6 +15,8 @@ Entity::Entity()
 {
 	baseMaterial = AssetManager::Instance()->GetMaterial();
 	socketNumber=0;
+	visible = true;
+	transform.entity = this;
 }
 
 
@@ -88,7 +90,7 @@ void Entity::Update(float dt)
 
 void Entity::Draw(EntityDrawArgs const* drawArgs)
 {
-	if (!drawArgs)
+	if (!visible || !drawArgs)
 	{
 		return;
 	}
@@ -273,6 +275,25 @@ void Entity::Finalize()
 	for(map<Material*, vector<UINT>*>::iterator it = indicesAll.begin(); it != indicesAll.end(); it++)
 	{
 		delete it->second;
+	}
+}
+
+
+bool Entity::GetVisible()
+{
+	return visible;
+}
+
+void Entity::SetVisible(bool visibility)
+{
+	visible = visible;
+	vector<Transform*>* children = &transform.children;
+	for(vector<Transform*>::iterator it = children->begin(); it != children->end(); it++)
+	{
+		if((*it)->entity)
+		{
+			(*it)->entity->SetVisible(visibility);
+		}
 	}
 }
 

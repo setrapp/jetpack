@@ -35,8 +35,14 @@ using namespace std;
 // NOTE: World and Local Matrices are Transposed //
 ///////////////////////////////////////////////////
 
+class Entity;
+
 class Transform
 {
+public:
+	Entity* entity;
+	vector<Transform*>children;
+
 private:
 	XMFLOAT3 right, up, forward;
 	XMFLOAT4X4 worldMatrix;
@@ -45,7 +51,6 @@ private:
 	XMFLOAT3X3 rotation;
 	XMFLOAT3 scale;
 	Transform* parent;
-	vector<Transform*>children;
 	
 public:
 	Transform::Transform();

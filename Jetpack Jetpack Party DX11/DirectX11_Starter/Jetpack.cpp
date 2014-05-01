@@ -1,5 +1,7 @@
 #include "Jetpack.h"
 #include "InputManager.h"
+#include "Entity.h"
+#include "AssetManager.h"
 
 Jetpack::Jetpack()
 {
@@ -10,6 +12,23 @@ Jetpack::Jetpack()
 	backwardAcceleration = 100.0f;
 	strafeAcceleration = 100.0f;
 	ascentAcceleration = 200.0f;
+	thrusterCount = 0;
+	thrusters = NULL;
+
+	/*for(int i = 0; i < thrusterCount; i++)
+	{
+		thrusters[i] = new Entity();
+		thrusters[i]->AddModel(AssetManager::Instance()->GetModel("fireball"));
+	}*/
+}
+
+Jetpack::Jetpack()
+{
+	/*for(int i = 0; i < thrusterCount; i++)
+	{
+		delete thrusters[i];
+	}
+	delete thrusters;*/
 }
 
 void Jetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)

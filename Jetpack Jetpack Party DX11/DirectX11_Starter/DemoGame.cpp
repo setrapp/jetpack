@@ -171,6 +171,7 @@ void DemoGame::CreateGeometryBuffers()
 	//mouseLook->looker = player;
 	//mouseLook->ClampX(0, 0);
 	AttachCameraToPlayer();
+	player->SetVisible(false);
 
 	Entity* emptyEntity = new Entity();
 	entities.push_back(emptyEntity);
@@ -185,6 +186,12 @@ void DemoGame::CreateGeometryBuffers()
 	cube->transform.SetParent(&player->transform);
 	cube->transform.SetParent(&emptyEntity->transform);
 	emptyEntity->transform.SetParent(&player->transform);
+
+	/*AssetManager::Instance()->CreateAndStoreModel("../Assets/Fireball.obj", "fireball");
+	for (int i = 0; i < player->jetpack->thrusterCount; i++)
+	{
+		entities.push_back(player->jetpack->thrusters[i]);
+	}*/
 	
 
 	Vertex vertices[] = 

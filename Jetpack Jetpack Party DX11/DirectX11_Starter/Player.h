@@ -23,6 +23,7 @@ public:
 	vector<string>* breakIntoParts(string s);
 	bool loggedIn;
 	bool controllable;
+	Jetpack* jetpack;
 
 private:
 	void CheckInput(float dt);
@@ -39,5 +40,4 @@ private:
 	float groundSpeedDampening;
 	float airSpeedDampening;
 	bool grounded;
-	Jetpack* jetpack;
 };
