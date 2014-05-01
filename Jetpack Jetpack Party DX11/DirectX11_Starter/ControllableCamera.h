@@ -9,6 +9,8 @@ public:
 	void Update(float dt, VertexShaderModelConstantBuffer* vsConstantBufferdata);
 	void CheckInput(float dt);
 
+public:
+	bool controllable;
 private:
 	XMFLOAT3 velocity;
 	float maxSpeed;

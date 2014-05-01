@@ -46,7 +46,7 @@ public :
 
 	XMFLOAT3 MouseLook::MouseMove(WPARAM btnState, float x, float y) {
 		// If mouse looking is being ignored, don't do anything
-		if (ignoreMouse)
+		if (ignoreMouse || !looker)
 		{
 			return XMFLOAT3();
 		}

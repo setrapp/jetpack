@@ -16,13 +16,13 @@ public:
 	void Update(float dt);
 
 public:
-	XMFLOAT3 cameraPos;
 	ClientConnectionEntity* clientEntity;
 	Entity* networkedCube;
 	std::map<int,Entity*> networkedEntities;
 	float networkSendTimer;
 	vector<string>* breakIntoParts(string s);
 	bool loggedIn;
+	bool controllable;
 
 private:
 	void CheckInput(float dt);

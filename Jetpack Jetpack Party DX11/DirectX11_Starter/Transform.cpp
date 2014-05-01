@@ -16,6 +16,7 @@ using namespace std;
 
 Transform::Transform()
 {
+	parent = NULL;
 	right = XMFLOAT3(1, 0, 0);
 	up = XMFLOAT3(0, 1, 0);
 	forward = XMFLOAT3(0, 0, 1);
@@ -124,12 +125,16 @@ void Transform::SetParent(Transform* parent)
 	// Remove from old parent.
 	if (this->parent)
 	{
-		for(vector<Transform*>::iterator it = parent->children.begin(); it < parent->children.end(); it++)
+		vector<Transform*>::iterator it = this->parent->children.begin();
+		while(it != this->parent->children.end())
 		{
 			if (*it == this)
 			{
-				parent->children.erase(it);
-				it--;
+				it = this->parent->children.erase(it);
+			}
+			else
+			{
+				it++;
 			}
 		}
 	}

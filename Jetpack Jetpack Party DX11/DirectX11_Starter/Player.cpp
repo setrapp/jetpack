@@ -19,6 +19,7 @@ Player::Player()
 	clientEntity->connectClient("127.0.0.1");//("138.91.117.6");
 	networkSendTimer=0.0f;
 	loggedIn=false;
+	controllable = true;
 }
 
 Player::~Player()
@@ -31,7 +32,10 @@ Player::~Player()
 void Player::Update(float dt)
 {
 	// Check for user input.
-	CheckInput(dt);
+	if (controllable)
+	{
+		CheckInput(dt);
+	}
 
 	// Update jetpack.
 	jetpack->allowInputForces = !grounded;
