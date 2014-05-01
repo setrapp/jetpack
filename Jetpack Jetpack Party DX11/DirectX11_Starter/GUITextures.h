@@ -34,35 +34,20 @@ public :
 		path, 
 		&texture, 
 		&this->resourceView, sizeof(ID3D11ShaderResourceView));
-
-		/*D3D11_SAMPLER_DESC sBufferDesc;
-		sBufferDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-		sBufferDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-		sBufferDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-		sBufferDesc.Filter = D3D11_FILTER_ANISOTROPIC;
-		sBufferDesc.MaxAnisotropy = 16;
-		sBufferDesc.MipLODBias = 0;
-
-		DXConnection::Instance()->device->CreateSamplerState(
-			&sBufferDesc,
-			&this->samplerState);
-			*/
-			 this->rect = rect;
-			 XMStoreFloat4(&this->color, color);
-			 this->rotation = rotation;
-			 this->depth = depth;
-			 this->spriteFX = spriteEffects;		
-			 clicked = false;
-			 this->scale = Scale;
-			 hover = false;
-			 
+		this->rect = rect;
+		XMStoreFloat4(&this->color, color);
+		this->rotation = rotation;
+		this->depth = depth;
+		this->spriteFX = spriteEffects;		
+		clicked = false;
+		this->scale = Scale;
+		hover = false;			 
 	}
+
 public :
 		 void Render() const
 		 {			 
-			 spBatch->Begin();
 			 spBatch->Draw(resourceView, *rect);
-			 spBatch->End(); 
 		 }
 
 		 const inline bool Clicked()
