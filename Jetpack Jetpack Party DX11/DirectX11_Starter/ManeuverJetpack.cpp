@@ -8,11 +8,11 @@ ManeuverJetpack::ManeuverJetpack()
 	forwardAcceleration = 100.0f;
 	backwardAcceleration = 100.0f;
 	strafeAcceleration = 100.0f;
-	ascentAcceleration = 150.0f;
-	backSpin = 50 * (PI / 180);
-	frontSpin = 50 * (PI / 180);
-	sideSpin = 50 * (PI / 180);
-	bottomSpin = 50 * (PI / 180);
+	ascentAcceleration = 400.0f;
+	backSpin = 10 * (PI / 180);
+	frontSpin = 10 * (PI / 180);
+	sideSpin = 10 * (PI / 180);
+	bottomSpin = 10 * (PI / 180);
 }
 
 void ManeuverJetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
@@ -22,7 +22,7 @@ void ManeuverJetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angular
 	if(GetAsyncKeyState('W'))//('A'))
 	{
 		velocity->z -= backwardAcceleration * dt;
-		angularVelocity->x -= frontSpin * dt;
+		angularVelocity->y -= frontSpin * dt;
 		active = true;
 	}
 	if(GetAsyncKeyState('A'))//(('S'))

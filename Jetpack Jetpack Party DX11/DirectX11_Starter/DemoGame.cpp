@@ -167,6 +167,7 @@ void DemoGame::CreateGeometryBuffers()
 	// Attempt to load model
 	player = new Player();
 	entities.push_back(player);
+	player->transform.Translate(XMFLOAT3(0, 500, 0));
 	//mouseLook->looker = player;
 	//mouseLook->ClampX(0, 0);
 	AttachCameraToPlayer();
@@ -220,11 +221,11 @@ void DemoGame::CreateGeometryBuffers()
 	Entity* floor = new Entity();
 	//floor->AddQuad(floorVertices, floorIndices);
 	floor->AddModel(AssetManager::Instance()->GetModel("terrain"));
-	//floor->transform.Translate(XMFLOAT3(-1000, -10, -1000));
-	floor->transform.Scale(XMFLOAT3(1000, 1000, 1000));
+	floor->transform.Translate(XMFLOAT3(0, -1000, 0));
+	floor->transform.Scale(XMFLOAT3(500, 500, 500));
 	entities.push_back(floor);
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.1f, 0.3f, 0.2f, 1), XMFLOAT4(0.0f, 0.5f, 0.2f, 1), XMFLOAT4(0.0f, 0.0f, 0.0f, 1), 16), "floor");
-	floor->SetBaseMaterial("floor");
+	//AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.1f, 0.3f, 0.2f, 1), XMFLOAT4(0.0f, 0.5f, 0.2f, 1), XMFLOAT4(0.0f, 0.0f, 0.0f, 1), 16), "floor");
+	//floor->SetBaseMaterial("floor");
 	floor->Finalize();
 }
 

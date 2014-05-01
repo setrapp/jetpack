@@ -9,8 +9,8 @@ Player::Player()
 	forwardAcceleration = 100.0f;
 	backwardAcceleration = 100.0f;
 	strafeAcceleration = 100.0f;
-	gravityAcceleration = 150.0f;
-	terminalVelocity = 1000;
+	gravityAcceleration = 300.0f;
+	terminalVelocity = 5000;
 	groundSpeedDampening = 0.1f;
 	airSpeedDampening = 0.7f;
 	grounded = true;
