@@ -15,7 +15,6 @@ ManeuverJetpack::ManeuverJetpack(Entity* player) : Jetpack(player)
 	bottomSpin = 10 * (PI / 180);
 	thrusterCount = 8;
 	CreateThrusters();
-	thrusters[Thruster::BOTTOM_LEFT]->transform.SetLocalTranslation(XMFLOAT3(0, 100, 0));
 }
 
 void ManeuverJetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)

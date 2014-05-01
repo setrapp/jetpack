@@ -163,6 +163,11 @@ void Transform::SetParent(Transform* parent)
 	rotation._22 /= scale.y;
 	rotation._33 /= scale.z;
 	UpdateLocalAndWorld();
+
+	if (entity && parent && parent->entity && !parent->entity->GetVisible())
+	{
+		entity->SetVisible(false);
+	}
 }
 
 // Transform point from local space to world space.

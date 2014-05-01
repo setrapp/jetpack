@@ -173,25 +173,17 @@ void DemoGame::CreateGeometryBuffers()
 	// Attempt to load model
 	player = new Player();
 	entities.push_back(player);
-	player->transform.Translate(XMFLOAT3(0, 500, 0));
-	//mouseLook->looker = player;
-	//mouseLook->ClampX(0, 0);
+	player->transform.Translate(XMFLOAT3(10, 10, 0));
 	AttachCameraToPlayer();
-	player->SetVisible(false);
-
-	Entity* emptyEntity = new Entity();
-	entities.push_back(emptyEntity);
-
 	
-	Entity* cube = new Entity();
-	//cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
-	cube->Finalize();
-	cube->transform.Translate(XMFLOAT3(0, -5, 0));
-	cube->transform.Rotate(XMFLOAT3(0, -PI / 2, 0));
-	entities.push_back(cube);
-	cube->transform.SetParent(&player->transform);
-	cube->transform.SetParent(&emptyEntity->transform);
-	emptyEntity->transform.SetParent(&player->transform);
+	Entity* jetman = new Entity();
+	jetman->AddModel(AssetManager::Instance()->GetModel("jetman"));
+	jetman->Finalize();
+	jetman->transform.Translate(XMFLOAT3(0, -5, 0));
+	jetman->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
+	entities.push_back(jetman);
+	jetman->transform.SetParent(&player->transform);
+	
 
 	for (int i = 0; i < player->jetpack->thrusterCount; i++)
 	{
@@ -210,7 +202,7 @@ void DemoGame::CreateGeometryBuffers()
 	UINT indices[] = { 0, 2, 1, 3, 0, 1 };
 
 	Entity* gift = new Entity();
-	gift->AddQuad(vertices, indices);
+	//gift->AddQuad(vertices, indices);
 	
 	gift->transform.Translate(XMFLOAT3(-5, 5, 0));
 	entities.push_back(gift);
@@ -220,23 +212,11 @@ void DemoGame::CreateGeometryBuffers()
 	gift->LoadTexture(L"../Assets/RedGift.png");
 	gift->Finalize();
 
-	/*Vertex floorVertices[] = 
-	{
-		{ XMFLOAT3(+100.0f, -10.0f, +100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 0) },
-		{ XMFLOAT3(-100.0f, -10.0f, -100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 1) },
-		{ XMFLOAT3(+100.0f, -10.0f, -100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 1) },		
-		{ XMFLOAT3(-100.0f, -10.0f, +100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 0) },
-	};
-
-	UINT floorIndices[] = { 0, 2, 1, 3, 0, 1 };*/
 	Entity* floor = new Entity();
-	//floor->AddQuad(floorVertices, floorIndices);
 	floor->AddModel(AssetManager::Instance()->GetModel("terrain"));
 	floor->transform.Translate(XMFLOAT3(0, -1000, 0));
 	floor->transform.Scale(XMFLOAT3(500, 500, 500));
 	entities.push_back(floor);
-	//AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.1f, 0.3f, 0.2f, 1), XMFLOAT4(0.0f, 0.5f, 0.2f, 1), XMFLOAT4(0.0f, 0.0f, 0.0f, 1), 16), "floor");
-	//floor->SetBaseMaterial("floor");
 	floor->Finalize();
 }
 
@@ -378,8 +358,6 @@ void DemoGame::UpdateScene(float dt)
 		{
 			e->Update(dt);
 		}
-		//mouseLook->XMove(xnew);
-		//entities[1]->transform.Rotate(XMFLOAT3(0, 5 * dt, 0));
 	}
 
 	if(camera != debugCamera)

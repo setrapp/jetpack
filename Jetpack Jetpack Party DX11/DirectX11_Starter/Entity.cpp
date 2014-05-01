@@ -286,7 +286,14 @@ bool Entity::GetVisible()
 
 void Entity::SetVisible(bool visibility)
 {
-	visible = visible;
+	visible = visibility;
+
+	Transform* parent = transform.GetParent() ;
+	if (visibility = true && parent && parent->entity && !transform.GetParent()->entity->visible)
+	{
+		visibility = false;
+	}
+
 	vector<Transform*>* children = &transform.children;
 	for(vector<Transform*>::iterator it = children->begin(); it != children->end(); it++)
 	{
