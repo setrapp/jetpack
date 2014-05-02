@@ -335,6 +335,22 @@ public:
 	return result;
 	}	
 
+	//I know this is the wrong way of doing it!
+	inline unsigned short* GetAllKeys() 
+	{
+		for(int i = 0 ; i < 256; i++)
+		{
+			if(GetAsyncKeyState(i))
+				{
+					if(keys[i] == 0)
+					keys[i] = 1;
+				}
+				else
+					keys[i] = 0;
+		}
+		return keys;
+	}
+
 	//Trying to multiplex start of gamepad and enter in keyboard.
 	inline bool GetStartKey() const 
 	{
@@ -449,6 +465,8 @@ private:
 	int* keyStates;
 	float* xVals;
 	float* xDefaultVals;
+	
+	unsigned short keys[256];
 	XBOX360CONTROLLER* xcontroller;
 };
 

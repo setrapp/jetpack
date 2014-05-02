@@ -1,5 +1,6 @@
 #include "Player.h"
-#include "DemoGame.h"
+#include "AssetManager.h"
+//#include "DemoGame.h"
 
 Player::Player()
 {

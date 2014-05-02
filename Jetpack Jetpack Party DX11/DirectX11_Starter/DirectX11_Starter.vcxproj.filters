@@ -126,9 +126,6 @@
     <ClCompile Include="Jetpack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ManeuverJetpack.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXGame.h">
@@ -239,9 +236,6 @@
     <ClInclude Include="GUIManager.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="GUIBase.h">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="Rect.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
@@ -263,8 +257,20 @@
     <ClInclude Include="MessageTypes.h">
       <Filter>Header Files\Networking</Filter>
     </ClInclude>
-    <ClInclude Include="ManeuverJetpack.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="GUIText.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUITextBox.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationBase.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIBase.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUITextures.h">
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

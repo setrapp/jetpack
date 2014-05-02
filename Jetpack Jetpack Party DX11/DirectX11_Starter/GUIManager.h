@@ -7,8 +7,9 @@
 #include "DXConnection.h"
 #include "Rect.h"
 #include <vector>
-#include "GUIBase.h"
+#include "GUIText.h"
 #include <map>
+#include "AnimationBase.h"
 
 using namespace std;
 using namespace DirectX;
@@ -34,7 +35,7 @@ public:
 	void Add(char* name, GUIBase* _guiElement)
 	{
 		if(_guiElement)
-			_guiElements[name] = (_guiElement);
+			_guiElements[name] = static_cast<GUIBase*>(_guiElement);
 	}
 	
 	bool Remove(char* _guiElementName) 
