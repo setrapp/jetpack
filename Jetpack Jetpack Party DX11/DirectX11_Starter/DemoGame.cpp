@@ -184,6 +184,7 @@ void DemoGame::CreateGeometryBuffers()
 	player->AddModel(AssetManager::Instance()->GetModel());
 	player->Finalize();
 	entities.push_back(player);
+	player->transform.Translate(XMFLOAT3(0, 1000, 0));
 	AttachCameraToPlayer();
 	
 	Entity* jetman = new Entity();
