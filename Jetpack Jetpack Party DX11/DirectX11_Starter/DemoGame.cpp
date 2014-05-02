@@ -166,23 +166,27 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 blue	= XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/cube.obj");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicJetMan.obj", "jetman");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Fireball.obj", "fireball");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicTrack.obj", "terrain");
 
 	// Attempt to load model
 	player = new Player();
+	player->AddModel(AssetManager::Instance()->GetModel());
+	player->Finalize();
 	entities.push_back(player);
-	player->transform.Translate(XMFLOAT3(10, 10, 0));
+	player->transform.Translate(XMFLOAT3(1000, 10, 0));
 	AttachCameraToPlayer();
 	
 	Entity* jetman = new Entity();
 	jetman->AddModel(AssetManager::Instance()->GetModel("jetman"));
 	jetman->Finalize();
-	jetman->transform.Translate(XMFLOAT3(0, -5, 0));
 	jetman->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
 	entities.push_back(jetman);
 	jetman->transform.SetParent(&player->transform);
+	jetman->transform.SetLocalTranslation(XMFLOAT3(0, 0, 0));
+	jetman->transform.Translate(XMFLOAT3(0, -5, 0));
 	
 
 	for (int i = 0; i < player->jetpack->thrusterCount; i++)
@@ -524,8 +528,8 @@ void DemoGame::OnMouseWheel(WPARAM btnState, int x, int y)
 void DemoGame::AttachCameraToPlayer()
 {
 	playerCamera->transform.SetParent(&player->transform);
-	XMFLOAT3 eye = playerCamera->transform.GetTranslation();
-	XMStoreFloat3(&eye, XMLoadFloat3(&camera->transform.GetTranslation()) + (5 * XMLoadFloat3(&player->transform.GetUp())));
+	XMFLOAT3 eye;
+	XMStoreFloat3(&eye, XMLoadFloat3(&player->transform.GetTranslation()) - (50 * XMLoadFloat3(&player->transform.GetForward())) + (5 * XMLoadFloat3(&player->transform.GetUp())));
 	XMFLOAT3 target;
 	XMStoreFloat3(&target, XMLoadFloat3(&player->transform.GetTranslation()) + (3 * XMLoadFloat3(&player->transform.GetForward())));
 	XMFLOAT3 up = player->transform.GetUp();

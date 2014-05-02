@@ -125,8 +125,10 @@ void Transform::SetParent(Transform* parent)
 	}
 		
 	// Remove from old parent.
+	XMMATRIX oldParentWorldMatrix = XMMatrixIdentity();
 	if (this->parent)
 	{
+		oldParentWorldMatrix = XMLoadFloat4x4(&this->parent->GetWorldMatrix());
 		vector<Transform*>::iterator it = this->parent->children.begin();
 		while(it != this->parent->children.end())
 		{
@@ -151,7 +153,7 @@ void Transform::SetParent(Transform* parent)
 	}
 
 	// Update local matrix to exist within new parent space.
-	XMStoreFloat4x4(&localMatrix, XMMatrixMultiply(XMLoadFloat4x4(&worldMatrix), XMMatrixInverse(nullptr, parentWorldMatrix)));
+	XMStoreFloat4x4(&localMatrix, oldParentWorldMatrix * XMMatrixInverse(nullptr, parentWorldMatrix) * XMLoadFloat4x4(&localMatrix));
 
 	// Update translation, rotation, and scale
 	translation = XMFLOAT3(localMatrix._14, localMatrix._24, localMatrix._34);
@@ -287,7 +289,7 @@ void Transform::SetLocalTranslation(XMFLOAT3 newPosition)
 {
 	XMFLOAT3 translation;
 	XMStoreFloat3(&translation, XMVectorSubtract(XMLoadFloat3(&newPosition), XMLoadFloat3(&GetLocalTranslation())));
-	Translate(translation);
+	Translate(InverseTransformDirection(translation));
 }
 
 XMFLOAT3X3 Transform::GetRotation() const

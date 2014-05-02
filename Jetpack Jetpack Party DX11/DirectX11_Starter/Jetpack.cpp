@@ -82,6 +82,6 @@ void Jetpack::CreateThrusters()
 		thrusters[i]->AddModel(AssetManager::Instance()->GetModel("fireball"));
 		thrusters[i]->Finalize();
 		thrusters[i]->transform.SetParent(&player->transform);
-		thrusters[i]->transform.SetLocalTranslation(XMFLOAT3(0, 0, 0));
+		thrusters[i]->transform.SetLocalTranslation(XMFLOAT3(3 * i, 0, 0));
 	}
 }
