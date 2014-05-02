@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Demos">
+      <UniqueIdentifier>{15014AAE-C7D0-124C-8D1B-364896A9DBCB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demos\MultiMaterialDemo">
+      <UniqueIdentifier>{312FFE7B-BEDB-3646-8118-954B43F61B4D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Demos\MultiMaterialDemo\MultiMaterialDemo.h">
+      <Filter>Demos\MultiMaterialDemo</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Demos\MultiMaterialDemo\main.cpp">
+      <Filter>Demos\MultiMaterialDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Demos\MultiMaterialDemo\MultiMaterialDemo.cpp">
+      <Filter>Demos\MultiMaterialDemo</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\bullet.rc" />
+  </ItemGroup>
+</Project>

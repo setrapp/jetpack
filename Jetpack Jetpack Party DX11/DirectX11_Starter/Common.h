@@ -7,6 +7,7 @@
 #include "dxerr.h"
 #include "DXConnection.h"
 #include "GameState.h"
+#include "Bullet\src\btBulletDynamicsCommon.h"
 
 using namespace DirectX;
 using namespace std;

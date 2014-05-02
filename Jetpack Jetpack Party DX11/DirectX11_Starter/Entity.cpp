@@ -15,6 +15,7 @@ Entity::Entity()
 {
 	baseMaterial = AssetManager::Instance()->GetMaterial();
 	socketNumber=0;
+	//colShape = NULL;
 }
 
 

@@ -229,9 +229,9 @@ void DemoGame::CreateGeometryBuffers()
 	camera->transform.SetParent(&player->transform);
 	player->transform.Translate(XMFLOAT3(1, 0, 0));
 	XMFLOAT3 eye = camera->transform.GetTranslation();
-	XMStoreFloat3(&eye, XMLoadFloat3(&camera->transform.GetTranslation()) + (5 * XMLoadFloat3(&player->transform.GetUp())));
+	XMStoreFloat3(&eye, XMVectorAdd(XMLoadFloat3(&camera->transform.GetTranslation()), (5 * XMLoadFloat3(&player->transform.GetUp()))));
 	XMFLOAT3 target;
-	XMStoreFloat3(&target, XMLoadFloat3(&player->transform.GetTranslation()) + (3 * XMLoadFloat3(&player->transform.GetForward())));
+	XMStoreFloat3(&target, XMVectorAdd(XMLoadFloat3(&player->transform.GetTranslation()), (3 * XMLoadFloat3(&player->transform.GetForward()))));
 	XMFLOAT3 up = player->transform.GetUp();
 	camera->LookAt(eye, target, up);
 }
