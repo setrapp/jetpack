@@ -529,7 +529,7 @@ void DemoGame::AttachCameraToPlayer()
 {
 	playerCamera->transform.SetParent(&player->transform);
 	XMFLOAT3 eye;
-	XMStoreFloat3(&eye, XMLoadFloat3(&player->transform.GetTranslation()) - (50 * XMLoadFloat3(&player->transform.GetForward())) + (5 * XMLoadFloat3(&player->transform.GetUp())));
+	XMStoreFloat3(&eye, XMLoadFloat3(&player->transform.GetTranslation()) - (50 * XMLoadFloat3(&player->transform.GetForward())) + (10 * XMLoadFloat3(&player->transform.GetUp())));
 	XMFLOAT3 target;
 	XMStoreFloat3(&target, XMLoadFloat3(&player->transform.GetTranslation()) + (3 * XMLoadFloat3(&player->transform.GetForward())));
 	XMFLOAT3 up = player->transform.GetUp();

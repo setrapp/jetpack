@@ -201,6 +201,8 @@ public :
 		if (looker)
 		{
 			rotationValue = looker->GetLocalEulerAngles();
+			//looker->SetLocalRotation(rotationValue);
+			//TODO is euler angles right?
 		}
 	}
 
