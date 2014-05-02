@@ -36,7 +36,10 @@ public :
 		virtual const bool IsMouseHovering() const = 0;
 		virtual void Update (LPPOINT point, float dt)
 		{
+
 		}
+		inline Rect* GetRect() { return rect; }
+		virtual XMFLOAT2 GetPosition() {return basePosition; }
 		virtual const inline bool Clicked() = 0;
 		virtual void Render() const = 0;
 		virtual inline void SetColor(const XMFLOAT4 Color) = 0;

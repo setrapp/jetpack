@@ -20,34 +20,38 @@ using namespace DirectX;
 class GUITexture : public GUIBase
 {
 public :
-	virtual ~GUITexture() { delete fontRenderer; delete rect;}
+	virtual ~GUITexture() { delete fontRenderer; }
 	ID3D11ShaderResourceView* resourceView;
 	ID3D11SamplerState* samplerState;	
 	ID3D11Resource* texture;
-	RECT* rect;
-	SpriteBatch* spBatch; 
-	GUITexture(RECT* rect, wchar_t* path,SpriteBatch* spBatch, FXMVECTOR color = Colors::White, XMFLOAT2 Scale =XMFLOAT2(1, 1), float rotation = 0, float depth = 1, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
+	RECT rect;
+	SpriteRenderer* spBatch; 
+	GUITexture(RECT* rect, wchar_t* path, SpriteRenderer* spBatch, FXMVECTOR color = Colors::White, XMFLOAT2 Scale =XMFLOAT2(1, 1), float rotation = 0, float depth = 1, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
 	{
 		CreateWICTextureFromFile(
 		DXConnection::Instance()->device, 
 		DXConnection::Instance()->deviceContext, 
 		path, 
 		&texture, 
-		&this->resourceView, sizeof(ID3D11ShaderResourceView));
-		this->rect = rect;
+		&this->resourceView);
+		this->rect = *rect;
+		
 		XMStoreFloat4(&this->color, color);
 		this->rotation = rotation;
 		this->depth = depth;
 		this->spriteFX = spriteEffects;		
 		clicked = false;
 		this->scale = Scale;
-		hover = false;			 
+		hover = false;			
+		this->spBatch = spBatch;
 	}
 
 public :
 		 void Render() const
 		 {			 
-			 spBatch->Draw(resourceView, *rect);
+			 if(resourceView)
+				 spBatch->GetSpriteBatch()->Draw(resourceView, rect);
+			 
 		 }
 
 		 const inline bool Clicked()
@@ -84,5 +88,10 @@ public :
 		 inline void SetScale(XMFLOAT2 scale)
 		 {
 			 this->scale = scale;
+		 }
+
+		 inline void SetRect(RECT rect)
+		 {
+			 this->rect = rect;
 		 }
 };

@@ -10,6 +10,7 @@
 #include "GUIBase.h"
 #include "GUIManager.h"
 #include "GUITextBox.h"
+#include "SpriteRenderer.h"
 
 using namespace std;
 using namespace DirectX;
@@ -18,17 +19,31 @@ using namespace DirectX;
 class Menu
 {
 public:
-	Menu(FontRenderer* renderer);
+	typedef enum MENU_OPTIONS
+	{
+		NEWGAME = 0,
+		SETTINGS = 1,
+		EXIT= 2
+	};
+
+	Menu(FontRenderer* renderer, SpriteRenderer* spRenderer) ;
 	~Menu(void);
 	GameState Update(float dt);
 	void Render();
 	void OnClickNewGame();
 	void WindowResize();
+	GameState KeyboardInputProcess();
+	MENU_OPTIONS changeOptions(MENU_OPTIONS currentOption, int changeBy);
 
 private:
 	FontRenderer* fontRenderer;
 	GUIManager* guiMan;
 	GameState currstate;
-	GUITextBox* b ;
+	GUITextBox* b ;	
+	RECT r;	
+	
+
+	MENU_OPTIONS menuOptions;
+	
 };
 #endif

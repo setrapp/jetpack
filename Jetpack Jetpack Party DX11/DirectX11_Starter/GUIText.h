@@ -134,6 +134,11 @@ public :
 			 this->scale = scale;
 		 }
 
+		 inline Rect GetRect()
+		 {
+			 return *rect;
+		 }
+
 private :
 	
 	wchar_t* str;

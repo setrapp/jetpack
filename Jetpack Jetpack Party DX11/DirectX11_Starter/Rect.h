@@ -33,5 +33,15 @@ public:
 		}
 		return false;
 	}
+
+	static RECT ConvertToRECT(Rect* rect)
+	{
+		RECT r;
+		r.left = rect->x;
+		r.top = rect->y ;
+		r.right = rect->width - r.left;
+		r.bottom = rect->height -  r.top;
+		return r;
+	}
 };
 #endif

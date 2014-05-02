@@ -134,7 +134,7 @@ bool DemoGame::Init()
 	assetManager = new AssetManager();
 
 	spriteRenderer = new SpriteRenderer(deviceContext);
-	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/font.spritefont"));	
+	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/font.spritefont"), spriteRenderer);	
 	LoadShadersAndInputLayout();
 
 	AssetManager::Instance()->StoreMaterial(new Material());
@@ -456,8 +456,7 @@ void DemoGame::DrawScene()
 		
 		// Draw entities.
 		for(Entity* e :entities) 
-		{
-			
+		{			
 			e->Draw(&entityDrawArgs);
 		}
 	}
