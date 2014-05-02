@@ -186,12 +186,13 @@ void DemoGame::CreateGeometryBuffers()
 	player->Finalize();
 	entities.push_back(player);
 	player->transform.Translate(XMFLOAT3(0, 1000, 0));
+	//player->transform.SetLocalRotation(XMFLOAT3(0, PI /2, 0));
 	AttachCameraToPlayer();
 	
 	Entity* jetman = new Entity();
 	jetman->AddModel(AssetManager::Instance()->GetModel("jetman"));
 	jetman->Finalize();
-	jetman->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
+	//jetman->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
 	entities.push_back(jetman);
 	jetman->transform.SetParent(&player->transform);
 	jetman->transform.SetLocalTranslation(XMFLOAT3(0, 0, 0));
@@ -329,7 +330,7 @@ void DemoGame::OnResize()
 			0.25f * 3.1415926535f,
 			AspectRatio(),
 			0.1f,
-			10000.0f);
+			100000.0f);
 
 	XMStoreFloat4x4(&playerCamera->projection, XMMatrixTranspose(P));
 	XMStoreFloat4x4(&debugCamera->projection, XMMatrixTranspose(P));

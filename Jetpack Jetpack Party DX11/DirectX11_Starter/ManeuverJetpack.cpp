@@ -11,7 +11,7 @@ ManeuverJetpack::ManeuverJetpack(Entity* player) : Jetpack(player)
 	ascentAcceleration = 400.0f;
 	backSpin = 10 * (PI / 180);
 	frontSpin = 10 * (PI / 180);
-	sideSpin = 10 * (PI / 180);
+	sideSpin = 20 * (PI / 180);
 	bottomSpin = 10 * (PI / 180);
 	
 	// Thrusters
