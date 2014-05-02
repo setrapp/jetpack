@@ -228,8 +228,8 @@ void DemoGame::CreateGeometryBuffers()
 
 	Entity* floor = new Entity();
 	floor->AddModel(AssetManager::Instance()->GetModel("terrain"));
-	floor->transform.Translate(XMFLOAT3(0, -1000, 0));
-	floor->transform.Scale(XMFLOAT3(500, 500, 500));
+	floor->transform.Translate(XMFLOAT3(0, -200, 0));
+	floor->transform.Scale(XMFLOAT3(1000, 1000, 1000));
 	entities.push_back(floor);
 	floor->Finalize();
 }
