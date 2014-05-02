@@ -18,13 +18,13 @@
 #include "Camera.h"
 #include "AssetManager.h"
 #include "Light.h"
-#include "SoundManager.h"
+//#include "SoundManager.h"
 #include "MouseLook.h"
 #include "Debug.h"
 #include "InputManager.h"
 #include <queue>
 #include "XNew.h"
-#include "InputManager.h"
+#include <dinput.h>
 
 using namespace DirectX;
 
@@ -42,7 +42,6 @@ class DemoGame : public DXGame
 public:
 	DemoGame(HINSTANCE hInstance);
 	~DemoGame();
-
 	// Overrides for base level methods
 	bool Init();
 	void OnFocus(bool givenFocus);

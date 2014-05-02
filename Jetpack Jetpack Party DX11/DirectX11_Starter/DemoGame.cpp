@@ -24,7 +24,6 @@
 #include <Windows.h>
 #include <d3dcompiler.h>
 #include "DemoGame.h"
-
 #include "Common.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,7 +33,11 @@
 #include "Debug.h"
 #include "XInputValues.h"
 #include "InputManager.h"
+#include "SoundManager.h"
+#include "SpriteRenderer.h"
+#define DIRECTINPUT_VERSION 0x0800
 
+using namespace std;
 InputManager* IPMan::inputManager = NULL;
 
 #pragma region Win32 Entry Point (WinMain)
@@ -73,6 +76,9 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	mouseCursorVisibility = true;
 	mouseLook = NULL;
 }
+
+		
+	
 
 DemoGame::~DemoGame()
 {
@@ -128,7 +134,7 @@ bool DemoGame::Init()
 	assetManager = new AssetManager();
 
 	spriteRenderer = new SpriteRenderer(deviceContext);
-	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer->GetSpriteBatch(), L"../Assets/font.spritefont"));	
+	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/font.spritefont"), spriteRenderer);	
 	LoadShadersAndInputLayout();
 
 	AssetManager::Instance()->StoreMaterial(new Material());
@@ -342,6 +348,7 @@ void DemoGame::OnResize()
 // Update the scene.
 void DemoGame::UpdateScene(float dt)
 {	
+	(IPMan::GetIPMan()->GetAllKeys());
 	if (IPMan::GetIPMan()->GetBack())
 	{
 		currentState = Helper::GoBackOnce(currentState);
@@ -449,8 +456,7 @@ void DemoGame::DrawScene()
 		
 		// Draw entities.
 		for(Entity* e :entities) 
-		{
-			
+		{			
 			e->Draw(&entityDrawArgs);
 		}
 	}

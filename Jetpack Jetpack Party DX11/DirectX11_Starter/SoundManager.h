@@ -1,10 +1,7 @@
 #pragma once
 #ifndef _SOUNDMANAGER_H
 #define _SOUNDMANAGER_H
-#include "Toolkit\Audio\SoundCommon.h"
 #include <string>
-#include "Toolkit\Audio\WAVFileReader.h"
-#include "Toolkit\Audio\SoundCommon.h"
 #include "SoundInstance.h"
 #include "InputManager.h"
 #include "AudioWaveManager.h"

@@ -236,9 +236,6 @@
     <ClInclude Include="GUIManager.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="GUIBase.h">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="Rect.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
@@ -259,6 +256,21 @@
     </ClInclude>
     <ClInclude Include="MessageTypes.h">
       <Filter>Header Files\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIText.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUITextBox.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationBase.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIBase.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUITextures.h">
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

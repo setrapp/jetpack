@@ -4,11 +4,11 @@
 #include "Toolkit\Inc\WICTextureLoader.h"
 #include <Windows.h>
 #include <d3dcompiler.h>
-#include "DemoGame.h"
 #include "Common.h"
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "AssetManager.h"
 using namespace DirectX;
 
 Entity::Entity()
