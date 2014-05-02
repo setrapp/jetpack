@@ -12,11 +12,11 @@ Player::Player()
 	gravityAcceleration = 300.0f;
 	terminalVelocity = 5000;
 	groundSpeedDampening = 0.1f;
-	airSpeedDampening = 0.7f;
+	airSpeedDampening = 0.5f;
 	grounded = true;
 	jetpack = new ManeuverJetpack(this);
 	clientEntity = new ClientConnectionEntity();
-	clientEntity->connectClient("127.0.0.1");//("138.91.117.6");
+	clientEntity->connectClient("127.0.0.1");
 	networkSendTimer=0.0f;
 	loggedIn=false;
 	controllable = true;

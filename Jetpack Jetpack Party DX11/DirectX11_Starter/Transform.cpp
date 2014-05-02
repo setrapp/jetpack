@@ -94,9 +94,10 @@ void Transform::LookAt(XMFLOAT3 eye, XMFLOAT3 lookAt, XMFLOAT3 up)
 	XMFLOAT4X4 lookAtMatrix;
 	XMStoreFloat4x4(&lookAtMatrix, XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&lookAt), XMLoadFloat3(&up)));
 	XMStoreFloat4x4(&localMatrix, XMMatrixInverse(nullptr, XMLoadFloat4x4(&lookAtMatrix)));
-	SetTranslation(XMFLOAT3(localMatrix._41, localMatrix._42, localMatrix._43));
+	XMFLOAT3 newTranslation = XMFLOAT3(localMatrix._41, localMatrix._42, localMatrix._43);
 	XMFLOAT3X3 newRotation;
-	XMStoreFloat3x3(&newRotation, XMMatrixTranspose(XMLoadFloat4x4(&localMatrix)));
+	XMStoreFloat3x3(&newRotation, XMLoadFloat4x4(&localMatrix));
+	SetLocalTranslation(newTranslation);
 	SetLocalRotation(newRotation);
 	UpdateLocalAndWorld();
 }
