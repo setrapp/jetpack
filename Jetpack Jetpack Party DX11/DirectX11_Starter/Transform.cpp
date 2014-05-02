@@ -56,7 +56,9 @@ void Transform::Rotate(const XMFLOAT3 rotation)
 // Rotate locally.
 void Transform::Rotate(const XMFLOAT3X3 rotation)
 {
-	XMStoreFloat3x3(&this->rotation, XMMatrixMultiply(XMLoadFloat3x3(&this->rotation), XMLoadFloat3x3(&rotation)));
+	XMFLOAT3X3 actualRotation;
+	XMStoreFloat3x3(&actualRotation, XMLoadFloat3x3(&rotation)); 
+	XMStoreFloat3x3(&this->rotation, XMMatrixMultiply(XMLoadFloat3x3(&this->rotation), XMLoadFloat3x3(&actualRotation)));
 	UpdateLocalAndWorld();
 		
 	right = TransformDirection(XMFLOAT3(1, 0, 0));
