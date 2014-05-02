@@ -24,6 +24,10 @@
 #include <xmemory>
 #include <map>
 
+#ifndef PI
+#define PI 3.14159265358979323846f
+#endif
+
 using namespace DirectX;
 using namespace std;
 
@@ -31,20 +35,24 @@ using namespace std;
 // NOTE: World and Local Matrices are Transposed //
 ///////////////////////////////////////////////////
 
+class Entity;
+
 class Transform
 {
+public:
+	Entity* entity;
+	vector<Transform*>children;
+
 private:
 	XMFLOAT3 right, up, forward;
 	XMFLOAT4X4 worldMatrix;
 	XMFLOAT4X4 localMatrix;
 	XMFLOAT3 translation;
+	XMFLOAT3X3 rotation;
 	XMFLOAT3 scale;
 	Transform* parent;
-	vector<Transform*>children;
 	
 public:
-
-	XMFLOAT3X3 rotation;
 	Transform::Transform();
 
 	Transform::~Transform();
@@ -83,7 +91,9 @@ public:
 	// Transform direction from world space to local space.
 	XMFLOAT3 InverseTransformDirection(const XMFLOAT3 worldDirection) const;
 
-	XMFLOAT3 ClampVector(XMFLOAT3* vector, float maxMagnitude, float minMagnitude);
+	XMFLOAT3 ClampVector(XMFLOAT3* vector, float maxMagnitude, float minMagnitude) const;
+
+	XMFLOAT3 RotationToEuler(XMFLOAT3X3 const* rotationMatrix) const;
 
 	// Get world translation.
 	XMFLOAT3 GetTranslation() const;
@@ -99,7 +109,11 @@ public:
 
 	XMFLOAT3X3 GetRotation() const;
 
+	XMFLOAT3 GetEulerAngles() const;
+
 	XMFLOAT3X3 GetLocalRotation() const;
+
+	XMFLOAT3 GetLocalEulerAngles() const;
 
 	void SetLocalRotation(XMFLOAT3 newEulerAngles);
 

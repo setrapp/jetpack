@@ -26,7 +26,7 @@ public:
 		EXIT= 2
 	};
 
-	Menu(FontRenderer* renderer, SpriteRenderer* spRenderer) ;
+	Menu(FontRenderer* renderer, SpriteRenderer* spRenderer, const short ScreenWidth, const short ScreenHeight);
 	~Menu(void);
 	GameState Update(float dt);
 	void Render();
@@ -34,7 +34,7 @@ public:
 	void WindowResize();
 	GameState KeyboardInputProcess();
 	MENU_OPTIONS changeOptions(MENU_OPTIONS currentOption, int changeBy);
-
+	RECT GetRECTFromRect(Rect* rect);
 private:
 	FontRenderer* fontRenderer;
 	GUIManager* guiMan;

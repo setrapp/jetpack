@@ -62,6 +62,7 @@ private:
 	void CreateGeometryBuffers();
 	void LoadShadersAndInputLayout();
 	void LoadSoundAssets();
+	void AttachCameraToPlayer();
 
 private:
 
@@ -90,6 +91,8 @@ private:
 
 	SpriteRenderer* spriteRenderer;
 
+	Camera* playerCamera;
+	ControllableCamera* debugCamera;
 	Camera* camera;
 	GameState currentState;
 	Menu* menu;

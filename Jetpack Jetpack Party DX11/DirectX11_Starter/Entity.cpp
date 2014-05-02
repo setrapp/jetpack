@@ -15,7 +15,8 @@ Entity::Entity()
 {
 	baseMaterial = AssetManager::Instance()->GetMaterial();
 	socketNumber=0;
-	//colShape = NULL;
+	visible = true;
+	transform.entity = this;
 }
 
 
@@ -89,7 +90,7 @@ void Entity::Update(float dt)
 
 void Entity::Draw(EntityDrawArgs const* drawArgs)
 {
-	if (!drawArgs)
+	if (!visible || !drawArgs)
 	{
 		return;
 	}
@@ -271,7 +272,36 @@ void Entity::Finalize()
 		&initialVertexData,
 		&vertexBuffer));
 
-	
+	for(map<Material*, vector<UINT>*>::iterator it = indicesAll.begin(); it != indicesAll.end(); it++)
+	{
+		delete it->second;
+	}
+}
+
+
+bool Entity::GetVisible()
+{
+	return visible;
+}
+
+void Entity::SetVisible(bool visibility)
+{
+	visible = visibility;
+
+	Transform* parent = transform.GetParent() ;
+	if (visibility = true && parent && parent->entity && !transform.GetParent()->entity->visible)
+	{
+		visibility = false;
+	}
+
+	vector<Transform*>* children = &transform.children;
+	for(vector<Transform*>::iterator it = children->begin(); it != children->end(); it++)
+	{
+		if((*it)->entity)
+		{
+			(*it)->entity->SetVisible(visibility);
+		}
+	}
 }
 
 string Entity::getNetworkString(){

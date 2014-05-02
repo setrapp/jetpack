@@ -16,8 +16,9 @@ using namespace DirectX;
 
 class MouseLook
 {
-public :
+private:
 	Transform* looker;
+public :
 	XMFLOAT3 rotationValue;
 	XMFLOAT2 speed;
 	float minXDegrees, maxXDegrees;
@@ -26,13 +27,9 @@ public :
 	bool ignoreMouse;
 
 	MouseLook(Transform* looker, XMFLOAT2 speed) {
-		this->looker = looker;
-		rotationValue = XMFLOAT3(0, 0, 0);		
+		rotationValue = XMFLOAT3(0, 0, 0);
+		SetLooker(looker);	
 		this->speed = speed;
-		if (this->looker)
-		{
-			this->looker->SetLocalRotation(XMFLOAT3());
-		}
 		ignoreMouse = false;
 		minXDegrees = maxXDegrees = 0;
 		minYDegrees = maxYDegrees = 0;
@@ -46,7 +43,7 @@ public :
 
 	XMFLOAT3 MouseLook::MouseMove(WPARAM btnState, float x, float y) {
 		// If mouse looking is being ignored, don't do anything
-		if (ignoreMouse)
+		if (ignoreMouse || !looker)
 		{
 			return XMFLOAT3();
 		}
@@ -55,7 +52,7 @@ public :
 		XMFLOAT2 deltaRotation = XMFLOAT2(x - screenCenter.x, y - screenCenter.y);
 		if (deltaRotation.x != 0 || deltaRotation.y != 0) 
 		{
-			rotationValue = XMFLOAT3(rotationValue.x + (deltaRotation.y * this->speed.y), rotationValue.y + (deltaRotation.x * this->speed.x), 0);
+			rotationValue = XMFLOAT3(rotationValue.x + (deltaRotation.y * this->speed.y), rotationValue.y + (deltaRotation.x * this->speed.x), rotationValue.z);
 			
 			// Keep x rotation either within clamp range or between (+/-)360.
 			if (clampX)
@@ -192,6 +189,21 @@ public :
 		}		
 		return this->rotationValue;
 	}*/
+
+	Transform* GetLooker()
+	{
+		return looker;
+	}
+
+	void SetLooker(Transform* newLooker)
+	{
+		looker = newLooker;
+		if (looker)
+		{
+			rotationValue = looker->GetLocalEulerAngles();
+			looker->SetLocalRotation(rotationValue);
+		}
+	}
 
 	void MouseLook::ResetCursor()
 	{

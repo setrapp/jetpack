@@ -1,12 +1,18 @@
 #pragma once
 #include "Common.h"
 
+class Entity;
+
 class Jetpack
 {
 public:
-	Jetpack();
-	virtual void Update(float dt, XMFLOAT3* velocity);
-	virtual void CheckInput(float dt, XMFLOAT3* velocity);
+	Jetpack(Entity* player);
+	~Jetpack();
+	virtual void Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
+	virtual void CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
+
+protected:
+	void CreateThrusters();
 
 public:
 	bool allowInputForces;
@@ -16,4 +22,7 @@ public:
 	float strafeAcceleration;
 	float ascentAcceleration;
 	bool active;
+	Entity* player;
+	Entity** thrusters;
+	int thrusterCount;
 };

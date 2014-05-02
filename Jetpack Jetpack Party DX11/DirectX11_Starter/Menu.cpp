@@ -5,12 +5,12 @@
 #include "GUITextures.h"
 #include <d3d11.h>
 
-#define TICKER_WIDTH 80
-#define TICKER_TOP 25
-#define TICKER_HEIGHT 80
+#define TICKER_WIDTH			50
+#define TICKER_TOP_OFFSET		40
+#define TICKER_HEIGHT			145 - TICKER_TOP_OFFSET
 
 
-Menu::Menu(FontRenderer* renderer, SpriteRenderer* spRenderer) 
+Menu::Menu(FontRenderer* renderer, SpriteRenderer* spRenderer, const short ScreenWidth, const short ScreenHeight) 
 {
 	guiMan = new GUIManager();	
 	GUIText* nG = new GUIText(new Rect(80, 0, 0 ,0), L"NEW GAME", 1, AnimationType::TOPTOBOTTOM, renderer, 1000, Colors::Black);
@@ -21,12 +21,12 @@ Menu::Menu(FontRenderer* renderer, SpriteRenderer* spRenderer)
 	guiMan->Add("EXIT", exit);
 
 	r.left		= nG->GetRect().x	-	TICKER_WIDTH;
-	r.top		= nG->GetRect().y	+	TICKER_TOP;
+	r.top		= nG->GetRect().y	+	TICKER_TOP_OFFSET;
 	r.right		= nG->GetRect().x;						//End it where the text starts
 	r.bottom	= nG->GetRect().y	+	TICKER_HEIGHT; //End its y where the 
+
 	auto p = Rect::ConvertToRECT(&nG->GetRect());
-	guiMan->Add("Texture", new GUITexture(&r, L"../Assets/jetpackimage.png", spRenderer));
-	
+	guiMan->Add("Texture", new GUITexture(&r, L"../Assets/jetpackimage.png", spRenderer));	
 	this->fontRenderer = renderer;	
 	GUITextBox* b = new GUITextBox(new Rect(0, 500, 0 ,0), L"EXIT", 5, AnimationType::BOTTOMTOTOP, this->fontRenderer, 1000, Colors::Black);
 	currstate = GameState::Started;
@@ -51,17 +51,24 @@ GameState Menu::Update(const float dt)
 	{
 		guiMan->_guiElements["NEWGAME"]->SetColor(XMFLOAT4(1, 1, 1, 1));
 		guiMan->_guiElements["NEWGAME"]->SetScale(XMFLOAT2(1.105f, 1.105f));
+		menuOptions = MENU_OPTIONS::NEWGAME;
+		auto tex = static_cast<GUITexture*>(guiMan->_guiElements["Texture"]);
+		tex->SetRect(GetRECTFromRect(guiMan->_guiElements["NEWGAME"]->GetRect()));
 	}
 	else
 	{
 		guiMan->_guiElements["NEWGAME"]->SetColor(XMFLOAT4(0, 0, 0, 1));
 		guiMan->_guiElements["NEWGAME"]->SetScale(XMFLOAT2(1, 1));
+
 	}
 
 	if(guiMan->_guiElements["EXIT"]->IsMouseHovering()|| menuOptions == MENU_OPTIONS::EXIT)
 	{
 		guiMan->_guiElements["EXIT"]->SetColor(XMFLOAT4(1, 1, 1, 1));
 		guiMan->_guiElements["EXIT"]->SetScale(XMFLOAT2(1.105f, 1.105f));
+		menuOptions = MENU_OPTIONS::EXIT;
+		auto tex = static_cast<GUITexture*>(guiMan->_guiElements["Texture"]);		
+		tex->SetRect(GetRECTFromRect(guiMan->_guiElements["EXIT"]->GetRect()));
 	}
 	else
 	{
@@ -73,6 +80,9 @@ GameState Menu::Update(const float dt)
 	{
 		guiMan->_guiElements["SETTINGS"]->SetColor(XMFLOAT4(1, 1, 1, 1));
 		guiMan->_guiElements["SETTINGS"]->SetScale(XMFLOAT2(1.105f, 1.105f)); 
+		menuOptions = MENU_OPTIONS::SETTINGS;		
+		auto tex = static_cast<GUITexture*>(guiMan->_guiElements["Texture"]);
+		tex->SetRect(GetRECTFromRect(guiMan->_guiElements["SETTINGS"]->GetRect()));
 	}
 	else
 	{
@@ -91,9 +101,9 @@ GameState Menu::KeyboardInputProcess()
 		//Because the height of the fonts is 100
 		r.top += 100;
 		r.bottom += 100;
-		if(r.top > 200 + TICKER_TOP)
+		if(r.top > 200 + TICKER_TOP_OFFSET)
 			{
-				r.top = TICKER_TOP;
+				r.top = TICKER_TOP_OFFSET;
 				r.bottom = guiMan->_guiElements["NEWGAME"]->GetRect()->y + TICKER_HEIGHT; 
 			}
 		auto tex = static_cast<GUITexture*>(guiMan->_guiElements["Texture"]);
@@ -106,10 +116,11 @@ GameState Menu::KeyboardInputProcess()
 		//Because the height of the fonts is 100
 		r.top -= 100;
 		r.bottom -= 100;
-		if(r.top <= guiMan->_guiElements["NEWGAME"]->GetRect()->x-TICKER_WIDTH)
+		float x = guiMan->_guiElements["NEWGAME"]->GetRect()->y	+ TICKER_TOP_OFFSET;
+		if(r.top < x)
 			{
-				r.top = guiMan->_guiElements["NEWGAME"]->GetRect()->x-TICKER_WIDTH;
-				r.bottom = guiMan->_guiElements["NEWGAME"]->GetRect()->y	+TICKER_HEIGHT;
+				r.top = guiMan->_guiElements["EXIT"]->GetRect()->y+ TICKER_TOP_OFFSET;
+				r.bottom = guiMan->_guiElements["EXIT"]->GetRect()->y+TICKER_HEIGHT;
 			}
 		auto tex = static_cast<GUITexture*>(guiMan->_guiElements["Texture"]);
 		tex->SetRect(r);	
@@ -156,4 +167,15 @@ Menu::MENU_OPTIONS Menu::changeOptions(MENU_OPTIONS currentOption, int changeBy)
 	if(currentOption + changeBy < 0)
 		return MENU_OPTIONS::EXIT;
 	return (MENU_OPTIONS)((currentOption + changeBy) % 3);
+}
+
+
+RECT Menu::GetRECTFromRect(Rect* rect)
+{
+	RECT r;
+	r.left		= rect->x	-	TICKER_WIDTH;
+	r.top		= rect->y	+	TICKER_TOP_OFFSET;
+	r.right		= rect->x;						//End it where the text starts
+	r.bottom	= rect->y	+	TICKER_HEIGHT; //End its y where the 
+	return r;
 }

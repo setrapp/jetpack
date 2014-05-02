@@ -105,6 +105,7 @@
     <ClCompile Include="GeneralUtility\GUParseUtility.cpp" />
     <ClCompile Include="Jetpack.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="ManeuverJetpack.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Jetpack.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="ManeuverJetpack.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Mesh.h" />

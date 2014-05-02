@@ -6,6 +6,7 @@
 #include "MessageTypes.h";
 #include <queue>
 #include "Jetpack.h"
+#include "ManeuverJetpack.h"
 
 class Player : public Entity
 {
@@ -15,18 +16,20 @@ public:
 	void Update(float dt);
 
 public:
-	XMFLOAT3 cameraPos;
 	ClientConnectionEntity* clientEntity;
 	Entity* networkedCube;
 	std::map<int,Entity*> networkedEntities;
 	float networkSendTimer;
 	vector<string>* breakIntoParts(string s);
 	bool loggedIn;
+	bool controllable;
+	Jetpack* jetpack;
 
 private:
 	void CheckInput(float dt);
 
 private:
+	XMFLOAT3 angularVelocity;
 	XMFLOAT3 velocity;
 	float maxSpeed;
 	float forwardAcceleration;
@@ -37,5 +40,4 @@ private:
 	float groundSpeedDampening;
 	float airSpeedDampening;
 	bool grounded;
-	Jetpack* jetpack;
 };
