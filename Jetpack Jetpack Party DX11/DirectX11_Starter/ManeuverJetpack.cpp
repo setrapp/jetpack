@@ -6,10 +6,11 @@
 ManeuverJetpack::ManeuverJetpack(Entity* player) : Jetpack(player)
 {
 	maxSpeed = 1000;
+	//fuelUseRate = 10;
 	forwardAcceleration = 400.0f;
 	backwardAcceleration = 400.0f;
 	strafeAcceleration = 400.0f;
-	ascentAcceleration = 400.0f;
+	ascentAcceleration = 600.0f;
 	backSpin = 30 * (PI / 180);
 	frontSpin = 30 * (PI / 180);
 	sideSpin = 15 * (PI / 180);

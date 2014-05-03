@@ -11,8 +11,8 @@ Player::Player()
 	forwardAcceleration = 100.0f;
 	backwardAcceleration = 100.0f;
 	strafeAcceleration = 100.0f;
-	gravityAcceleration = 300.0f;
-	terminalVelocity = 5000;
+	gravityAcceleration = 600.0f;
+	terminalVelocity = 500000;
 	groundSpeedDampening = 0.1f;
 	airSpeedDampening = 0.3f;
 	grounded = true;
@@ -265,6 +265,7 @@ void Player::Respawn()
 	transform.SetLocalRotation(XMFLOAT3(0, 0, 0));
 	worldVelocity = XMFLOAT3(0, 0, 0);
 	angularVelocity = XMFLOAT3(0, 0, 0);
+	jetpack->Refuel(Jetpack::MAX_FUEL);
 }
 
 vector<string>* Player::breakIntoParts(string s){
