@@ -4,7 +4,7 @@
 
 Player::Player()
 {
-	velocity = XMFLOAT3(0, 0, 0);
+	worldVelocity = XMFLOAT3(0, 0, 0);
 	angularVelocity = XMFLOAT3(0, 0, 0);
 	maxSpeed = 200;
 	forwardAcceleration = 100.0f;
@@ -13,7 +13,7 @@ Player::Player()
 	gravityAcceleration = 300.0f;
 	terminalVelocity = 5000;
 	groundSpeedDampening = 0.1f;
-	airSpeedDampening = 0.5f;
+	airSpeedDampening = 0.3f;
 	grounded = true;
 	jetpack = new ManeuverJetpack(this);
 	clientEntity = new ClientConnectionEntity();
@@ -32,6 +32,8 @@ Player::~Player()
 
 void Player::Update(float dt)
 {
+	XMFLOAT3 velocity = transform.InverseTransformDirection(worldVelocity);
+
 	// Check for user input.
 	if (controllable)
 	{
@@ -45,8 +47,8 @@ void Player::Update(float dt)
 	// Clamp velocity withing max speed.
 	transform.ClampVector(&velocity, (grounded ? maxSpeed : jetpack->maxSpeed), 0);
 
-	// Apply world space accelerations.
-	XMFLOAT3 worldVelocity = transform.TransformDirection(velocity);
+	// Update world velocity and apply world space accelerations.
+	worldVelocity = transform.TransformDirection(velocity);
 
 	// TODO gravity should be handled by rigid body.
 	XMFLOAT3 position = transform.GetTranslation();
@@ -63,10 +65,7 @@ void Player::Update(float dt)
 	else if (worldVelocity.y <= 0 && (position.y < 0 || !grounded))
 	{
 		grounded = true;
-		//transform.SetTranslation(XMFLOAT3(position.x, 0, position.z)));
-		//transform.SetLocalRotation(XMFLOAT3(0, 0, 0));
 		worldVelocity.y = 0;
-		//angularVelocity = XMFLOAT3(0, 0 ,0);
 	}
 	velocity = transform.InverseTransformDirection(worldVelocity);
 

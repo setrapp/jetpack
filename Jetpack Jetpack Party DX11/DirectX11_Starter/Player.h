@@ -30,7 +30,7 @@ private:
 
 private:
 	XMFLOAT3 angularVelocity;
-	XMFLOAT3 velocity;
+	XMFLOAT3 worldVelocity;
 	float maxSpeed;
 	float forwardAcceleration;
 	float backwardAcceleration;
