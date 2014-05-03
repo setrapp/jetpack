@@ -4,6 +4,7 @@
 
 Player::Player()
 {
+	respawnPosition = XMFLOAT3(0, 0, 0);
 	worldVelocity = XMFLOAT3(0, 0, 0);
 	angularVelocity = XMFLOAT3(0, 0, 0);
 	maxSpeed = 200;
@@ -64,8 +65,15 @@ void Player::Update(float dt)
 	} 
 	else if (worldVelocity.y <= 0 && (position.y < 0 || !grounded))
 	{
-		grounded = true;
-		worldVelocity.y = 0;
+		if (true)
+		{
+			Respawn();
+		}
+		else
+		{
+			grounded = true;
+			worldVelocity.y = 0;
+		}
 	}
 	velocity = transform.InverseTransformDirection(worldVelocity);
 
@@ -226,13 +234,13 @@ void Player::CheckInput(float dt)
 		}*/
 
 		// TODO should use IPMan
-		if (GetAsyncKeyState(VK_SPACE))
+		/*if (GetAsyncKeyState(VK_SPACE))
 		{
 			// Reset Rotation
 			transform.SetLocalRotation(XMFLOAT3(0, 0, 0));
 			angularVelocity = (XMFLOAT3(0, 0, 0));
 			//grounded = false;
-		}
+		}*/
 	}
 
 
@@ -249,6 +257,14 @@ void Player::CheckInput(float dt)
 		networkSendTimer=0.2f;
 		clientEntity->sendMessage(MessageTypes::Client::MovementUpdate,getNetworkString());
 	}
+}
+
+void Player::Respawn()
+{
+	transform.SetTranslation(respawnPosition);
+	transform.SetLocalRotation(XMFLOAT3(0, 0, 0));
+	worldVelocity = XMFLOAT3(0, 0, 0);
+	angularVelocity = XMFLOAT3(0, 0, 0);
 }
 
 vector<string>* Player::breakIntoParts(string s){

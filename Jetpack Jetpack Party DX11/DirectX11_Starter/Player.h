@@ -14,16 +14,18 @@ public:
 	Player();
 	~Player();
 	void Update(float dt);
+	void Respawn();
+	vector<string>* breakIntoParts(string s);
 
 public:
 	ClientConnectionEntity* clientEntity;
 	Entity* networkedCube;
 	std::map<int,Entity*> networkedEntities;
 	float networkSendTimer;
-	vector<string>* breakIntoParts(string s);
 	bool loggedIn;
 	bool controllable;
 	Jetpack* jetpack;
+	XMFLOAT3 respawnPosition;
 
 private:
 	void CheckInput(float dt);

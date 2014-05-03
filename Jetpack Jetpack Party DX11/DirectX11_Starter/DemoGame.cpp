@@ -188,7 +188,7 @@ void DemoGame::CreateGeometryBuffers()
 	player->Finalize();
 	entities.push_back(player);
 	player->transform.Translate(XMFLOAT3(0, 1000, 0));
-	//player->transform.SetLocalRotation(XMFLOAT3(0, PI /2, 0));
+	player->respawnPosition = player->transform.GetTranslation();
 	AttachCameraToPlayer();
 	
 	Entity* jetman = new Entity();
@@ -467,7 +467,7 @@ void DemoGame::DrawScene()
 		entityDrawArgs.vsModelConstantBufferData = &vsModelConstantBufferData;
 		entityDrawArgs.materialsAndLightsConstantBuffer = materialsAndLightsConstantBuffer;
 		entityDrawArgs.materialsAndLightsConstantBufferData = &materialsAndLightsConstantBufferData;
-		
+
 		// Draw entities.
 		for(Entity* e :entities) 
 		{			

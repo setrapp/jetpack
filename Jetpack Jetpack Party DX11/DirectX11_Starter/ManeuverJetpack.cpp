@@ -5,7 +5,7 @@
 
 ManeuverJetpack::ManeuverJetpack(Entity* player) : Jetpack(player)
 {
-	maxSpeed = 2000;
+	maxSpeed = 1000;
 	forwardAcceleration = 400.0f;
 	backwardAcceleration = 400.0f;
 	strafeAcceleration = 400.0f;
