@@ -12,6 +12,7 @@ class Player : public Entity
 {
 public:
 	Player();
+	Player(const btRigidBody::btRigidBodyConstructionInfo& rbInfo);
 	~Player();
 	void Update(float dt);
 

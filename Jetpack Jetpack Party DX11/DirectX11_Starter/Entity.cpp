@@ -17,8 +17,17 @@ Entity::Entity()
 	socketNumber=0;
 	visible = true;
 	transform.entity = this;
+	rigidBody = NULL;		//Not a Rigid body
 }
 
+Entity::Entity(const btRigidBody::btRigidBodyConstructionInfo& rbInfo)
+{
+	baseMaterial = AssetManager::Instance()->GetMaterial();
+	socketNumber=0;
+	visible = true;
+	transform.entity = this;
+	rigidBody = new btRigidBody(rbInfo);
+}
 
 Entity::~Entity(void)
 {

@@ -23,6 +23,28 @@ Player::Player()
 	controllable = true;
 }
 
+Player::Player(const btRigidBody::btRigidBodyConstructionInfo& rbInfo)
+{
+	velocity = XMFLOAT3(0, 0, 0);
+	angularVelocity = XMFLOAT3(0, 0, 0);
+	maxSpeed = 200;
+	forwardAcceleration = 100.0f;
+	backwardAcceleration = 100.0f;
+	strafeAcceleration = 100.0f;
+	gravityAcceleration = 300.0f;
+	terminalVelocity = 5000;
+	groundSpeedDampening = 0.1f;
+	airSpeedDampening = 0.5f;
+	grounded = true;
+	jetpack = new ManeuverJetpack(this);
+	clientEntity = new ClientConnectionEntity();
+	clientEntity->connectClient("127.0.0.1");
+	networkSendTimer=0.0f;
+	loggedIn=false;
+	controllable = true;
+	rigidBody = new btRigidBody(rbInfo);
+}
+
 Player::~Player()
 {
 	delete jetpack;

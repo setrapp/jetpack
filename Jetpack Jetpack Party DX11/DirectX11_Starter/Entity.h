@@ -23,6 +23,7 @@ class Entity
 {
 public:
 	Entity();
+	Entity(const btRigidBody::btRigidBodyConstructionInfo& rbInfo);
 	virtual ~Entity();
 	void AddTriangle(Vertex* v, UINT* u);
 	void AddQuad(Vertex* v, UINT* u);
@@ -40,6 +41,8 @@ public:
 	void Finalize();
 	bool GetVisible();
 	void SetVisible(bool visibility);
+
+	btRigidBody* rigidBody;
 
 protected:
 	map<Material*, pair<ID3D11Buffer*, LONG>> indexBuffers;

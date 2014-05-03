@@ -40,6 +40,8 @@
 using namespace std;
 InputManager* IPMan::inputManager = NULL;
 Player* player = NULL;
+//Physics
+btTransform trans;
 
 #pragma region Win32 Entry Point (WinMain)
 
@@ -79,6 +81,8 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
 	mouseCursorVisibility = true;
 	mouseLook = NULL;
+	bullet = new BulletManager();
+
 }
 
 		
@@ -166,6 +170,8 @@ bool DemoGame::Init()
 	mouseLook = new MouseLook(NULL, XMFLOAT2(0.01f, 0.01f));
 
 	return true;
+
+	
 }
 
 void DemoGame::CreateGeometryBuffers()
@@ -181,7 +187,7 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicTrack.obj", "terrain");
 
 	// Attempt to load model
-	player = new Player();
+	player = new Player(*bullet->playerConstructionInfo);
 	player->AddModel(AssetManager::Instance()->GetModel());
 	player->Finalize();
 	entities.push_back(player);
@@ -231,6 +237,12 @@ void DemoGame::CreateGeometryBuffers()
 	floor->transform.Scale(XMFLOAT3(500, 500, 500));
 	entities.push_back(floor);
 	floor->Finalize();
+
+	//Physics
+	{
+		
+		bullet->dynamicsWorld->addRigidBody(player->rigidBody);
+	}
 }
 
 #pragma endregion
@@ -403,6 +415,16 @@ void DemoGame::UpdateScene(float dt)
 	&vsModelConstantBufferData,
 	0,
 	0);
+
+	//Physics
+	{
+		bullet->dynamicsWorld->stepSimulation(dt,10);
+		bullet->MoveRigidBodyWithEntity(player->transform.GetTranslation(), player->rigidBody);
+		player->rigidBody->getMotionState()->getWorldTransform(trans);
+		btVector3 rigidOrigin = trans.getOrigin();
+		Debug::Log(Debug::ToString(player->transform.GetTranslation().y) + " " +  Debug::ToString(rigidOrigin.getY()));
+		Debug::Log("--------");
+	}
 }
 
 // Clear the screen, redraw everything, present

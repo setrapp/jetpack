@@ -100,6 +100,9 @@ private:
 
 	bool mouseCursorVisibility;
 	bool flag;
+
+	//Physics
+	BulletManager* bullet;
 };
 
 #endif

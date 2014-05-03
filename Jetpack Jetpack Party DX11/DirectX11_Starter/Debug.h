@@ -29,6 +29,13 @@ public:
 		return ss.str();
 	}
 
+	inline static string ToString(XMFLOAT3 v)
+	{
+		std::stringstream ss;
+		ss << "x : " << v.x << "\ny : " << v.y << "\nz : " << v.z;
+		return ss.str();
+	}
+
 	inline static string ToString(XMFLOAT4 v)
 	{
 		std::stringstream ss;
