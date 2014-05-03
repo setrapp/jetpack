@@ -34,13 +34,13 @@ public:
 	void WindowResize();
 	GameState KeyboardInputProcess();
 	MENU_OPTIONS changeOptions(MENU_OPTIONS currentOption, int changeBy);
-	RECT GetRECTFromRect(Rect* rect);
+	RECT* GetRECTFromRect(Rect* rect);
 private:
 	FontRenderer* fontRenderer;
 	GUIManager* guiMan;
 	GameState currstate;
 	GUITextBox* b ;	
-	RECT r;	
+	RECT* r;	
 	
 
 	MENU_OPTIONS menuOptions;

@@ -2,7 +2,11 @@
 #include <d3d11.h>
 #include "Toolkit\Inc\SpriteBatch.h"
 #include "Renderer.h"
+#include "Toolkit\Inc\CommonStates.h"
+#include "DXConnection.h"
 
+
+using namespace DirectX;
 class SpriteRenderer: Renderer
 {
 public:
@@ -28,8 +32,14 @@ public:
 		deviceContext->OMGetBlendState(&blendState, blendVector, &blendMask);
 		deviceContext->OMGetDepthStencilState(&depthStencilState, &pStencil);
 		deviceContext->RSGetState(&rasterizerState);
-
-		this->spriteBatch->Begin(DirectX::SpriteSortMode::SpriteSortMode_FrontToBack, nullptr,nullptr,nullptr,nullptr,nullptr, DirectX::XMMatrixIdentity());
+		
+		CommonStates states(DXConnection::Instance()->device);
+		deviceContext->OMSetBlendState(states.NonPremultiplied(), nullptr, 0xFFFFFFFF);
+		spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, nullptr, nullptr, nullptr, [=]
+		{			
+			CommonStates states(DXConnection::Instance()->device);
+			deviceContext->OMSetBlendState( states.NonPremultiplied(), nullptr, 0xFFFFFFFF);
+		});
 	}
 
 	inline void SpriteRenderer::End()

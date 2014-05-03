@@ -20,13 +20,19 @@ using namespace DirectX;
 class GUITexture : public GUIBase
 {
 public :
-	virtual ~GUITexture() { delete fontRenderer; }
+	virtual ~GUITexture() 
+	{  	
+		delete rect;
+		ReleaseMacro(texture);
+		ReleaseMacro(resourceView);
+	}
 	ID3D11ShaderResourceView* resourceView;
-	ID3D11SamplerState* samplerState;	
-	ID3D11Resource* texture;
-	RECT rect;
+	RECT* rect;
 	SpriteRenderer* spBatch; 
-	GUITexture(RECT* rect, wchar_t* path, SpriteRenderer* spBatch, FXMVECTOR color = Colors::White, XMFLOAT2 Scale =XMFLOAT2(1, 1), float rotation = 0, float depth = 1, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
+	bool isStatic;
+	ID3D11Resource* texture;
+	
+	GUITexture(RECT* rect, wchar_t* path, SpriteRenderer* spBatch, bool isStatic = false, FXMVECTOR color = Colors::White, XMFLOAT2 Scale =XMFLOAT2(1, 1), float rotation = 0, float depth = 1, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
 	{
 		CreateWICTextureFromFile(
 		DXConnection::Instance()->device, 
@@ -34,7 +40,8 @@ public :
 		path, 
 		&texture, 
 		&this->resourceView);
-		this->rect = *rect;
+		this->rect = new RECT();
+		SetRect(rect);
 		
 		XMStoreFloat4(&this->color, color);
 		this->rotation = rotation;
@@ -44,14 +51,17 @@ public :
 		this->scale = Scale;
 		hover = false;			
 		this->spBatch = spBatch;
+		this->isStatic = isStatic;
+		XMStoreFloat4(&this->color, color);
+		if(!isStatic)
+			this->color.w = 0;
 	}
 
 public :
 		 void Render() const
 		 {			 
 			 if(resourceView)
-				 spBatch->GetSpriteBatch()->Draw(resourceView, rect);
-			 
+				 spBatch->GetSpriteBatch()->Draw(resourceView, *rect, nullptr, XMLoadFloat4(&this->color), 0, XMFLOAT2(0, 0), DirectX::SpriteEffects::SpriteEffects_None, depth);
 		 }
 
 		 const inline bool Clicked()
@@ -90,8 +100,45 @@ public :
 			 this->scale = scale;
 		 }
 
-		 inline void SetRect(RECT rect)
+		 inline void SetRect(RECT* rect)
 		 {
-			 this->rect = rect;
+			 *this->rect = *rect;
+			 //this->rect = rect;
 		 }
+
+		 
+
+
+		 
+		 void Update (LPPOINT point, float dt)
+		 {		
+			 if(!isStatic)
+			 {
+				 this->color.w += dt;
+
+				RECT rect1;
+				GetWindowRect(GetActiveWindow(), &rect1);
+				 //Inside the rect or not ?					MOUSE LEFT IS PRESSED
+				int x, y;
+					 x = point->x - rect1.left;
+					 y = point->y - rect1.top - 21;
+				 
+
+				Rect* rectLittle = Rect::GetRectFromRECT(rect);
+				if(rectLittle->Contains(x, y))
+				 {
+					 hover = true;
+					 if(((GetKeyState(VK_LBUTTON) & 0x80) != 0))
+					 {			 
+						clicked = true;
+					 }
+				 }
+				 else
+					 hover = false;
+				delete rectLittle;
+			}
+		 }
+
+		 private:
+			 XMFLOAT4 color;
 };

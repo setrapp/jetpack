@@ -70,9 +70,9 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 {
 	flag = true;
 	windowCaption = L"Jetpack Jetpack Party!";
-	windowWidth = 800;
-	windowHeight = 600;
-	currentState = GameState::Started;
+	windowWidth = 1920;
+	windowHeight = 1080;
+	currentState = GameState::MenuState;
 	playerCamera = new Camera();
 	debugCamera = new ControllableCamera();
 	camera = playerCamera;
@@ -88,15 +88,17 @@ DemoGame::~DemoGame()
 {
 	ReleaseMacro(vsModelConstantBuffer);
 	ReleaseMacro(materialsAndLightsConstantBuffer);
-
-	delete assetManager;
-	delete input;
-	delete FontManager::Instance();
-
+	
+	
 	for(int i = 0 ; i < entities.size(); i++)
 	{
 		delete entities.at(i);
 	}
+
+	delete IPMan::GetIPMan();
+	delete assetManager;
+	delete FontManager::Instance();
+
 	
 	delete light;
 	delete camera;
@@ -338,6 +340,12 @@ void DemoGame::OnResize()
 	{
 		mouseLook->ResetCursor();
 	}
+
+	if(currentState == GameState::MenuState)
+	{
+		if(menu)
+			menu->WindowResize();
+	}
 }
 #pragma endregion
 
@@ -352,7 +360,7 @@ void DemoGame::UpdateScene(float dt)
 		currentState = Helper::GoBackOnce(currentState);
 #ifndef _PAUSEMENU
 		if(currentState == GameState::Paused)
-			currentState = GameState::Started;
+			currentState = GameState::MenuState;
 #endif
 	}
 
@@ -385,7 +393,7 @@ void DemoGame::UpdateScene(float dt)
 
 	camera->Update(dt, &vsModelConstantBufferData);	
 
-	if(currentState == GameState::Started)
+	if(currentState == GameState::MenuState)
 	{
 		GameState newState = menu->Update(dt);
 		if (currentState != newState)
@@ -418,7 +426,7 @@ void DemoGame::DrawScene()
 		1.0f,
 		0);
 
-	if(currentState == GameState::Started)
+	if(currentState == GameState::MenuState)
 	{	
 		spriteRenderer->Begin();
 		menu->Render();
