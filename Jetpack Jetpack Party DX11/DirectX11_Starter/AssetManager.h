@@ -11,10 +11,11 @@
 #include "Material.h"
 #include "Mesh.h"
 #include "ModelLoad\MLModelViewer.h"
-#include "SoundManager.h"
 #include "InputManager.h"
 
 using namespace std;
+
+class SoundManager;
 
 class AssetManager
 {

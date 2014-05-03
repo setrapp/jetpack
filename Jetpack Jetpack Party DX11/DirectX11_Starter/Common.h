@@ -7,9 +7,14 @@
 #include "dxerr.h"
 #include "DXConnection.h"
 #include "GameState.h"
+#include "Bullet\src\btBulletDynamicsCommon.h"
 
 using namespace DirectX;
 using namespace std;
+
+#ifndef PI
+#define PI 3.14159265358979323846f
+#endif
 
 #define Print(x) { if(x) { printf(x); } }
 
@@ -78,17 +83,17 @@ class Helper
 	static	GameState GoBackOnce(GameState state)
 	{
 		switch(state){
-		case GameState::Lost : return GameState::Started;
+		case GameState::Lost : return GameState::MenuState;
 			break;
 		case GameState::Paused: return GameState::Paused;
 			break;
 		case GameState::Playing: return GameState::Paused;
 			break;
-		case GameState::Started: return GameState::Started;
+		case GameState::MenuState: return GameState::MenuState;
 			break;
-		case GameState::Won: return GameState::Started;
+		case GameState::Won: return GameState::MenuState;
 			break;
-		default: return GameState::Started;
+		default: return GameState::MenuState;
 		}
 	}
 };

@@ -84,6 +84,7 @@ DXGame::~DXGame(void)
 	// Release the context and finally the device
 	ReleaseMacro(deviceContext);
 	ReleaseMacro(device);
+
 }
 #pragma endregion
 
@@ -350,7 +351,7 @@ int DXGame::Run()
 				// Standard game loop type stuff
 				CalculateFrameStats();
 				UpdateScene(timer.DeltaTime());
-				DrawScene();
+				DrawScene(); 
 				elapsedTime += (LONG64)(timer.DeltaTime() * 10000);
                 if(((__int64)elapsedTime > 60))
                 {

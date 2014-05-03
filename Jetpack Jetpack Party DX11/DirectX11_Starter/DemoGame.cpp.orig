@@ -24,7 +24,6 @@
 #include <Windows.h>
 #include <d3dcompiler.h>
 #include "DemoGame.h"
-
 #include "Common.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,8 +33,13 @@
 #include "Debug.h"
 #include "XInputValues.h"
 #include "InputManager.h"
+#include "SoundManager.h"
+#include "SpriteRenderer.h"
+#define DIRECTINPUT_VERSION 0x0800
 
+using namespace std;
 InputManager* IPMan::inputManager = NULL;
+Player* player = NULL;
 
 #pragma region Win32 Entry Point (WinMain)
 
@@ -43,8 +47,8 @@ InputManager* IPMan::inputManager = NULL;
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 				   PSTR cmdLine, int showCmd)
 {
-	// Enable run-time memory check for debug builds.
-#if defined(DEBUG) | defined(_DEBUG)
+#if defined(DEBUG) | defined(_DEBUG)	// Enable run-time memory check for debug builds.
+
 	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 #endif
 
@@ -53,6 +57,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 	if( !game.Init() )
 		return 0;	
+	int a = 0;
 
 	return game.Run();
 }
@@ -65,36 +70,49 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 {
 	flag = true;
 	windowCaption = L"Jetpack Jetpack Party!";
-	windowWidth = 800;
-	windowHeight = 600;
-	currentState = GameState::Started;
-	camera = new ControllableCamera();
+	windowWidth = 1920;
+	windowHeight = 1080;
+	currentState = GameState::MenuState;
+	playerCamera = new Camera();
+	debugCamera = new ControllableCamera();
+	camera = playerCamera;
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
 	mouseCursorVisibility = true;
+	mouseLook = NULL;
 }
+
+		
+	
 
 DemoGame::~DemoGame()
 {
 	ReleaseMacro(vsModelConstantBuffer);
 	ReleaseMacro(materialsAndLightsConstantBuffer);
-
-	delete ipMan;
-	delete xnew;
+<<<<<<< HEAD
 
 	delete assetManager;
+	delete input;
+	delete FontManager::Instance();
+	delete deferredRenderer;
 
+=======
+	
+	
+>>>>>>> 7f51578d4ea53aa49c00303e416e601af83d4ab0
 	for(int i = 0 ; i < entities.size(); i++)
 	{
 		delete entities.at(i);
 	}
-	entities.clear();
-	
+
+	delete IPMan::GetIPMan();
+	delete assetManager;
+	delete FontManager::Instance();
+
 	
 	delete light;
 	delete camera;
 	delete menu;
 	delete mouseLook;
-	delete fontRenderer;
 	delete spriteRenderer;
 }
 
@@ -106,52 +124,72 @@ float clearColor[4] = {0.4f, 0.6f, 0.75f, 0.0f};
 
 bool DemoGame::Init()
 {
+	
 	if( !DXGame::Init() )
 		return false;
 
+	// Set Cull Mode.
+	ID3D11RasterizerState* rasterizerState;
+	D3D11_RASTERIZER_DESC rasterizerDesc;
+	deviceContext->RSGetState(&rasterizerState);
+	if (rasterizerState)
+	{
+		rasterizerState->GetDesc(&rasterizerDesc);
+	}
+	else
+	{
+		ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
+		rasterizerDesc.CullMode = D3D11_CULL_BACK;
+		rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+	}
+	HRESULT hr = device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
+	if (FAILED(hr))
+		int a = 0;
+	deviceContext->RSSetState(rasterizerState);
+
 	assetManager = new AssetManager();
 
-<<<<<<< HEAD
-	spriteRenderer = new SpriteRenderer(deviceContext);	
-	menu = new Menu(FontManager::GetInstance()->AddFont("MENUFONT", device, spriteRenderer->GetSpriteBatch(), L"../Assets/font.spritefont"));
-=======
-	//spriteRenderer = new SpriteRenderer(deviceContext);
-	fontRenderer = new FontRenderer(device, L"../Assets/font.spritefont");	
-	//fontRenderer->setSpriteBatch(spriteRenderer->GetSpriteBatch());	
-	menu = new Menu(fontRenderer);
->>>>>>> d86e1b9c36b39a2c62736330f7be8d75840fde51
+	// Create depthless state for rendering to deferred plane.
+	D3D11_DEPTH_STENCIL_DESC deferredDepthlessDesc;
+	deviceContext->OMGetDepthStencilState(&deferredDepthlessState, NULL);
+	if (deferredDepthlessState)
+	{
+		deferredDepthlessState->GetDesc(&deferredDepthlessDesc);
+	}
+	deferredDepthlessDesc.DepthEnable = false;
+	device->CreateDepthStencilState(&deferredDepthlessDesc, &deferredDepthlessState);
 
+	spriteRenderer = new SpriteRenderer(deviceContext);
+	RECT rect;
+	GetClientRect(GetActiveWindow(), &rect);	
+	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/font.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );	
 	LoadShadersAndInputLayout();
 
 	AssetManager::Instance()->StoreMaterial(new Material());
 
-	/*XMFLOAT3 cameraPosition;
-	XMStoreFloat3(&cameraPosition, XMVectorSet(0, 10, -50, 0));
+	XMFLOAT3 cameraPosition;
+	XMStoreFloat3(&cameraPosition, XMVectorSet(0, 0, -50, 0));
 	XMFLOAT3 cameraTarget;
 	XMStoreFloat3(&cameraTarget, XMVectorSet(0, 0, 0, 0));
 	XMFLOAT3 cameraUp;
 	XMStoreFloat3(&cameraUp, XMVectorSet(0, 1, 0, 0));
 
-	camera->LookAt(cameraPosition, cameraTarget, cameraUp);*/
+	camera->LookAt(cameraPosition, cameraTarget, cameraUp);
+	XMStoreFloat4x4(&deferredView, XMMatrixTranspose(XMMatrixLookAtLH(XMLoadFloat3(&cameraPosition), XMLoadFloat3(&cameraTarget), XMLoadFloat3(&cameraUp))));
 
 	// Set up buffers and such
-	//CreateGeometryBuffers();
+	CreateGeometryBuffers();
 	this->deltaTime = 0;
 	
-	//LoadSoundAssets();
-
-<<<<<<< HEAD
-	XMMATRIX W = XMMatrixIdentity();
-	for( Entity* e : entities)
-		XMStoreFloat4x4(&e->GetWorldMatrix(), XMMatrixTranspose(W));	
-
 	LoadSoundAssets();
 
-	//mouseLook = new MouseLook(camera->transform, XMFLOAT2(0.001f, 0.001f));
+	input = new IPMan(INPUTMODES::KEYBOARD);
+
+<<<<<<< HEAD
+	deferredRenderer = new DeferredRenderer(windowWidth, windowHeight);
 =======
-	// Create temporary mouse look
-	//mouseLook = new MouseLook(NULL, XMFLOAT2(0, 0));
->>>>>>> d86e1b9c36b39a2c62736330f7be8d75840fde51
+	mouseLook = new MouseLook(NULL, XMFLOAT2(0.01f, 0.01f));
+>>>>>>> 7f51578d4ea53aa49c00303e416e601af83d4ab0
 
 	return true;
 }
@@ -163,30 +201,54 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 blue	= XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 
-	// Attempt to load model
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/video_camera.obj", "camera");
-	Player* player = new Player();
-	//player->AddModel(AssetManager::Instance()->GetModel("camera"));
-	entities.push_back(player);
-	//player->Finalize();
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3, 0.3, 0.3, 1), XMFLOAT4(1, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 16), "camera");
-	player->SetMaterial("camera");
-	mouseLook = new MouseLook(&player->transform, XMFLOAT2(0.01f, 0.01f));
-
-	Entity* emptyEntity = new Entity();
-	entities.push_back(emptyEntity);
-
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/cube.obj", "cube");
+<<<<<<< HEAD
+	// Create orthographic and projection plane for deferred rendering.
+	float halfWindowWidth = windowWidth / 2, halfWindowHieght= windowHeight / 2;
+	XMStoreFloat4x4(&deferredView, XMMatrixTranspose(XMMatrixLookAtLH(XMLoadFloat3(&XMFLOAT3(0, 0, -50)), XMLoadFloat3(&XMFLOAT3(0, 0, 0)), XMLoadFloat3(&XMFLOAT3(0, 1, 0)))));
+	XMStoreFloat4x4(&deferredProjection, XMMatrixTranspose(XMMatrixOrthographicLH(windowWidth * 2, windowHeight * 2, 0.1f, 100.0f)));
+	Vertex deferredVertices[] = 
+	{
+		{ XMFLOAT3(+halfWindowWidth, +halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 0) },
+		{ XMFLOAT3(-halfWindowWidth, -halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 1) },
+		{ XMFLOAT3(+halfWindowWidth, -halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 1) },		
+		{ XMFLOAT3(-halfWindowWidth, +halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 0) },
+	};
+	UINT deferredIndices[] = { 0, 2, 1, 3, 0, 1 };
+	deferredPlane = new Entity();
+	deferredPlane->AddQuad(deferredVertices, deferredIndices);
+	deferredPlane->Finalize();
+	
+=======
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/cube.obj");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicJetMan.obj", "jetman");
-	Entity* cube = new Entity();
-	cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
-	cube->Finalize();
-	cube->transform.Translate(XMFLOAT3(0, -5, 0));
-	cube->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
-	entities.push_back(cube);
-	cube->transform.SetParent(&player->transform);
-	//cube->transform->SetParent(&emptyEntity->transform);
-	//emptyEntity->transform->SetParent(&player->transform);
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Fireball.obj", "fireball");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicTrack.obj", "terrain");
+
+>>>>>>> 7f51578d4ea53aa49c00303e416e601af83d4ab0
+	// Attempt to load model
+	player = new Player();
+	player->AddModel(AssetManager::Instance()->GetModel());
+	player->Finalize();
+	entities.push_back(player);
+	player->transform.Translate(XMFLOAT3(0, 1000, 0));
+	player->respawnPosition = player->transform.GetTranslation();
+	AttachCameraToPlayer();
+	
+	Entity* jetman = new Entity();
+	jetman->AddModel(AssetManager::Instance()->GetModel("jetman"));
+	jetman->Finalize();
+	jetman->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
+	entities.push_back(jetman);
+	jetman->transform.SetParent(&player->transform);
+	jetman->transform.SetLocalTranslation(XMFLOAT3(0, 0, 0));
+	jetman->transform.Translate(XMFLOAT3(0, -5, 0));
+	
+
+	for (int i = 0; i < player->jetpack->thrusterCount; i++)
+	{
+		entities.push_back(player->jetpack->thrusters[i]);
+	}
+	
 
 	Vertex vertices[] = 
 	{
@@ -199,43 +261,30 @@ void DemoGame::CreateGeometryBuffers()
 	UINT indices[] = { 0, 2, 1, 3, 0, 1 };
 
 	Entity* gift = new Entity();
-	gift->AddQuad(vertices, indices);
-	gift->Finalize();
+	//gift->AddQuad(vertices, indices);
+	
 	gift->transform.Translate(XMFLOAT3(-5, 5, 0));
 	entities.push_back(gift);
+<<<<<<< HEAD
 
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
+	/*AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
 	gift->SetMaterial("gift");
 	gift->GetMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
+	gift->LoadTexture(L"../Assets/RedGift.png");*/
+=======
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
+	gift->SetBaseMaterial("gift");
+	gift->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 	gift->LoadTexture(L"../Assets/RedGift.png");
+	gift->Finalize();
+>>>>>>> 7f51578d4ea53aa49c00303e416e601af83d4ab0
 
-	Vertex floorVertices[] = 
-	{
-		{ XMFLOAT3(+100.0f, -10.0f, +100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 0) },
-		{ XMFLOAT3(-100.0f, -10.0f, -100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 1) },
-		{ XMFLOAT3(+100.0f, -10.0f, -100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 1) },		
-		{ XMFLOAT3(-100.0f, -10.0f, +100.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 0) },
-	};
-
-	UINT floorIndices[] = { 0, 2, 1, 3, 0, 1 };
 	Entity* floor = new Entity();
-	floor->AddQuad(floorVertices, floorIndices);
-	floor->Finalize();
-	floor->transform.Translate(XMFLOAT3(-5, 5, 0));
+	floor->AddModel(AssetManager::Instance()->GetModel("terrain"));
+	floor->transform.Translate(XMFLOAT3(0, -400, 0));
+	floor->transform.Scale(XMFLOAT3(1000, 1000, 1000));
 	entities.push_back(floor);
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(0.0f, 0.2f, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "floor");
-	floor->SetMaterial("floor");
-	
-	camera->transform.SetParent(&player->transform);
-	player->transform.Translate(XMFLOAT3(1, 0, 0));
-	XMFLOAT3 eye = camera->transform.GetTranslation();
-	XMStoreFloat3(&eye, XMLoadFloat3(&camera->transform.GetTranslation()) + (5 * XMLoadFloat3(&player->transform.GetUp())));
-	XMFLOAT3 target;
-	XMStoreFloat3(&target, XMLoadFloat3(&player->transform.GetTranslation()) + (3 * XMLoadFloat3(&player->transform.GetForward())));
-	XMFLOAT3 up = player->transform.GetUp();
-	camera->LookAt(eye, target, up);
-
-	IPMan * w = new IPMan(INPUTMODES::KEYBOARD);
+	floor->Finalize();
 }
 
 #pragma endregion
@@ -265,7 +314,7 @@ void DemoGame::LoadShadersAndInputLayout()
 
 	// Constant buffers ----------------------------------------
 	// Vertex Shader Per Model Constant Buffer
-	/*D3D11_BUFFER_DESC cBufferDesc;
+	D3D11_BUFFER_DESC cBufferDesc;
 	cBufferDesc.ByteWidth			= sizeof(vsModelConstantBufferData);
 	cBufferDesc.Usage				= D3D11_USAGE_DEFAULT;
 	cBufferDesc.BindFlags			= D3D11_BIND_CONSTANT_BUFFER;
@@ -287,7 +336,7 @@ void DemoGame::LoadShadersAndInputLayout()
 	HR(device->CreateBuffer(
 		&cBufferDesc,
 		NULL,
-		&materialsAndLightsConstantBuffer));*/
+		&materialsAndLightsConstantBuffer));
 }
 
 void DemoGame::LoadSoundAssets()
@@ -309,7 +358,7 @@ void DemoGame::LoadSoundAssets()
 #pragma region Window Focus
 void DemoGame::OnFocus(bool givenFocus)
 {
-	/*DXGame::OnFocus(givenFocus);
+	DXGame::OnFocus(givenFocus);
 	if (mouseLook)
 	{
 		if (givenFocus)
@@ -321,7 +370,7 @@ void DemoGame::OnFocus(bool givenFocus)
 		{
 			mouseLook->ignoreMouse = true;
 		}
-	}*/
+	}
 }
 #pragma endregion Window Focus
 
@@ -330,46 +379,49 @@ void DemoGame::OnFocus(bool givenFocus)
 void DemoGame::OnResize()
 {
 	DXGame::OnResize();
+<<<<<<< HEAD
+	XMMATRIX P = XMMatrixPerspectiveFovLH(
+		0.25f * 3.1415926535f,
+		AspectRatio(),
+		0.1f,
+		100.0f);
+=======
 		XMMATRIX P = XMMatrixPerspectiveFovLH(
 			0.25f * 3.1415926535f,
 			AspectRatio(),
 			0.1f,
-			100.0f);
+			100000.0f);
+>>>>>>> 7f51578d4ea53aa49c00303e416e601af83d4ab0
 
-
-
-	/*XMStoreFloat4x4(&camera->projection, XMMatrixTranspose(P));
+	XMStoreFloat4x4(&playerCamera->projection, XMMatrixTranspose(P));
+	XMStoreFloat4x4(&debugCamera->projection, XMMatrixTranspose(P));
 
 	if (mouseLook)
 	{
 		mouseLook->ResetCursor();
-	}*/
+	}
+
+	if(currentState == GameState::MenuState)
+	{
+		if(menu)
+			menu->WindowResize();
+	}
 }
 #pragma endregion
 
 #pragma region Game Loop
 
-// Updates the local constant buffer and 
-// push it to the buffer on the device
-XMFLOAT3 trans = XMFLOAT3(0, 0, 0);
-bool scaleSmall = true;
+// Update the scene.
 void DemoGame::UpdateScene(float dt)
 {	
+	(IPMan::GetIPMan()->GetAllKeys());
 	if (IPMan::GetIPMan()->GetBack())
 	{
-<<<<<<< HEAD
 		currentState = Helper::GoBackOnce(currentState);
 #ifndef _PAUSEMENU
 		if(currentState == GameState::Paused)
-			currentState = GameState::Started;
+			currentState = GameState::MenuState;
 #endif
-		///*CComPtr<IErrorInfo> debug;
-		//HRESULT hr = device->QueryInterface(IID_PPV_ARGS(&debug));
-		//debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_SUMMARY);*/
-		//PostQuitMessage(0);
-=======
-		PostQuitMessage(0);
->>>>>>> d86e1b9c36b39a2c62736330f7be8d75840fde51
 	}
 
 	assetManager->Instance()->GetSoundManager()->Update();
@@ -388,18 +440,24 @@ void DemoGame::UpdateScene(float dt)
 		{
 			e->Update(dt);
 		}
-		//mouseLook->XMove(xnew);
-		//entities[1]->transform->Rotate(XMFLOAT3(0, 5 * dt, 0));	
+	}
+
+	if(camera != debugCamera)
+	{
+		XMFLOAT3 debugEye = camera->transform.GetTranslation();
+		XMFLOAT3 debugTarget;
+		XMStoreFloat3(&debugTarget, XMVectorAdd(XMLoadFloat3(&camera->transform.GetTranslation()), XMLoadFloat3(&camera->transform.GetForward())));
+		XMFLOAT3 debugUp = camera->transform.GetUp();
+		debugCamera->LookAt(debugEye, debugTarget, debugUp);
 	}
 
 	camera->Update(dt, &vsModelConstantBufferData);	
 
-	if(currentState == GameState::Started)
+	if(currentState == GameState::MenuState)
 	{
 		GameState newState = menu->Update(dt);
 		if (currentState != newState)
 		{
-			//ShowCursor(false);
 			mouseLook->ResetCursor();
 			currentState = newState;
 		}
@@ -418,17 +476,20 @@ void DemoGame::UpdateScene(float dt)
 // Clear the screen, redraw everything, present
 void DemoGame::DrawScene()
 {
+	//deferredRenderer->SetTargets();
+	//deferredRenderer->ClearTargets(clearColor);
+
+	//TODO take this out when defered rendering works.
 	deviceContext->ClearRenderTargetView(
 		renderTargetView,
 		clearColor);
-
 	deviceContext->ClearDepthStencilView(
 		depthStencilView, 
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
 		1.0f,
 		0);
 
-	if(currentState == GameState::Started)
+	if(currentState == GameState::MenuState)
 	{	
 		spriteRenderer->Begin();
 		menu->Render();
@@ -450,60 +511,66 @@ void DemoGame::DrawScene()
 		&vsModelConstantBuffer);
 #endif
 	if (currentState == GameState::Playing) {		
-		/*if(mouseCursorVisibility)
+		if(mouseCursorVisibility)
 		{
 			mouseCursorVisibility = false;
 			ShowCursor(mouseCursorVisibility);
-		}*/
+		}
 		// Update light constant buffer for vertex and pixel shader.
-		/*materialsAndLightsConstantBufferData.light = light->GetShaderLight();
+		materialsAndLightsConstantBufferData.light = light->GetShaderLight();
 		materialsAndLightsConstantBufferData.material = AssetManager::Instance()->GetMaterial("default")->GetShaderMaterial();
 		DXConnection::Instance()->deviceContext->UpdateSubresource(materialsAndLightsConstantBuffer, 0, NULL, &materialsAndLightsConstantBufferData, 0, 0);
 		DXConnection::Instance()->deviceContext->VSSetConstantBuffers(1, 1, &materialsAndLightsConstantBuffer);
 		DXConnection::Instance()->deviceContext->PSSetConstantBuffers(1, 1, &materialsAndLightsConstantBuffer);
-		*/
 
+		// Store entity drawing arguments.
+		EntityDrawArgs entityDrawArgs;
+		entityDrawArgs.vsModelConstantBuffer = vsModelConstantBuffer;
+		entityDrawArgs.vsModelConstantBufferData = &vsModelConstantBufferData;
+		entityDrawArgs.materialsAndLightsConstantBuffer = materialsAndLightsConstantBuffer;
+		entityDrawArgs.materialsAndLightsConstantBufferData = &materialsAndLightsConstantBufferData;
+
+		// Draw entities.
 		for(Entity* e :entities) 
-		{
-			// Compute the inverse transpose of the entity's world matrix for use by normals in the shaders. Ignore translation.
-			// If the entity is scaled uniformly, cheat and use the world matrix because scales will work.
-			XMFLOAT3X3 rotationScale;
-			XMStoreFloat3x3(&rotationScale, XMLoadFloat4x4(&e->transform.GetWorldMatrix()));
-			XMFLOAT4X4 inverseTranspose;
-			if (e->transform.IsUniformScale())
-			{
-				XMStoreFloat4x4(&inverseTranspose, XMLoadFloat3x3(&rotationScale));
-			}
-			else
-			{
-				XMStoreFloat4x4(&inverseTranspose, XMMatrixTranspose(XMMatrixInverse(nullptr, XMLoadFloat3x3(&rotationScale))));
-			}
-			
-
-			// Create per primitive vertex shader constant buffer to hold matrices.
-			VertexShaderModelConstantBuffer perPrimitiveVSConstantBuffer;
-			perPrimitiveVSConstantBuffer.world = e->transform.GetWorldMatrix();
-			perPrimitiveVSConstantBuffer.inverseTranspose = inverseTranspose;
-			perPrimitiveVSConstantBuffer.view = vsModelConstantBufferData.view;
-			perPrimitiveVSConstantBuffer.projection = vsModelConstantBufferData.projection;
-
-			// Update vertex shader constant buffer with per primitive buffer.
-			DXConnection::Instance()->deviceContext->UpdateSubresource(vsModelConstantBuffer, 0, nullptr, &perPrimitiveVSConstantBuffer, 0, 0);
-
-			// Create per primitive pixel shader constant buffer to hold materials.
-			MaterialsAndLightsConstantBuffer perPrimitiveMaterialConstantBuffer;
-			perPrimitiveMaterialConstantBuffer.light = materialsAndLightsConstantBufferData.light;
-			perPrimitiveMaterialConstantBuffer.material = e->GetMaterial()->GetShaderMaterial();
-
-			// Update pixel shader constant buffer with per primitive materials buffer.
-			DXConnection::Instance()->deviceContext->UpdateSubresource(materialsAndLightsConstantBuffer, 0, nullptr, &perPrimitiveMaterialConstantBuffer, 0, 0);
-			
-			e->Draw();
+		{			
+			e->Draw(&entityDrawArgs);
 		}
 	}
 	flag = true;
 
+	// Prepare render to back buffer.
+	ID3D11DepthStencilState* depthStencilState;
+	deviceContext->OMGetDepthStencilState(&depthStencilState, NULL);
+	deviceContext->OMSetDepthStencilState(deferredDepthlessState, NULL);
+	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+	deviceContext->ClearRenderTargetView(renderTargetView, clearColor);
+	deviceContext->ClearDepthStencilView( depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+
+	// Create deferred vertex shader constant buffer to hold matrices.
+	VertexShaderModelConstantBuffer deferredVSConstantBuffer;
+	deferredVSConstantBuffer.world = deferredPlane->transform.GetWorldMatrix();
+	deferredVSConstantBuffer.inverseTranspose = deferredPlane->transform.GetWorldMatrix();
+	deferredVSConstantBuffer.view = deferredView;
+	deferredVSConstantBuffer.projection = deferredProjection;
+
+	// Update vertex shader constant buffer with deferred buffer.
+	DXConnection::Instance()->deviceContext->UpdateSubresource(vsModelConstantBuffer, 0, nullptr, &deferredVSConstantBuffer, 0, 0);
+
+	// Create deferred pixel shader constant buffer to hold materials.
+	MaterialsAndLightsConstantBuffer perPrimitiveMaterialConstantBuffer;
+	perPrimitiveMaterialConstantBuffer.light = materialsAndLightsConstantBufferData.light;
+	perPrimitiveMaterialConstantBuffer.material = deferredPlane->GetMaterial()->GetShaderMaterial();
+
+	// Update pixel shader constant buffer with deferred materials buffer.
+	DXConnection::Instance()->deviceContext->UpdateSubresource(materialsAndLightsConstantBuffer, 0, nullptr, &perPrimitiveMaterialConstantBuffer, 0, 0);
+
+	deferredPlane->Draw();
+
 	HR(swapChain->Present(0, 0));
+
+	// Reset to usual 3D rendering settings.
+	deviceContext->OMSetDepthStencilState(depthStencilState, NULL);
 }
 
 
@@ -517,16 +584,34 @@ void DemoGame::FixedUpdate()
 #pragma region Mouse Input
 
 // These methods don't do much currently, but can be used for mouse-related input
-
 void DemoGame::OnMouseDown(WPARAM btnState, int x, int y)
 {
 	prevMousePos.x = x;
 	prevMousePos.y = y;
 	SetCapture(hMainWnd);
+
+	// Right mousehold detaches camera
+	if(btnState == 2)
+	{
+		if (camera != debugCamera)
+		{	
+			debugCamera->controllable = true;
+			player->controllable = false;
+			camera = debugCamera;
+			mouseLook->SetLooker(&debugCamera->transform);
+		}
+	}
 }
 
 void DemoGame::OnMouseUp(WPARAM btnState, int x, int y)
 {
+	if(camera == debugCamera)
+	{
+		debugCamera->controllable = false;
+		player->controllable = true;
+		camera = playerCamera;
+		mouseLook->SetLooker(NULL);
+	}
 	ReleaseCapture();
 }
 
@@ -538,7 +623,7 @@ void DemoGame::OnMouseMove(WPARAM btnState, int x, int y)
 		flag = false;
 		prevMousePos.x = x;
 		prevMousePos.y = y;
-		if(currentState == Playing)
+		if(currentState == Playing && mouseLook)
 		{
 			mouseLook->MouseMove(btnState, x, y);		
 		}
@@ -548,5 +633,18 @@ void DemoGame::OnMouseMove(WPARAM btnState, int x, int y)
 void DemoGame::OnMouseWheel(WPARAM btnState, int x, int y)
 {
 	//float rot = (float)GET_WHEEL_DELTA_WPARAM(btnState);	
+}
+#pragma endregion
+
+#pragma region CameraAttach
+void DemoGame::AttachCameraToPlayer()
+{
+	playerCamera->transform.SetParent(&player->transform);
+	XMFLOAT3 eye;
+	XMStoreFloat3(&eye, XMVectorAdd(XMVectorSubtract(XMLoadFloat3(&player->transform.GetTranslation()), (50 * XMLoadFloat3(&player->transform.GetForward()))), (10 * XMLoadFloat3(&player->transform.GetUp()))));
+	XMFLOAT3 target;
+	XMStoreFloat3(&target, XMVectorAdd(XMLoadFloat3(&player->transform.GetTranslation()), (3 * XMLoadFloat3(&player->transform.GetForward()))));
+	XMFLOAT3 up = player->transform.GetUp();
+	playerCamera->LookAt(eye, target, up);
 }
 #pragma endregion

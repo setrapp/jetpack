@@ -6,6 +6,7 @@
 #include <d3d11.h>
 #include <vector>
 #include <math.h>
+#include "Entity.h"
 
 using namespace DirectX;
 using namespace std;
@@ -16,6 +17,8 @@ using namespace std;
 
 Transform::Transform()
 {
+	parent = NULL;
+	entity = NULL;
 	right = XMFLOAT3(1, 0, 0);
 	up = XMFLOAT3(0, 1, 0);
 	forward = XMFLOAT3(0, 0, 1);
@@ -34,7 +37,8 @@ Transform::~Transform()
 // Translate locally.
 void Transform::Translate(const XMFLOAT3 translation)
 {
-	XMStoreFloat3(&this->translation, XMVector3Transform(XMLoadFloat3(&this->translation), XMMatrixTranslation(translation.x, translation.y, translation.z)));
+	XMFLOAT3 actualTranslation = TransformDirection(translation);
+	XMStoreFloat3(&this->translation, XMVector3Transform(XMLoadFloat3(&this->translation), XMMatrixTranslation(actualTranslation.x, actualTranslation.y, actualTranslation.z)));
 	UpdateLocalAndWorld();
 }
 
@@ -43,22 +47,22 @@ void Transform::Rotate(const XMFLOAT3 rotation)
 {
 	XMFLOAT3X3 rotationMatrix;
 	XMStoreFloat3x3(&rotationMatrix, XMMatrixIdentity());
-	XMStoreFloat3x3(&rotationMatrix, XMMatrixMultiply(XMLoadFloat3x3(&rotationMatrix), XMMatrixRotationZ(rotation.z)));
-	XMStoreFloat3x3(&rotationMatrix, XMMatrixMultiply(XMLoadFloat3x3(&rotationMatrix), XMMatrixRotationY(rotation.y)));
-	XMStoreFloat3x3(&rotationMatrix, XMMatrixMultiply(XMLoadFloat3x3(&rotationMatrix), XMMatrixRotationX(rotation.x)));
-	Rotate(rotationMatrix);
-}
+	XMStoreFloat3x3(&rotationMatrix, XMMatrixMultiply(XMLoadFloat3x3(&rotationMatrix), XMMatrixRotationAxis(XMLoadFloat3(&forward), rotation.z)));
+	XMStoreFloat3x3(&rotationMatrix, XMMatrixMultiply(XMLoadFloat3x3(&rotationMatrix), XMMatrixRotationAxis(XMLoadFloat3(&up),rotation.y)));
+	XMStoreFloat3x3(&rotationMatrix, XMMatrixMultiply(XMLoadFloat3x3(&rotationMatrix), XMMatrixRotationAxis(XMLoadFloat3(&right),rotation.x)));
 
-// Rotate locally.
-void Transform::Rotate(const XMFLOAT3X3 rotation)
-{
-	XMMATRIX rotationMatrix = XMLoadFloat3x3(&rotation);
-	XMStoreFloat3x3(&this->rotation, XMMatrixMultiply(XMLoadFloat3x3(&this->rotation), rotationMatrix));
+	XMStoreFloat3x3(&this->rotation, XMMatrixMultiply(XMLoadFloat3x3(&this->rotation), XMLoadFloat3x3(&rotationMatrix)));
 	UpdateLocalAndWorld();
 		
 	right = TransformDirection(XMFLOAT3(1, 0, 0));
 	up = TransformDirection(XMFLOAT3(0, 1, 0));
 	forward = TransformDirection(XMFLOAT3(0, 0, 1));
+}
+
+// Rotate locally.
+void Transform::Rotate(const XMFLOAT3X3 rotation)
+{
+	Rotate(RotationToEuler(&rotation));
 }
 
 // Scale locally.
@@ -83,17 +87,18 @@ void Transform::LookAt(XMFLOAT3 eye, XMFLOAT3 lookAt, XMFLOAT3 up)
 
 	if (parent)
 	{
-		eye = parent->InverseTransformPoint(eye);
-		lookAt = parent->InverseTransformPoint(lookAt);
-		up = parent->InverseTransformDirection(up);
+		eye = parent->TransformPoint(eye);
+		lookAt = parent->TransformPoint(lookAt);
+		up = parent->TransformDirection(up);
 	}
 	
 	XMFLOAT4X4 lookAtMatrix;
 	XMStoreFloat4x4(&lookAtMatrix, XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&lookAt), XMLoadFloat3(&up)));
 	XMStoreFloat4x4(&localMatrix, XMMatrixInverse(nullptr, XMLoadFloat4x4(&lookAtMatrix)));
-	SetTranslation(XMFLOAT3(localMatrix._41, localMatrix._42, localMatrix._43));
+	XMFLOAT3 newTranslation = XMFLOAT3(localMatrix._41, localMatrix._42, localMatrix._43);
 	XMFLOAT3X3 newRotation;
-	XMStoreFloat3x3(&newRotation, XMMatrixTranspose(XMLoadFloat4x4(&localMatrix)));
+	XMStoreFloat3x3(&newRotation, XMLoadFloat4x4(&localMatrix));
+	SetLocalTranslation(newTranslation);
 	SetLocalRotation(newRotation);
 	UpdateLocalAndWorld();
 }
@@ -122,14 +127,20 @@ void Transform::SetParent(Transform* parent)
 	}
 		
 	// Remove from old parent.
+	XMMATRIX oldParentWorldMatrix = XMMatrixIdentity();
 	if (this->parent)
 	{
-		for(vector<Transform*>::iterator it = parent->children.begin(); it < parent->children.end(); it++)
+		oldParentWorldMatrix = XMLoadFloat4x4(&this->parent->GetWorldMatrix());
+		vector<Transform*>::iterator it = this->parent->children.begin();
+		while(it != this->parent->children.end())
 		{
 			if (*it == this)
 			{
-				parent->children.erase(it);
-				it--;
+				it = this->parent->children.erase(it);
+			}
+			else
+			{
+				it++;
 			}
 		}
 	}
@@ -144,7 +155,7 @@ void Transform::SetParent(Transform* parent)
 	}
 
 	// Update local matrix to exist within new parent space.
-	XMStoreFloat4x4(&localMatrix, XMMatrixMultiply(XMLoadFloat4x4(&worldMatrix), XMMatrixInverse(nullptr, parentWorldMatrix)));
+	XMStoreFloat4x4(&localMatrix, oldParentWorldMatrix * XMMatrixInverse(nullptr, parentWorldMatrix) * XMLoadFloat4x4(&localMatrix));
 
 	// Update translation, rotation, and scale
 	translation = XMFLOAT3(localMatrix._14, localMatrix._24, localMatrix._34);
@@ -156,19 +167,24 @@ void Transform::SetParent(Transform* parent)
 	rotation._22 /= scale.y;
 	rotation._33 /= scale.z;
 	UpdateLocalAndWorld();
+
+	if (entity && parent && parent->entity && !parent->entity->GetVisible())
+	{
+		entity->SetVisible(false);
+	}
 }
 
 // Transform point from local space to world space.
 XMFLOAT3 Transform::TransformPoint(XMFLOAT3 localPoint) const
 {
-	XMStoreFloat3(&localPoint, XMVector3Transform(XMLoadFloat3(&localPoint), XMLoadFloat4x4(&worldMatrix)));
+	XMStoreFloat3(&localPoint, XMVector3Transform(XMLoadFloat3(&localPoint), XMMatrixTranspose(XMMatrixInverse(nullptr, XMLoadFloat4x4(&worldMatrix)))));
 	return localPoint;
 }
 
 // Transform point from world space to local space.
 XMFLOAT3 Transform::InverseTransformPoint(XMFLOAT3 worldPoint) const
 {
-	XMStoreFloat3(&worldPoint, XMVector3Transform(XMLoadFloat3(&worldPoint), XMMatrixTranspose(XMMatrixInverse(nullptr, XMLoadFloat4x4(&worldMatrix)))));
+	XMStoreFloat3(&worldPoint, XMVector3Transform(XMLoadFloat3(&worldPoint), XMLoadFloat4x4(&worldMatrix)));
 	return worldPoint;
 }
 
@@ -180,7 +196,7 @@ XMFLOAT3 Transform::TransformDirection(XMFLOAT3 localDirection) const
 	sansTranslationAndScale._11 /= scale.x;
 	sansTranslationAndScale._22 /= scale.y;
 	sansTranslationAndScale._33 /= scale.z;
-	XMStoreFloat3(&localDirection, XMVector3Transform(XMLoadFloat3(&localDirection), XMLoadFloat3x3(&sansTranslationAndScale)));
+	XMStoreFloat3(&localDirection, XMVector3Transform(XMLoadFloat3(&localDirection), XMMatrixTranspose(XMLoadFloat3x3(&sansTranslationAndScale))));
 	return localDirection;
 }
 
@@ -192,8 +208,60 @@ XMFLOAT3 Transform::InverseTransformDirection(XMFLOAT3 worldDirection) const
 	sansTranslationAndScale._11 /= scale.x;
 	sansTranslationAndScale._22 /= scale.y;
 	sansTranslationAndScale._33 /= scale.z;
-	XMStoreFloat3(&worldDirection, XMVector3Transform(XMLoadFloat3(&worldDirection), XMMatrixInverse(nullptr, XMLoadFloat3x3(&sansTranslationAndScale))));
+	XMStoreFloat3(&worldDirection, XMVector3Transform(XMLoadFloat3(&worldDirection), XMLoadFloat3x3(&sansTranslationAndScale)));
 	return worldDirection;
+}
+
+XMFLOAT3 Transform::ClampVector(XMFLOAT3* vector, float maxMagnitude, float minMagnitude) const
+{
+	if (minMagnitude > maxMagnitude)
+	{
+		return *vector;
+	}
+	XMVECTOR vec = XMLoadFloat3(vector);
+	XMFLOAT3 vecMag3;
+	XMStoreFloat3(&vecMag3, XMVector3Length(vec));
+	float velocityMag = vecMag3.x;
+	if (velocityMag > maxMagnitude) {
+		vector->x *= (maxMagnitude / velocityMag);
+		vector->y *= (maxMagnitude / velocityMag);
+		vector->z *= (maxMagnitude / velocityMag);
+	} else if (velocityMag < minMagnitude) {
+		vector->x *= (minMagnitude / velocityMag);
+		vector->y *= (minMagnitude / velocityMag);
+		vector->z *= (minMagnitude / velocityMag);
+	}
+}
+
+XMFLOAT3 Transform::RotationToEuler(XMFLOAT3X3 const* rotationMatrix) const
+{
+	XMFLOAT3 eulerAngles(0, 0, 0);
+	if (!rotationMatrix)
+	{
+		return eulerAngles;
+	}
+
+	// Compute the Euler Angles based on the value rotation around the y-axis.
+	// If rotated exactly (+/-)PI/2 around the y-axis, pick a solution from the infinite possiblities.
+	if (rotationMatrix->_31 == 1)
+	{
+		eulerAngles.y = PI / 2;
+		eulerAngles.x = eulerAngles.z + atan2(rotationMatrix->_12, rotationMatrix->_13);
+	}
+	else if (rotationMatrix->_31 == -1)
+	{
+		eulerAngles.y = -PI / 2;
+		eulerAngles.x = -eulerAngles.z + atan2(-rotationMatrix->_12, -rotationMatrix->_13);
+	}
+	else
+	{
+		eulerAngles.y = asin(rotationMatrix->_31);
+		float cosY = cos(eulerAngles.y);
+		eulerAngles.x = -atan2(rotationMatrix->_32 / cosY, rotationMatrix->_33 / cosY);
+		eulerAngles.z = -atan2(rotationMatrix->_21 / cosY, rotationMatrix->_11 / cosY);
+	}
+	
+	return eulerAngles;
 }
 
 // Get world translation.
@@ -223,7 +291,7 @@ void Transform::SetLocalTranslation(XMFLOAT3 newPosition)
 {
 	XMFLOAT3 translation;
 	XMStoreFloat3(&translation, XMVectorSubtract(XMLoadFloat3(&newPosition), XMLoadFloat3(&GetLocalTranslation())));
-	Translate(translation);
+	Translate(InverseTransformDirection(translation));
 }
 
 XMFLOAT3X3 Transform::GetRotation() const
@@ -240,31 +308,42 @@ XMFLOAT3X3 Transform::GetRotation() const
 	return worldRotation;
 }
 
+XMFLOAT3 Transform::GetEulerAngles() const
+{
+	return RotationToEuler(&GetRotation());
+}
+
 XMFLOAT3X3 Transform::GetLocalRotation() const
 {
 	return rotation;
 }
 
+XMFLOAT3 Transform::GetLocalEulerAngles() const
+{
+	return RotationToEuler(&rotation);
+}
+
 void Transform::SetLocalRotation(XMFLOAT3 newEulerAngles)
 {
-	XMMATRIX rotation = XMMatrixRotationRollPitchYaw(newEulerAngles.x, newEulerAngles.y, newEulerAngles.z);
-	ApplyRotation(&rotation);
+	ApplyRotation(newEulerAngles);
 }
 
 void Transform::SetLocalRotation(const XMFLOAT3 axis, const float newAngle)
 {
-	XMMATRIX rotation = XMMatrixRotationAxis(XMLoadFloat3(&axis), newAngle);
-	ApplyRotation(&rotation);
+	XMFLOAT3X3 rotation;
+	XMStoreFloat3x3(&rotation, XMMatrixRotationAxis(XMLoadFloat3(&axis), newAngle));
+	SetLocalRotation(rotation);
 }
 
 void Transform::SetLocalRotation(const XMFLOAT3X3 newRotation)
 {
-	ApplyRotation(&XMLoadFloat3x3(&newRotation));
+	ApplyRotation(RotationToEuler(&newRotation));
 }
 
 bool Transform::IsUniformScale() const
 {
-	return (scale.x == scale.y && scale.x == scale.z) && (parent == NULL || parent->IsUniformScale());
+	float scaleEpsilon = 0.00001f;
+	return ((abs(scale.x - scale.y) < scaleEpsilon) && (abs(scale.x - scale.z) < scaleEpsilon)) && (parent == NULL || parent->IsUniformScale());
 }
 
 XMFLOAT3 Transform::GetScale() const
@@ -332,7 +411,7 @@ XMFLOAT3 Transform::GetUp()
 // Concatenate translation, scale, and rotation in to local and world matrices.
 void Transform::UpdateLocalAndWorld()
 {
-	XMStoreFloat4x4(&localMatrix, XMMatrixTranspose(XMMatrixTranslation(translation.x, translation.y, translation.z)) * XMMatrixTranspose(XMLoadFloat3x3(&rotation)) * XMMatrixTranspose(XMMatrixScaling(scale.x, scale.y, scale.z)));
+	XMStoreFloat4x4(&localMatrix, XMMatrixTranspose(XMMatrixScaling(scale.x, scale.y, scale.z) * XMLoadFloat3x3(&rotation) * XMMatrixTranslation(translation.x, translation.y, translation.z)));
 
 	if (parent) 
 	{
@@ -347,11 +426,11 @@ void Transform::UpdateLocalAndWorld()
 	}
 }
 
-void Transform::ApplyRotation(XMMATRIX* rotation)
+void Transform::ApplyRotation(XMFLOAT3 rotation)
 {
-	XMFLOAT3X3 rotationMatrix;
+	XMFLOAT3 eulerAngles;
 	XMStoreFloat3x3(&this->rotation, XMMatrixIdentity());
-	XMStoreFloat3x3(&rotationMatrix, *rotation);
-	Rotate(rotationMatrix);
+	XMStoreFloat3(&eulerAngles, XMLoadFloat3(&rotation));
+	Rotate(eulerAngles);
 	UpdateLocalAndWorld();
 }

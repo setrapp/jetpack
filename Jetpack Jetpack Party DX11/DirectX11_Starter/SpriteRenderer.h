@@ -1,8 +1,12 @@
-
+#pragma once 
 #include <d3d11.h>
 #include "Toolkit\Inc\SpriteBatch.h"
 #include "Renderer.h"
+#include "Toolkit\Inc\CommonStates.h"
+#include "DXConnection.h"
 
+
+using namespace DirectX;
 class SpriteRenderer: Renderer
 {
 public:
@@ -16,25 +20,7 @@ public:
 	{
 		delete spriteBatch;
 	}
-
-	inline void SpriteRenderer::SetColor(FLOAT* color)
-	{
-		this->COLOR = color;
-	}
-
-	void SpriteRenderer::ClearScreen(ID3D11DeviceContext* deviceContext, ID3D11RenderTargetView* renderTargetView, ID3D11DepthStencilView* depthStencilView)
-	{
-	deviceContext->ClearRenderTargetView(
-		renderTargetView, 
-		COLOR);
-
-	deviceContext->ClearDepthStencilView(
-		depthStencilView, 
-		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
-		1.0f,
-		0);
-	};
-
+	
 	inline DirectX::SpriteBatch* SpriteRenderer::GetSpriteBatch() const
 	{
 		return this->spriteBatch;
@@ -46,8 +32,14 @@ public:
 		deviceContext->OMGetBlendState(&blendState, blendVector, &blendMask);
 		deviceContext->OMGetDepthStencilState(&depthStencilState, NULL);
 		deviceContext->RSGetState(&rasterizerState);
-
-		this->spriteBatch->Begin(DirectX::SpriteSortMode::SpriteSortMode_FrontToBack, nullptr,nullptr,nullptr,nullptr,nullptr, DirectX::XMMatrixIdentity());
+		
+		CommonStates states(DXConnection::Instance()->device);
+		deviceContext->OMSetBlendState(states.NonPremultiplied(), nullptr, 0xFFFFFFFF);
+		spriteBatch->Begin(SpriteSortMode_BackToFront, nullptr, nullptr, nullptr, nullptr, [=]
+		{			
+			CommonStates states(DXConnection::Instance()->device);
+			deviceContext->OMSetBlendState( states.NonPremultiplied(), nullptr, 0xFFFFFFFF);
+		});
 	}
 
 	inline void SpriteRenderer::End()
@@ -61,7 +53,6 @@ public:
 	}
 
 private: 
-	FLOAT* COLOR;
 	DirectX::SpriteBatch* spriteBatch;
 	ID3D11DeviceContext* deviceContext;
 	ID3D11BlendState* blendState;

@@ -1,0 +1,809 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AssetManager" Collapsed="true">
+    <Position X="24" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAFAYAAiAAAAAmACAAAABAQBAAAADwABgAAFJACA=</HashCode>
+      <FileName>AssetManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraComponents" Collapsed="true">
+    <Position X="5.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAIAAAAAA=</HashCode>
+      <FileName>Camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camera" Collapsed="true">
+    <Position X="5.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Helper" Collapsed="true">
+    <Position X="29.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ControllableCamera" Collapsed="true">
+    <Position X="5.5" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAQAAAEAAAAAAAAAAAAAAIQAAAAgAAA=</HashCode>
+      <FileName>ControllableCamera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Debug" Collapsed="true">
+    <Position X="27.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Debug.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DemoGame" Collapsed="true">
+    <Position X="0.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAABQABAoEgACCAcJAAAhgAAxIAARACIAACABASCEA=</HashCode>
+      <FileName>DemoGame.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXConnection" Collapsed="true">
+    <Position X="29.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAACAAAAAAAAAAAAAAAAAABAAQAASAAgAAAAAAA=</HashCode>
+      <FileName>DXConnection.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXGame" Collapsed="true">
+    <Position X="0.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AASDoAACMwIgBACCVgAABIAYAhAAEQAAIqBDAAgCAOo=</HashCode>
+      <FileName>DXGame.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameTimer" Collapsed="true">
+    <Position X="24" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AhAAAAgAACAABAAJAAAIAgAAAAAAAAUAIAAAAAAAQQA=</HashCode>
+      <FileName>GameTimer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Light" Collapsed="true">
+    <Position X="25.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAAAAAAgIAAAAEAACAAAAAAABAAAg=</HashCode>
+      <FileName>Light.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Menu" Collapsed="true">
+    <Position X="29.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAABAAAABAAAAAAAAAAgAAAAAIAQAAABAAAAAAAAE=</HashCode>
+      <FileName>Menu.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MouseLook" Collapsed="true">
+    <Position X="24" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAkAACIAAAAAAAAAIAAAAIAQAAABAAAACAAAA=</HashCode>
+      <FileName>MouseLook.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player" Collapsed="true">
+    <Position X="0.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAABwAAAEgAAAAAQABAAAAAAQAAQAgABA=</HashCode>
+      <FileName>Player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="XNEW" Collapsed="true">
+    <Position X="27.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAIAAAAAEgAAgAAAIAAABAAAAAAAACgAAIIAA=</HashCode>
+      <FileName>XNew.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Entity" Collapsed="true">
+    <Position X="3" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EQQ0AEAAAAAAAgAAAAAQAgAAQDAUgAAGgAAgAABAAAA=</HashCode>
+      <FileName>Entity.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameObject" Collapsed="true">
+    <Position X="3" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>GameObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Material" Collapsed="true">
+    <Position X="27.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QEBBAAABAAAEAAAAEAAAAAIAAAAAAgAAAQBCAABAAAg=</HashCode>
+      <FileName>Material.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mesh" Collapsed="true">
+    <Position X="31" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAAQAAQAAAAAAAAA=</HashCode>
+      <FileName>Mesh.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Transform" Collapsed="true">
+    <Position X="24" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAgACFAKAAoRAAAKAIAUCEQAAAAQAIEIEIoyggKI=</HashCode>
+      <FileName>Transform.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rigidbody" Collapsed="true">
+    <Position X="27.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAACAA=</HashCode>
+      <FileName>Rigidbody.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FontManager" Collapsed="true">
+    <Position X="31" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAAAAAgAAAhAAAAAQQAAgBAQAAA=</HashCode>
+      <FileName>FontManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FontRenderer" Collapsed="true">
+    <Position X="0.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAABAAAAAABAAAAAAAAAAAABAAAAIA=</HashCode>
+      <FileName>FontRenderer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Renderer" Collapsed="true">
+    <Position X="1.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAEAAAAAAAAAAAAAAAAAAAAAAAAAAAACABAAAAAA=</HashCode>
+      <FileName>Renderer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SpriteRenderer" Collapsed="true">
+    <Position X="2.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIQAEAAAAAAABAQAAAAIAAAAEAAEQKAIAgABAAAJAA=</HashCode>
+      <FileName>SpriteRenderer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AudioWaveManger" Collapsed="true">
+    <Position X="25.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgAAAEAAAAAAAACAAAAEAAAAJAAAAAgAAAAACAAAQ=</HashCode>
+      <FileName>AudioWaveManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SoundManager" Collapsed="true">
+    <Position X="31" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAMEoAIWAAAAAAIAAAAAICAAIAIIAAQECQ=</HashCode>
+      <FileName>SoundManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InputManager" Collapsed="true">
+    <Position X="31" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAIAAAAAACgAExhAAUAAABAAAMAgEAEIKAAAAA=</HashCode>
+      <FileName>InputManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IPMan" Collapsed="true">
+    <Position X="24" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAIAAAAAAAAAAAAgAAAAAAEAAAA=</HashCode>
+      <FileName>InputManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="XBOX360CONTROLLER" Collapsed="true">
+    <Position X="25.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAABQAAAAAAAAAAAAAABACAAAAA=</HashCode>
+      <FileName>XController.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClientConnectionEntity" Collapsed="true">
+    <Position X="5.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAEAAAAAgACQAAgAAgACCQCAAAAAAAEAgA=</HashCode>
+      <FileName>ClientConnectionEntity.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GUIBase" Collapsed="true">
+    <Position X="25.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AASAAAAAIAQQAAAAAACAIIRCAAABBSiEABggIggAAAI=</HashCode>
+      <FileName>GUIBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GUIManager" Collapsed="true">
+    <Position X="27.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAAAAgAAAAAAAAABAAAAAAAAAAAABAEAAAAQAA=</HashCode>
+      <FileName>GUIManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rect" Collapsed="true">
+    <Position X="25.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAQAAAAAAAACCAAAAAAABgAAAQAAA=</HashCode>
+      <FileName>Rect.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="JetpackAudio::SoundInstance" Collapsed="true">
+    <Position X="29.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAgCAQgAAAAAgAACIAIAAAAQAAAAAAAoAAAAAAAAAA=</HashCode>
+      <FileName>SoundInstance.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="_ml_vertex3D" Collapsed="true">
+    <Position X="14.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAABAAAAAIAgAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.c</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_002c_1" Collapsed="true">
+    <Position X="9.5" Y="24.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAQAAAAAgA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.c</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_002c_2" Collapsed="true">
+    <Position X="21.5" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.c</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_002c_3" Collapsed="true">
+    <Position X="21.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.c</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="_ml_texelXY" Collapsed="true">
+    <Position X="1.5" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.c</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="_ml_face3D" Collapsed="true">
+    <Position X="12.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAQAAABgAgAAAAAAAAAAgAABEAAAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.c</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="_ml_model3D" Collapsed="true">
+    <Position X="8.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAABAAAAAACAAAAOAAAAgAEAQwAACAAAAAABAAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.c</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_002c_5" Collapsed="true">
+    <Position X="5.5" Y="22.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.c</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ShaderMaterial" Collapsed="true">
+    <Position X="29.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAABAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Common.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ShaderLight" Collapsed="true">
+    <Position X="27.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAEAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Common.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="VertexShaderModelConstantBuffer" Collapsed="true">
+    <Position X="24" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAEAAAAAAAAAAAAAAAAAAQAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Common.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="MaterialsAndLightsConstantBuffer" Collapsed="true">
+    <Position X="24" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Common.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Vertex" Collapsed="true">
+    <Position X="31" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAIAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Common.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Model" Collapsed="true">
+    <Position X="25.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAQAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Mesh.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_001c_1" Collapsed="true">
+    <Position X="1.5" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_001c_2" Collapsed="true">
+    <Position X="20.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_001c_3" Collapsed="true">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAQAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_001c_4" Collapsed="true">
+    <Position X="1.5" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAQAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_002b_1" Collapsed="true">
+    <Position X="16.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAABAAAAAAAIAAAAAAAAAAIAAAAEAQAAAAAQAABAAAA=</HashCode>
+      <FileName>ModelLoad\MLMaterialLoader.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="MaterialProperties" Collapsed="true">
+    <Position X="13.5" Y="26.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLMaterialLoader.c</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="MLColor4ub" Collapsed="true">
+    <Position X="9.5" Y="26.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.c</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="MLRenderingVertex3D" Collapsed="true">
+    <Position X="21.5" Y="23.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.c</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="MLPickingVertex3D" Collapsed="true">
+    <Position X="21.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.c</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="MLModelFeatures" Collapsed="true">
+    <Position X="20.5" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.c</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="MLMaterialSwitch" Collapsed="true">
+    <Position X="5.5" Y="24.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.c</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUubyte" Collapsed="true">
+    <Position X="24" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUbyte" Collapsed="true">
+    <Position X="31" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUVector2D" Collapsed="true">
+    <Position X="4.5" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUPoint2D" Collapsed="true">
+    <Position X="7.5" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUNormal2D" Collapsed="true">
+    <Position X="1.5" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUIntVector2D" Collapsed="true">
+    <Position X="20.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUIntPoint2D" Collapsed="true">
+    <Position X="4.5" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUIntNormal2D" Collapsed="true">
+    <Position X="4.5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUVector3D" Collapsed="true">
+    <Position X="10" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUPoint3D" Collapsed="true">
+    <Position X="13" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUNormal3D" Collapsed="true">
+    <Position X="13" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GURotation3D" Collapsed="true">
+    <Position X="7" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUIntVector3D" Collapsed="true">
+    <Position X="1.5" Y="23.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUIntPoint3D" Collapsed="true">
+    <Position X="13" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUIntNormal3D" Collapsed="true">
+    <Position X="10" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUIntRotation3D" Collapsed="true">
+    <Position X="10" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUMathUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUNumBases" Collapsed="true">
+    <Position X="19.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUParseUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUCompareStats" Collapsed="true">
+    <Position X="17.5" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUParseUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUStringPositions" Collapsed="true">
+    <Position X="13.5" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUParseUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GUReadDataTypes" Collapsed="true">
+    <Position X="9.5" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUParseUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GULinePlurality" Collapsed="true">
+    <Position X="5.5" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUParseUtility.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GLfloat" Collapsed="true">
+    <Position X="25.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLMaterialLoader.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GLbyte" Collapsed="true">
+    <Position X="24" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLMaterialLoader.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GLubyte" Collapsed="true">
+    <Position X="24" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLMaterialLoader.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GLshort" Collapsed="true">
+    <Position X="31" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLMaterialLoader.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GLushort" Collapsed="true">
+    <Position X="29.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLMaterialLoader.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GLint" Collapsed="true">
+    <Position X="27.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLMaterialLoader.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GLuint" Collapsed="true">
+    <Position X="25.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLMaterialLoader.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GLlong" Collapsed="true">
+    <Position X="29.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLMaterialLoader.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="GLulong" Collapsed="true">
+    <Position X="27.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLMaterialLoader.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="MLModelMaterial" Collapsed="true">
+    <Position X="16.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLMaterialLoader.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="MLIlluminationModels" Collapsed="true">
+    <Position X="17.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLMaterialLoader.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="MLMaterialExporter" Collapsed="true">
+    <Position X="16.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLMaterialLoader.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="MLVertex3D" Collapsed="true">
+    <Position X="14.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="MLTexelXY" Collapsed="true">
+    <Position X="1.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="MLFace3D" Collapsed="true">
+    <Position X="12.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="MLModel3D" Collapsed="true">
+    <Position X="8.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="MLModelFaces" Collapsed="true">
+    <Position X="10.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="__unnamed_enum_002a_1" Collapsed="true">
+    <Position X="13.5" Y="24.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAhCBQAQAAAQAIAEAJAAAAEAAAQMAACAAAggACAA=</HashCode>
+      <FileName>ModelLoad\MLMaterialLoader.c</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_002c_4" Collapsed="true">
+    <Position X="20.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AGABAAAAAACAAAAgBAAAAAAAgAAAAAAAAAASAAAAAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.c</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="XINPUTVALUES" Collapsed="true">
+    <Position X="25.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAkEAAAAIAFICAAAAAAgAAAAQiQACAAggAAAAAgAkAA=</HashCode>
+      <FileName>XInputValues.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GameState" Collapsed="true">
+    <Position X="25.75" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAACAAAAAAAAAAAAAAAAIAAIQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameState.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="SoundId" Collapsed="true">
+    <Position X="31" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIAAQAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>SoundManager.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="INPUTMODES" Collapsed="true">
+    <Position X="27.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAIAAAA=</HashCode>
+      <FileName>InputManager.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="KeyType" Collapsed="true">
+    <Position X="29.25" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAgAIAAAAAAAAA=</HashCode>
+      <FileName>InputManager.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="SpecialKeys" Collapsed="true">
+    <Position X="24" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAACAAAAAAAAAAAIAAAAAARAAAAAA=</HashCode>
+      <FileName>InputManager.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_001e_1" Collapsed="true">
+    <Position X="18.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAEAAAAAAAACAAAAAAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUParseUtility.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_001e_2" Collapsed="true">
+    <Position X="17.5" Y="19.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAAAAAAAAAAACAAAAAAAAAAQAAEAA=</HashCode>
+      <FileName>GeneralUtility\GUParseUtility.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_001e_3" Collapsed="true">
+    <Position X="13.5" Y="19.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAAAAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUParseUtility.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_001e_4" Collapsed="true">
+    <Position X="9.5" Y="19.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EABAAAAAEAAAAAAABBAAAAAAAAASAAAAQAAAASAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUParseUtility.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_001e_5" Collapsed="true">
+    <Position X="5.5" Y="19.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>GeneralUtility\GUParseUtility.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_002b_2" Collapsed="true">
+    <Position X="16.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAIAAAAIAAABAAAAAIIAAAAgAAAAAAAAAEAAACAAACE=</HashCode>
+      <FileName>ModelLoad\MLMaterialLoader.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_002b_3" Collapsed="true">
+    <Position X="16.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAgAAAAAAAAAAAAAAAAgAAAAAAAAAIAAA=</HashCode>
+      <FileName>ModelLoad\MLMaterialLoader.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_002d_1" Collapsed="true">
+    <Position X="9.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAACAAAAAAAAAAAAAAAAAAAQAAAAAAAAIAAA=</HashCode>
+      <FileName>ModelLoad\MLModelViewer.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="AnimationType" Collapsed="true">
+    <Position X="24" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAQAAAAAEAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GUIBase.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

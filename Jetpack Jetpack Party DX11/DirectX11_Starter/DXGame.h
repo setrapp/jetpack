@@ -8,8 +8,8 @@
 // -------------------------------------------------------------
 
 #pragma once
-#define screenWidth 800	
-#define screenHeight 600
+#define screenWidth		1920	
+#define screenHeight	1080
 
 #include "Common.h"
 #include "Windows.h"
@@ -20,6 +20,7 @@
 #include "dxerr.h"
 #include "GameTimer.h"
 #include "DXConnection.h"
+#include "BulletManager.h"
 
 class DXGame
 {

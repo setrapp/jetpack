@@ -7,9 +7,10 @@
 #include "DXConnection.h"
 #include "Rect.h"
 #include <vector>
-#include "GUIBase.h"
+#include "GUIText.h"
 #include <map>
-
+#include "AnimationBase.h"
+#include <unordered_map>
 using namespace std;
 using namespace DirectX;
 
@@ -21,8 +22,8 @@ public:
 	}
 
 	~GUIManager()
-	{
-			map<char*, GUIBase*>::iterator i = _guiElements.begin();
+	{		
+			unordered_map<char*, GUIBase*>::iterator i = _guiElements.begin();
 			while(i != _guiElements.end())
 			{
 				//delete i->first;
@@ -34,7 +35,7 @@ public:
 	void Add(char* name, GUIBase* _guiElement)
 	{
 		if(_guiElement)
-			_guiElements[name] = (_guiElement);
+			_guiElements[name] = static_cast<GUIBase*>(_guiElement);
 	}
 	
 	bool Remove(char* _guiElementName) 
@@ -54,7 +55,6 @@ public:
 
 	void Update(const float dt)
 	{
-		ShowCursor(true);
 		POINT point;
 		if(GetCursorPos(&point)) 
 		{
@@ -78,5 +78,5 @@ public:
 	}
 
 public:
-	map<char*, GUIBase*> _guiElements;
+	unordered_map<char*, GUIBase*> _guiElements;
 };

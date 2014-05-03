@@ -10,6 +10,14 @@
 #include "Transform.h"
 #include "Rigidbody.h"
 
+struct EntityDrawArgs
+{
+	ID3D11Buffer* vsModelConstantBuffer;
+	VertexShaderModelConstantBuffer* vsModelConstantBufferData;
+	ID3D11Buffer* materialsAndLightsConstantBuffer;
+	MaterialsAndLightsConstantBuffer* materialsAndLightsConstantBufferData;
+};
+
 class Entity
 {
 public:
@@ -19,23 +27,26 @@ public:
 	void AddQuad(Vertex* v, UINT* u);
 	void AddModel(Model* model);
 	virtual void Update(float dt);
-	void Draw();
+	void Draw(EntityDrawArgs const* drawArgs, XMFLOAT4X4 const* view = NULL, XMFLOAT4X4 const* projection = NULL);
 	void LoadTexture(wchar_t* path);
-	Material* GetMaterial();
-	inline Material GetMaterialSafe() const;
-	void SetMaterial(string name = "default");
+	Material* GetBaseMaterial();
+	inline Material GetBaseMaterialSafe() const;
+	void SetBaseMaterial(string name = "default", bool forceOnAllMeshes = true);
 	inline vector<Mesh*> GetMeshes() const;
+	string getNetworkString();
 	Transform transform;
 	int socketNumber;
 	void Finalize();
+	bool GetVisible();
+	void SetVisible(bool visibility);
 
-private:
-	ID3D11Buffer* indexBuffer;
+protected:
+	map<Material*, pair<ID3D11Buffer*, LONG>> indexBuffers;
 	ID3D11Buffer* vertexBuffer;
 	vector<Vertex> vertices;
 	vector<Mesh*> meshes; 
-	Material* material;
-	LONG totalIndices;
+	Material* baseMaterial;
+	bool visible;
 };
 
 #endif

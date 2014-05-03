@@ -450,40 +450,54 @@ MLModel3D* mlModel3DLoadOBJ(const char* filename)
 			free(matLibs[i]);
 
 		//link face names from model file to materials loaded from libraries
-		faceMats = (GLushort*)malloc(sizeof(MLModelMaterial*)*matSwitchCount+1);
-		faceMats[0] = 0;
-		for(i = 1; i < matSwitchCount; i++)
+		for(i = 0; i < faceCount; i++)
+				faces[i].materialIndex = 0;
+		if (matSwitchCount > 0)
 		{
-			int matFound = 0;						//is there a material with the same name as the switch
-			if(matSwitches[i].name)					//if there is a name specified at the switch attempt to find the material in library
+			faceMats = (GLushort*)malloc(sizeof(MLModelMaterial*)*matSwitchCount+1);
+			faceMats[0] = 0;
+			for(i = 1; i < matSwitchCount; i++)
 			{
-				unsigned int j = 1;
-				for(j = 1; j < matCount && !matFound; j++)
+				int matFound = 0;						//is there a material with the same name as the switch
+				if(matSwitches[i].name)					//if there is a name specified at the switch attempt to find the material in library
 				{
-					//match faces between model file and material file
-					if(mats[j] && guCompare(matSwitches[i].name, mats[j]->name, 0, GU_DEFAULT_BUFFER_SIZE) == 0)	
+					unsigned int j = 1;
+					for(j = 1; j < matCount && !matFound; j++)
 					{
-						faceMats[i] = j;
-						matFound = 1;
+						//match faces between model file and material file
+						if(mats[j] && guCompare(matSwitches[i].name, mats[j]->name, 0, GU_DEFAULT_BUFFER_SIZE) == 0)	
+						{
+							faceMats[i] = j;
+							matFound = 1;
+						}
 					}
 				}
+
+				//if no match found, use default
+				if(!matFound)
+					faceMats[i] = 0;
 			}
 
-			//if no match found, use default
-			if(!matFound)
-				faceMats[i] = 0;
-		}
-
-		//connect faces to materials
-		for(i = 0; i < matSwitchCount; i++)
-		{
-			unsigned int j = 0;
-			unsigned int matBegin = matSwitches[i].switchFace;												//first face using material
-			unsigned int matEnd = (i == matSwitchCount-1 ? faceCount : matSwitches[i+1].switchFace);		//first face not using material, use end of face array if no more switches exist
+			//connect faces to materials
+			for(i = 0; i < matSwitchCount; i++)
+			{
+				unsigned int j = 0;
+				unsigned int matBegin = matSwitches[i].switchFace;												//first face using material
+				unsigned int matEnd = (i == matSwitchCount-1 ? faceCount : matSwitches[i+1].switchFace);		//first face not using material, use end of face array if no more switches exist
 	
-			//apply current material to all faces before next switch
-			for(j = matBegin; j < matEnd; j++)
-				faces[j].materialIndex = faceMats[i];
+				//apply current material to all faces before next switch
+				//if no default material was specified and other materials exist, use the first material as default
+				for(j = matBegin; j < matEnd; j++)
+					if (matCount < 2 || faceMats[i] != 0 || (mats[0] && mats[0]->name))
+						faces[j].materialIndex = faceMats[i];
+					else
+						faces[j].materialIndex = 1;
+					
+			}
+		}
+		else 
+		{
+			faceMats = NULL;
 		}
 
 		//create new model and using vertex and face arrays
@@ -1251,6 +1265,7 @@ void mlModel3DSetFaceCulling(MLModel3D* targetModel, int enumModelFace)
 }
 
 //accessors
+char const* mlModel3DGetFilename(MLModel3D const* targetModel)												{	return targetModel->filename;					}
 MLVertex3D const* mlModel3DGetVertex(MLModel3D const* targetModel, unsigned int index)						{	return &targetModel->vertices[index];			}
 unsigned int mlModel3DGetVertexCount(MLModel3D const* targetModel)											{	return targetModel->numVertices;				}
 MLFace3D const* mlModel3DGetFace(MLModel3D const* targetModel, unsigned int index)							{	return &targetModel->faces[index];				}

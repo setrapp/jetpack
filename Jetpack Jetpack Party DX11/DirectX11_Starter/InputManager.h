@@ -61,6 +61,7 @@ private:
 public:
 	//Give the input modes. You can pass KEYBOARD | XCONTROLLER
 	InputManager(INPUTMODES mode){
+		
 		keyStates = NULL;
 		xVals = NULL;
 		xDefaultVals = NULL;			
@@ -75,22 +76,26 @@ public:
 			else
 				if(mode == INPUTMODES::KEYBOARD) {
 					keyboard = true;
+					xinput = false;
 				}
 				else {
 					xinput = true;
+					keyboard = false;
 				}
 
 				if(keyboard)
 				{
-					keyStates = new int[maxMappedControls];					
+					keyStates = new int[maxMappedControls];		
+					xVals = new float[xMap];
+					xDefaultVals = new float[xMap];			
+					xcontroller = new XBOX360CONTROLLER(1);						
+					SetXDefaults();
 				}
-
 				if(xinput)
 				{
 					xVals = new float[xMap];
 					xDefaultVals = new float[xMap];			
-					xcontroller = new XBOX360CONTROLLER(1);
-						
+					xcontroller = new XBOX360CONTROLLER(1);						
 					SetXDefaults();
 				}
 				DumpAll();
@@ -102,14 +107,57 @@ public:
 	{
 		delete [] xVals;
 		delete [] xDefaultVals;
-		delete []  keyStates;
+		delete [] keyStates;
 		delete xcontroller;
 	}
 
+	//Returns 1 if a current key is pressed. does not keep a track of the state. If a button is pressed it will constantly return 1; 
+	//EG: if(GetKey('k')) dosomething();
+	double GetKey(const int key)  
+	{
+		double result = 0;
+		if(keyboard)
+		{
+			if(GetAsyncKeyState(tolower(key)) || GetAsyncKeyState(toupper(key)))
+				return 1;
+		}
+		return 0;
+	}
+
+	//Returns 1 if a current key is pressed. does not keep a track of the state. If a button is pressed it will constantly return 1;
+	double GetKey(const KeyType key)  
+	{
+		double result = 0;
+		if(keyboard)
+		{
+			if(key == FORWARD)
+				{
+					if((GetAsyncKeyState('w') || GetAsyncKeyState('W') || GetAsyncKeyState(VK_UP)))				
+							return 1;
+				}
+				if(key == BACKWARD) 
+				{
+					if(GetAsyncKeyState('s') || GetAsyncKeyState('S') || GetAsyncKeyState(VK_DOWN))					
+							return 1;
+				}
+				if(key == LEFT)
+				{
+					if(GetAsyncKeyState('a') || GetAsyncKeyState('A') || GetAsyncKeyState(VK_LEFT))
+						return 1;
+				}
+				if(key == RIGHT)
+				{
+					if(GetAsyncKeyState('d') || GetAsyncKeyState('D') || GetAsyncKeyState(VK_RIGHT))
+						return 1;
+				}		
+
+		}
+		return 0;
+	}
 
 	//Returns a number between 0 and 1, 0 means no input, 1 means full input. Gets absolute value of Gamepad. 
 	//Eg: if up is pressed in gamepad, it will return 1 only once. 
-	inline double GetKey(KeyType key) const
+	double GetKeyDown(KeyType key)
 	{
 		double result = 0.0;
 		if(keyboard)
@@ -227,9 +275,34 @@ public:
 		}		
 
 		return result;
-	}
-	
+	}	
 
+	////For all keyboard keys. Returns true only once.
+	//const bool GetKeyDown(const int key) const
+	//{
+	//	if(keyboard)
+	//	{
+	//		if(GetAsyncKeyState(key))
+	//			{
+	//				if(keyStates)
+	//					if(keyStates[key] == 0)
+	//					{
+	//						keyStates[key] = 1;
+	//						return true;
+	//					}
+	//			}			
+	//		else
+	//			{
+	//				if(keyStates)
+	//					if(keyStates[key])
+	//						keyStates[key] = 0;
+
+	//						return false;
+	//			}
+	//	}		
+	//}
+
+	//Returns the X Gamepad state just once
 	double GetXKeyDown(KeyType key)
 	{
 		double result = 0.0;
@@ -260,20 +333,25 @@ public:
 			}			
 		}		
 	return result;
-	}
-	
+	}	
 
-	bool GetSpecialKeyboardState(int key) const
+	//I know this is the wrong way of doing it!
+	inline unsigned short* GetAllKeys() 
 	{
-		if(keyboard)
+		for(int i = 0 ; i < 256; i++)
 		{
-			if(GetAsyncKeyState(key))
-				return true;
-			else
-				return false;
-		}		
+			if(GetAsyncKeyState(i))
+				{
+					if(keys[i] == 0)
+					keys[i] = 1;
+				}
+				else
+					keys[i] = 0;
+		}
+		return keys;
 	}
 
+	//Trying to multiplex start of gamepad and enter in keyboard.
 	inline bool GetStartKey() const 
 	{
 		if(keyboard)
@@ -341,6 +419,7 @@ public:
 	}
 
 protected:
+	//Dont delete this.
 	inline void DumpAll()
 	{
 		if(keyboard)
@@ -348,9 +427,10 @@ protected:
 			keyStates[i] = 0;
 		}
 
-		if(xcontroller)
+		if(xinput)
 		for(int i = 0; i < xMap; i++) {
 			xVals[i] = 0;
+			xDefaultVals[i] = 0;
 		}
 	}
 
@@ -385,6 +465,8 @@ private:
 	int* keyStates;
 	float* xVals;
 	float* xDefaultVals;
+	
+	unsigned short keys[256];
 	XBOX360CONTROLLER* xcontroller;
 };
 

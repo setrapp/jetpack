@@ -1,10 +1,7 @@
 #pragma once
 #ifndef _SOUNDMANAGER_H
 #define _SOUNDMANAGER_H
-#include "Toolkit\Audio\SoundCommon.h"
 #include <string>
-#include "Toolkit\Audio\WAVFileReader.h"
-#include "Toolkit\Audio\SoundCommon.h"
 #include "SoundInstance.h"
 #include "InputManager.h"
 #include "AudioWaveManager.h"
@@ -105,12 +102,12 @@ public:
 	//always call this
 	void SoundManager::Update()
 	{
-		if(IPMan::GetIPMan()->GetSpecialKeyboardState('M') && IPMan::GetIPMan()->GetSpecialKeyboardState('M') != oldkeystate)
+		if(IPMan::GetIPMan()->GetKey('M') && IPMan::GetIPMan()->GetKey('M') != oldkeystate)
 		{
 			mute = !mute;
 			Mute(mute);
 		}
-		oldkeystate = IPMan::GetIPMan()->GetSpecialKeyboardState('M');
+		oldkeystate = IPMan::GetIPMan()->GetKey('M');
 		engineSfx->Update();
 	}
 
@@ -124,12 +121,12 @@ public:
 			iterator++;
 		}
 
-		if(IPMan::GetIPMan()->GetSpecialKeyboardState('M') && IPMan::GetIPMan()->GetSpecialKeyboardState('M') != oldkeystate)
+		if(IPMan::GetIPMan()->GetKey('M') && IPMan::GetIPMan()->GetKey('M') != oldkeystate)
 		{
 			mute = !mute;
 			Mute(mute);
 		}
-		oldkeystate = IPMan::GetIPMan()->GetSpecialKeyboardState('M');
+		oldkeystate = IPMan::GetIPMan()->GetKey('M');
 		engineSfx->Update();
 	}
 
@@ -167,6 +164,7 @@ public:
 		auto w = Contains(name);
 		if(w != SoundMap->end())
 		{
+			Debug::Log("hi");
 			w->second->ChangeVolume(volume);
 		}
 	}

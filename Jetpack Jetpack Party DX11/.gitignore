@@ -6,13 +6,14 @@
 *.suo
 *.user
 *.sln.docstates
+*.lib
 
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
 x64/
-build/
+#build/
 bld/
 [Bb]in/
 [Oo]bj/

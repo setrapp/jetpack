@@ -33,5 +33,26 @@ public:
 		}
 		return false;
 	}
+
+	static RECT* GetRECTFromRect(Rect* rect)
+	{
+		RECT* r = new RECT();
+		r->left = rect->x;
+		r->top = rect->y ;
+		r->right = rect->width + r->left;
+		r->bottom = rect->height +  r->top;
+		return r;
+	}
+
+
+	static Rect* GetRectFromRECT(const RECT* rectOld)
+	{
+		Rect* rect = new Rect();
+		rect->x = rectOld->left;
+		rect->y = rectOld->top;
+		rect->width = rectOld->left + rectOld->right;
+		rect->height = rectOld->top + rectOld->bottom;
+		return rect;
+	}
 };
 #endif

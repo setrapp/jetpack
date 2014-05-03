@@ -61,6 +61,7 @@ extern "C"
     void mlModel3DHideVertexNormals(MLModel3D* targetModel);
     void mlModel3DSetFaceCulling(MLModel3D* targetModel, int enumModelFace);
 
+	char const* mlModel3DGetFilename(MLModel3D const* targetModel);
 	MLVertex3D const* mlModel3DGetVertex(MLModel3D const* targetModel, unsigned int index);
 	unsigned int mlModel3DGetVertexCount(MLModel3D const* targetModel);
 	MLFace3D const* mlModel3DGetFace(MLModel3D const* targetModel, unsigned int index);

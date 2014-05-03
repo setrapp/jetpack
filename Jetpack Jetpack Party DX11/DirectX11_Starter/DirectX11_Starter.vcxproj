@@ -41,11 +41,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(LibraryPath)</LibraryPath>
-    <IncludePath>$(Project)\Libs;D:\New folder\Jetpack Jetpack Party DX11\DirectX11_Starter\Libs;%DXSDK_DIR%Include\x64\xaudio2.lib;%DXSDK_DIR%Include\x64\xaudio3.lib;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Additional Packages\bullet-2.82-r2704\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(Project)\Libs;D:\New folder\Jetpack Jetpack Party DX11\DirectX11_Starter\Libs;%DXSDK_DIR%Include\x64\xaudio2.lib;%DXSDK_DIR%Include\x64\xaudio3.lib;$(ProjectLib)\Additional Packages\bullet-2.82-r2704\src;$(IncludePath);$(SolutionDir)\Additional Packages\bullet-2.82-r2704\src</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(Project)\Libs;D:\New folder\Jetpack Jetpack Party DX11\DirectX11_Starter\Libs;%DXSDK_DIR%Include\x64\xaudio2.lib;%DXSDK_DIR%Include\x64\xaudio3.lib;$(IncludePath)</IncludePath>
+    <IncludePath>$(Project)\Libs;D:\New folder\Jetpack Jetpack Party DX11\DirectX11_Starter\Libs;%DXSDK_DIR%Include\x64\xaudio2.lib;%DXSDK_DIR%Include\x64\xaudio3.lib;$(IncludePath);$(SolutionDir)\Additional Packages\bullet-2.82-r2704\src</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -53,15 +53,17 @@
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\inc;$(SolutionDir)\Toolkit\inc;%(AdditionalIncludeDirectories);$(DXSDK_DIR)\Lib\x64</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\inc;$(SolutionDir)\Toolkit\inc;%(AdditionalIncludeDirectories);$(DXSDK_DIR)\Lib\x64;$(ProjectDir)\Bullet\src</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;BulletCollision_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;LinearMath_vs2010_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)\Bullet\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -77,7 +79,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\inc;$(SolutionDir)\Toolkit\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAsManaged>false</CompileAsManaged>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -87,6 +89,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ClientConnectionEntity.cpp" />
@@ -101,7 +104,9 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GeneralUtility\GUMathUtility.cpp" />
     <ClCompile Include="GeneralUtility\GUParseUtility.cpp" />
+    <ClCompile Include="Jetpack.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="ManeuverJetpack.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -113,8 +118,10 @@
   <ItemGroup>
     <ClInclude Include="..\XInputValues.h" />
     <ClInclude Include="..\XNew.h" />
+    <ClInclude Include="AnimationBase.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="AudioWaveManager.h" />
+    <ClInclude Include="BulletManager.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ClientConnectionEntity.h" />
     <ClInclude Include="Common.h" />
@@ -134,12 +141,18 @@
     <ClInclude Include="GeneralUtility\GUMathUtility.h" />
     <ClInclude Include="GeneralUtility\GUParseUtility.h" />
     <ClInclude Include="GUIBase.h" />
+    <ClInclude Include="GUIText.h" />
     <ClInclude Include="GUIManager.h" />
+    <ClInclude Include="GUITextBox.h" />
+    <ClInclude Include="GUITextures.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="Jetpack.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="ManeuverJetpack.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MessageTypes.h" />
     <ClInclude Include="ModelLoad\MLMaterialLoader.h" />
     <ClInclude Include="ModelLoad\MLModelViewer.h" />
     <ClInclude Include="MouseLook.h" />
@@ -156,6 +169,9 @@
     <ClInclude Include="XNew.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Shaders\DeferredPixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+    </FxCompile>
     <FxCompile Include="Shaders\SimplePixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
@@ -175,6 +191,12 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Bullet\build\vs2010_dx11\BulletCollision.vcxproj">
+      <Project>{3b6c779f-684e-824f-8082-e3eca2da75d7}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Bullet\build\vs2010_dx11\LinearMath.vcxproj">
+      <Project>{65e61ba4-768a-4241-bfbd-6b488bb303ff}</Project>
+    </ProjectReference>
     <ProjectReference Include="Toolkit\Audio\DirectXTKAudio_Desktop_2012_DXSDK.vcxproj">
       <Project>{4f150a30-cecb-49d1-8283-6a3f57438cf5}</Project>
     </ProjectReference>
