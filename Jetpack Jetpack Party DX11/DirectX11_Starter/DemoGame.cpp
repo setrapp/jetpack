@@ -198,13 +198,13 @@ void DemoGame::CreateGeometryBuffers()
 	// Create orthographic and projection plane for deferred rendering.
 	float halfWindowWidth = windowWidth / 2, halfWindowHieght= windowHeight / 2;
 	XMStoreFloat4x4(&deferredView, XMMatrixTranspose(XMMatrixLookAtLH(XMLoadFloat3(&XMFLOAT3(0, 0, -50)), XMLoadFloat3(&XMFLOAT3(0, 0, 0)), XMLoadFloat3(&XMFLOAT3(0, 1, 0)))));
-	XMStoreFloat4x4(&deferredProjection, XMMatrixTranspose(XMMatrixOrthographicLH(windowWidth * 2, windowHeight * 2, 0.1f, 100.0f)));
+	XMStoreFloat4x4(&deferredProjection, XMMatrixTranspose(XMMatrixOrthographicLH(windowWidth, windowHeight, 0.1f, 100.0f)));
 	Vertex deferredVertices[] = 
 	{
-		{ XMFLOAT3(+halfWindowWidth, +halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 0) },
-		{ XMFLOAT3(-halfWindowWidth, -halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 1) },
-		{ XMFLOAT3(+halfWindowWidth, -halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 1) },		
-		{ XMFLOAT3(-halfWindowWidth, +halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 0) },
+		{ XMFLOAT3(+halfWindowWidth, +halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 0) },
+		{ XMFLOAT3(-halfWindowWidth, -halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 1) },
+		{ XMFLOAT3(+halfWindowWidth, -halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 1) },		
+		{ XMFLOAT3(-halfWindowWidth, +halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 0) },
 	};
 	UINT deferredIndices[] = { 0, 2, 1, 3, 0, 1 };
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.0f, 0.0f, 0.0f, 1), XMFLOAT4(0, 0, 0, 0), XMFLOAT4(0, 0, 0, 0), 16), "deferred");
@@ -450,8 +450,8 @@ void DemoGame::UpdateScene(float dt)
 // Clear the screen, redraw everything, present
 void DemoGame::DrawScene()
 {
-	//deferredRenderer->SetTargets();
-	//deferredRenderer->ClearTargets(clearColor);
+	deferredRenderer->SetTargets();
+	deferredRenderer->ClearTargets(clearColor);
 
 	//TODO take this out when defered rendering works.
 	deviceContext->ClearRenderTargetView(
@@ -507,7 +507,7 @@ void DemoGame::DrawScene()
 		// Draw entities.
 		for(Entity* e :entities) 
 		{			
-			e->Draw(&entityDrawArgs, &camera->view, &camera->projection);
+			e->Draw(&entityDrawArgs);
 		}
 	}
 	flag = true;
@@ -526,13 +526,14 @@ void DemoGame::DrawScene()
 	deferredPlaneDrawArgs.vsModelConstantBufferData = &vsModelConstantBufferData;
 	deferredPlaneDrawArgs.materialsAndLightsConstantBuffer = materialsAndLightsConstantBuffer;
 	deferredPlaneDrawArgs.materialsAndLightsConstantBufferData = &materialsAndLightsConstantBufferData;
+	deviceContext->PSSetShaderResources(0, TARGET_COUNT, deferredRenderer->GetShaderResourceViews());
 
 	deferredPlane->Draw(&deferredPlaneDrawArgs, &deferredView, &deferredProjection);
 
 	HR(swapChain->Present(0, 0));
 
 	// Reset to usual 3D rendering settings.
-	deviceContext->OMSetDepthStencilState(depthStencilState, NULL);
+	//deviceContext->OMSetDepthStencilState(depthStencilState, NULL);
 }
 
 
