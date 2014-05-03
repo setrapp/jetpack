@@ -35,7 +35,7 @@ public:
 		
 		CommonStates states(DXConnection::Instance()->device);
 		deviceContext->OMSetBlendState(states.NonPremultiplied(), nullptr, 0xFFFFFFFF);
-		spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, nullptr, nullptr, nullptr, [=]
+		spriteBatch->Begin(SpriteSortMode_BackToFront, nullptr, nullptr, nullptr, nullptr, [=]
 		{			
 			CommonStates states(DXConnection::Instance()->device);
 			deviceContext->OMSetBlendState( states.NonPremultiplied(), nullptr, 0xFFFFFFFF);

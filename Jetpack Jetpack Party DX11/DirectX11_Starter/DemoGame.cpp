@@ -188,6 +188,7 @@ void DemoGame::CreateGeometryBuffers()
 	player->Finalize();
 	entities.push_back(player);
 	player->transform.Translate(XMFLOAT3(0, 1000, 0));
+	//player->transform.SetLocalRotation(XMFLOAT3(0, PI /2, 0));
 	AttachCameraToPlayer();
 	
 	Entity* jetman = new Entity();
@@ -229,8 +230,8 @@ void DemoGame::CreateGeometryBuffers()
 
 	Entity* floor = new Entity();
 	floor->AddModel(AssetManager::Instance()->GetModel("terrain"));
-	floor->transform.Translate(XMFLOAT3(0, -1000, 0));
-	floor->transform.Scale(XMFLOAT3(500, 500, 500));
+	floor->transform.Translate(XMFLOAT3(0, -200, 0));
+	floor->transform.Scale(XMFLOAT3(1000, 1000, 1000));
 	entities.push_back(floor);
 	floor->Finalize();
 }
@@ -331,7 +332,7 @@ void DemoGame::OnResize()
 			0.25f * 3.1415926535f,
 			AspectRatio(),
 			0.1f,
-			10000.0f);
+			100000.0f);
 
 	XMStoreFloat4x4(&playerCamera->projection, XMMatrixTranspose(P));
 	XMStoreFloat4x4(&debugCamera->projection, XMMatrixTranspose(P));

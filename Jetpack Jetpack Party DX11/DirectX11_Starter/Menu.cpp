@@ -17,16 +17,12 @@ Menu::Menu(FontRenderer* renderer, SpriteRenderer* spRenderer, const short Scree
 {
 	guiMan = new GUIManager();	
 
-	auto p = Rect::GetRECTFromRect(new Rect(0, 0, ScreenWidth, ScreenHeight));
-	guiMan->Add("Background", new GUITexture(p, L"../Assets/Menu_bg.png", spRenderer, true));
-	delete p;
-
 	GUIText* nG = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, 0 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"NEW GAME", 1, AnimationType::RIGHTTOLEFT, renderer, 4000, Colors::Black);
 	guiMan->Add("NEWGAME", nG);
 	GUIText* settings = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, 100 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"SETTINGS", 3, AnimationType::RIGHTTOLEFT, renderer, 4000, Colors::Black);
 	guiMan->Add("SETTINGS", settings);
 	GUIText* exit = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, 200 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"EXIT", 5, AnimationType::RIGHTTOLEFT, renderer, 4000, Colors::Black);
-	guiMan->Add("EXIT", exit);
+	guiMan->Add("EXIT", exit);	
 
 	if(!r)
 		r = new RECT();
@@ -36,7 +32,17 @@ Menu::Menu(FontRenderer* renderer, SpriteRenderer* spRenderer, const short Scree
 	r->right	= nG->GetRect().x;						//End it where the text starts
 	r->bottom	= nG->GetRect().y	+	TICKER_HEIGHT; //End its y where the 
 
-	guiMan->Add("Texture", new GUITexture(r, L"../Assets/jetpackimage.png", spRenderer));	
+	guiMan->Add("Texture", new GUITexture(r, L"../Assets/jetpackimage.png", spRenderer));
+
+	auto p = Rect::GetRECTFromRect(new Rect(0, 0, ScreenWidth, ScreenHeight));
+	guiMan->Add("Background", new GUITexture(p, L"../Assets/Menu_bg.png", spRenderer, true));
+	delete p;
+
+	guiMan->_guiElements["NEWGAME"]->SetDepth(0.5f);
+	guiMan->_guiElements["SETTINGS"]->SetDepth(0.5f);
+	guiMan->_guiElements["EXIT"]->SetDepth(0.5f);
+	guiMan->_guiElements["Texture"]->SetDepth(0);
+	guiMan->_guiElements["Background"]->SetDepth(1);
 
 	this->fontRenderer = renderer;	
 	

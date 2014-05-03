@@ -32,7 +32,7 @@ public :
 	bool isStatic;
 	ID3D11Resource* texture;
 	
-	GUITexture(RECT* rect, wchar_t* path, SpriteRenderer* spBatch, bool isStatic = false, FXMVECTOR color = Colors::White, XMFLOAT2 Scale =XMFLOAT2(1, 1), float rotation = 0, float depth = 1, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
+	GUITexture(RECT* rect, wchar_t* path, SpriteRenderer* spBatch, bool isStatic = false, FXMVECTOR color = Colors::White, XMFLOAT2 Scale =XMFLOAT2(1, 1), float rotation = 0, float depth = 0, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
 	{
 		CreateWICTextureFromFile(
 		DXConnection::Instance()->device, 
