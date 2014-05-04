@@ -26,11 +26,13 @@ public:
 	bool controllable;
 	Jetpack* jetpack;
 	XMFLOAT3 respawnPosition;
+	XMFLOAT3 respawnLocalRotation;
 
 private:
 	void CheckInput(float dt);
 
 private:
+	float minPosture;
 	XMFLOAT3 angularVelocity;
 	XMFLOAT3 worldVelocity;
 	float maxSpeed;

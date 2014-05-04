@@ -29,14 +29,20 @@ struct VertexToPixel
 	float3 toLight		: NORMAL2;
 };
 
+struct PixelOutput
+{
+	float4 ambient	: SV_TARGET0;
+	float4 diffuse	: SV_TARGET1;
+	float4 normal	: SV_TARGET2;
+};
+
 Texture2D myTexture : register(t0);
 SamplerState mySampler : register(s0);
 
-// Entry point for this pixel shader
-float4 main(VertexToPixel input) : SV_TARGET
-{	
+PixelOutput main(VertexToPixel input) : SV_TARGET
+{
 	// Sample Texture.
-	float4 sampleColor = myTexture.Sample(mySampler, input.uv);
+	float4 sampleColor = (0, 0, 0, 0);//myTexture.Sample(mySampler, input.uv);
 
 	// Extract color data.
 	float4 inAmbient = material.ambient;
@@ -50,7 +56,7 @@ float4 main(VertexToPixel input) : SV_TARGET
 	input.toLight = normalize(input.toLight);
 
 	// Ambient
-	float4 ambient = sampleColor * inAmbient * light.ambient;
+	float4 ambient = inAmbient * light.ambient;
 
 	// Diffuse and Specular
 	float4 diffuse = float4(0, 0, 0, 0);
@@ -58,17 +64,20 @@ float4 main(VertexToPixel input) : SV_TARGET
 	float diffuseIntensity = dot(input.normal, input.toLight);
 	if (diffuseIntensity > 0)
 	{
-		diffuse = sampleColor * inDiffuse * light.diffuse * float4(diffuseIntensity, diffuseIntensity, diffuseIntensity, 1);
+		diffuse = inDiffuse * light.diffuse * float4(diffuseIntensity, diffuseIntensity, diffuseIntensity, 1);
 
 		float3 lightReflect = reflect(-input.toLight, input.normal);
 		float specularIntensity = dot(input.toEye, lightReflect);
 		specularIntensity = pow(specularIntensity, inShininess);
 		if (specularIntensity > 0)
 		{
-			specular = sampleColor * inSpecular * light.specular * specularIntensity;
+			specular = inSpecular * light.specular * specularIntensity;
 		}
 	}
 
-
-	return ambient + diffuse + specular;
+	PixelOutput output;
+	output.ambient = inAmbient;
+	output.diffuse = inDiffuse;
+	output.normal = float4(input.normal, 0);
+	return output;
 }

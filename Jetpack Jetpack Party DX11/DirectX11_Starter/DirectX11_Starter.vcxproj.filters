@@ -292,9 +292,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Toolkit\Src\Shaders\DGSLPhong.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="Shaders\SimplePixelShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>

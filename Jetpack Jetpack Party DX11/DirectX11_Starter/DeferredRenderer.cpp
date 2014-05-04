@@ -134,12 +134,12 @@ void DeferredRenderer::ClearTargets(float clearColor[4])
 	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
-ID3D11ShaderResourceView* const* DeferredRenderer::GetShaderResourceViews()
+ID3D11ShaderResourceView** DeferredRenderer::GetShaderResourceViews()
 {
 	return shaderResourceViews;
 }
 
-ID3D11ShaderResourceView const* DeferredRenderer::GetShaderResourceView(int index)
+ID3D11ShaderResourceView* DeferredRenderer::GetShaderResourceView(int index)
 {
 	return shaderResourceViews[index];
 }

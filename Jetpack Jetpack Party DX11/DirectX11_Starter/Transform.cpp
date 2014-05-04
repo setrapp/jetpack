@@ -430,7 +430,18 @@ void Transform::ApplyRotation(XMFLOAT3 rotation)
 {
 	XMFLOAT3 eulerAngles;
 	XMStoreFloat3x3(&this->rotation, XMMatrixIdentity());
-	XMStoreFloat3(&eulerAngles, XMLoadFloat3(&rotation));
-	Rotate(eulerAngles);
+	if (parent)
+	{
+		right = parent->TransformDirection(XMFLOAT3(1, 0, 0));
+		up = parent->TransformDirection(XMFLOAT3(0, 1, 0));
+		forward = parent->TransformDirection(XMFLOAT3(0, 0, 1));
+	}
+	else
+	{
+		right = XMFLOAT3(1, 0, 0);
+		up = XMFLOAT3(0, 1, 0);
+		forward = XMFLOAT3(0, 0, 1);
+	}
+	Rotate(rotation);
 	UpdateLocalAndWorld();
 }

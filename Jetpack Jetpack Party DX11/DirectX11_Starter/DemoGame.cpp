@@ -469,19 +469,6 @@ void DemoGame::DrawScene()
 	deferredRenderer->SetTargets();
 	deferredRenderer->ClearTargets(clearColor);
 
-
-	if(currentState == GameState::MenuState)
-	{
-		spriteRenderer->Begin();
-		menu->Render();
-		spriteRenderer->End();
-		if(!mouseCursorVisibility)
-		{
-			mouseCursorVisibility = true;
-			ShowCursor(mouseCursorVisibility);
-		}
-	}
-
 #ifndef OPTIMIZATION
 	deviceContext->IASetInputLayout(inputLayout);
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -540,11 +527,26 @@ void DemoGame::DrawScene()
 	// Draw rendering plane to back buffer.
 	deferredPlane->Draw(&deferredPlaneDrawArgs, &deferredView, &deferredProjection);
 
-	// Present to front buffer.
-	HR(swapChain->Present(0, 0));
-
 	// Reset to usual 3D rendering settings.
 	deviceContext->OMSetDepthStencilState(depthStencilState, NULL);
+
+	// TODO Render transparency here.
+
+	// Render Menus and HUD.
+	if(currentState == GameState::MenuState)
+	{
+		spriteRenderer->Begin();
+		menu->Render();
+		spriteRenderer->End();
+		if(!mouseCursorVisibility)
+		{
+			mouseCursorVisibility = true;
+			ShowCursor(mouseCursorVisibility);
+		}
+	}
+
+	// Present to front buffer.
+	HR(swapChain->Present(0, 0));
 }
 
 

@@ -29,22 +29,29 @@ struct VertexToPixel
 	float3 toLight		: NORMAL2;
 };
 
-Texture2D color : register(t0);
-Texture2D diffuse : register(t0);
-Texture2D normals : register(t0);
+Texture2D ambient : register(t0);
+Texture2D diffuse : register(t1);
+Texture2D normals : register(t2);
 SamplerState mySampler : register(s0);
-SamplerState textureSampler
-{
-	Filter = MIN_MAG_MIP_LINEAR;
-	AddressU = Wrap;
-	AddressV = Wrap;
-};
 
 // Entry point for this pixel shader
 float4 main(VertexToPixel input) : SV_TARGET
 {	
-	// Sample Texture.
-	float4 sampleColor = normals.Sample(textureSampler, input.uv);
+	// Sample textures.
+	float4 sampleAmbient = ambient.Sample(mySampler, input.uv);
+	float4 sampleDiffuse = diffuse.Sample(mySampler, input.uv);
+	float4 sampleNormal = normals.Sample(mySampler, input.uv);
+
+	// Ambient
+	float4 finalAmbient = sampleAmbient * light.ambient;
+
+	// Diffuse
+	float4 finalDiffuse = float4(0, 0, 0, 0);
+	float diffuseIntensity = dot(sampleNormal, input.toLight);
+	if (diffuseIntensity > 0)
+	{
+		finalDiffuse = sampleDiffuse * light.diffuse * float4(diffuseIntensity, diffuseIntensity, diffuseIntensity, 1);
+	}
 
 	// Extract color data.
 	/*float4 inAmbient = material.ambient;
@@ -78,5 +85,5 @@ float4 main(VertexToPixel input) : SV_TARGET
 	}*/
 
 
-	return sampleColor;
+	return finalAmbient + finalDiffuse;
 }

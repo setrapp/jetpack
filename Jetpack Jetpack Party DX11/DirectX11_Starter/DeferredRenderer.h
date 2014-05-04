@@ -10,8 +10,8 @@ public:
 	~DeferredRenderer();
 	void SetTargets();
 	void ClearTargets(float clearColor[4]);
-	ID3D11ShaderResourceView* const* GetShaderResourceViews();
-	ID3D11ShaderResourceView const* GetShaderResourceView(int index);
+	ID3D11ShaderResourceView** GetShaderResourceViews();
+	ID3D11ShaderResourceView* GetShaderResourceView(int index);
 private:
 	ID3D11Texture2D* targetTextures[TARGET_COUNT];
 	ID3D11RenderTargetView* targetViews[TARGET_COUNT];

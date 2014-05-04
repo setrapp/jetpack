@@ -4,7 +4,9 @@
 
 Player::Player()
 {
+	minPosture = 0.95f;
 	respawnPosition = XMFLOAT3(0, 0, 0);
+	respawnLocalRotation = XMFLOAT3(0, PI / 2, 0);
 	worldVelocity = XMFLOAT3(0, 0, 0);
 	angularVelocity = XMFLOAT3(0, 0, 0);
 	maxSpeed = 200;
@@ -65,7 +67,10 @@ void Player::Update(float dt)
 	} 
 	else if (worldVelocity.y <= 0 && (position.y < 0 || !grounded))
 	{
-		if (true)
+		// When landing, either respawn or stand straight up, depending on standing direction.
+		XMFLOAT3 upDot;
+		XMStoreFloat3(&upDot, XMVector3Dot(XMLoadFloat3(&transform.GetUp()), XMLoadFloat3(&XMFLOAT3(0, 1, 0))));
+		if (upDot.x < minPosture)
 		{
 			Respawn();
 		}
@@ -73,6 +78,8 @@ void Player::Update(float dt)
 		{
 			grounded = true;
 			worldVelocity.y = 0;
+			transform.SetLocalRotation(XMFLOAT3(0, transform.GetLocalEulerAngles().y, 0));
+			angularVelocity = XMFLOAT3(0, 0, 0);
 		}
 	}
 	velocity = transform.InverseTransformDirection(worldVelocity);
@@ -262,7 +269,7 @@ void Player::CheckInput(float dt)
 void Player::Respawn()
 {
 	transform.SetTranslation(respawnPosition);
-	transform.SetLocalRotation(XMFLOAT3(0, 0, 0));
+	transform.SetLocalRotation(respawnLocalRotation);
 	worldVelocity = XMFLOAT3(0, 0, 0);
 	angularVelocity = XMFLOAT3(0, 0, 0);
 	jetpack->Refuel(Jetpack::MAX_FUEL);
