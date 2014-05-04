@@ -23,8 +23,12 @@
 #include "InputManager.h"
 #include <queue>
 #include "XNew.h"
-#include <dinput.h>
+<<<<<<< HEAD
+#include "InputManager.h"
 #include "DeferredRenderer.h"
+=======
+#include <dinput.h>
+>>>>>>> 7f51578d4ea53aa49c00303e416e601af83d4ab0
 
 using namespace DirectX;
 
@@ -85,8 +89,6 @@ private:
 	XMFLOAT4X4 deferredProjection;
 	Entity* deferredPlane;
 	ID3D11DepthStencilState* deferredDepthlessState;
-	ID3D11RenderTargetView* nullRenderTargets[TARGET_COUNT];
-	ID3D11ShaderResourceView* nullShaderResources[TARGET_COUNT];
 
 
 	// Keeps track of the old mouse position.  Useful for 
@@ -108,9 +110,6 @@ private:
 
 	bool mouseCursorVisibility;
 	bool flag;
-
-	//Physics
-	BulletManager* bullet;
 };
 
 #endif

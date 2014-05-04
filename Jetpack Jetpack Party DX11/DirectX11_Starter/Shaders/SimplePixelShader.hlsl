@@ -29,10 +29,14 @@ struct VertexToPixel
 	float3 toLight		: NORMAL2;
 };
 
-//Texture2D myTexture : register(t0);
-//SamplerState mySampler : register(s0);
+struct PixelOutput
+{
+	float4 ambient	: SV_TARGET0;
+	float4 diffuse	: SV_TARGET1;
+	float4 normal	: SV_TARGET2;
+};
 
-float4 main(VertexToPixel input) : SV_TARGET
+PixelOutput main(VertexToPixel input) : SV_TARGET
 {
 	// Extract color data.
 	float4 inAmbient = material.ambient;
@@ -65,5 +69,9 @@ float4 main(VertexToPixel input) : SV_TARGET
 		}
 	}
 
-	return ambient + diffuse + specular;
+	PixelOutput output;
+	output.ambient = inAmbient;
+	output.diffuse = inDiffuse;
+	output.normal = float4(input.normal, 0);
+	return output;
 }

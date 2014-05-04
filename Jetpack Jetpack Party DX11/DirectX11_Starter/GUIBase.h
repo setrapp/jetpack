@@ -26,6 +26,7 @@ protected :
 	bool clicked;
 	bool hover;
 	XMFLOAT2 basePosition;
+	XMFLOAT2 startPosition;
 	XMFLOAT2 Origin;
 	float offset;
 	AnimationType animation;
@@ -46,4 +47,12 @@ public :
 		virtual inline void SetRotation(float rot) = 0;
 		virtual inline void SetSpriteEffects(const SpriteEffects fx) = 0;
 		virtual inline void SetScale(XMFLOAT2 scale) = 0;
+		inline void SetRect(Rect* rect)
+		 {
+			 *this->rect = *rect;
+		 }
+		inline void SetDepth(float depth)
+		{
+			this->depth = depth;
+		}
 };

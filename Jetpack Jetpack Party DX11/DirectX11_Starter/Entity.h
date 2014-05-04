@@ -16,7 +16,6 @@ struct EntityDrawArgs
 	VertexShaderModelConstantBuffer* vsModelConstantBufferData;
 	ID3D11Buffer* materialsAndLightsConstantBuffer;
 	MaterialsAndLightsConstantBuffer* materialsAndLightsConstantBufferData;
-	
 };
 
 class Entity
@@ -29,7 +28,7 @@ public:
 	void AddQuad(Vertex* v, UINT* u);
 	void AddModel(Model* model);
 	virtual void Update(float dt);
-	void Draw(EntityDrawArgs const* drawArgs);
+	void Draw(EntityDrawArgs const* drawArgs, XMFLOAT4X4 const* view = NULL, XMFLOAT4X4 const* projection = NULL);
 	void LoadTexture(wchar_t* path);
 	Material* GetBaseMaterial();
 	inline Material GetBaseMaterialSafe() const;

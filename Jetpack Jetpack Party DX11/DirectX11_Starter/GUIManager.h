@@ -10,7 +10,7 @@
 #include "GUIText.h"
 #include <map>
 #include "AnimationBase.h"
-
+#include <unordered_map>
 using namespace std;
 using namespace DirectX;
 
@@ -22,8 +22,8 @@ public:
 	}
 
 	~GUIManager()
-	{
-			map<char*, GUIBase*>::iterator i = _guiElements.begin();
+	{		
+			unordered_map<char*, GUIBase*>::iterator i = _guiElements.begin();
 			while(i != _guiElements.end())
 			{
 				//delete i->first;
@@ -78,5 +78,5 @@ public:
 	}
 
 public:
-	map<char*, GUIBase*> _guiElements;
+	unordered_map<char*, GUIBase*> _guiElements;
 };

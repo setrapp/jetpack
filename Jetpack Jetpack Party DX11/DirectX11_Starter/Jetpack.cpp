@@ -15,6 +15,9 @@ Jetpack::Jetpack(Entity* player)
 	ascentAcceleration = 200.0f;
 	thrusterCount = 0;
 	thrusters = NULL;
+	maxFuel = 100;
+	fuel = maxFuel;
+	fuelUseRate = 0;
 }
 
 Jetpack::~Jetpack()
@@ -34,7 +37,19 @@ Jetpack::~Jetpack()
 void Jetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 {
 	active = false;
-	CheckInput(dt, velocity, angularVelocity);
+	if (fuel > 0)
+	{
+		CheckInput(dt, velocity, angularVelocity);
+	}
+	if (active)
+	{
+		fuel -= fuelUseRate * dt;
+		Debug::Log(Debug::ToString(fuel));
+		if (fuel < 0)
+		{
+			fuel == 0;
+		}
+	}
 }
 
 void Jetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
@@ -83,5 +98,20 @@ void Jetpack::CreateThrusters()
 		thrusters[i]->Finalize();
 		thrusters[i]->transform.SetParent(&player->transform);
 		thrusters[i]->transform.SetLocalTranslation(XMFLOAT3(0, 0, 0));
+	}
+}
+
+void Jetpack::Refuel(int fuelAdd)
+{
+	if (fuelAdd == MAX_FUEL)
+	{
+		fuelAdd = maxFuel;
+	}
+
+	fuel += fuelAdd;
+
+	if (fuel > maxFuel)
+	{
+		fuel = maxFuel;
 	}
 }

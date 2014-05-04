@@ -10,11 +10,13 @@ public:
 	~Jetpack();
 	virtual void Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
 	virtual void CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
+	void Refuel(int fuelAdd);
 
 protected:
 	void CreateThrusters();
 
 public:
+	static const int MAX_FUEL = -1;
 	bool allowInputForces;
 	float maxSpeed;
 	float forwardAcceleration;
@@ -25,4 +27,7 @@ public:
 	Entity* player;
 	Entity** thrusters;
 	int thrusterCount;
+	float fuel;
+	float maxFuel;
+	float fuelUseRate;
 };

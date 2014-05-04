@@ -116,9 +116,19 @@ public :
 
 		 void Render() const
 		 {
-			 std::wstring widestr = std::wstring(ss.str().begin(), ss.str().end());
-			 auto sp = this->fontRenderer->GetSpriteFont();
-			 sp->DrawString(fontRenderer->GetSpriteBatch(), widestr.c_str(), XMLoadFloat2(&XMFLOAT2(basePosition.x, basePosition.y)), XMLoadFloat4(&this->color), rotation, XMLoadFloat2(&XMFLOAT2(0, 0)), XMLoadFloat2(&scale), spriteFX, depth);
+			 if(ss)
+			 {
+				 auto temp = ss.rdbuf()->in_avail();
+				 if(ss.rdbuf()->in_avail() > 1)
+				 {
+					 std::wstring widestr = std::wstring(ss.str().begin(), ss.str().end());
+					 if(widestr != L"")
+					 {
+					 auto sp = this->fontRenderer->GetSpriteFont();
+					 sp->DrawString(fontRenderer->GetSpriteBatch(), widestr.c_str(), XMLoadFloat2(&XMFLOAT2(basePosition.x, basePosition.y)), XMLoadFloat4(&this->color), rotation, XMLoadFloat2(&XMFLOAT2(0, 0)), XMLoadFloat2(&scale), spriteFX, depth);
+					 }
+				 }
+			 }
 		 }
 
 		 const inline bool Clicked()

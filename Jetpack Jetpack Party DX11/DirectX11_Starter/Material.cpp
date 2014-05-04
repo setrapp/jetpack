@@ -67,7 +67,6 @@ void Material::ApplyTexture(wchar_t* path)
 	DXConnection::Instance()->device->CreateSamplerState(
 		&sBufferDesc,
 		&this->samplerState);
-	int a = 0;
 }
 
 ShaderMaterial Material::GetShaderMaterial()

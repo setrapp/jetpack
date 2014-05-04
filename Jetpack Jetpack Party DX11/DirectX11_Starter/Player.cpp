@@ -4,16 +4,19 @@
 
 Player::Player()
 {
-	velocity = XMFLOAT3(0, 0, 0);
+	minPosture = 0.95f;
+	respawnPosition = XMFLOAT3(0, 0, 0);
+	respawnLocalRotation = XMFLOAT3(0, PI / 2, 0);
+	worldVelocity = XMFLOAT3(0, 0, 0);
 	angularVelocity = XMFLOAT3(0, 0, 0);
 	maxSpeed = 200;
 	forwardAcceleration = 100.0f;
 	backwardAcceleration = 100.0f;
 	strafeAcceleration = 100.0f;
-	gravityAcceleration = 300.0f;
-	terminalVelocity = 5000;
+	gravityAcceleration = 600.0f;
+	terminalVelocity = 500000;
 	groundSpeedDampening = 0.1f;
-	airSpeedDampening = 0.5f;
+	airSpeedDampening = 0.3f;
 	grounded = true;
 	jetpack = new ManeuverJetpack(this);
 	clientEntity = new ClientConnectionEntity();
@@ -54,6 +57,8 @@ Player::~Player()
 
 void Player::Update(float dt)
 {
+	XMFLOAT3 velocity = transform.InverseTransformDirection(worldVelocity);
+
 	// Check for user input.
 	if (controllable)
 	{
@@ -67,8 +72,8 @@ void Player::Update(float dt)
 	// Clamp velocity withing max speed.
 	transform.ClampVector(&velocity, (grounded ? maxSpeed : jetpack->maxSpeed), 0);
 
-	// Apply world space accelerations.
-	XMFLOAT3 worldVelocity = transform.TransformDirection(velocity);
+	// Update world velocity and apply world space accelerations.
+	worldVelocity = transform.TransformDirection(velocity);
 
 	// TODO gravity should be handled by rigid body.
 	XMFLOAT3 position = transform.GetTranslation();
@@ -84,11 +89,20 @@ void Player::Update(float dt)
 	} 
 	else if (worldVelocity.y <= 0 && (position.y < 0 || !grounded))
 	{
-		grounded = true;
-		//transform.SetTranslation(XMFLOAT3(position.x, 0, position.z)));
-		//transform.SetLocalRotation(XMFLOAT3(0, 0, 0));
-		worldVelocity.y = 0;
-		//angularVelocity = XMFLOAT3(0, 0 ,0);
+		// When landing, either respawn or stand straight up, depending on standing direction.
+		XMFLOAT3 upDot;
+		XMStoreFloat3(&upDot, XMVector3Dot(XMLoadFloat3(&transform.GetUp()), XMLoadFloat3(&XMFLOAT3(0, 1, 0))));
+		if (upDot.x < minPosture)
+		{
+			Respawn();
+		}
+		else
+		{
+			grounded = true;
+			worldVelocity.y = 0;
+			transform.SetLocalRotation(XMFLOAT3(0, transform.GetLocalEulerAngles().y, 0));
+			angularVelocity = XMFLOAT3(0, 0, 0);
+		}
 	}
 	velocity = transform.InverseTransformDirection(worldVelocity);
 
@@ -249,13 +263,13 @@ void Player::CheckInput(float dt)
 		}*/
 
 		// TODO should use IPMan
-		if (GetAsyncKeyState(VK_SPACE))
+		/*if (GetAsyncKeyState(VK_SPACE))
 		{
 			// Reset Rotation
 			transform.SetLocalRotation(XMFLOAT3(0, 0, 0));
 			angularVelocity = (XMFLOAT3(0, 0, 0));
 			//grounded = false;
-		}
+		}*/
 	}
 
 
@@ -272,6 +286,15 @@ void Player::CheckInput(float dt)
 		networkSendTimer=0.2f;
 		clientEntity->sendMessage(MessageTypes::Client::MovementUpdate,getNetworkString());
 	}
+}
+
+void Player::Respawn()
+{
+	transform.SetTranslation(respawnPosition);
+	transform.SetLocalRotation(respawnLocalRotation);
+	worldVelocity = XMFLOAT3(0, 0, 0);
+	angularVelocity = XMFLOAT3(0, 0, 0);
+	jetpack->Refuel(Jetpack::MAX_FUEL);
 }
 
 vector<string>* Player::breakIntoParts(string s){

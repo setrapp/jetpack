@@ -35,8 +35,11 @@ Entity::~Entity(void)
 	{
 		delete *it;
 	}
-	//ReleaseMacro(vertexBuffer);
-	//ReleaseMacro(indexBuffer);
+	ReleaseMacro(vertexBuffer);
+	for (map<Material*, pair<ID3D11Buffer*, LONG>>::iterator it = indexBuffers.begin(); it != indexBuffers.end(); it++)
+	{
+		ReleaseMacro(it->second.first);
+	}
 }
 
 void Entity::AddQuad(Vertex* v, UINT* i)
@@ -97,7 +100,7 @@ void Entity::Update(float dt)
 	
 }
 
-void Entity::Draw(EntityDrawArgs const* drawArgs)
+void Entity::Draw(EntityDrawArgs const* drawArgs, XMFLOAT4X4 const* view, XMFLOAT4X4 const* projection)
 {
 	if (!visible || !drawArgs)
 	{
@@ -127,8 +130,22 @@ void Entity::Draw(EntityDrawArgs const* drawArgs)
 	VertexShaderModelConstantBuffer perPrimitiveVSConstantBuffer;
 	perPrimitiveVSConstantBuffer.world = transform.GetWorldMatrix();
 	perPrimitiveVSConstantBuffer.inverseTranspose = inverseTranspose;
-	perPrimitiveVSConstantBuffer.view = drawArgs->vsModelConstantBufferData->view;
-	perPrimitiveVSConstantBuffer.projection = drawArgs->vsModelConstantBufferData->projection;
+	if (view)
+	{
+		perPrimitiveVSConstantBuffer.view = *view;
+	}
+	else
+	{
+		perPrimitiveVSConstantBuffer.view = drawArgs->vsModelConstantBufferData->view;
+	}
+	if (projection)
+	{
+		perPrimitiveVSConstantBuffer.projection = *projection;
+	}
+	else
+	{
+		perPrimitiveVSConstantBuffer.projection = drawArgs->vsModelConstantBufferData->projection;
+	}
 
 	// Update vertex shader constant buffer with per primitive buffer.
 	DXConnection::Instance()->deviceContext->UpdateSubresource(drawArgs->vsModelConstantBuffer, 0, nullptr, &perPrimitiveVSConstantBuffer, 0, 0);
