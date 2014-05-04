@@ -1,7 +1,7 @@
 #pragma once
 #include "Common.h"
 
-#define TARGET_COUNT 1
+#define TARGET_COUNT 3
 
 class DeferredRenderer
 {

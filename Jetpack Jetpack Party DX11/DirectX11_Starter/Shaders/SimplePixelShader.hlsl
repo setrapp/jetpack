@@ -32,6 +32,8 @@ struct VertexToPixel
 struct PixelOutput
 {
 	float4 color	: SV_TARGET0;
+	float4 diffuse	: SV_TARGET1;
+	float4 normal	: SV_TARGET2;
 };
 
 //Texture2D myTexture : register(t0);
@@ -72,5 +74,7 @@ PixelOutput main(VertexToPixel input) : SV_TARGET
 
 	PixelOutput output;
 	output.color = ambient + diffuse + specular;
+	output.diffuse = inDiffuse;
+	output.normal = float4(input.normal, 0);
 	return output;
 }

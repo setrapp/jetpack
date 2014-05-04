@@ -29,7 +29,6 @@
 #include <stdlib.h>
 #include <comdef.h>
 #include <iostream>
-#include <dxgidebug.h>
 #include "Player.h"
 #include "Debug.h"
 #include "XInputValues.h"
@@ -186,6 +185,15 @@ bool DemoGame::Init()
 	deferredRenderer = new DeferredRenderer(windowWidth, windowHeight);
 	mouseLook = new MouseLook(NULL, XMFLOAT2(0.01f, 0.01f));
 
+	for (int i = 0; i < TARGET_COUNT; i++)
+	{
+		nullRenderTargets[i] = NULL;
+	}
+	for (int i = 0; i < TARGET_COUNT; i++)
+	{
+		nullShaderResources[i] = NULL;
+	}
+
 	return true;
 }
 
@@ -256,14 +264,14 @@ void DemoGame::CreateGeometryBuffers()
 	UINT indices[] = { 0, 2, 1, 3, 0, 1 };
 
 	Entity* gift = new Entity();
-	//gift->AddQuad(vertices, indices);
+	gift->AddQuad(vertices, indices);
 	
 	gift->transform.Translate(XMFLOAT3(-5, 5, 0));
 	entities.push_back(gift);
-	/*AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
 	gift->SetBaseMaterial("gift");
 	gift->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
-	gift->LoadTexture(L"../Assets/RedGift.png");*/
+	gift->LoadTexture(L"../Assets/RedGift.png");
 	gift->Finalize();
 
 	Entity* floor = new Entity();
@@ -456,12 +464,14 @@ void DemoGame::UpdateScene(float dt)
 // Clear the screen, redraw everything, present
 void DemoGame::DrawScene()
 {
+	// Prepare for rendering to textures.
+	deviceContext->PSSetShaderResources(0, TARGET_COUNT, nullShaderResources);
 	deferredRenderer->SetTargets();
 	deferredRenderer->ClearTargets(clearColor);
 
+
 	if(currentState == GameState::MenuState)
-	{	
-		// TODO: Not releaseing all live objects.
+	{
 		spriteRenderer->Begin();
 		menu->Render();
 		spriteRenderer->End();
@@ -481,6 +491,7 @@ void DemoGame::DrawScene()
 		1, 
 		&vsModelConstantBuffer);
 #endif
+
 	if (currentState == GameState::Playing) {		
 		if(mouseCursorVisibility)
 		{
@@ -512,17 +523,12 @@ void DemoGame::DrawScene()
 	// Prepare render to back buffer.
 	ID3D11DepthStencilState* depthStencilState;
 	deviceContext->OMGetDepthStencilState(&depthStencilState, NULL);
-	deviceContext->OMSetDepthStencilState(deferredDepthlessState, NULL);
-	ID3D11RenderTargetView* deferredTargets[TARGET_COUNT];
-	//deferredTargets[0] = renderTargetView;
-	for (int i = 0; i < TARGET_COUNT; i++)
-	{
-		deferredTargets[i] = NULL;
-	}
-	deviceContext->OMSetRenderTargets(TARGET_COUNT, deferredTargets, depthStencilView);
+	deviceContext->OMSetDepthStencilState(deferredDepthlessState, NULL);	
+	deviceContext->OMSetRenderTargets(TARGET_COUNT, nullRenderTargets, depthStencilView);
 	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
 	deviceContext->ClearRenderTargetView(renderTargetView, clearColor);
 	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	deviceContext->PSSetShaderResources(0, TARGET_COUNT, deferredRenderer->GetShaderResourceViews());
 
 	// Store entity drawing arguments.
 	EntityDrawArgs deferredPlaneDrawArgs;
@@ -530,16 +536,11 @@ void DemoGame::DrawScene()
 	deferredPlaneDrawArgs.vsModelConstantBufferData = &vsModelConstantBufferData;
 	deferredPlaneDrawArgs.materialsAndLightsConstantBuffer = materialsAndLightsConstantBuffer;
 	deferredPlaneDrawArgs.materialsAndLightsConstantBufferData = &materialsAndLightsConstantBufferData;
-	ID3D11ShaderResourceView* deferredResources[TARGET_COUNT];
-	for (int i = 0; i < TARGET_COUNT; i++)
-	{
-		deferredResources[i] = NULL;
-	}
-	deviceContext->PSSetShaderResources(0, TARGET_COUNT, deferredResources);
-	deviceContext->PSSetShaderResources(0, TARGET_COUNT, deferredRenderer->GetShaderResourceViews());
 
+	// Draw rendering plane to back buffer.
 	deferredPlane->Draw(&deferredPlaneDrawArgs, &deferredView, &deferredProjection);
 
+	// Present to front buffer.
 	HR(swapChain->Present(0, 0));
 
 	// Reset to usual 3D rendering settings.

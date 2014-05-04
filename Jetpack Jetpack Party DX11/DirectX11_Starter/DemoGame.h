@@ -85,6 +85,8 @@ private:
 	XMFLOAT4X4 deferredProjection;
 	Entity* deferredPlane;
 	ID3D11DepthStencilState* deferredDepthlessState;
+	ID3D11RenderTargetView* nullRenderTargets[TARGET_COUNT];
+	ID3D11ShaderResourceView* nullShaderResources[TARGET_COUNT];
 
 
 	// Keeps track of the old mouse position.  Useful for 
