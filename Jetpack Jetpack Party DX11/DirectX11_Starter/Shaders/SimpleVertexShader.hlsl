@@ -30,6 +30,7 @@ cbuffer materialsAndLights : register(b1)
 {
 	Material material;
 	Light light;
+	float4 projectionInfo;
 }
 
 struct VertexShaderInput
@@ -46,6 +47,7 @@ struct VertexToPixel
 	float2 uv			: TEXCOORD0;
 	float3 toEye		: NORMAL1;
 	float3 toLight		: NORMAL2;
+	float2 depth		: TEXCOORD1;
 };
 
 // The entry point for our vertex shader
@@ -69,6 +71,9 @@ VertexToPixel main( VertexShaderInput input )
 	// Calculate direction to light. Use fun math tricks to differentiate between point and directional lights.
 	float4 lightPos = light.world._41_42_43_44;
 	output.toLight = (lightPos.xyz * ((lightPos.a - 0.5) * 2))  - (input.position.xyz * lightPos.a);
+
+	// Store depth and the range between the near and far planes.
+	output.depth = float2(output.position.z, projectionInfo.x);
 
 	return output;
 }

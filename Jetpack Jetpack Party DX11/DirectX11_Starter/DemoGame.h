@@ -80,6 +80,7 @@ private:
 	VertexShaderModelConstantBuffer vsModelConstantBufferData;
 	ID3D11Buffer* materialsAndLightsConstantBuffer;
 	MaterialsAndLightsConstantBuffer materialsAndLightsConstantBufferData;
+	XMFLOAT4 projectionInfo;
 	DeferredRenderer* deferredRenderer;
 	XMFLOAT4X4 deferredView;
 	XMFLOAT4X4 deferredProjection;

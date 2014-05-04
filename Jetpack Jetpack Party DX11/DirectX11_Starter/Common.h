@@ -68,6 +68,7 @@ struct MaterialsAndLightsConstantBuffer
 {
 	ShaderMaterial material;
 	ShaderLight light;
+	XMFLOAT4 projectionInfo;
 };
 
 struct Vertex

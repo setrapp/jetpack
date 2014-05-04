@@ -18,6 +18,7 @@ cbuffer materialsAndLights : register(b1)
 {
 	Material material;
 	Light light;
+	float4 projectionInfo;
 }
 
 struct VertexToPixel
@@ -27,11 +28,13 @@ struct VertexToPixel
 	float2 uv			: TEXCOORD0;
 	float3 toEye		: NORMAL1;
 	float3 toLight		: NORMAL2;
+	float2 depth		: TEXCOORD0;
 };
 
 Texture2D ambient : register(t0);
 Texture2D diffuse : register(t1);
 Texture2D normals : register(t2);
+Texture2D depth : register(t3);
 SamplerState mySampler : register(s0);
 
 // Entry point for this pixel shader
@@ -41,6 +44,7 @@ float4 main(VertexToPixel input) : SV_TARGET
 	float4 sampleAmbient = ambient.Sample(mySampler, input.uv);
 	float4 sampleDiffuse = diffuse.Sample(mySampler, input.uv);
 	float4 sampleNormal = normals.Sample(mySampler, input.uv);
+	float4 sampleDepth = depth.Sample(mySampler, input.uv);
 
 	// Ambient
 	float4 finalAmbient = sampleAmbient * light.ambient;
@@ -84,6 +88,6 @@ float4 main(VertexToPixel input) : SV_TARGET
 		}
 	}*/
 
-
+	// TODO Depth totally does not work. Look into directly sampling the depth buffer.
 	return finalAmbient + finalDiffuse;
 }
