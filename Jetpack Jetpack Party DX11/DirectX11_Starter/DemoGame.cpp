@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <comdef.h>
 #include <iostream>
+#include <dxgidebug.h>
 #include "Player.h"
 #include "Debug.h"
 #include "XInputValues.h"
@@ -88,8 +89,10 @@ DemoGame::~DemoGame()
 {
 	ReleaseMacro(vsModelConstantBuffer);
 	ReleaseMacro(materialsAndLightsConstantBuffer);
+	ReleaseMacro(deferredDepthlessState);
 	
 	delete deferredRenderer;
+	delete deferredPlane;
 	
 	for(int i = 0 ; i < entities.size(); i++)
 	{
@@ -138,11 +141,13 @@ bool DemoGame::Init()
 	if (FAILED(hr))
 		int a = 0;
 	deviceContext->RSSetState(rasterizerState);
+	ReleaseMacro(rasterizerState);
 
 	assetManager = new AssetManager();
 
 	// Create depthless state for rendering to deferred plane.
 	D3D11_DEPTH_STENCIL_DESC deferredDepthlessDesc;
+	ZeroMemory(&deferredDepthlessDesc, sizeof(deferredDepthlessDesc));
 	deviceContext->OMGetDepthStencilState(&deferredDepthlessState, NULL);
 	if (deferredDepthlessState)
 	{
@@ -155,6 +160,7 @@ bool DemoGame::Init()
 	RECT rect;
 	GetClientRect(GetActiveWindow(), &rect);	
 	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/font.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );	
+
 	LoadShadersAndInputLayout();
 
 	AssetManager::Instance()->StoreMaterial(new Material());
@@ -453,18 +459,9 @@ void DemoGame::DrawScene()
 	deferredRenderer->SetTargets();
 	deferredRenderer->ClearTargets(clearColor);
 
-	//TODO take this out when defered rendering works.
-	deviceContext->ClearRenderTargetView(
-		renderTargetView,
-		clearColor);
-	deviceContext->ClearDepthStencilView(
-		depthStencilView, 
-		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
-		1.0f,
-		0);
-
 	if(currentState == GameState::MenuState)
 	{	
+		// TODO: Not releaseing all live objects.
 		spriteRenderer->Begin();
 		menu->Render();
 		spriteRenderer->End();
@@ -516,9 +513,16 @@ void DemoGame::DrawScene()
 	ID3D11DepthStencilState* depthStencilState;
 	deviceContext->OMGetDepthStencilState(&depthStencilState, NULL);
 	deviceContext->OMSetDepthStencilState(deferredDepthlessState, NULL);
+	ID3D11RenderTargetView* deferredTargets[TARGET_COUNT];
+	//deferredTargets[0] = renderTargetView;
+	for (int i = 0; i < TARGET_COUNT; i++)
+	{
+		deferredTargets[i] = NULL;
+	}
+	deviceContext->OMSetRenderTargets(TARGET_COUNT, deferredTargets, depthStencilView);
 	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
 	deviceContext->ClearRenderTargetView(renderTargetView, clearColor);
-	deviceContext->ClearDepthStencilView( depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	// Store entity drawing arguments.
 	EntityDrawArgs deferredPlaneDrawArgs;
@@ -526,6 +530,12 @@ void DemoGame::DrawScene()
 	deferredPlaneDrawArgs.vsModelConstantBufferData = &vsModelConstantBufferData;
 	deferredPlaneDrawArgs.materialsAndLightsConstantBuffer = materialsAndLightsConstantBuffer;
 	deferredPlaneDrawArgs.materialsAndLightsConstantBufferData = &materialsAndLightsConstantBufferData;
+	ID3D11ShaderResourceView* deferredResources[TARGET_COUNT];
+	for (int i = 0; i < TARGET_COUNT; i++)
+	{
+		deferredResources[i] = NULL;
+	}
+	deviceContext->PSSetShaderResources(0, TARGET_COUNT, deferredResources);
 	deviceContext->PSSetShaderResources(0, TARGET_COUNT, deferredRenderer->GetShaderResourceViews());
 
 	deferredPlane->Draw(&deferredPlaneDrawArgs, &deferredView, &deferredProjection);
@@ -533,7 +543,7 @@ void DemoGame::DrawScene()
 	HR(swapChain->Present(0, 0));
 
 	// Reset to usual 3D rendering settings.
-	//deviceContext->OMSetDepthStencilState(depthStencilState, NULL);
+	deviceContext->OMSetDepthStencilState(depthStencilState, NULL);
 }
 
 

@@ -50,6 +50,18 @@ public:
 		deviceContext->OMSetBlendState(blendState, blendVector, blendMask);
 		deviceContext->OMSetDepthStencilState(depthStencilState, NULL);
 		deviceContext->RSSetState(rasterizerState);
+		if (blendState)
+		{
+			blendState->Release();
+		}
+		if (depthStencilState)
+		{
+			depthStencilState->Release();
+		}
+		if (rasterizerState)
+		{
+			rasterizerState->Release();
+		}
 	}
 
 private: 

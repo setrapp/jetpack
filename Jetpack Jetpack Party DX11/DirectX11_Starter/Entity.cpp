@@ -26,8 +26,11 @@ Entity::~Entity(void)
 	{
 		delete *it;
 	}
-	//ReleaseMacro(vertexBuffer);
-	//ReleaseMacro(indexBuffer);
+	ReleaseMacro(vertexBuffer);
+	for (map<Material*, pair<ID3D11Buffer*, LONG>>::iterator it = indexBuffers.begin(); it != indexBuffers.end(); it++)
+	{
+		ReleaseMacro(it->second.first);
+	}
 }
 
 void Entity::AddQuad(Vertex* v, UINT* i)
