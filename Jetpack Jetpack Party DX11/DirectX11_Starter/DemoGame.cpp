@@ -112,6 +112,7 @@ DemoGame::~DemoGame()
 	delete menu;
 	delete mouseLook;
 	delete spriteRenderer;
+	delete bullet;
 }
 
 #pragma endregion
@@ -289,7 +290,7 @@ void DemoGame::CreateGeometryBuffers()
 
 	//Physics
 	{
-		
+		//Add all rigid bodies to dynamics world
 		bullet->dynamicsWorld->addRigidBody(player->rigidBody);
 	}
 }
@@ -472,7 +473,7 @@ void DemoGame::UpdateScene(float dt)
 	0,
 	0);
 
-	//Physics
+	//Physics Update
 	{
 		bullet->dynamicsWorld->stepSimulation(dt,10);
 		bullet->MoveRigidBodyWithEntity(player->transform.GetTranslation(), player->rigidBody);

@@ -40,7 +40,7 @@ public:
 	void Finalize();
 	bool GetVisible();
 	void SetVisible(bool visibility);
-
+	//Also has a rigid Body
 	btRigidBody* rigidBody;
 
 protected:

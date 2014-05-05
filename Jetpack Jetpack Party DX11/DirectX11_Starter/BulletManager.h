@@ -69,18 +69,27 @@ void InitPhysics()
 	dynamicsWorld->setGravity(btVector3(0,-10,0));
 }
 
+//End Bullet
+void ExitPhysics()
+{
+
+}
 
 //Callback
 void Update(float dt)
 {
+
 }
 
 ~BulletManager()
 {
-
+	ExitPhysics();
 }
 
-//Construct Player's Rigid Body
+//Construct Player's Rigid Body. 
+//Implement box collider
+//Rigid Body constructor needs a struct of parameters. 
+//Collision manager creates that and stores it (for all other player objects that may be instantiated later).
 void SetPlayerConstructionInfo(btCollisionShape* playerShape,btTransform& startTransform,btScalar mass,const btVector3& localInertia)
 {
 	//Gathering Rigid Body Construction Info
@@ -94,7 +103,16 @@ btRigidBody::btRigidBodyConstructionInfo* GetPlayerConstructionInfo()
 }
 
 //Construct Track Rigid Body (yet to be implemented)
+//Needs a mesh collider.
+void SetTrackConstructionInfo(/* what parameters? */)
+{
 
+}
+
+btRigidBody::btRigidBodyConstructionInfo* GetTrackConstructionInfo()
+{
+	return trackConstructionInfo;
+}
 
 //Covert XMVector3 to btVector3
 void MoveRigidBodyWithEntity(XMFLOAT3& playerTranslation, btRigidBody* entityBody)
