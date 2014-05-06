@@ -2,6 +2,7 @@
 #include "InputManager.h"
 #include "Entity.h"
 #include "AssetManager.h"
+#include "HUD.h"
 
 Jetpack::Jetpack(Entity* player)
 {
@@ -17,7 +18,7 @@ Jetpack::Jetpack(Entity* player)
 	thrusters = NULL;
 	maxFuel = 100;
 	fuel = maxFuel;
-	fuelUseRate = 0;
+	fuelUseRate = 1;
 }
 
 Jetpack::~Jetpack()
@@ -50,6 +51,8 @@ void Jetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 			fuel == 0;
 		}
 	}
+	
+	HUD::fuel = this->fuel;
 }
 
 void Jetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)

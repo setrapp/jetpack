@@ -14,6 +14,7 @@ public:
 	{
 		this->deviceContext = deviceContext;
 		spriteBatch = new DirectX::SpriteBatch(deviceContext);
+		begun = false;
 	}
 
 	~SpriteRenderer(void)
@@ -26,7 +27,7 @@ public:
 		return this->spriteBatch;
 	}
 
-	inline void SpriteRenderer::Begin()
+	inline void SpriteRenderer::Begin(SpriteSortMode spriteMode = SpriteSortMode::SpriteSortMode_BackToFront)
 	{
 		// Store states that about to change.
 		deviceContext->OMGetBlendState(&blendState, blendVector, &blendMask);
@@ -35,11 +36,12 @@ public:
 		
 		CommonStates states(DXConnection::Instance()->device);
 		deviceContext->OMSetBlendState(states.NonPremultiplied(), nullptr, 0xFFFFFFFF);
-		spriteBatch->Begin(SpriteSortMode_BackToFront, nullptr, nullptr, nullptr, nullptr, [=]
+		spriteBatch->Begin(spriteMode, nullptr, nullptr, nullptr, nullptr, [=]
 		{			
 			CommonStates states(DXConnection::Instance()->device);
 			deviceContext->OMSetBlendState( states.NonPremultiplied(), nullptr, 0xFFFFFFFF);
 		});
+		begun = true;
 	}
 
 	inline void SpriteRenderer::End()
@@ -62,6 +64,7 @@ public:
 		{
 			rasterizerState->Release();
 		}
+		begun = false;
 	}
 
 private: 
@@ -72,4 +75,5 @@ private:
 	UINT blendMask;
 	ID3D11DepthStencilState* depthStencilState;
 	ID3D11RasterizerState* rasterizerState;
+	bool begun;
 };

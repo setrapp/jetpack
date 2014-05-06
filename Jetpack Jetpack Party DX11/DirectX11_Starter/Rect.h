@@ -15,6 +15,8 @@ public:
 
 	Rect(int x, int y, int width, int height)
 	{
+		if(!this)
+		{}
 		this->x = x;
 		this->y = y;
 		this->width = width;

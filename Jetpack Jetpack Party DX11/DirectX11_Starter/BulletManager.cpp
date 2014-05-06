@@ -19,7 +19,7 @@ dispatcher = new	btCollisionDispatcher(collisionConfiguration);
 overlappingPairCache = new btDbvtBroadphase();
 
 //the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
-solver = new btSequentialImpulseConstraintSolver;
+solver = new btSequentialImpulseConstraintSolver();
 
 //Initialize Discrete Dynamics World
 dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,overlappingPairCache,solver,collisionConfiguration);

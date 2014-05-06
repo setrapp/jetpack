@@ -35,6 +35,7 @@
 #include "InputManager.h"
 #include "SoundManager.h"
 #include "SpriteRenderer.h"
+#include "HUD.h"
 #define DIRECTINPUT_VERSION 0x0800
 
 using namespace std;
@@ -262,6 +263,18 @@ void DemoGame::CreateGeometryBuffers()
 	};
 
 	UINT indices[] = { 0, 2, 1, 3, 0, 1 };
+
+	Vertex hudVertices[] = 
+	{
+		{ XMFLOAT3(+1.0f, +1.0f, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 0) },
+		{ XMFLOAT3(-1.0f, -1.0f, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 1) },
+		{ XMFLOAT3(+1.0f, -1.0f, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 1) },	
+	};
+
+	UINT hudIndices[] = { 0, 2, 1};
+
+	h = new HUD(spriteRenderer, FontManager::Instance()->GetFont("MENUFONT"));
+	
 
 	Entity* gift = new Entity();
 	gift->AddQuad(vertices, indices);
@@ -504,6 +517,7 @@ void DemoGame::DrawScene()
 		{			
 			e->Draw(&entityDrawArgs);
 		}
+		
 	}
 	flag = true;
 
@@ -544,6 +558,13 @@ void DemoGame::DrawScene()
 			ShowCursor(mouseCursorVisibility);
 		}
 	}
+
+	else
+		if(currentState == GameState::Playing)
+		{
+			h->Render();
+		}
+
 
 	// Present to front buffer.
 	HR(swapChain->Present(0, 0));

@@ -25,6 +25,7 @@
 #include "XNew.h"
 #include <dinput.h>
 #include "DeferredRenderer.h"
+#include "HUD.h"
 
 using namespace DirectX;
 
@@ -105,7 +106,7 @@ private:
 	GameState currentState;
 	Menu* menu;
 	MouseLook* mouseLook;
-
+	HUD* h;
 	bool mouseCursorVisibility;
 	bool flag;
 };

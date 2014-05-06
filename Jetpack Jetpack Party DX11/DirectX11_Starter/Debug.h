@@ -15,21 +15,35 @@ class Debug
 {
 public: 
 
-	inline static string ToString(float t)
+	inline static string ToString(const float t)
 	{		
 		std::stringstream ss;
 		ss << t;
 		return ss.str();
 	}
 
-	inline static string ToString(double t)
+	inline static string ToString(const double t)
 	{		
 		std::stringstream ss;
 		ss << t;
 		return ss.str();
 	}
 
-	inline static string ToString(XMFLOAT4 v)
+	inline static string ToString(const short t)
+	{		
+		std::stringstream ss;
+		ss << t;
+		return ss.str();
+	}
+
+	inline static string ToString(const unsigned short t)
+	{		
+		std::stringstream ss;
+		ss << t;
+		return ss.str();
+	}
+
+	inline static string ToString(const XMFLOAT4 v)
 	{
 		std::stringstream ss;
 		ss << "x : " << v.x << "\ny : " << v.y << "\nz : " << v.z << "\nw : " << v.w;
@@ -72,13 +86,13 @@ public:
 		return ss.str();
 	}
 
-	inline static void Log(string s)
+	inline static void Log(const string s)
 	{
 		string line = s + "\n";
 		OutputDebugStringA(line.c_str());
 	}
 
-	inline static string ToString(void * ptr)
+	inline static string ToString(const void * ptr)
 	{
 		std::stringstream ss;
 		if(ptr)

@@ -16,7 +16,10 @@ protected:
 	void CreateThrusters();
 
 public:
+
 	static const int MAX_FUEL = -1;
+
+
 	bool allowInputForces;
 	float maxSpeed;
 	float forwardAcceleration;
