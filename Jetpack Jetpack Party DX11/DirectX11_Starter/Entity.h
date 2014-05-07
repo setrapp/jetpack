@@ -18,6 +18,13 @@ struct EntityDrawArgs
 	MaterialsAndLightsConstantBuffer* materialsAndLightsConstantBufferData;
 };
 
+struct EntityPhysicsData
+{
+	btVector3* entityVertices;
+	int* indices;
+	btVector3 aabbMin , aabbMax;
+};
+
 class Entity
 {
 public:
@@ -42,6 +49,8 @@ public:
 	void SetVisible(bool visibility);
 	//Also has a rigid Body
 	btRigidBody* rigidBody;
+	//
+	EntityPhysicsData* entityCollisionShapeData;
 
 protected:
 	map<Material*, pair<ID3D11Buffer*, LONG>> indexBuffers;

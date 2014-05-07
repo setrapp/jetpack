@@ -30,6 +30,12 @@ public:
 	//Track Construction Info
 	btRigidBody::btRigidBodyConstructionInfo* trackConstructionInfo;
 
+	//Player Collision Shape
+	btCollisionShape* playerCollisionShape;
+
+	//Track Collision Shape
+	btBvhTriangleMeshShape* trackCollisionShape;
+
 BulletManager()
 {
 	//Physics
@@ -104,9 +110,12 @@ btRigidBody::btRigidBodyConstructionInfo* GetPlayerConstructionInfo()
 
 //Construct Track Rigid Body (yet to be implemented)
 //Needs a mesh collider.
-void SetTrackConstructionInfo(/* what parameters? */)
+void SetTrackConstructionInfo(Entity* track)
 {
-
+	trackCollisionShape = new btBvhTriangleMeshShape(track->entityCollisionShapeData->entityVertices, 
+													 TRUE,
+													 track->entityCollisionShapeData->aabbMin,
+													 track->entityCollisionShapeData->aabbMax);
 }
 
 btRigidBody::btRigidBodyConstructionInfo* GetTrackConstructionInfo()

@@ -228,13 +228,19 @@ inline vector<Mesh*> Entity::GetMeshes() const
 
 void Entity::Finalize()
 {
+	
 	if (meshes.size() < 1 || vertices.size() < 1)
 	{
 		return;
 	}
+	Vertex first = vertices.at(0);
+
+	entityCollisionShapeData->aabbMin= btVector3(first.Position.x,first.Position.y,first.Position.z);
+	entityCollisionShapeData->aabbMax= btVector3(first.Position.x,first.Position.y,first.Position.z);
 
 	map<Material*, vector<UINT>*> indicesAll;
 	long totalMeshes = meshes.size();
+	int numOfIndices = 0;
 	for(int i = 0; i < totalMeshes; i++)
 	{
 		Material* meshMaterial = meshes[i]->GetMaterial();
@@ -253,8 +259,25 @@ void Entity::Finalize()
 		for(short j= 0; j < 3; j++)
 		{
 			materialIndices->push_back(indices[j]);
+			numOfIndices++;
 		}
 	}
+
+
+	//Physics
+	
+	entityCollisionShapeData->indices = new int[numOfIndices];
+
+	for(int i = 0; i < totalMeshes; i++)
+	{
+		UINT* indices = meshes.at(i)->GetIndices();
+		for(short j= 0; j < 3; j++)
+		{
+			entityCollisionShapeData->indices[i*3 + j] = indices[j];
+		}
+	}
+	
+	//
 
 	for (map<Material*, vector<UINT>*>::iterator it = indicesAll.begin(); it != indicesAll.end(); it++)
 	{
@@ -297,6 +320,31 @@ void Entity::Finalize()
 		&vbd,
 		&initialVertexData,
 		&vertexBuffer));
+
+	//Physics
+	entityCollisionShapeData->entityVertices = new btVector3[vertices.size()];
+	for (int i=0; i<vertices.size(); i++)
+	{
+		Vertex temp = vertices.at(i);
+		entityCollisionShapeData->entityVertices[i].x = temp.Position.x;
+		entityCollisionShapeData->entityVertices[i].y = temp.Position.y;
+		entityCollisionShapeData->entityVertices[i].z = temp.Position.z;
+		//aabbMax
+		if (temp.Position.x > entityCollisionShapeData->aabbMax.x)
+			entityCollisionShapeData->aabbMax.x = temp.Position.x;
+		if (temp.Position.y > entityCollisionShapeData->aabbMax.y)
+			entityCollisionShapeData->aabbMax.y = temp.Position.y;
+		if (temp.Position.z > entityCollisionShapeData->aabbMax.z)
+			entityCollisionShapeData->aabbMax.z = temp.Position.z;
+		//aabbMin
+		if (temp.Position.x < entityCollisionShapeData->aabbMin.x)
+			entityCollisionShapeData->aabbMin.x = temp.Position.x;
+		if (temp.Position.y < entityCollisionShapeData->aabbMin.y)
+			entityCollisionShapeData->aabbMin.y = temp.Position.y;
+		if (temp.Position.z < entityCollisionShapeData->aabbMin.z)
+			entityCollisionShapeData->aabbMin.z = temp.Position.z;
+	}
+	//
 
 	for(map<Material*, vector<UINT>*>::iterator it = indicesAll.begin(); it != indicesAll.end(); it++)
 	{
