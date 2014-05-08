@@ -32,10 +32,10 @@ Menu::Menu(FontRenderer* renderer, SpriteRenderer* spRenderer, const short Scree
 	r->right	= nG->GetRect().x;						//End it where the text starts
 	r->bottom	= nG->GetRect().y	+	TICKER_HEIGHT; //End its y where the 
 
-	guiMan->Add("Texture", new GUITexture(r, L"../Assets/jetpackimage.png", spRenderer));
+	guiMan->Add("Texture", new GUITexture(r, L"../Assets/Textures/jetpackimage.png", spRenderer));
 
 	auto p = Rect::GetRECTFromRect(new Rect(0, 0, ScreenWidth, ScreenHeight));
-	guiMan->Add("Background", new GUITexture(p, L"../Assets/Menu_bg.png", spRenderer, true));
+	guiMan->Add("Background", new GUITexture(p, L"../Assets/Textures/Menu_bg.png", spRenderer, true));
 	delete p;
 
 	guiMan->_guiElements["NEWGAME"]->SetDepth(0.5f);

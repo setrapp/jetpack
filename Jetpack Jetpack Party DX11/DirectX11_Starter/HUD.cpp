@@ -4,27 +4,48 @@
 float HUD::fuel = 0;
 
 HUD::HUD(SpriteRenderer* renderer, FontRenderer* fontRenderer)
-{
+{	
 	this->renderer			= renderer;
 	this->fontRenderer		= fontRenderer;
-	RECT tempRect;
-	GetClientRect(GetActiveWindow(), &tempRect);
-	screen = Rect::GetRectFromRECT(&tempRect);
-	HUDBGRect				= new Rect(0, 0, 1920, 250);
-	fuelRect				= new Rect(screen->width / 2 - 125, 0, 250, 100);
 
-	HR (CreateWICTextureFromFile(DXConnection::Instance()->device, DXConnection::Instance()->deviceContext,
+	Reset();
+
+
+	HR (CreateWICTextureFromFile(DXConnection::Instance()->device, 
+		DXConnection::Instance()->deviceContext,
 		L"../Assets/HUD/HUD_BG.png",
 		&this->HUDResource,
 		&this->HUDTexture));
 
-	HR (CreateWICTextureFromFile(DXConnection::Instance()->device, DXConnection::Instance()->deviceContext,
+	HR (CreateWICTextureFromFile(DXConnection::Instance()->device, 
+		DXConnection::Instance()->deviceContext,
 	L"../Assets/HUD/fuel.png",
 	&this->fuelResource,
 	&this->fuelTexture));
+	fontScale = 1;
+}
 
-	rank = 1;
-	maxRacers = 10;
+inline void HUD::Reset()
+{
+	RECT tempRect;
+	screen = new Rect();
+
+	GetClientRect(GetActiveWindow(), &tempRect);
+
+	auto temp	= Rect::GetRectFromRECT(&tempRect);
+	*screen		= *temp;
+
+	delete temp;
+
+	HUDBGRect				= new Rect(0, 0, screen->width, 250);
+	fuelRect				= new Rect(screen->width / 2 - 125, 0, 250, 100);
+	rank					= 1;
+	maxRacers				= 10;
+	fontScale				= (float)screen->width / (float)screen->height;
+	//Reverse current aspect ratio, so we can scale to other ratios too. 
+	fontScale			   *= (float)9 / (float)16;
+
+	xTextOffset = fontRenderer->GetSpriteFont()->MeasureString(L"Position \n 10 / 10").m128_f32[1] * fontScale;
 }
 
 
@@ -33,6 +54,7 @@ HUD::~HUD(void)
 	delete HUDBGRect;
 	delete fuelRect;
 	delete screen;
+
 	ReleaseMacro(HUDTexture);
 	ReleaseMacro(fuelTexture);
 	ReleaseMacro(HUDResource);
@@ -75,16 +97,24 @@ void HUD::Render()
 	RECT* temp1;
 	RECT* temp2;
 
-	fuelRect->width = fuel * 2.5;
+	//since the width is 250. 
+	fuelRect->width = fuel * 2.5f;
 
 	temp1 = Rect::GetRECTFromRect(fuelRect);
 	temp2 = Rect::GetRECTFromRect(HUDBGRect);
 
 	//Draw bg first
-	renderer->GetSpriteBatch()->Draw(HUDTexture, *temp2, nullptr, XMLoadFloat4(&XMFLOAT4(1, 1, 1, 1)), 0);
+	renderer->GetSpriteBatch()->Draw(
+		HUDTexture, 
+		*temp2, 
+		nullptr, 
+		XMLoadFloat4(&XMFLOAT4(1, 1, 1, 1)), 
+		0);
 	
 	//Draw fuel bar
-	renderer->GetSpriteBatch()->Draw(fuelTexture, *temp1);
+	renderer->GetSpriteBatch()->Draw(
+		fuelTexture, 
+		*temp1);
 
 	//building the string
 	wstringstream* ss = new wstringstream();
@@ -96,7 +126,16 @@ void HUD::Render()
 	wstring* t = new wstring(ss->str());
 
 	//draw string
-	fontRenderer->GetSpriteFont()->DrawString(renderer->GetSpriteBatch(), t->c_str(), XMFLOAT2(HUDBGRect->width + HUDBGRect->x - 300, 2)); 
+	fontRenderer->GetSpriteFont()->DrawString(
+		renderer->GetSpriteBatch(), 
+		t->c_str(), 
+		XMLoadFloat2(&XMFLOAT2(HUDBGRect->width + HUDBGRect->x - xTextOffset, 20 * fontScale)), 
+		Colors::Green, 
+		0, 
+		g_XMZero, 
+		fontScale); 
+
+
 	renderer->End();
 	
 	//delete stuff
@@ -104,4 +143,9 @@ void HUD::Render()
 	delete ss;
 	delete temp1;
 	delete temp2;
+}
+
+void HUD::Resize()
+{
+	Reset();
 }

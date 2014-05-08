@@ -36,7 +36,7 @@
 #include "SoundManager.h"
 #include "SpriteRenderer.h"
 #include "HUD.h"
-#define DIRECTINPUT_VERSION 0x0800
+#include "Skybox.h"
 
 using namespace std;
 InputManager* IPMan::inputManager = NULL;
@@ -103,7 +103,7 @@ DemoGame::~DemoGame()
 	delete assetManager;
 	delete FontManager::Instance();
 
-	
+	delete m_hud;
 	delete light;
 	delete camera;
 	delete menu;
@@ -159,7 +159,7 @@ bool DemoGame::Init()
 	spriteRenderer = new SpriteRenderer(deviceContext);
 	RECT rect;
 	GetClientRect(GetActiveWindow(), &rect);	
-	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/font.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );	
+	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/Fonts/font.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );	
 
 	LoadShadersAndInputLayout();
 
@@ -205,11 +205,11 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 blue	= XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/cube.obj");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicJetMan.obj", "jetman");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Fireball.obj", "fireball");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicTrack.obj", "terrain");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicTrackNav.obj", "terrain_nav");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/cube.obj");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicJetMan.obj", "jetman");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/Fireball.obj", "fireball");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrack.obj", "terrain");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrackNav.obj", "terrain_nav");
 
 	// Create orthographic and projection plane for deferred rendering.
 	float halfWindowWidth = windowWidth / 2, halfWindowHieght= windowHeight / 2;
@@ -279,7 +279,7 @@ void DemoGame::CreateGeometryBuffers()
 		
 	UINT hudIndices[] = { 0, 2, 1};
 
-	h = new HUD(spriteRenderer, FontManager::Instance()->GetFont("MENUFONT"));
+	m_hud = new HUD(spriteRenderer, FontManager::Instance()->GetFont("MENUFONT"));
 	
 
 	Entity* gift = new Entity();
@@ -290,7 +290,7 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
 	gift->SetBaseMaterial("gift");
 	gift->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
-	gift->LoadTexture(L"../Assets/RedGift.png");
+	gift->LoadTexture(L"../Assets/Textures/RedGift.png");
 	gift->Finalize();
 
 	Entity* floor = new Entity();
@@ -304,7 +304,7 @@ void DemoGame::CreateGeometryBuffers()
 	navMesh->AddModel(AssetManager::Instance()->GetModel("terrain_nav"));
 	navMesh->transform.SetTranslation(floor->transform.GetTranslation());
 	navMesh->transform.SetLocalScale(floor->transform.GetScale());
-	///entities.push_back(navMesh);
+	//entities.push_back(navMesh);
 	navMesh->Finalize();
 }
 
@@ -365,9 +365,9 @@ void DemoGame::LoadSoundAssets()
 {
 	SoundId id;
 	id = SoundId::SAMPLEBG;
-	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/SampleBG.wav");
+	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sounds/SampleBG.wav");
 	id = SoundId::SINK;
-	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sunk.wav");
+	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sounds/Sunk.wav");
 	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SAMPLEBG, true, true);
 	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SINK);
 	#ifdef _DEBUG
@@ -420,6 +420,10 @@ void DemoGame::OnResize()
 		if(menu)
 			menu->WindowResize();
 	}
+
+	if(m_hud)
+		if(currentState == GameState::Playing)
+			m_hud->Reset();
 }
 #pragma endregion
 
@@ -575,7 +579,7 @@ void DemoGame::DrawScene()
 	else
 		if(currentState == GameState::Playing)
 		{
-			h->Render();
+			m_hud->Render();
 		}
 
 

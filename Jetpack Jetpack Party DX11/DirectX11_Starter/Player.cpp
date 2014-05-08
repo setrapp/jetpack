@@ -6,7 +6,7 @@ Player::Player()
 {
 	minPosture = 0.95f;
 	respawnPosition = XMFLOAT3(0, 0, 0);
-	respawnLocalRotation = XMFLOAT3(0, PI / 2, 0);
+	respawnLocalRotation = XMFLOAT3(0, 0, 0);
 	worldVelocity = XMFLOAT3(0, 0, 0);
 	angularVelocity = XMFLOAT3(0, 0, 0);
 	maxSpeed = 200;
