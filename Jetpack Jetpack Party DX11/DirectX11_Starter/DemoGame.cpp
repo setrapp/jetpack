@@ -36,7 +36,7 @@
 #include "SoundManager.h"
 #include "SpriteRenderer.h"
 #include "HUD.h"
-#define DIRECTINPUT_VERSION 0x0800
+#include "Skybox.h"
 
 using namespace std;
 InputManager* IPMan::inputManager = NULL;
@@ -273,7 +273,7 @@ void DemoGame::CreateGeometryBuffers()
 
 	UINT hudIndices[] = { 0, 2, 1};
 
-	h = new HUD(spriteRenderer, FontManager::Instance()->GetFont("MENUFONT"));
+	m_hud = new HUD(spriteRenderer, FontManager::Instance()->GetFont("MENUFONT"));
 	
 
 	Entity* gift = new Entity();
@@ -293,6 +293,7 @@ void DemoGame::CreateGeometryBuffers()
 	floor->transform.Scale(XMFLOAT3(1000, 1000, 1000));
 	entities.push_back(floor);
 	floor->Finalize();
+
 }
 
 #pragma endregion
@@ -407,6 +408,10 @@ void DemoGame::OnResize()
 		if(menu)
 			menu->WindowResize();
 	}
+
+	if(m_hud)
+		if(currentState == GameState::Playing)
+			m_hud->Reset();
 }
 #pragma endregion
 
@@ -562,7 +567,7 @@ void DemoGame::DrawScene()
 	else
 		if(currentState == GameState::Playing)
 		{
-			h->Render();
+			m_hud->Render();
 		}
 
 

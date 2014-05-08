@@ -106,7 +106,7 @@ private:
 	GameState currentState;
 	Menu* menu;
 	MouseLook* mouseLook;
-	HUD* h;
+	HUD* m_hud;
 	bool mouseCursorVisibility;
 	bool flag;
 };

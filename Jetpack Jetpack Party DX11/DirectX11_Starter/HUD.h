@@ -24,6 +24,9 @@ public:
 	inline short getRank();
 	inline void setMaxRacers(unsigned short maxRacers);
 	void Render();
+	inline void Resize();
+	inline void Reset();
+
 
 private:
 	SpriteRenderer*				renderer;
@@ -37,7 +40,8 @@ private:
 	ID3D11ShaderResourceView*	fuelTexture;
 	ID3D11Resource*				HUDResource;
 	ID3D11Resource*				fuelResource;
-
+	float						fontScale;
+	float						xTextOffset;
 
 public:
 	//Pass it as a percentage. Min 0% and max 100%

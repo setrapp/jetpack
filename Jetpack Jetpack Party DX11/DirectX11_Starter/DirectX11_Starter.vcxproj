@@ -162,6 +162,7 @@
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Rigidbody.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="SoundInstance.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SpriteRenderer.h" />
