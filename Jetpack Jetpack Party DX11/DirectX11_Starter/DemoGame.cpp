@@ -209,6 +209,7 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicJetMan.obj", "jetman");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Fireball.obj", "fireball");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicTrack.obj", "terrain");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicTrackNav.obj", "terrain_nav");
 
 	// Create orthographic and projection plane for deferred rendering.
 	float halfWindowWidth = windowWidth / 2, halfWindowHieght= windowHeight / 2;
@@ -247,10 +248,15 @@ void DemoGame::CreateGeometryBuffers()
 	jetman->transform.SetLocalTranslation(XMFLOAT3(0, 0, 0));
 	jetman->transform.Translate(XMFLOAT3(0, -5, 0));
 	
-
-	for (int i = 0; i < player->jetpack->thrusterCount; i++)
+	if (player->jetpack->thrusterActives)
 	{
-		entities.push_back(player->jetpack->thrusters[i]);
+		for (int i = 0; i < player->jetpack->thrusterCount; i++)
+		{
+			if (player->jetpack->thrusters[i])
+			{
+				entities.push_back(player->jetpack->thrusters[i]);
+			}
+		}
 	}
 	
 
@@ -270,7 +276,7 @@ void DemoGame::CreateGeometryBuffers()
 		{ XMFLOAT3(-1.0f, -1.0f, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(1, 1) },
 		{ XMFLOAT3(+1.0f, -1.0f, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 1) },	
 	};
-
+		
 	UINT hudIndices[] = { 0, 2, 1};
 
 	h = new HUD(spriteRenderer, FontManager::Instance()->GetFont("MENUFONT"));
@@ -293,6 +299,13 @@ void DemoGame::CreateGeometryBuffers()
 	floor->transform.Scale(XMFLOAT3(1000, 1000, 1000));
 	entities.push_back(floor);
 	floor->Finalize();
+
+	Entity* navMesh = new Entity();
+	navMesh->AddModel(AssetManager::Instance()->GetModel("terrain_nav"));
+	navMesh->transform.SetTranslation(floor->transform.GetTranslation());
+	navMesh->transform.SetLocalScale(floor->transform.GetScale());
+	///entities.push_back(navMesh);
+	navMesh->Finalize();
 }
 
 #pragma endregion

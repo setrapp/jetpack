@@ -61,26 +61,106 @@ void ManeuverJetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angular
 	// Left Side
 	if(GetAsyncKeyState('W'))//('A'))
 	{
+		thrusterActives[Thruster::FRONT_LEFT] = true;
+	}
+	if(GetAsyncKeyState('A'))//(('S'))
+	{
+		thrusterActives[Thruster::SIDE_LEFT] = true;
+	}
+	if(GetAsyncKeyState('S'))//(('D'))
+	{
+		thrusterActives[Thruster::BACK_LEFT] = true;
+	}
+	if(GetAsyncKeyState('D'))//(('F'))
+	{
+		thrusterActives[Thruster::BOTTOM_LEFT] = true;
+	}
+	// Right Side
+	if(GetAsyncKeyState('J'))//(('J'))
+	{
+		thrusterActives[Thruster::BOTTOM_RIGHT] = true;
+	}
+	if(GetAsyncKeyState('K'))//(('K'))
+	{
+		thrusterActives[Thruster::BACK_RIGHT] = true;
+	}
+	if(GetAsyncKeyState('L'))//(('L'))
+	{
+		thrusterActives[Thruster::SIDE_RIGHT] = true;
+	}
+	if(GetAsyncKeyState('I'))//((VK_OEM_1)) // colon on US standard keyboards
+	{
+		thrusterActives[Thruster::FRONT_RIGHT] = true;
+	}
+}
+
+void ManeuverJetpack::ApproachTarget(XMFLOAT3 desiredTranslation, float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
+{
+	// Hmmmmm, figure out which steering options would get the jetpacker in the desired direction the fastest
+	// Need to account for landing, may need to pass in a desired rotation or a landing flag.
+
+	// Left Side
+	if(GetAsyncKeyState('W'))//('A'))
+	{
+		thrusterActives[Thruster::FRONT_LEFT] = true;
+	}
+	if(GetAsyncKeyState('A'))//(('S'))
+	{
+		thrusterActives[Thruster::SIDE_LEFT] = true;
+	}
+	if(GetAsyncKeyState('S'))//(('D'))
+	{
+		thrusterActives[Thruster::BACK_LEFT] = true;
+	}
+	if(GetAsyncKeyState('D'))//(('F'))
+	{
+		thrusterActives[Thruster::BOTTOM_LEFT] = true;
+	}
+	// Right Side
+	if(GetAsyncKeyState('J'))//(('J'))
+	{
+		thrusterActives[Thruster::BOTTOM_RIGHT] = true;
+	}
+	if(GetAsyncKeyState('K'))//(('K'))
+	{
+		thrusterActives[Thruster::BACK_RIGHT] = true;
+	}
+	if(GetAsyncKeyState('L'))//(('L'))
+	{
+		thrusterActives[Thruster::SIDE_RIGHT] = true;
+	}
+	if(GetAsyncKeyState('I'))//((VK_OEM_1)) // colon on US standard keyboards
+	{
+		thrusterActives[Thruster::FRONT_RIGHT] = true;
+	}
+}
+
+void ManeuverJetpack::ApplyForces(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
+{
+	// TODO: These should use IPMan
+	// Left Side
+	if(thrusterActives[Thruster::FRONT_LEFT])
+	{
 		velocity->z -= backwardAcceleration * dt;
 		angularVelocity->y -= frontSpin * dt;
 		thrusters[Thruster::FRONT_LEFT]->SetVisible(true);
 		active = true;
 	}
-	if(GetAsyncKeyState('A'))//(('S'))
+	if(thrusterActives[Thruster::SIDE_LEFT])
 	{
 		velocity->x += strafeAcceleration * dt;
 		angularVelocity->z -= sideSpin * dt;
 		thrusters[Thruster::SIDE_LEFT]->SetVisible(true);
 		active = true;
 	}
-	if(GetAsyncKeyState('S'))//(('D'))
+	if(thrusterActives[Thruster::BACK_LEFT])
 	{
 		velocity->z += forwardAcceleration * dt;
 		angularVelocity->y += backSpin * dt;
 		thrusters[Thruster::BACK_LEFT]->SetVisible(true);
 		active = true;
 	}
-	if(GetAsyncKeyState('D'))//(('F'))
+	if(thrusterActives[Thruster::BOTTOM_LEFT])
 	{
 		velocity->y += ascentAcceleration * dt;
 		angularVelocity->z -= bottomSpin * dt;
@@ -88,28 +168,28 @@ void ManeuverJetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angular
 		active = true;
 	}
 	// Right Side
-	if(GetAsyncKeyState('J'))//(('J'))
+	if(thrusterActives[Thruster::BOTTOM_RIGHT])
 	{
 		velocity->y += ascentAcceleration * dt;
 		angularVelocity->z += bottomSpin * dt;
 		thrusters[Thruster::BOTTOM_RIGHT]->SetVisible(true);
 		active = true;
 	}
-	if(GetAsyncKeyState('K'))//(('K'))
+	if(thrusterActives[Thruster::BACK_RIGHT])
 	{
 		velocity->z += forwardAcceleration * dt;
 		angularVelocity->y -= backSpin * dt;
 		thrusters[Thruster::BACK_RIGHT]->SetVisible(true);
 		active = true;
 	}
-	if(GetAsyncKeyState('L'))//(('L'))
+	if(thrusterActives[Thruster::SIDE_RIGHT])
 	{
 		velocity->x -= strafeAcceleration * dt;
 		angularVelocity->z += sideSpin * dt;
 		thrusters[Thruster::SIDE_RIGHT]->SetVisible(true);
 		active = true;
 	}
-	if(GetAsyncKeyState('I'))//((VK_OEM_1)) // colon on US standard keyboards
+	if(thrusterActives[Thruster::FRONT_RIGHT])
 	{
 		velocity->z -= backwardAcceleration * dt;
 		angularVelocity->y += frontSpin * dt;

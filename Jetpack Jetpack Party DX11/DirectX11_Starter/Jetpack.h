@@ -10,6 +10,8 @@ public:
 	~Jetpack();
 	virtual void Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
 	virtual void CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
+	virtual void ApproachTarget(XMFLOAT3 desiredTranslation, float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
+	virtual void ApplyForces(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
 	void Refuel(int fuelAdd);
 
 protected:
@@ -29,8 +31,10 @@ public:
 	bool active;
 	Entity* player;
 	Entity** thrusters;
+	bool* thrusterActives;
 	int thrusterCount;
 	float fuel;
 	float maxFuel;
 	float fuelUseRate;
+	bool playerControlled;
 };

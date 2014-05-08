@@ -16,6 +16,7 @@ Jetpack::Jetpack(Entity* player)
 	ascentAcceleration = 200.0f;
 	thrusterCount = 0;
 	thrusters = NULL;
+	thrusterActives = NULL;
 	maxFuel = 100;
 	fuel = maxFuel;
 	fuelUseRate = 1;
@@ -32,16 +33,35 @@ Jetpack::~Jetpack()
 		//	thrusters[i] = NULL;
 		//}
 		delete thrusters;
+		delete thrusterActives;
 	}
 }
 
 void Jetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 {
 	active = false;
+	if (thrusterActives)
+	{
+		for (int i = 0; i < thrusterCount; i++)
+		{
+			thrusterActives[i] = false;
+		}
+	}
+
 	if (fuel > 0)
 	{
-		CheckInput(dt, velocity, angularVelocity);
+		if (playerControlled)
+		{
+			CheckInput(dt, velocity, angularVelocity);
+		}
+		else
+		{
+
+		}
 	}
+
+	ApplyForces(dt, velocity, angularVelocity);
+
 	if (active)
 	{
 		fuel -= fuelUseRate * dt;
@@ -51,7 +71,7 @@ void Jetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 			fuel == 0;
 		}
 	}
-	
+
 	HUD::fuel = this->fuel;
 }
 
@@ -59,24 +79,24 @@ void Jetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity
 {
 	if (velocity && allowInputForces)
 	{
-		if(IPMan::GetIPMan()->GetKey(KeyType::FORWARD))
+		if(playerControlled && IPMan::GetIPMan()->GetKey(KeyType::FORWARD))
 		{
 			velocity->z += forwardAcceleration * dt;
 		}
-		if(IPMan::GetIPMan()->GetKey(KeyType::BACKWARD))
+		if(playerControlled && IPMan::GetIPMan()->GetKey(KeyType::BACKWARD))
 		{
 			velocity->z -= backwardAcceleration * dt;
 		}
-		if(IPMan::GetIPMan()->GetKey(KeyType::LEFT))
+		if(playerControlled && IPMan::GetIPMan()->GetKey(KeyType::LEFT))
 		{
 			velocity->x -= strafeAcceleration * dt;
 		}
-		if(IPMan::GetIPMan()->GetKey(KeyType::RIGHT))
+		if(playerControlled && IPMan::GetIPMan()->GetKey(KeyType::RIGHT))
 		{
 			velocity->x += strafeAcceleration * dt;
 		}
 
-		// TODO: This should use IPMan
+		// TODO: This should use IPMan	
 		if(GetAsyncKeyState(VK_SPACE))
 		{
 			velocity->y += ascentAcceleration * dt;
@@ -84,6 +104,10 @@ void Jetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity
 		}
 	}
 }
+
+void Jetpack::ApproachTarget(XMFLOAT3 desiredTranslation, float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity){}
+
+void Jetpack::ApplyForces(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity){}
 
 void Jetpack::CreateThrusters()
 {
@@ -94,6 +118,7 @@ void Jetpack::CreateThrusters()
 	}
 
 	thrusters = new Entity*[thrusterCount];
+	thrusterActives = new bool[thrusterCount];
 	for(int i = 0; i < thrusterCount; i++)
 	{
 		thrusters[i] = new Entity();

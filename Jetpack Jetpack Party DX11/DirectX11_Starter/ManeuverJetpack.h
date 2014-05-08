@@ -8,6 +8,8 @@ public:
 	ManeuverJetpack(Entity* player);
 	void Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
 	void CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
+	void ApproachTarget(XMFLOAT3 desiredTranslation, float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
+	void ApplyForces(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
 
 public:
 	float backSpin;

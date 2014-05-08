@@ -1284,5 +1284,4 @@ GUNormal3D mlFace3DGetNormal(MLFace3D const* targetFace)													{	return ta
 GLushort mlFace3DGetMaterial(MLFace3D const* targetFace)													{	return targetFace->materialIndex;				}
 GUPoint3D mlVertex3DGetPosition(MLVertex3D const* targetVertex)												{	return targetVertex->position;					}
 GUNormal3D mlVertex3DGetNormal(MLVertex3D const* targetVertex)												{	return targetVertex->normal;					}
-GUPoint2D mlTexelXYGetPosition(MLTexelXY const* targetTexel)												{	
- if(targetTexel)	return targetTexel->position;					}
+GUPoint2D mlTexelXYGetPosition(MLTexelXY const* targetTexel)												{	if(targetTexel)	return targetTexel->position;	}
