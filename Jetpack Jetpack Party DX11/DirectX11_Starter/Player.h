@@ -2,8 +2,8 @@
 #define WIN32_LEAN_AND_MEAN
 #include "Entity.h"
 #include "Camera.h"
-#include "ClientConnectionEntity.h"
-#include "MessageTypes.h";
+//#include "ClientConnectionEntity.h"
+#include "MessageTypes.h"
 #include <queue>
 #include "Jetpack.h"
 #include "ManeuverJetpack.h"
@@ -18,7 +18,7 @@ public:
 	vector<string>* breakIntoParts(string s);
 
 public:
-	ClientConnectionEntity* clientEntity;
+	//ClientConnectionEntity* clientEntity;
 	Entity* networkedCube;
 	std::map<int,Entity*> networkedEntities;
 	float networkSendTimer;

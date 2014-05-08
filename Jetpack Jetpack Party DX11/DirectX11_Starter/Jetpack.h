@@ -32,9 +32,9 @@ public:
 	Entity* player;
 	Entity** thrusters;
 	bool* thrusterActives;
+	XMFLOAT3* thrusterDirections;
 	int thrusterCount;
 	float fuel;
 	float maxFuel;
 	float fuelUseRate;
-	bool playerControlled;
 };

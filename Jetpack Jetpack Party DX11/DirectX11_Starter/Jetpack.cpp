@@ -1,6 +1,6 @@
 #include "Jetpack.h"
 #include "InputManager.h"
-#include "Entity.h"
+#include "Player.h"
 #include "AssetManager.h"
 #include "HUD.h"
 
@@ -17,6 +17,7 @@ Jetpack::Jetpack(Entity* player)
 	thrusterCount = 0;
 	thrusters = NULL;
 	thrusterActives = NULL;
+	thrusterDirections = NULL;
 	maxFuel = 100;
 	fuel = maxFuel;
 	fuelUseRate = 1;
@@ -34,23 +35,22 @@ Jetpack::~Jetpack()
 		//}
 		delete thrusters;
 		delete thrusterActives;
+		delete thrusterDirections;
 	}
 }
 
 void Jetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 {
 	active = false;
-	if (thrusterActives)
+	for (int i = 0; i < thrusterCount; i++)
 	{
-		for (int i = 0; i < thrusterCount; i++)
-		{
-			thrusterActives[i] = false;
-		}
+		thrusters[i]->SetVisible(false);
+		thrusterActives[i] = false;
 	}
 
 	if (fuel > 0)
 	{
-		if (playerControlled)
+		if (((Player*)player)->controllable)
 		{
 			CheckInput(dt, velocity, angularVelocity);
 		}
@@ -65,7 +65,6 @@ void Jetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 	if (active)
 	{
 		fuel -= fuelUseRate * dt;
-		Debug::Log(Debug::ToString(fuel));
 		if (fuel < 0)
 		{
 			fuel == 0;
@@ -79,19 +78,19 @@ void Jetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity
 {
 	if (velocity && allowInputForces)
 	{
-		if(playerControlled && IPMan::GetIPMan()->GetKey(KeyType::FORWARD))
+		if(IPMan::GetIPMan()->GetKey(KeyType::FORWARD))
 		{
 			velocity->z += forwardAcceleration * dt;
 		}
-		if(playerControlled && IPMan::GetIPMan()->GetKey(KeyType::BACKWARD))
+		if(IPMan::GetIPMan()->GetKey(KeyType::BACKWARD))
 		{
 			velocity->z -= backwardAcceleration * dt;
 		}
-		if(playerControlled && IPMan::GetIPMan()->GetKey(KeyType::LEFT))
+		if(IPMan::GetIPMan()->GetKey(KeyType::LEFT))
 		{
 			velocity->x -= strafeAcceleration * dt;
 		}
-		if(playerControlled && IPMan::GetIPMan()->GetKey(KeyType::RIGHT))
+		if(IPMan::GetIPMan()->GetKey(KeyType::RIGHT))
 		{
 			velocity->x += strafeAcceleration * dt;
 		}
@@ -119,6 +118,7 @@ void Jetpack::CreateThrusters()
 
 	thrusters = new Entity*[thrusterCount];
 	thrusterActives = new bool[thrusterCount];
+	thrusterDirections = new XMFLOAT3[thrusterCount];
 	for(int i = 0; i < thrusterCount; i++)
 	{
 		thrusters[i] = new Entity();
@@ -126,6 +126,8 @@ void Jetpack::CreateThrusters()
 		thrusters[i]->Finalize();
 		thrusters[i]->transform.SetParent(&player->transform);
 		thrusters[i]->transform.SetLocalTranslation(XMFLOAT3(0, 0, 0));
+		thrusterActives[i] = false;
+		thrusterDirections[i] = XMFLOAT3(0, 1, 0);
 	}
 }
 

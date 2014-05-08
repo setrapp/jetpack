@@ -48,10 +48,24 @@ ManeuverJetpack::ManeuverJetpack(Entity* player) : Jetpack(player)
 
 void ManeuverJetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 {
-	for (int i = 0; i < thrusterCount; i++)
-	{
-		thrusters[i]->SetVisible(false);
-	}
+	// Estimate the propultion direction of each thruster.
+	XMVECTOR right = XMLoadFloat3(&player->transform.GetRight());
+	XMVECTOR up = XMLoadFloat3(&player->transform.GetUp());
+	XMVECTOR forward = XMLoadFloat3(&player->transform.GetForward());
+	XMStoreFloat3(&thrusterDirections[Thruster::BOTTOM_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(up, 3), right)));
+	thrusterDirections[Thruster::BOTTOM_RIGHT] = thrusterDirections[Thruster::BOTTOM_LEFT];
+	thrusterDirections[Thruster::BOTTOM_RIGHT].x *= -1;
+	XMStoreFloat3(&thrusterDirections[Thruster::BACK_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(forward, 2), right)));
+	thrusterDirections[Thruster::BACK_RIGHT] = thrusterDirections[Thruster::BACK_LEFT];
+	thrusterDirections[Thruster::BACK_RIGHT].x *= -1;
+	XMStoreFloat3(&thrusterDirections[Thruster::FRONT_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(-forward, 2), right)));
+	thrusterDirections[Thruster::FRONT_RIGHT] = thrusterDirections[Thruster::FRONT_LEFT];
+	thrusterDirections[Thruster::FRONT_RIGHT].x *= -1;
+	XMStoreFloat3(&thrusterDirections[Thruster::SIDE_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(right, 3), -up)));
+	thrusterDirections[Thruster::SIDE_RIGHT] = thrusterDirections[Thruster::SIDE_LEFT];
+	thrusterDirections[Thruster::SIDE_RIGHT].x *= -1;
+
+	// Call base update.
 	Jetpack::Update(dt, velocity, angularVelocity);
 }
 
@@ -96,40 +110,50 @@ void ManeuverJetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angular
 
 void ManeuverJetpack::ApproachTarget(XMFLOAT3 desiredTranslation, float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 {
-	// Hmmmmm, figure out which steering options would get the jetpacker in the desired direction the fastest
-	// Need to account for landing, may need to pass in a desired rotation or a landing flag.
+	XMVECTOR desiredDirection = XMVector3Normalize(XMLoadFloat3(&desiredTranslation));
+	XMFLOAT3 thrustDotDir;
+	float minDot = 0.5f;
+
 
 	// Left Side
-	if(GetAsyncKeyState('W'))//('A'))
+	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredDirection, XMLoadFloat3(&thrusterDirections[Thruster::FRONT_LEFT])));
+	if(thrustDotDir.x >= minDot)
 	{
 		thrusterActives[Thruster::FRONT_LEFT] = true;
 	}
-	if(GetAsyncKeyState('A'))//(('S'))
+	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredDirection, XMLoadFloat3(&thrusterDirections[Thruster::SIDE_LEFT])));
+	if(thrustDotDir.x >= minDot)
 	{
 		thrusterActives[Thruster::SIDE_LEFT] = true;
 	}
-	if(GetAsyncKeyState('S'))//(('D'))
+	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredDirection, XMLoadFloat3(&thrusterDirections[Thruster::BACK_LEFT])));
+	if(thrustDotDir.x >= minDot)
 	{
 		thrusterActives[Thruster::BACK_LEFT] = true;
 	}
-	if(GetAsyncKeyState('D'))//(('F'))
+	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredDirection, XMLoadFloat3(&thrusterDirections[Thruster::BOTTOM_LEFT])));
+	if(thrustDotDir.x >= minDot)
 	{
 		thrusterActives[Thruster::BOTTOM_LEFT] = true;
 	}
 	// Right Side
-	if(GetAsyncKeyState('J'))//(('J'))
+	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredDirection, XMLoadFloat3(&thrusterDirections[Thruster::BOTTOM_RIGHT])));
+	if(thrustDotDir.x >= minDot)
 	{
 		thrusterActives[Thruster::BOTTOM_RIGHT] = true;
 	}
-	if(GetAsyncKeyState('K'))//(('K'))
+	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredDirection, XMLoadFloat3(&thrusterDirections[Thruster::BACK_RIGHT])));
+	if(thrustDotDir.x >= minDot)
 	{
 		thrusterActives[Thruster::BACK_RIGHT] = true;
 	}
-	if(GetAsyncKeyState('L'))//(('L'))
+	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredDirection, XMLoadFloat3(&thrusterDirections[Thruster::SIDE_RIGHT])));
+	if(thrustDotDir.x >= minDot)
 	{
 		thrusterActives[Thruster::SIDE_RIGHT] = true;
 	}
-	if(GetAsyncKeyState('I'))//((VK_OEM_1)) // colon on US standard keyboards
+	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredDirection, XMLoadFloat3(&thrusterDirections[Thruster::FRONT_RIGHT])));
+	if(thrustDotDir.x >= minDot)
 	{
 		thrusterActives[Thruster::FRONT_RIGHT] = true;
 	}

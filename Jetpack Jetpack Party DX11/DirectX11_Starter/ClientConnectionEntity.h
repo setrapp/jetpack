@@ -8,7 +8,7 @@
 #include <queue>
 #include <sstream>
 #include "Entity.h"
-#include "MessageTypes.h";
+#include "MessageTypes.h"
 #define DEFAULT_PORT "8080"
 #define DEFAULT_BUFLEN 512
 

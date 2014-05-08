@@ -1,6 +1,5 @@
 #include "Player.h"
 #include "AssetManager.h"
-//#include "DemoGame.h"
 
 Player::Player()
 {
@@ -19,8 +18,8 @@ Player::Player()
 	airSpeedDampening = 0.3f;
 	grounded = true;
 	jetpack = new ManeuverJetpack(this);
-	clientEntity = new ClientConnectionEntity();
-	clientEntity->connectClient("127.0.0.1");
+	//clientEntity = new ClientConnectionEntity();
+	//clientEntity->connectClient("127.0.0.1");
 	networkSendTimer=0.0f;
 	loggedIn=false;
 	controllable = true;
@@ -29,7 +28,7 @@ Player::Player()
 Player::~Player()
 {
 	delete jetpack;
-	delete clientEntity;
+	//delete clientEntity;
 	delete networkedCube;
 }
 
@@ -118,7 +117,7 @@ void Player::Update(float dt)
 		angularVelocity.x = angularVelocity.y = angularVelocity.z = 0;
 	}
 
-	while(!clientEntity->networkMessages.empty()){
+	/*while(!clientEntity->networkMessages.empty()){
 
 		
 		string readData= clientEntity->networkMessages.front();
@@ -208,7 +207,7 @@ void Player::Update(float dt)
 		}
 		clientEntity->networkMessages.pop();
 			
-	}
+	}*/
 
 	Entity::Update(dt);
 }
@@ -251,7 +250,7 @@ void Player::CheckInput(float dt)
 	}
 
 
-	if(GetAsyncKeyState('V'))
+	/*if(GetAsyncKeyState('V'))
 	{
 		if(clientEntity->isConnected && !loggedIn){
 			clientEntity->sendMessage(MessageTypes::Client::Login,"");
@@ -263,7 +262,7 @@ void Player::CheckInput(float dt)
 		XMFLOAT3 curTransform= transform.GetTranslation();
 		networkSendTimer=0.2f;
 		clientEntity->sendMessage(MessageTypes::Client::MovementUpdate,getNetworkString());
-	}
+	}*/
 }
 
 void Player::Respawn()
@@ -284,4 +283,3 @@ vector<string>* Player::breakIntoParts(string s){
 	}
 	return vectorParts;
 }
-
