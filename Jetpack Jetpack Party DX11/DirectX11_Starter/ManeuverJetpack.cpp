@@ -52,7 +52,7 @@ void ManeuverJetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelo
 	XMVECTOR right = XMLoadFloat3(&player->transform.GetRight());
 	XMVECTOR up = XMLoadFloat3(&player->transform.GetUp());
 	XMVECTOR forward = XMLoadFloat3(&player->transform.GetForward());
-	XMStoreFloat3(&thrusterDirections[Thruster::BOTTOM_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(up, 3), right)));
+	XMStoreFloat3(&thrusterDirections[Thruster::BOTTOM_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(up, 10), right)));
 	thrusterDirections[Thruster::BOTTOM_RIGHT] = thrusterDirections[Thruster::BOTTOM_LEFT];
 	thrusterDirections[Thruster::BOTTOM_RIGHT].x *= -1;
 	XMStoreFloat3(&thrusterDirections[Thruster::BACK_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(forward, 2), right)));
@@ -108,15 +108,15 @@ void ManeuverJetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angular
 	}
 }
 
-void ManeuverJetpack::ApproachTarget(XMFLOAT3 desiredTranslation, float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
+void ManeuverJetpack::ApproachTarget(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 {
-	XMVECTOR desiredDirection = XMVector3Normalize(XMLoadFloat3(&desiredTranslation));
+	//XMVECTOR desiredDirection = XMVector3Normalize(XMVectorSubtract(XMLoadFloat3(&targetPosition), XMLoadFloat3(&player->transform.GetTranslation())));
+	//XMVector
 	XMFLOAT3 thrustDotDir;
-	float minDot = 0.5f;
-
+	float minDot = 0.7f;
 
 	// Left Side
-	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredDirection, XMLoadFloat3(&thrusterDirections[Thruster::FRONT_LEFT])));
+	XMStoreFloat3(&thrustDotDir, XMVector3Dot(&XMLoadFloat3(targetAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::FRONT_LEFT])));
 	if(thrustDotDir.x >= minDot)
 	{
 		thrusterActives[Thruster::FRONT_LEFT] = true;

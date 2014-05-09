@@ -1,6 +1,5 @@
 #include "Jetpack.h"
 #include "InputManager.h"
-#include "Player.h"
 #include "AssetManager.h"
 #include "HUD.h"
 
@@ -21,6 +20,9 @@ Jetpack::Jetpack(Entity* player)
 	maxFuel = 100;
 	fuel = maxFuel;
 	fuelUseRate = 1;
+	bool playerControllable = false;
+	bool playerAI = false;
+	targetAcceleration = XMFLOAT3(0, 0, 0);
 }
 
 Jetpack::~Jetpack()
@@ -50,13 +52,13 @@ void Jetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 
 	if (fuel > 0)
 	{
-		if (((Player*)player)->controllable)
+		if (playerControllable)
 		{
 			CheckInput(dt, velocity, angularVelocity);
 		}
-		else
+		else if (playerAI)
 		{
-
+			ApproachTarget(dt, velocity, angularVelocity);
 		}
 	}
 
@@ -104,7 +106,7 @@ void Jetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity
 	}
 }
 
-void Jetpack::ApproachTarget(XMFLOAT3 desiredTranslation, float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity){}
+void Jetpack::ApproachTarget(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity){}
 
 void Jetpack::ApplyForces(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity){}
 

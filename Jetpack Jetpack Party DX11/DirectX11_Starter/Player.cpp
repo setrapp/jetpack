@@ -18,33 +18,40 @@ Player::Player()
 	airSpeedDampening = 0.3f;
 	grounded = true;
 	jetpack = new ManeuverJetpack(this);
-	//clientEntity = new ClientConnectionEntity();
-	//clientEntity->connectClient("127.0.0.1");
+	clientEntity = new ClientConnectionEntity();
+	clientEntity->connectClient("127.0.0.1");
 	networkSendTimer=0.0f;
 	loggedIn=false;
 	controllable = true;
+
+	// TEMP
+	controllable = false;
+	jetpack->targetPosition = XMFLOAT3(100, 500, 3000);
 }
 
 Player::~Player()
 {
 	delete jetpack;
-	//delete clientEntity;
+	delete clientEntity;
 	delete networkedCube;
 }
 
 void Player::Update(float dt)
 {
+	//TODO account for networked players.
+	jetpack->playerControllable = controllable;
+	jetpack->playerAI = !controllable;
+
 	XMFLOAT3 velocity = transform.InverseTransformDirection(worldVelocity);
 
 	// Check for user input.
 	if (controllable)
 	{
 		CheckInput(dt);
-
-		// Update jetpack.
-		jetpack->allowInputForces = !grounded;
-		jetpack->Update(dt, &velocity, &angularVelocity);
 	}
+	// Update jetpack.
+	jetpack->allowInputForces = !grounded; //TODO This might not be useful anymore
+	jetpack->Update(dt, &velocity, &angularVelocity);
 
 	// Clamp velocity withing max speed.
 	transform.ClampVector(&velocity, (grounded ? maxSpeed : jetpack->maxSpeed), 0);
@@ -117,7 +124,7 @@ void Player::Update(float dt)
 		angularVelocity.x = angularVelocity.y = angularVelocity.z = 0;
 	}
 
-	/*while(!clientEntity->networkMessages.empty()){
+	while(!clientEntity->networkMessages.empty()){
 
 		
 		string readData= clientEntity->networkMessages.front();
@@ -207,7 +214,7 @@ void Player::Update(float dt)
 		}
 		clientEntity->networkMessages.pop();
 			
-	}*/
+	}
 
 	Entity::Update(dt);
 }
@@ -250,7 +257,7 @@ void Player::CheckInput(float dt)
 	}
 
 
-	/*if(GetAsyncKeyState('V'))
+	if(GetAsyncKeyState('V'))
 	{
 		if(clientEntity->isConnected && !loggedIn){
 			clientEntity->sendMessage(MessageTypes::Client::Login,"");
@@ -262,7 +269,7 @@ void Player::CheckInput(float dt)
 		XMFLOAT3 curTransform= transform.GetTranslation();
 		networkSendTimer=0.2f;
 		clientEntity->sendMessage(MessageTypes::Client::MovementUpdate,getNetworkString());
-	}*/
+	}
 }
 
 void Player::Respawn()

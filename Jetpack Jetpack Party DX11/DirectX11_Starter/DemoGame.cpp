@@ -285,7 +285,7 @@ void DemoGame::CreateGeometryBuffers()
 	Entity* gift = new Entity();
 	gift->AddQuad(vertices, indices);
 	
-	gift->transform.Translate(XMFLOAT3(-5, 5, 0));
+	gift->transform.SetTranslation(player->targetPosition);
 	entities.push_back(gift);
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
 	gift->SetBaseMaterial("gift");

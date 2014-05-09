@@ -10,7 +10,7 @@ public:
 	~Jetpack();
 	virtual void Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
 	virtual void CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
-	virtual void ApproachTarget(XMFLOAT3 desiredTranslation, float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
+	virtual void ApproachTarget(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
 	virtual void ApplyForces(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
 	void Refuel(int fuelAdd);
 
@@ -18,10 +18,7 @@ protected:
 	void CreateThrusters();
 
 public:
-
 	static const int MAX_FUEL = -1;
-
-
 	bool allowInputForces;
 	float maxSpeed;
 	float forwardAcceleration;
@@ -37,4 +34,7 @@ public:
 	float fuel;
 	float maxFuel;
 	float fuelUseRate;
+	bool playerControllable;
+	bool playerAI;
+	XMFLOAT3 targetAcceleration; 
 };
