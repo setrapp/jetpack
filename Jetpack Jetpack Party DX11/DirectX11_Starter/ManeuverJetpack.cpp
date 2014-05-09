@@ -109,7 +109,6 @@ void ManeuverJetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angular
 
 void ManeuverJetpack::ApproachTarget(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 {
-	//XMVECTOR desiredDirection = XMVector3Normalize(XMVectorSubtract(XMLoadFloat3(&targetPosition), XMLoadFloat3(&player->transform.GetTranslation())));
 	XMVECTOR desiredAcceleration = XMLoadFloat3(&targetAcceleration);
 	XMFLOAT3 thrustDotDir;
 	float minDot = 0.7f;

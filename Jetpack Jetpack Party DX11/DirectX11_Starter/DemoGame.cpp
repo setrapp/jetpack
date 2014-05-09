@@ -230,36 +230,8 @@ void DemoGame::CreateGeometryBuffers()
 	deferredPlane->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("deferred");
 	deferredPlane->Finalize();
 	
-	// Attempt to load model
-	player = new Player();
-	player->AddModel(AssetManager::Instance()->GetModel());
-	player->Finalize();
-	entities.push_back(player);
-	player->transform.Translate(XMFLOAT3(0, 1000, 0));
-	player->respawnPosition = player->transform.GetTranslation();
-	AttachCameraToPlayer();
+	CreatePlayers();
 	
-	Entity* jetman = new Entity();
-	jetman->AddModel(AssetManager::Instance()->GetModel("jetman"));
-	jetman->Finalize();
-	jetman->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
-	entities.push_back(jetman);
-	jetman->transform.SetParent(&player->transform);
-	jetman->transform.SetLocalTranslation(XMFLOAT3(0, 0, 0));
-	jetman->transform.Translate(XMFLOAT3(0, -5, 0));
-	
-	if (player->jetpack->thrusterActives)
-	{
-		for (int i = 0; i < player->jetpack->thrusterCount; i++)
-		{
-			if (player->jetpack->thrusters[i])
-			{
-				entities.push_back(player->jetpack->thrusters[i]);
-			}
-		}
-	}
-	
-
 	Vertex vertices[] = 
 	{
 		{ XMFLOAT3(+1.0f, +1.0f, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 0) },
@@ -650,7 +622,46 @@ void DemoGame::OnMouseWheel(WPARAM btnState, int x, int y)
 }
 #pragma endregion
 
-#pragma region CameraAttach
+#pragma region Player Stuff
+
+void DemoGame::CreatePlayers()
+{
+	for (int i = 0; i < PLAYER_COUNT; i++)
+	{
+		Player* newPlayer = new Player();
+		newPlayer->AddModel(AssetManager::Instance()->GetModel());
+		newPlayer->Finalize();
+		entities.push_back(newPlayer);
+		players[i] = newPlayer;
+		newPlayer->transform.Translate(XMFLOAT3(50 * (i % 2), 1000, 50 * (i / 2)));
+		newPlayer->respawnPosition = newPlayer->transform.GetTranslation();
+	
+		Entity* jetman = new Entity();
+		jetman->AddModel(AssetManager::Instance()->GetModel("jetman"));
+		jetman->Finalize();
+		jetman->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
+		entities.push_back(jetman);
+		jetman->transform.SetParent(&newPlayer->transform);
+		jetman->transform.SetLocalTranslation(XMFLOAT3(0, 0, 0));
+		jetman->transform.Translate(XMFLOAT3(0, -5, 0));
+	
+		if (newPlayer->jetpack->thrusterActives)
+		{
+			for (int i = 0; i < newPlayer->jetpack->thrusterCount; i++)
+			{
+				if (newPlayer->jetpack->thrusters[i])
+				{
+					entities.push_back(newPlayer->jetpack->thrusters[i]);
+				}
+			}
+		}
+	}
+
+	player = players[0];
+	player->controllable = true;
+	AttachCameraToPlayer();
+}
+
 void DemoGame::AttachCameraToPlayer()
 {
 	playerCamera->transform.SetParent(&player->transform);

@@ -27,6 +27,8 @@
 #include "DeferredRenderer.h"
 #include "HUD.h"
 
+#define PLAYER_COUNT 2
+
 using namespace DirectX;
 
 // Include run-time memory checking in debug builds
@@ -63,6 +65,7 @@ private:
 	void CreateGeometryBuffers();
 	void LoadShadersAndInputLayout();
 	void LoadSoundAssets();
+	void CreatePlayers();
 	void AttachCameraToPlayer();
 
 private:
@@ -109,6 +112,7 @@ private:
 	HUD* m_hud;
 	bool mouseCursorVisibility;
 	bool flag;
+	Player* players[PLAYER_COUNT];
 };
 
 #endif
