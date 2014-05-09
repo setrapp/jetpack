@@ -15,6 +15,7 @@ ManeuverJetpack::ManeuverJetpack(Entity* player) : Jetpack(player)
 	frontSpin = 30 * (PI / 180);
 	sideSpin = 15 * (PI / 180);
 	bottomSpin = 10 * (PI / 180);
+	actionsPerSecond = 1.9f;
 	
 	// Thrusters
 	thrusterCount = 8;
@@ -43,7 +44,6 @@ ManeuverJetpack::ManeuverJetpack(Entity* player) : Jetpack(player)
 	// Side Right
 	thrusters[Thruster::SIDE_RIGHT]->transform.SetLocalTranslation(XMFLOAT3(3, 2, -1));
 	thrusters[Thruster::SIDE_RIGHT]->transform.SetLocalRotation(XMFLOAT3(0, 0, -PI / 2));
-
 }
 
 void ManeuverJetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)

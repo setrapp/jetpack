@@ -16,6 +16,7 @@ public:
 
 protected:
 	void CreateThrusters();
+	void OffThrusters();
 
 public:
 	static const int MAX_FUEL = -1;
@@ -37,4 +38,6 @@ public:
 	bool playerControllable;
 	bool playerAI;
 	XMFLOAT3 targetAcceleration; 
+	float actionsPerSecond;
+	float timeSinceAction;
 };

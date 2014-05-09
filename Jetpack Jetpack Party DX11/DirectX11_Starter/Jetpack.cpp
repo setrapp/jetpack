@@ -23,6 +23,8 @@ Jetpack::Jetpack(Entity* player)
 	bool playerControllable = false;
 	bool playerAI = false;
 	targetAcceleration = XMFLOAT3(0, 0, 0);
+	actionsPerSecond = -1;
+	timeSinceAction = 0;
 }
 
 Jetpack::~Jetpack()
@@ -44,21 +46,27 @@ Jetpack::~Jetpack()
 void Jetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 {
 	active = false;
-	for (int i = 0; i < thrusterCount; i++)
-	{
-		thrusters[i]->SetVisible(false);
-		thrusterActives[i] = false;
-	}
+	
 
 	if (fuel > 0)
 	{
 		if (playerControllable)
 		{
+			OffThrusters();
 			CheckInput(dt, velocity, angularVelocity);
 		}
 		else if (playerAI)
 		{
-			ApproachTarget(dt, velocity, angularVelocity);
+			if (actionsPerSecond <= 0 || timeSinceAction >= 1 / actionsPerSecond)
+			{
+				OffThrusters();
+				ApproachTarget(dt, velocity, angularVelocity);
+				timeSinceAction = 0;
+			}
+			else
+			{
+				timeSinceAction += dt;
+			}
 		}
 	}
 
@@ -128,9 +136,9 @@ void Jetpack::CreateThrusters()
 		thrusters[i]->Finalize();
 		thrusters[i]->transform.SetParent(&player->transform);
 		thrusters[i]->transform.SetLocalTranslation(XMFLOAT3(0, 0, 0));
-		thrusterActives[i] = false;
 		thrusterDirections[i] = XMFLOAT3(0, 1, 0);
 	}
+	OffThrusters();
 }
 
 void Jetpack::Refuel(int fuelAdd)
@@ -145,5 +153,14 @@ void Jetpack::Refuel(int fuelAdd)
 	if (fuel > maxFuel)
 	{
 		fuel = maxFuel;
+	}
+}
+
+void Jetpack::OffThrusters()
+{
+	for (int i = 0; i < thrusterCount; i++)
+	{
+		thrusters[i]->SetVisible(false);
+		thrusterActives[i] = false;
 	}
 }

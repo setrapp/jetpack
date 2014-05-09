@@ -23,10 +23,11 @@ Player::Player()
 	networkSendTimer=0.0f;
 	loggedIn=false;
 	controllable = true;
+	
 
 	// TEMP
 	controllable = false;
-	targetPosition = XMFLOAT3(100, 500, 3000);
+	targetPosition = XMFLOAT3(400, 200, 5000);
 }
 
 Player::~Player()
