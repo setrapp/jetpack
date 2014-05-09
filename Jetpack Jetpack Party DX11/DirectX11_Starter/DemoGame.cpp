@@ -372,15 +372,19 @@ void DemoGame::OnFocus(bool givenFocus)
 // Handles resizing the window and updating our projection matrix to match
 void DemoGame::OnResize()
 {
+	float nearPlane = 0.1f;
+	float farPlane = 100000.0f;
 	DXGame::OnResize();
 	XMMATRIX P = XMMatrixPerspectiveFovLH(
 		0.25f * 3.1415926535f,
 		AspectRatio(),
-		0.1f,
-		100000.0f);
+		nearPlane,
+		farPlane);
 
 	XMStoreFloat4x4(&playerCamera->projection, XMMatrixTranspose(P));
 	XMStoreFloat4x4(&debugCamera->projection, XMMatrixTranspose(P));
+
+	projectionInfo.x = (farPlane - nearPlane);
 
 	if (mouseLook)
 	{
@@ -490,6 +494,7 @@ void DemoGame::DrawScene()
 		// Update light constant buffer for vertex and pixel shader.
 		materialsAndLightsConstantBufferData.light = light->GetShaderLight();
 		materialsAndLightsConstantBufferData.material = AssetManager::Instance()->GetMaterial("default")->GetShaderMaterial();
+		materialsAndLightsConstantBufferData.projectionInfo = projectionInfo;
 		DXConnection::Instance()->deviceContext->UpdateSubresource(materialsAndLightsConstantBuffer, 0, NULL, &materialsAndLightsConstantBufferData, 0, 0);
 		DXConnection::Instance()->deviceContext->VSSetConstantBuffers(1, 1, &materialsAndLightsConstantBuffer);
 		DXConnection::Instance()->deviceContext->PSSetConstantBuffers(1, 1, &materialsAndLightsConstantBuffer);
