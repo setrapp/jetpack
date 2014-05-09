@@ -206,16 +206,16 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 
 <<<<<<< HEAD
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/cube.obj");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicJetMan.obj", "jetman");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Fireball.obj", "fireball");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicTrack.obj", "terrain");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicTrackNav.obj", "terrain_nav");
-=======
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/cube.obj");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicJetMan.obj", "jetman");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/Fireball.obj", "fireball");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrack.obj", "terrain");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrackNav.obj", "terrain_nav");
+=======
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/cube.obj");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicJetMan.obj", "jetman");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Fireball.obj", "fireball");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicTrack.obj", "terrain");
 >>>>>>> master
 
 	// Create orthographic and projection plane for deferred rendering.
@@ -292,7 +292,7 @@ void DemoGame::CreateGeometryBuffers()
 	Entity* gift = new Entity();
 	gift->AddQuad(vertices, indices);
 	
-	gift->transform.Translate(XMFLOAT3(-5, 5, 0));
+	gift->transform.SetTranslation(player->targetPosition);
 	entities.push_back(gift);
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
 	gift->SetBaseMaterial("gift");
@@ -307,15 +307,12 @@ void DemoGame::CreateGeometryBuffers()
 	entities.push_back(floor);
 	floor->Finalize();
 
-<<<<<<< HEAD
 	Entity* navMesh = new Entity();
 	navMesh->AddModel(AssetManager::Instance()->GetModel("terrain_nav"));
 	navMesh->transform.SetTranslation(floor->transform.GetTranslation());
 	navMesh->transform.SetLocalScale(floor->transform.GetScale());
-	///entities.push_back(navMesh);
+	//entities.push_back(navMesh);
 	navMesh->Finalize();
-=======
->>>>>>> master
 }
 
 #pragma endregion

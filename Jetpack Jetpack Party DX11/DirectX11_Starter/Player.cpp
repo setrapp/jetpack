@@ -25,8 +25,8 @@ Player::Player()
 	controllable = true;
 
 	// TEMP
-	controllable = false;
-	jetpack->targetPosition = XMFLOAT3(100, 500, 3000);
+	//controllable = false;
+	targetPosition = XMFLOAT3(100, 500, 3000);
 }
 
 Player::~Player()
@@ -43,6 +43,11 @@ void Player::Update(float dt)
 	jetpack->playerAI = !controllable;
 
 	XMFLOAT3 velocity = transform.InverseTransformDirection(worldVelocity);
+
+	// Figure out the optimal acceleration to the target position.
+	// TODO should only be done if AI controlled.
+	//XMVECTOR desiredDirection = XMVector3Normalize(XMVectorSubtract(XMLoadFloat3(&targetPosition), XMLoadFloat3(&transform.GetTranslation())));
+	//XMStoreFloat3(&jetpack->targetAcceleration, XMVectorSubtract(desiredDirection, XMVector3Normalize(XMLoadFloat3(&velocity))));
 
 	// Check for user input.
 	if (controllable)

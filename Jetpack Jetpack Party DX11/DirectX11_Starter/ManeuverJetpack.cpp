@@ -111,48 +111,48 @@ void ManeuverJetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angular
 void ManeuverJetpack::ApproachTarget(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 {
 	//XMVECTOR desiredDirection = XMVector3Normalize(XMVectorSubtract(XMLoadFloat3(&targetPosition), XMLoadFloat3(&player->transform.GetTranslation())));
-	//XMVector
+	XMVECTOR desiredAcceleration = XMLoadFloat3(&targetAcceleration);
 	XMFLOAT3 thrustDotDir;
 	float minDot = 0.7f;
 
 	// Left Side
-	XMStoreFloat3(&thrustDotDir, XMVector3Dot(&XMLoadFloat3(targetAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::FRONT_LEFT])));
+	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::FRONT_LEFT])));
 	if(thrustDotDir.x >= minDot)
 	{
 		thrusterActives[Thruster::FRONT_LEFT] = true;
 	}
-	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredDirection, XMLoadFloat3(&thrusterDirections[Thruster::SIDE_LEFT])));
+	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::SIDE_LEFT])));
 	if(thrustDotDir.x >= minDot)
 	{
 		thrusterActives[Thruster::SIDE_LEFT] = true;
 	}
-	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredDirection, XMLoadFloat3(&thrusterDirections[Thruster::BACK_LEFT])));
+	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::BACK_LEFT])));
 	if(thrustDotDir.x >= minDot)
 	{
 		thrusterActives[Thruster::BACK_LEFT] = true;
 	}
-	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredDirection, XMLoadFloat3(&thrusterDirections[Thruster::BOTTOM_LEFT])));
+	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::BOTTOM_LEFT])));
 	if(thrustDotDir.x >= minDot)
 	{
 		thrusterActives[Thruster::BOTTOM_LEFT] = true;
 	}
 	// Right Side
-	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredDirection, XMLoadFloat3(&thrusterDirections[Thruster::BOTTOM_RIGHT])));
+	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::BOTTOM_RIGHT])));
 	if(thrustDotDir.x >= minDot)
 	{
 		thrusterActives[Thruster::BOTTOM_RIGHT] = true;
 	}
-	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredDirection, XMLoadFloat3(&thrusterDirections[Thruster::BACK_RIGHT])));
+	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::BACK_RIGHT])));
 	if(thrustDotDir.x >= minDot)
 	{
 		thrusterActives[Thruster::BACK_RIGHT] = true;
 	}
-	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredDirection, XMLoadFloat3(&thrusterDirections[Thruster::SIDE_RIGHT])));
+	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::SIDE_RIGHT])));
 	if(thrustDotDir.x >= minDot)
 	{
 		thrusterActives[Thruster::SIDE_RIGHT] = true;
 	}
-	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredDirection, XMLoadFloat3(&thrusterDirections[Thruster::FRONT_RIGHT])));
+	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::FRONT_RIGHT])));
 	if(thrustDotDir.x >= minDot)
 	{
 		thrusterActives[Thruster::FRONT_RIGHT] = true;
