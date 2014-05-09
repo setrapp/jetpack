@@ -255,9 +255,14 @@ Material* AssetManager::GetMaterial(string name)
 // Model
 Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 {
-	Model* model = new Model();
-
 	MLModel3D* objModel = mlModel3DLoadOBJ(filePath.c_str());
+
+	if (!objModel)
+	{
+		return NULL;
+	}
+
+	Model* model = new Model();
 	
 	bool hasUVs = mlModel3DGetTextureVertexCount(objModel) > 1;
 
