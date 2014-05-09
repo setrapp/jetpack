@@ -403,7 +403,7 @@ XMFLOAT3 Transform::GetUp()
 	XMStoreFloat3(&lengthSq, XMVector3LengthSq(upVector));
 	if (lengthSq.x != 1.0f) 
 	{
-		XMStoreFloat3(&forward, XMVector3Normalize(upVector));
+		XMStoreFloat3(&up, XMVector3Normalize(upVector));
 	}
 	return up;
 }

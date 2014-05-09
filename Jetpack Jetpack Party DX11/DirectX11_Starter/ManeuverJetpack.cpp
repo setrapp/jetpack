@@ -49,9 +49,8 @@ ManeuverJetpack::ManeuverJetpack(Entity* player) : Jetpack(player)
 void ManeuverJetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 {
 	// Estimate the propultion direction of each thruster.
-	XMVECTOR right = XMLoadFloat3(&player->transform.GetRight());
-	XMVECTOR up = XMLoadFloat3(&player->transform.GetUp());
-	XMVECTOR forward = XMLoadFloat3(&player->transform.GetForward());
+	XMFLOAT3 transformRight = player->transform.GetRight(), transformUp = player->transform.GetUp(), transformForward = player->transform.GetForward();
+	XMVECTOR right = XMLoadFloat3(&transformRight), up = XMLoadFloat3(&transformUp), forward = XMLoadFloat3(&transformForward);
 	XMStoreFloat3(&thrusterDirections[Thruster::BOTTOM_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(up, 10), right)));
 	thrusterDirections[Thruster::BOTTOM_RIGHT] = thrusterDirections[Thruster::BOTTOM_LEFT];
 	thrusterDirections[Thruster::BOTTOM_RIGHT].x *= -1;
