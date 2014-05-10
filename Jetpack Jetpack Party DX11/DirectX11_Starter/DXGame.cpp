@@ -12,14 +12,15 @@
 #include <sstream>
 #include "Toolkit\Inc\CommonStates.h"
 #pragma region Global Window Callback
+bool DXGame::sysEvent  = false;
 namespace
 {
 	// Allows us to forward Windows messages from a global
 	// window procedure to our member function window procedure
 	// because we cannot assign a member function to WNDCLASS::lpfnWndProc
 	DXGame* dxGame = 0;
+	
 }
-
 // Set up a global callback for handling windows messages
 LRESULT CALLBACK
 	MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -36,10 +37,10 @@ LRESULT CALLBACK
 
 DXGame::DXGame(HINSTANCE hInstance)
 	:	hAppInst(hInstance),
-	windowCaption(L"DirectX Game"),
+	windowCaption(L"Jetpack Jetpack Party!"),
 	driverType(D3D_DRIVER_TYPE_HARDWARE),
-	windowWidth(800),
-	windowHeight(600),
+	windowWidth(screenWidth),
+	windowHeight(screenHeight),
 	enable4xMsaa(false),
 	hMainWnd(0),
 	gamePaused(false),
@@ -47,7 +48,6 @@ DXGame::DXGame(HINSTANCE hInstance)
 	maximized(false),
 	resizing(false),
 	msaa4xQuality(0),
-
 	device(0),
 	deviceContext(0),
 	swapChain(0),
@@ -57,7 +57,8 @@ DXGame::DXGame(HINSTANCE hInstance)
 {
 	// Zero out the viewport struct
 	ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
-
+	DXGame::sysEvent =true;
+	elapsedTime = 0;
 	// Grabs a pointer to this DXGame object so we can forward
 	// Windows messages to the object's message handling function
 	dxGame = this;
@@ -83,6 +84,7 @@ DXGame::~DXGame(void)
 	// Release the context and finally the device
 	ReleaseMacro(deviceContext);
 	ReleaseMacro(device);
+
 }
 #pragma endregion
 
@@ -96,6 +98,8 @@ bool DXGame::Init()
 
 	if(!InitDirect3D())
 		return false;
+
+	initCPU();
 
 	return true;
 }
@@ -129,7 +133,7 @@ bool DXGame::InitMainWindow()
 	int height = R.bottom - R.top;
 
 	hMainWnd = CreateWindow(L"D3DWndClassName", windowCaption.c_str(), 
-		WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, width, height, 0, 0, hAppInst, 0); 
+		WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, screenWidth, screenHeight, 0, 0, hAppInst, 0); 
 	if( !hMainWnd )
 	{
 		MessageBox(0, L"CreateWindow Failed.", 0, 0);
@@ -243,6 +247,8 @@ float DXGame::AspectRatio() const
 	return (float)windowWidth / windowHeight;
 }
 
+void DXGame::OnFocus(bool givenFocus) {}
+
 // When the window is resized, the underlying buffers (textures) must
 // also be resized to match.  
 void DXGame::OnResize()
@@ -345,7 +351,14 @@ int DXGame::Run()
 				// Standard game loop type stuff
 				CalculateFrameStats();
 				UpdateScene(timer.DeltaTime());
-				DrawScene();
+				DrawScene(); 
+				elapsedTime += (LONG64)(timer.DeltaTime() * 10000);
+                if(((__int64)elapsedTime > 60))
+                {
+                    elapsedTime %= 60;
+                    FixedUpdate();
+                }
+
 			}
 		}
 	}
@@ -371,11 +384,18 @@ void DXGame::CalculateFrameStats()
 
 		std::wostringstream outs;   
 		outs.precision(6);
+		 memInfo.dwLength = sizeof(MEMORYSTATUSEX);
+		GlobalMemoryStatusEx(&memInfo);
+		DWORDLONG totalVirtualMem = memInfo.ullTotalPageFile;
+		DWORDLONG totalPhysMem = memInfo.dwMemoryLoad;
+
 		outs << windowCaption << L"    "
 			<< L"Width: " << windowWidth << L"    "
 			<< L"Height: " << windowHeight << L"    "
 			<< L"FPS: " << fps << L"    " 
-			<< L"Frame Time: " << mspf << L" (ms)";
+			<< L"Frame Time: " << mspf << L" (ms)"<< "    "
+			<< L"CPU : " << getCurrentValue() << "    "
+			<< L"RAM : " << totalPhysMem << " MB   ";
 
 		// Include feature level
 		switch(featureLevel)
@@ -412,16 +432,22 @@ LRESULT DXGame::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_ACTIVATE:
 		if( LOWORD(wParam) == WA_INACTIVE )
 		{
-			gamePaused = true;
-			timer.Stop();
+			//gamePaused = true;
+			//timer.Stop();
 		}
 		else
 		{
-			gamePaused = false;
-			timer.Start();
+			//gamePaused = false;
+			//timer.Start();
 		}
 		return 0;
-
+		// WM_SETFOCUS is sent when the window recieves keyboard focus.
+	case WM_SETFOCUS:
+		OnFocus(true);
+		return 0;
+	case WM_KILLFOCUS:
+		OnFocus(false);
+		return 0;
 		// WM_SIZE is sent when the user resizes the window.  
 	case WM_SIZE:
 		// Save the new client area dimensions.
@@ -522,14 +548,71 @@ LRESULT DXGame::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		OnMouseUp(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		return 0;
 	case WM_MOUSEMOVE:
-		OnMouseMove(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		OnMouseMove(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));		
 		return 0;
 	case WM_MOUSEWHEEL:
-	OnMouseWheel(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-	return 0;
+		OnMouseWheel(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		return 0;
 	}
 
 	return DefWindowProc(hwnd, msg, wParam, lParam);
+}
+
+
+#include "windows.h"
+
+
+static ULARGE_INTEGER lastCPU, lastSysCPU, lastUserCPU;
+static int numProcessors;
+static HANDLE self;
+
+
+void DXGame::initCPU(){
+
+
+
+    SYSTEM_INFO sysInfo;
+    FILETIME ftime, fsys, fuser;
+
+
+    GetSystemInfo(&sysInfo);
+    numProcessors = sysInfo.dwNumberOfProcessors;
+
+
+    GetSystemTimeAsFileTime(&ftime);
+    memcpy(&lastCPU, &ftime, sizeof(FILETIME));
+
+
+    self = GetCurrentProcess();
+    GetProcessTimes(self, &ftime, &ftime, &fsys, &fuser);
+    memcpy(&lastSysCPU, &fsys, sizeof(FILETIME));
+    memcpy(&lastUserCPU, &fuser, sizeof(FILETIME));
+}
+
+
+double DXGame::getCurrentValue(){
+    FILETIME ftime, fsys, fuser;
+    ULARGE_INTEGER now, sys, user;
+    double percent;
+
+
+    GetSystemTimeAsFileTime(&ftime);
+    memcpy(&now, &ftime, sizeof(FILETIME));
+
+
+    GetProcessTimes(self, &ftime, &ftime, &fsys, &fuser);
+    memcpy(&sys, &fsys, sizeof(FILETIME));
+    memcpy(&user, &fuser, sizeof(FILETIME));
+    percent = (sys.QuadPart - lastSysCPU.QuadPart) +
+        (user.QuadPart - lastUserCPU.QuadPart);
+    percent /= (now.QuadPart - lastCPU.QuadPart);
+    percent /= numProcessors;
+    lastCPU = now;
+    lastUserCPU = user;
+    lastSysCPU = sys;
+
+
+    return percent * 100;
 }
 
 #pragma endregion

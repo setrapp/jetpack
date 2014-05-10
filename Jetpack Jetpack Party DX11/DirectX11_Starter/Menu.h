@@ -1,6 +1,5 @@
 #ifndef _MENU_H
 #define _MENU_H
-#define WIN32_LEAN_AND_MEAN
 #include<d3d11.h>
 #include<DirectXMath.h>
 #include"Entity.h"
@@ -8,25 +7,44 @@
 #include "FontRenderer.h"
 #include "Rect.h"
 #include "Common.h"
+#include "GUIBase.h"
+#include "GUIManager.h"
+#include "GUITextBox.h"
+#include "SpriteRenderer.h"
+
+using namespace std;
+using namespace DirectX;
 
 #pragma once
 class Menu
 {
 public:
-	Menu(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
-	~Menu(void);
-	void setRenderers(FontRenderer* fontRenderer);
-	GameState Update(float dt);
-	void Render(ID3D11DeviceContext* deviceContext);
-	void ProcessMouseInput(WPARAM btnState, int x, int y);
+	typedef enum MENU_OPTIONS
+	{
+		SINGLEPLAYER = 0,
+		MULTIPLAYER = 1,
+		SETTINGS = 2,
+		EXIT= 3
+	};
 
+	Menu(FontRenderer* renderer, SpriteRenderer* spRenderer, const short ScreenWidth, const short ScreenHeight);
+	~Menu(void);
+	GameState Update(float dt);
+	void Render();
+	void OnClickNewGame();
+	void WindowResize();
+	GameState KeyboardInputProcess();
+	MENU_OPTIONS changeOptions(MENU_OPTIONS currentOption, int changeBy);
+	RECT* GetRECTFromRect(Rect* rect);
 private:
-	ID3D11Device* device;
-	ID3D11DeviceContext* deviceContext;
-	Rect* newGameArea;
-	Rect* exitGameArea;
 	FontRenderer* fontRenderer;
-	DirectX::SpriteBatch* spriteBatch;
-	bool newGameFlag;
+	GUIManager* guiMan;
+	GameState currstate;
+	GUITextBox* b ;	
+	RECT* r;	
+	
+
+	MENU_OPTIONS menuOptions;
+	
 };
 #endif

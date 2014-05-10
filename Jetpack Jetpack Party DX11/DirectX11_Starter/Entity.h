@@ -1,3 +1,5 @@
+#ifndef ENTITY_H
+#define ENTITY_H
 #pragma once
 #define WIN32_LEAN_AND_MEAN
 #include "Vertex.h"
@@ -8,34 +10,45 @@
 #include "Transform.h"
 #include "Rigidbody.h"
 
-
+struct EntityDrawArgs
+{
+	ID3D11Buffer* vsModelConstantBuffer;
+	VertexShaderModelConstantBuffer* vsModelConstantBufferData;
+	ID3D11Buffer* materialsAndLightsConstantBuffer;
+	MaterialsAndLightsConstantBuffer* materialsAndLightsConstantBufferData;
+};
 
 class Entity
 {
 public:
 	Entity();
-	~Entity(void);
-	void AddTriangle(Vertex* v, UINT* u);
-	void AddQuad(Vertex* v, UINT* u);
-	void AddMesh(vector<Mesh*>* mesh);
+	virtual ~Entity();
+	void AddTriangle(Vertex* v, UINT* u, bool moveIndicesToEnd = true);
+	void AddQuad(Vertex* v, UINT* u, bool moveIndicesToEnd = true);
+	void AddModel(Model* model);
 	virtual void Update(float dt);
-	void Draw();
-	void Rotate(XMFLOAT3 rotation);
-	void Translate(XMFLOAT3 translation);
-	void Scale(XMFLOAT3 scale);	
+	void Draw(EntityDrawArgs const* drawArgs, XMFLOAT4X4 const* view = NULL, XMFLOAT4X4 const* projection = NULL);
 	void LoadTexture(wchar_t* path);
-	DirectX::XMFLOAT4X4 GetWorldMatrix();
-	Material* GetMaterial();
-	Material GetMaterialSafe();
-	std::vector<Mesh*> GetMeshes();
-	Transform* transform;
-
-	//associated with a certain player on the multiplayer network
+	Material* GetBaseMaterial();
+	inline Material GetBaseMaterialSafe() const;
+	void SetBaseMaterial(string name = "default", bool forceOnAllMeshes = true);
+	inline vector<Mesh*> GetMeshes() const;
+	string getNetworkString();
+	Transform transform;
 	int socketNumber;
+	void Finalize();
+	bool GetVisible();
+	void SetVisible(bool visibility);
+	Model* GetModel(int index); 
 
-private:
-	LONG totalMeshes;				//keep this. 
-	std::vector<Mesh*> meshes; 
-	Material* material;
+protected:
+	map<Material*, pair<ID3D11Buffer*, LONG>> indexBuffers;
+	ID3D11Buffer* vertexBuffer;
+	vector<Vertex> vertices;
+	vector<Mesh*> meshes; 
+	vector<Model*> models;
+	Material* baseMaterial;
+	bool visible;
 };
 
+#endif

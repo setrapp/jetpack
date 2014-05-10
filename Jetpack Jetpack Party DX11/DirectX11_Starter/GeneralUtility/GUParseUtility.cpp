@@ -81,7 +81,10 @@ char* guExtractFilePath(char const* filename, char** filePathOut, int* pathSize,
 	int delimiterCount;
 	int* delimiters = guFindDelimiters(filename, directoryDelimiter, &delimiterCount, GU_DEFAULT_BUFFER_SIZE);
 	//substring the filename from the beginning to the last directory delimiter
-	return guScanLineRaw(filename, filePathOut, 0, delimiters[delimiterCount-2], pathSize);
+	char* extracted = guScanLineRaw(filename, filePathOut, 0, delimiters[delimiterCount-2], pathSize);
+
+	free(delimiters);
+	return extracted;
 }
 
 //extract the pathless filename specified in the filename
@@ -91,7 +94,10 @@ char* guExtractFilename(char const* filename, char** filenameOut, int* pathlessF
 	int delimiterCount;
 	int* delimiters = guFindDelimiters(filename, directoryDelimiter, &delimiterCount, GU_DEFAULT_BUFFER_SIZE);
 	//substring the filename from the beginning to the last directory delimiter
-	return guScanLineRaw(filename, filenameOut, delimiters[delimiterCount-2]+1, delimiters[delimiterCount-1], pathlessFilenameSize);
+	char* extracted = guScanLineRaw(filename, filenameOut, delimiters[delimiterCount-2]+1, delimiters[delimiterCount-1], pathlessFilenameSize);
+	
+	free(delimiters);
+	return extracted;
 }
 
 //get a portion of a string from first index to last index (inclusive)
@@ -146,7 +152,7 @@ char* guScanLineRaw(char const* line, char** substringOut, int start, int end, i
 	
 	//find end of line
 	int lineLength = guStringLength(line, GU_SINGLE_LINE, GU_NO_BUFFER_LIMIT);
-    
+
 	//clip start to 0
 	if(start < 0)
 		start = 0;
@@ -280,6 +286,9 @@ int guIndexOf(char const* searchString, char goalCharacter, int startIndex, int 
 //note that passing in c-strings that are not terminated by '\0' is dangerous, for this reason the function will terminate early if no such termination is found before the maximum size is reached
 int guCompare(char const* cString1, char const* cString2, int caseSensitive_bool, int maxSize)
 {
+	if (!cString1 || !cString2)
+		return GU_NULL_STRING;
+
     //declare counter
 	int i = 0;
 	

@@ -37,6 +37,9 @@ extern "C"
     //Face
     typedef struct _ml_face3D MLFace3D;
 
+	//Object
+	typedef struct _ml_object3D MLObject3D;
+
     //Model
     typedef struct _ml_model3D MLModel3D;
 
@@ -49,7 +52,7 @@ extern "C"
         ML_MODEL_FACE_FRONT_AND_BACK
     }MLModelFaces;
     
-    MLModel3D* MLModel3DCreate(MLVertex3D* vertices,  unsigned int numVertices, MLFace3D* faces,  unsigned int numFaces, MLTexelXY* textureVertices,  unsigned int numTextureVertices, MLModelMaterial** materials,  unsigned int numMaterials);
+    MLModel3D* MLModel3DCreate(MLVertex3D* vertices,  unsigned int numVertices, MLFace3D* faces,  unsigned int numFaces, MLObject3D* objects, unsigned int numObjects, MLTexelXY* textureVertices,  unsigned int numTextureVertices, MLModelMaterial** materials,  unsigned int numMaterials);
     void MLModel3DDelete(MLModel3D* deletee);
     MLModel3D* mlModel3DLoadOBJ(const char* filename);
     void mlModel3DLoadTextures(MLModel3D* targetModel);
@@ -61,10 +64,13 @@ extern "C"
     void mlModel3DHideVertexNormals(MLModel3D* targetModel);
     void mlModel3DSetFaceCulling(MLModel3D* targetModel, int enumModelFace);
 
+	char const* mlModel3DGetFilename(MLModel3D const* targetModel);
 	MLVertex3D const* mlModel3DGetVertex(MLModel3D const* targetModel, unsigned int index);
 	unsigned int mlModel3DGetVertexCount(MLModel3D const* targetModel);
 	MLFace3D const* mlModel3DGetFace(MLModel3D const* targetModel, unsigned int index);
 	unsigned int mlModel3DGetFaceCount(MLModel3D const* targetModel);
+	MLObject3D const* mlModel3DGetObject(MLModel3D const* targetModel, unsigned int index);
+	unsigned int mlModel3DGetObjectCount(MLModel3D const* targetModel);
 	MLTexelXY const* mlModel3DGetTextureVertex(MLModel3D const* targetModel, unsigned int index);
 	unsigned int mlModel3DGetTextureVertexCount(MLModel3D const* targetModel);
 	MLModelMaterial const* mlModel3DGetMaterial(MLModel3D const* targetModel, unsigned int index);
@@ -77,6 +83,8 @@ extern "C"
 	GLushort mlFace3DGetTextureVertex3(MLFace3D const* targetFace);
 	GUNormal3D mlFace3DGetNormal(MLFace3D const* targetFace);
 	GLushort mlFace3DGetMaterial(MLFace3D const* targetFace);
+	unsigned int mlObject3DGetFirstFace(MLObject3D const* targetObject);
+	unsigned int mlObject3DGetLastFace(MLObject3D const* targetObject);
 	GUPoint3D mlVertex3DGetPosition(MLVertex3D const* targetVertex);
 	GUNormal3D mlVertex3DGetNormal(MLVertex3D const* targetVertex);
 	GUPoint2D mlTexelXYGetPosition(MLTexelXY const* targetTexel);

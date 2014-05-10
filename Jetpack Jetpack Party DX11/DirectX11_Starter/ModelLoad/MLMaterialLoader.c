@@ -80,7 +80,7 @@ MLModelMaterial** mlModelMaterialLibsLoadMTL(char** matLibs, int matLibCount, un
 	unsigned int matCount = 1;										//total count of materials, including a single default
 	MLModelMaterial** mats;											//list of pointers to materials loaded
 	unsigned int matIndex = 1;										//index in list of material to be added (starts at 1 to allow for default)
-
+	
 	//count non-default materials
 	for(i = 0; i < matLibCount; i++)
 	{
@@ -113,12 +113,15 @@ MLModelMaterial** mlModelMaterialLibsLoadMTL(char** matLibs, int matLibCount, un
 			free(mats[0]);
 			mats[0] = libMats[0];
 		}
+
+		free(libMats);
 	}
 
 	//output number of materials found
 	if(numMatsOut)
 		*numMatsOut = matCount;
 
+	free(perLibCounts);
 	return mats;
 }
 
@@ -252,6 +255,7 @@ MLModelMaterial** loadMaterialsMTL(char* filename, int matsCounted, int* default
 	//--- Parse through file to find number of of materials included ---//
 	//allocate memory for materials
 	mats = (MLModelMaterial**)malloc(sizeof(MLModelMaterial*) * matsCounted);
+	mats[0] = NULL;
 
 	//flag that the default material has not been specifically defined in this library
 	*defaultDefined = 0;			
@@ -271,8 +275,8 @@ MLModelMaterial** loadMaterialsMTL(char* filename, int matsCounted, int* default
 		switch(propertyType)
 		{
             case MAT_NAME:					//material name
-                if((guCompare((char*)data[0], "(null)", 0, GU_DEFAULT_BUFFER_SIZE) == 0) || 
-                   (guCompare((char*)data[0], "Material", 0, GU_DEFAULT_BUFFER_SIZE) != 0))		//begin defining non-default material
+                if(((guCompare((char*)data[0], "(null)", 0, GU_DEFAULT_BUFFER_SIZE) == 0) || 
+					(guCompare((char*)data[0], "Material", 0, GU_DEFAULT_BUFFER_SIZE) != 0)))		//begin defining non-default material
                 {
                     curMat = matsCountedOnLoad+1;
                     matsCountedOnLoad++;
@@ -284,6 +288,7 @@ MLModelMaterial** loadMaterialsMTL(char* filename, int matsCounted, int* default
                 else																		//begin defining default material
                 {
                     mats[0] = MLModelMaterialCreate();
+					mats[0]->name = guCopyString("Default", NULL, GU_DEFAULT_BUFFER_SIZE);
                     curMat = 0;
                     *defaultDefined = 1;													//flag that the default material has been specifically defined in this library
                 }

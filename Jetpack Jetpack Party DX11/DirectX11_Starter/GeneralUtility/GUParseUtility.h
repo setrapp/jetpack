@@ -2,7 +2,7 @@
 #define GENERAL_UTILITY_PARSE_UTILITY_H
 
 #ifdef _WIN32
-	#define GU_DIRECTORY_DELIMITER 92 
+	#define GU_DIRECTORY_DELIMITER 47 //or 96
 #elif __APPLE__
 	#include "TargetConditionals.h"
 	#include <CoreFoundation/CoreFoundation.h>
@@ -48,7 +48,8 @@ extern "C"
         GU_EQUAL			= 0,
         GU_FIRST_GREATER	= 1,
         GU_SECOND_GREATER	= -1,
-        GU_NO_TERMINATION	= -100
+        GU_NO_TERMINATION	= -100,
+		GU_NULL_STRING		= 100
     }GUCompareStats;
 
     //enumeration for string reading

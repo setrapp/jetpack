@@ -1,35 +1,48 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN
 #include "Entity.h"
-#include "DemoGame.h"
 #include "Camera.h"
 #include "ClientConnectionEntity.h"
-#include "ServerConnectionEntity.h"
+#include "MessageTypes.h"
 #include <queue>
+#include "Jetpack.h"
+#include "ManeuverJetpack.h"
 
 class Player : public Entity
 {
 public:
 	Player();
-	Player(DemoGame* v_game);
+	~Player();
 	void Update(float dt);
+	void Respawn();
+	vector<string>* breakIntoParts(string s);
 
 public:
-	Camera* camera;
-	XMFLOAT3 cameraPos;
-	DemoGame* game;
 	ClientConnectionEntity* clientEntity;
-	ServerConnectionEntity* serverEntity;
 	Entity* networkedCube;
 	std::map<int,Entity*> networkedEntities;
 	float networkSendTimer;
+	bool loggedIn;
+	bool controllable;
+	Jetpack* jetpack;
+	XMFLOAT3 respawnPosition;
+	XMFLOAT3 respawnLocalRotation;
+	XMFLOAT3 targetPosition; 
 
 private:
 	void CheckInput(float dt);
 
 private:
-	XMFLOAT3 velocity;
+	float minPosture;
+	XMFLOAT3 angularVelocity;
+	XMFLOAT3 worldVelocity;
 	float maxSpeed;
+	float forwardAcceleration;
+	float backwardAcceleration;
+	float strafeAcceleration;
+	float gravityAcceleration;
+	float terminalVelocity;
 	float groundSpeedDampening;
-
+	float airSpeedDampening;
+	bool grounded;
 };

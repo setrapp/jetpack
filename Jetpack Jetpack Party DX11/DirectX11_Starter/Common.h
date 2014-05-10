@@ -1,12 +1,20 @@
 #pragma once
+
 #include <DirectXMath.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
+#include <vector>
 #include "dxerr.h"
 #include "DXConnection.h"
-#include "Light.h"
+#include "GameState.h"
+#include "Bullet\src\btBulletDynamicsCommon.h"
 
 using namespace DirectX;
+using namespace std;
+
+#ifndef PI
+#define PI 3.14159265358979323846f
+#endif
 
 #define Print(x) { if(x) { printf(x); } }
 
@@ -32,23 +40,61 @@ using namespace DirectX;
 	#endif
 #endif
 
+struct ShaderMaterial
+{
+	XMFLOAT4 ambient;
+	XMFLOAT4 diffuse;
+	XMFLOAT4 specular;
+	XMUINT4 shininess;
+};
+
+struct ShaderLight
+{
+	XMFLOAT4X4 world;
+	XMFLOAT4 ambient;
+	XMFLOAT4 diffuse;
+	XMFLOAT4 specular;
+};
 
 struct VertexShaderModelConstantBuffer
 {
 	XMFLOAT4X4 world;
+	XMFLOAT4X4 inverseTranspose;
 	XMFLOAT4X4 view;
 	XMFLOAT4X4 projection;
 };
 
-struct VertexShaderFrameConstantBuffer
+struct MaterialsAndLightsConstantBuffer
 {
+	ShaderMaterial material;
 	ShaderLight light;
+	XMFLOAT4 projectionInfo;
 };
 
 struct Vertex
 {
 	XMFLOAT3 Position;
 	XMFLOAT3 Normal;
-	XMFLOAT4 Color;
 	XMFLOAT2 UV;
+};
+
+class Helper
+{
+	public: 
+	static	GameState GoBackOnce(GameState state)
+	{
+		switch(state){
+		case GameState::Lost : return GameState::MenuState;
+			break;
+		case GameState::Paused: return GameState::Paused;
+			break;
+		case GameState::Playing: return GameState::Paused;
+			break;
+		case GameState::MenuState: return GameState::MenuState;
+			break;
+		case GameState::Won: return GameState::MenuState;
+			break;
+		default: return GameState::MenuState;
+		}
+	}
 };

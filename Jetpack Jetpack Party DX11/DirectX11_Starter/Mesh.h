@@ -4,21 +4,30 @@
 #include <DirectXMath.h>
 #include <d3d11.h>
 #include "Common.h"
-
-using namespace DirectX;
+#include "Material.h"
 
 class Mesh
 {
 public:
-	Mesh(Vertex* v, UINT* i, int noOfIndices, int noOfVertices);
-	~Mesh(void);
-	void Initialize(Vertex* v, UINT* i, int noOfIndices, int noOfVertices);
-	void Update(float dt);
-	void Draw();
+	Mesh(UINT* i);
+	UINT* GetIndices();
+	Material* GetMaterial();
+	void SetMaterial(Material* newMaterial);
 
-private:
-	ID3D11Buffer* indexBuffer;
-	ID3D11Buffer* vertexBuffer;
-	short totalIndices;
+private:	
+	UINT indices[3];
+	Material* material;
 };
 
+struct MeshGroup
+{
+	unsigned int firstFace;
+	unsigned int lastFace;
+};
+
+struct Model 
+{
+	vector<Vertex> vertices;
+	vector<Mesh> meshes;
+	vector<MeshGroup> meshGroups;
+};                                                                                                                                                                                                                                                                                                      

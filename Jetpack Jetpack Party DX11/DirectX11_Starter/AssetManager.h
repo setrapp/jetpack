@@ -5,12 +5,17 @@
 
 #include <map>
 #include <string>
+#include <queue>
 #include "Common.h"
+#include "Entity.h"
 #include "Material.h"
 #include "Mesh.h"
 #include "ModelLoad\MLModelViewer.h"
+#include "InputManager.h"
 
 using namespace std;
+
+class SoundManager;
 
 class AssetManager
 {
@@ -33,21 +38,35 @@ public:
 	ID3D11PixelShader* CreateAndStorePixelShader(string shaderPath, string name = "default");
 	ID3D11PixelShader* GetPixelShader(string name = "default");
 
+	// Textures
+	//ID3D11Texture2D StoreTexture2D(wchar_t* path, string name = "default");
+	//ID3D11Texture2D GetTexture2D(string name = "default");
+
 	// Materials
-	Material* StoreMaterial(Material* material, string name = "default");
-	Material* GetMaterial(string name = "default");
+	Material* StoreMaterial(Material* material, string name = "default", Model* sourceModel = NULL);
+	Material* GetMaterial(string name = "default", Model* sourceModel = NULL);
 
-	// Meshes
-	vector<Mesh*>* CreateAndStoreMesh(string filePath, string name = "default");
-	vector<Mesh*>* StoreMesh(vector<Mesh*>* mesh, string name = "default");
-	vector<Mesh*>* GetMesh(string name = "default");
+	// Models
+	Model* CreateAndStoreModel(string filePath, string name = "default");
+	Model* StoreModel(Model* model, string name = "default");
+	Model* GetModel(string name = "default");
 
+	// Mesh Groups
+	vector<MeshGroup*>* GetMeshGroupsWithMaterial(vector<MeshGroup*>* meshGroupsOut, Model* sourceModel, string desiredMaterialName = "default");
+	Entity* EntifyMeshGroup(Entity* entityOut, Model* sourceModel, MeshGroup* meshGroup);
+
+	SoundManager* GetSoundManager();
+	
 	static AssetManager* Instance();
+	std::queue<Entity*> addedEntities;
+
 private:
 	static AssetManager* instance;
 	map<ID3D11VertexShader*, ID3D11InputLayout*>* inputLayouts;
 	map<string, ID3D11VertexShader*>* vertexShaders;
 	map<string, ID3D11PixelShader*>* pixelShaders;
-	map<string, Material*>* materials;
-	map<string, vector<Mesh*>*>* meshes;
+	map<string, ID3D11Texture2D*>* texture2Ds;
+	map<string, pair<Material*, Model*>>* materials;
+	map<string, Model*>* models;
+	SoundManager* soundManager;
 };

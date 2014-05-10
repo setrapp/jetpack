@@ -8,13 +8,29 @@ ClientConnectionEntity::ClientConnectionEntity(void)
 	networkMessages = queue<string>();
 }
 
+ClientConnectionEntity::~ClientConnectionEntity()
+{
+	// TODO Figure out how to dealloacte memory.
+	/*while (receivedChat->size() > 0)
+	{
+		char* frontChat = receivedChat->front;
+		receivedChat->pop();
+		delete frontChat;
+	}
+	delete receivedChat;*/
+}
 
-void ClientConnectionEntity::sendMessage(string sentMessage){
+
+void ClientConnectionEntity::sendMessage(MessageTypes::Client msgType, string sentMessage){
 	
+	int curType= (int)msgType;
+	string messageTypeString(to_string(curType));
+	messageTypeString+= "\n";
+	sentMessage= messageTypeString + sentMessage;
 
 	int iResult;
 	// Send an initial buffer
-	//iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
+	sentMessage+="<EOF>";
 	iResult = send(ConnectSocket, sentMessage.c_str(), 512, 0);
 	if (iResult == SOCKET_ERROR) {
 		printf("send failed: %d\n", WSAGetLastError());
@@ -102,8 +118,11 @@ void ClientConnectionEntity::listenForResponse(void* stuff){
 	int buflen= DEFAULT_BUFLEN;
 	int iResult= 0;
 	char* receiveBuffer= new char[DEFAULT_BUFLEN];
-	string s= "SOCKET REQUEST";
-	send(connectedSocket, s.c_str(), 512, 0);
+	/*string toConnect(to_string((int)MessageTypes::Client::Login));
+	toConnect+="\n";
+	toConnect+="<EOF>";
+	string s= toConnect;
+	send(connectedSocket, s.c_str(), 512, 0);*/
 	int counter=0;
 	do {
 		for(int i=0; i<DEFAULT_BUFLEN; i++){
@@ -113,51 +132,7 @@ void ClientConnectionEntity::listenForResponse(void* stuff){
 		if (iResult > 0){
 
 			string toParse(receiveBuffer);
-			string curString;
-			cout << "client received: " << (char*)receiveBuffer << '\n';
-			if(toParse.find("ADDED. SOCKET NUMBER IS: ",0)!=-1){
-				string socketAddedStr="ADDED. SOCKET NUMBER IS: ";
-				toParse = toParse.substr(socketAddedStr.length());
-				std::vector<std::string> stringParts;
-				std::istringstream stringsplitter(toParse);
-				while(std::getline(stringsplitter,curString, '\n')){
-					stringParts.push_back(curString);
-				}
-				string socketString=(string)stringParts.at(0);
-				ClientConnectionEntity::socketNum=atoi(socketString.c_str());
-				string socketNumLengthEndLn = to_string(ClientConnectionEntity::socketNum);
-				socketNumLengthEndLn +="\n";
-				toParse = toParse.substr(socketNumLengthEndLn.length());
-				string toPush= "1";
-				toPush+= "\n";
-				ostringstream ss;
-				ss<< toParse;
-				toPush+= ss.str();
-						
-				networkMessages.push(toPush);
-			}
-			else if(toParse.find("SOCKET ADDED: ",0)!=-1){
-				string socketAddedStr= "SOCKET ADDED: ";
-				toParse = toParse.substr(socketAddedStr.length());
-				int value = atoi(toParse.c_str());
-				if(value != ClientConnectionEntity::socketNum){
-					string toPush= "2";
-					toPush+= "\n";
-					ostringstream ss;
-					ss<< value;
-					toPush+= ss.str();
-						
-					networkMessages.push(toPush);
-				}
-			}
-			else if(toParse.find("MOVEMENT UPDATE: ",0)!=-1){
-				string movementUpdateStr= "MOVEMENT UPDATE: ";
-				toParse = toParse.substr(movementUpdateStr.length());
-				string toPush= "3";
-				toPush+= "\n";
-				toPush+= toParse;
-				networkMessages.push(toPush);
-			}
+			networkMessages.push(toParse);
 			
 			counter++;
 		}    

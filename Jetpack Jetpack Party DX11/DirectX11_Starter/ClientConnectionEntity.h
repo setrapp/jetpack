@@ -8,6 +8,7 @@
 #include <queue>
 #include <sstream>
 #include "Entity.h"
+#include "MessageTypes.h"
 #define DEFAULT_PORT "8080"
 #define DEFAULT_BUFLEN 512
 
@@ -28,7 +29,8 @@ public:
 	char recvbuf[DEFAULT_BUFLEN];
 	volatile std::queue<char*>* receivedChat;
 	ClientConnectionEntity(void);
-	void sendMessage(string sentMessage);
+	~ClientConnectionEntity();
+	void sendMessage(MessageTypes::Client msgType, string sentMessage);
 	void connectClient(string address);
 	static void listenForResponse(void* stuff);
 	static queue<string> networkMessages;

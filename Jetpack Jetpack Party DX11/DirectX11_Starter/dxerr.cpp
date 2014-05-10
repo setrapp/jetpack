@@ -12,7 +12,7 @@
 //--------------------------------------------------------------------------------------
 
 // This version only supports UNICODE.
-#define _WINSOCKAPI_
+
 #include "dxerr.h"
 
 #include <stdio.h>

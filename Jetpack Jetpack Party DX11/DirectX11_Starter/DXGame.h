@@ -8,9 +8,11 @@
 // -------------------------------------------------------------
 
 #pragma once
+#define screenWidth		1920	
+#define screenHeight	1080
+
 #include "Common.h"
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "Windows.h"
 #include <string>
 #include <d3d11.h>
 #include <assert.h>
@@ -18,7 +20,7 @@
 #include "dxerr.h"
 #include "GameTimer.h"
 #include "DXConnection.h"
-
+#include "BulletManager.h"
 
 class DXGame
 {
@@ -35,9 +37,11 @@ public:
 	// Methods called by the game loop - override these in
 	// derived classes to implement custom functionality
 	virtual bool Init();
+	virtual void OnFocus(bool givenFocus); 
 	virtual void OnResize(); 
 	virtual void UpdateScene(float dt)=0;
 	virtual void DrawScene()=0; 
+	virtual void FixedUpdate() = 0;
 	virtual LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	// Convenience overrides for handling mouse input.
@@ -45,7 +49,9 @@ public:
 	virtual void OnMouseUp(WPARAM btnState, int x, int y)  { }
 	virtual void OnMouseMove(WPARAM btnState, int x, int y){ }	
 	virtual void OnMouseWheel(WPARAM btnState, int x, int y) { }
+	double getCurrentValue();
 
+	void initCPU();
 protected:
 	// Handles window and Direct3D initialization
 	bool InitMainWindow();
@@ -88,5 +94,11 @@ protected:
 	int windowWidth;
 	int windowHeight;
 	bool enable4xMsaa;
+	MEMORYSTATUSEX memInfo;
+
+	//In milliseconds
+	LONG64 elapsedTime;
+public :
+	static bool sysEvent;
 };
 
