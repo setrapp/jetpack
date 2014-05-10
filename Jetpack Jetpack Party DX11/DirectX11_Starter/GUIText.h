@@ -4,6 +4,7 @@
 #include "Common.h"
 #include "Rect.h"
 #include "FontRenderer.h"
+#include "SpriteRenderer.h"
 #include <functional>
 #include <utility>
 #include "AnimationBase.h"
@@ -70,7 +71,6 @@ public :
 			startPosition = basePosition;
 			 Origin = XMFLOAT2();	
 			 this->animationSpeed = animationSpeed;
-			 SetRect(rect);
 		 }
 
 		 void Update (LPPOINT point, float dt)
