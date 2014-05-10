@@ -63,23 +63,43 @@ void Entity::AddQuad(Vertex* v, UINT* i)
 
 void Entity::AddMeshGroup(Model* sourceModel, MeshGroup* meshGroup)
 {
+	int existingVertexCount = vertices.size();
 	int vertexCount = sourceModel->vertices.size();
 	int meshCount = sourceModel->meshes.size();
+	vector<UINT*> meshGroupIndices;
 
-	for (int i = meshGroup->firstFace; i < meshGroup->lastFace && i < meshCount; i++)
+	// Extract relevant faces.
+	for (int i = meshGroup->firstFace; i <= meshGroup->lastFace && i < meshCount; i++)
 	{
 		UINT* indices = sourceModel->meshes[i].GetIndices();
-		Vertex vertices[3] = {sourceModel->vertices[indices[0]], sourceModel->vertices[indices[1]], sourceModel->vertices[indices[2]]};
 		for (int j = 0; j < 3; j++)
 		{
-			indices[j] += this->vertices.size();
+			indices[j] += existingVertexCount;
 		}
+		meshGroupIndices.push_back(indices);
 		meshes.push_back(new Mesh(indices));
 	}
-
+	
+	// Extract relavant vertices and point face indices at them.
+	int meshGroupIndexCount = meshGroupIndices.size();
 	for (int i = 0; i < vertexCount; i++)
 	{
-		vertices.push_back(sourceModel->vertices[i]);
+		bool vertexFound = false;
+		for (int j = 0; j < meshGroupIndexCount; j++)
+		{
+			for (int k = 0; k < 3; k++)
+			{
+				if (meshGroupIndices[j][k] == i)
+				{
+					if (!vertexFound)
+					{
+						vertices.push_back(sourceModel->vertices[i]);
+						vertexFound = true;
+					}
+					meshes[j]->GetIndices()[k] = vertices.size() - 1;
+				}
+			}
+		}
 	}
 }
 
@@ -108,6 +128,31 @@ void Entity::AddModel(Model* model) {
 	}
 
 	models.push_back(model);
+}
+
+void Entity::RecenterGeometry()
+{
+	transform.SetTranslation(XMFLOAT3(0, 0, 0));
+	int vertexCount = vertices.size();
+	XMFLOAT3 centroid = XMFLOAT3(0, 0, 0);
+	for (int i = 0; i < vertexCount; i++)
+	{
+		centroid.x += vertices[i].Position.x;
+		centroid.y += vertices[i].Position.y;
+		centroid.z += vertices[i].Position.z;
+	}
+	centroid.x /= vertexCount;
+	centroid.y /= vertexCount;
+	centroid.z /= vertexCount;
+	for (int i = 0; i < vertexCount; i++)
+	{
+		vertices[i].Position.x -= centroid.x;
+		vertices[i].Position.y -= centroid.y;
+		vertices[i].Position.z -= centroid.z;
+	}
+	XMFLOAT3 translation;
+	XMStoreFloat3(&translation, XMVectorMultiply(XMLoadFloat3(&centroid), XMLoadFloat3(&transform.GetScale())));
+	transform.Translate(translation);
 }
 
 void Entity::Update(float dt)

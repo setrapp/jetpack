@@ -27,6 +27,7 @@ public:
 	void AddQuad(Vertex* v, UINT* u);
 	void AddMeshGroup(Model* sourceModel, MeshGroup* meshGroup);
 	void AddModel(Model* model);
+	void RecenterGeometry();
 	virtual void Update(float dt);
 	void Draw(EntityDrawArgs const* drawArgs, XMFLOAT4X4 const* view = NULL, XMFLOAT4X4 const* projection = NULL);
 	void LoadTexture(wchar_t* path);

@@ -411,23 +411,6 @@ vector<MeshGroup*>* AssetManager::GetMeshGroupsWithMaterial(vector<MeshGroup*>* 
 	return meshGroupsOut;
 }
 
-Entity* AssetManager::EntifyMeshGroup(Entity* entityOut, Model* sourceModel, MeshGroup* meshGroup)
-{
-	if (!sourceModel || !meshGroup)
-	{
-		return NULL;
-	}
-
-	if (!entityOut)
-	{
-		entityOut = new Entity();
-	}
-
-	entityOut->AddMeshGroup(sourceModel, meshGroup);
-
-	return entityOut;
-}
-
 SoundManager* AssetManager::GetSoundManager()
 {
 	return soundManager;

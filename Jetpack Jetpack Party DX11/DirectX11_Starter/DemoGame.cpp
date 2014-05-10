@@ -273,14 +273,15 @@ void DemoGame::CreateGeometryBuffers()
 	floor->Finalize();
 
 	// TEMP
-	Material* temp = AssetManager::Instance()->GetMaterial("Checkpoint", floor->GetModel(0));
-	temp->diffuse = XMFLOAT4(1, 0, 0, 1);
 	vector<MeshGroup*> checkpoints;
 	AssetManager::Instance()->GetMeshGroupsWithMaterial(&checkpoints, floor->GetModel(0), "Checkpoint");
-	Entity* checkpoint = AssetManager::Instance()->EntifyMeshGroup(NULL, floor->GetModel(0), checkpoints[0]);
+	Entity* checkpoint = new Entity();
+	checkpoint->AddMeshGroup(floor->GetModel(0), checkpoints[0]);
 	entities.push_back(checkpoint);
-	checkpoint->transform.Translate(XMFLOAT3(0, 200, -800));
+	//checkpoint->transform.SetParent(&floor->transform);
 	checkpoint->transform.Scale(XMFLOAT3(1000, 1000, 1000));
+	checkpoint->RecenterGeometry();
+	checkpoint->transform.Translate(XMFLOAT3(0, -400, -800)); // TODO make RecenterGeometry do this automatically, does parenting work?
 	checkpoint->Finalize();
 
 	Entity* navMesh = new Entity();
@@ -441,6 +442,9 @@ void DemoGame::UpdateScene(float dt)
 			AssetManager::Instance()->addedEntities.pop();
 		}
 
+		//temp 
+		entities[22]->transform.Translate(entities[22]->transform.InverseTransformDirection(XMFLOAT3(0, 0, -0.001 *dt)));
+		entities[22]->transform.Rotate(XMFLOAT3(0, 1 * dt, 0));
 
 		for(Entity* e: entities)
 		{
