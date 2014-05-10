@@ -265,21 +265,24 @@ void DemoGame::CreateGeometryBuffers()
 	gift->LoadTexture(L"../Assets/Textures/RedGift.png");
 	gift->Finalize();
 
-	// TEMP
 	Model* terrainModel = AssetManager::Instance()->GetModel("terrain");
 	vector<MeshGroup*> checkpoints;
 	AssetManager::Instance()->GetMeshGroupsWithMaterial(&checkpoints, terrainModel, "Checkpoint");
-	Entity* checkpoint = new Entity();
-	checkpoint->AddMeshGroup(terrainModel, checkpoints[0], true);
-	entities.push_back(checkpoint);
-	//checkpoint->transform.SetParent(&floor->transform);
-	checkpoint->transform.Scale(XMFLOAT3(1000, 1000, 1000));
-	checkpoint->RecenterGeometry();
-	checkpoint->transform.Translate(XMFLOAT3(0, -400, 0)); // TODO make RecenterGeometry do this automatically, does parenting work?
-	checkpoint->Finalize();
+
+	for (int i = 0; i < checkpoints.size(); i++)
+	{
+		Entity* checkpoint = new Entity();
+		checkpoint->AddMeshGroup(terrainModel, checkpoints[i], true);
+		entities.push_back(checkpoint);
+		//checkpoint->transform.SetParent(&floor->transform);
+		checkpoint->transform.Scale(XMFLOAT3(1000, 1000, 1000));
+		checkpoint->RecenterGeometry();
+		checkpoint->transform.Translate(XMFLOAT3(0, -400, 0)); // TODO make RecenterGeometry do this automatically, does parenting work?
+		checkpoint->Finalize();
+	}
 
 	Entity* floor = new Entity();
-	floor->AddModel(AssetManager::Instance()->GetModel("terrain"));
+	floor->AddModel(terrainModel);
 	floor->transform.Translate(XMFLOAT3(0, -400, 0));
 	floor->transform.Scale(XMFLOAT3(1000, 1000, 1000));
 	entities.push_back(floor);
@@ -444,8 +447,11 @@ void DemoGame::UpdateScene(float dt)
 		}
 
 		//temp 
-		entities[21]->transform.Translate(entities[22]->transform.InverseTransformDirection(XMFLOAT3(0, 0, -0.001 *dt)));
-		entities[21]->transform.Rotate(XMFLOAT3(0, 1 * dt, 0));
+		for (int i = 21; i < 29; i++)
+		{
+			//entities[i]->transform.Translate(entities[i]->transform.InverseTransformDirection(XMFLOAT3(0, 0, -0.001 *dt)));
+			entities[i]->transform.Rotate(XMFLOAT3(0, 1 * dt, 0));
+		}
 
 		for(Entity* e: entities)
 		{

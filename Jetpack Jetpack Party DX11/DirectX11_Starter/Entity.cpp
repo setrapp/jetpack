@@ -104,13 +104,21 @@ void Entity::AddMeshGroup(Model* sourceModel, MeshGroup* meshGroup, bool removeF
 		}
 	}
 
-	// If specified, remove geometry from the original model.
+	// If specified, set faces on the source model to NULL so they will be ignored.
 	if (removeFacesFromModel)
 	{
-		for (int i = meshGroup->firstFace; i <= meshGroup->lastFace && i < meshCount; meshGroup->lastFace--)
+		/*for (int i = meshGroup->firstFace; i <= meshGroup->lastFace && i < meshCount; meshGroup->lastFace--)
 		{
 			sourceModel->meshes.erase(sourceModel->meshes.begin() + i);
 		}
+		for (int i = 0; i < sourceModel->meshGroups.size(); i++)
+		{
+			if(sourceModel->meshGroups[i].firstFace > meshGroup->lastFace)
+			{
+				sourceModel->meshGroups[i].firstFace -= meshGroup->lastFace - meshGroup->firstFace;
+				sourceModel->meshGroups[i].lastFace -= meshGroup->lastFace - meshGroup->firstFace;
+			}
+		}*/
 	}
 }
 
@@ -309,21 +317,24 @@ void Entity::Finalize()
 	for(int i = 0; i < totalMeshes; i++)
 	{
 		Material* meshMaterial = meshes[i]->GetMaterial();
-		map<Material*, vector<UINT>*>::iterator matIt = indicesAll.find(meshMaterial);
-		vector<UINT>* materialIndices;
-		if (matIt != indicesAll.end())
+		if (meshMaterial)
 		{
-			materialIndices = matIt->second;
-		}
-		else
-		{
-			materialIndices = new vector<UINT>;
-			indicesAll.insert(pair<Material*, vector<UINT>*>(meshMaterial, materialIndices));
-		}
-		UINT* indices = meshes.at(i)->GetIndices();
-		for(short j= 0; j < 3; j++)
-		{
-			materialIndices->push_back(indices[j]);
+			map<Material*, vector<UINT>*>::iterator matIt = indicesAll.find(meshMaterial);
+			vector<UINT>* materialIndices;
+			if (matIt != indicesAll.end())
+			{
+				materialIndices = matIt->second;
+			}
+			else
+			{
+				materialIndices = new vector<UINT>;
+				indicesAll.insert(pair<Material*, vector<UINT>*>(meshMaterial, materialIndices));
+			}
+			UINT* indices = meshes.at(i)->GetIndices();
+			for(short j= 0; j < 3; j++)
+			{
+				materialIndices->push_back(indices[j]);
+			}
 		}
 	}
 
