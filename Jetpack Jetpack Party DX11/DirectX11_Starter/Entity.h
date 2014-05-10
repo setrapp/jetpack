@@ -21,8 +21,12 @@ struct EntityDrawArgs
 struct EntityPhysicsData
 {
 	btVector3* entityVertices;
-	int* indices;
+	int* entityNumOfTriangles;
+	int* entityIndices;
 	btVector3 aabbMin , aabbMax;
+	btTriangleIndexVertexArray* entityIndexVertexArray;
+	btBvhTriangleMeshShape* entiyMeshShape;
+
 };
 
 class Entity
@@ -49,8 +53,8 @@ public:
 	void SetVisible(bool visibility);
 	//Also has a rigid Body
 	btRigidBody* rigidBody;
-	//
-	EntityPhysicsData* entityCollisionShapeData;
+	//Struct containing data to create entity mesh collider
+	EntityPhysicsData* phys_entityPhysicsData;
 
 protected:
 	map<Material*, pair<ID3D11Buffer*, LONG>> indexBuffers;

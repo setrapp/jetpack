@@ -112,10 +112,7 @@ btRigidBody::btRigidBodyConstructionInfo* GetPlayerConstructionInfo()
 //Needs a mesh collider.
 void SetTrackConstructionInfo(Entity* track)
 {
-	trackCollisionShape = new btBvhTriangleMeshShape(track->entityCollisionShapeData->entityVertices, 
-													 TRUE,
-													 track->entityCollisionShapeData->aabbMin,
-													 track->entityCollisionShapeData->aabbMax);
+	
 }
 
 btRigidBody::btRigidBodyConstructionInfo* GetTrackConstructionInfo()

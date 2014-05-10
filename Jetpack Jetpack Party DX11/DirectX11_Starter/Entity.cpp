@@ -235,8 +235,8 @@ void Entity::Finalize()
 	}
 	Vertex first = vertices.at(0);
 
-	entityCollisionShapeData->aabbMin= btVector3(first.Position.x,first.Position.y,first.Position.z);
-	entityCollisionShapeData->aabbMax= btVector3(first.Position.x,first.Position.y,first.Position.z);
+	phys_entityPhysicsData->aabbMin= btVector3(first.Position.x,first.Position.y,first.Position.z);
+	phys_entityPhysicsData->aabbMax= btVector3(first.Position.x,first.Position.y,first.Position.z);
 
 	map<Material*, vector<UINT>*> indicesAll;
 	long totalMeshes = meshes.size();
@@ -266,14 +266,14 @@ void Entity::Finalize()
 
 	//Physics
 	
-	entityCollisionShapeData->indices = new int[numOfIndices];
+	phys_entityPhysicsData->entityIndices = new int[numOfIndices];
 
 	for(int i = 0; i < totalMeshes; i++)
 	{
 		UINT* indices = meshes.at(i)->GetIndices();
 		for(short j= 0; j < 3; j++)
 		{
-			entityCollisionShapeData->indices[i*3 + j] = indices[j];
+			phys_entityPhysicsData->entityIndices[i*3 + j] = indices[j];
 		}
 	}
 	
@@ -322,28 +322,32 @@ void Entity::Finalize()
 		&vertexBuffer));
 
 	//Physics
-	entityCollisionShapeData->entityVertices = new btVector3[vertices.size()];
+	//Calculating AABB-Max and Min
+	phys_entityPhysicsData->entityVertices = new btVector3[vertices.size()];
 	for (int i=0; i<vertices.size(); i++)
 	{
 		Vertex temp = vertices.at(i);
-		entityCollisionShapeData->entityVertices[i].x = temp.Position.x;
-		entityCollisionShapeData->entityVertices[i].y = temp.Position.y;
-		entityCollisionShapeData->entityVertices[i].z = temp.Position.z;
+		phys_entityPhysicsData->entityVertices[i].x = temp.Position.x;
+		phys_entityPhysicsData->entityVertices[i].y = temp.Position.y;
+		phys_entityPhysicsData->entityVertices[i].z = temp.Position.z;
 		//aabbMax
-		if (temp.Position.x > entityCollisionShapeData->aabbMax.x)
-			entityCollisionShapeData->aabbMax.x = temp.Position.x;
-		if (temp.Position.y > entityCollisionShapeData->aabbMax.y)
-			entityCollisionShapeData->aabbMax.y = temp.Position.y;
-		if (temp.Position.z > entityCollisionShapeData->aabbMax.z)
-			entityCollisionShapeData->aabbMax.z = temp.Position.z;
+		if (temp.Position.x > phys_entityPhysicsData->aabbMax.x)
+			phys_entityPhysicsData->aabbMax.x = temp.Position.x;
+		if (temp.Position.y > phys_entityPhysicsData->aabbMax.y)
+			phys_entityPhysicsData->aabbMax.y = temp.Position.y;
+		if (temp.Position.z > phys_entityPhysicsData->aabbMax.z)
+			phys_entityPhysicsData->aabbMax.z = temp.Position.z;
 		//aabbMin
-		if (temp.Position.x < entityCollisionShapeData->aabbMin.x)
-			entityCollisionShapeData->aabbMin.x = temp.Position.x;
-		if (temp.Position.y < entityCollisionShapeData->aabbMin.y)
-			entityCollisionShapeData->aabbMin.y = temp.Position.y;
-		if (temp.Position.z < entityCollisionShapeData->aabbMin.z)
-			entityCollisionShapeData->aabbMin.z = temp.Position.z;
+		if (temp.Position.x < phys_entityPhysicsData->aabbMin.x)
+			phys_entityPhysicsData->aabbMin.x = temp.Position.x;
+		if (temp.Position.y < phys_entityPhysicsData->aabbMin.y)
+			phys_entityPhysicsData->aabbMin.y = temp.Position.y;
+		if (temp.Position.z < phys_entityPhysicsData->aabbMin.z)
+			phys_entityPhysicsData->aabbMin.z = temp.Position.z;
 	}
+
+	//Creatng index vertex arrays	
+
 	//
 
 	for(map<Material*, vector<UINT>*>::iterator it = indicesAll.begin(); it != indicesAll.end(); it++)
