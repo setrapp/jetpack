@@ -18,15 +18,14 @@ class HUD
 public:
 	HUD(SpriteRenderer* renderer, FontRenderer* fontRenderer);
 	~HUD(void);
-	inline void setFuel(float fuelValue);
-	inline float getFuel();
+	//inline void setFuel(float fuelValue);
+	//inline float getFuel();
 	inline void setRank(short newRank);
 	inline short getRank();
 	inline void setMaxRacers(unsigned short maxRacers);
 	void Render();
 	inline void Resize();
 	inline void Reset();
-
 
 private:
 	SpriteRenderer*				renderer;

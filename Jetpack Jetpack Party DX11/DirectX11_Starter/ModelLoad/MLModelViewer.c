@@ -67,12 +67,19 @@ struct _ml_face3D
 	GLushort materialIndex;
 };
 
+struct _ml_object3D
+{
+	unsigned int firstFace;
+	unsigned int lastFace;
+};
+
 struct _ml_model3D
 {
 	const char* filename;
-	unsigned int numVertices, numFaces, numTextureVertices, numMaterials;
+	unsigned int numVertices, numFaces, numObjects, numTextureVertices, numMaterials;
 	MLVertex3D* vertices;
 	MLFace3D* faces;
+	MLObject3D* objects;
 	//int* textures;
 	MLTexelXY* textureVertices;
 	MLModelMaterial** materials;
@@ -93,6 +100,7 @@ typedef enum
 	MODEL_FACE_NORMAL,			//normal of face
 	MODEL_FACE,					//single face of model
 	MODEL_SPLIT_FACE,			//face needing to be split from a quad into two triangles
+	MODEL_OBJECT,				//defined object that references faces (helpful for separating geometry)
 	MODEL_MAT_LIB,				//filename for a material library
 	MODEL_MAT_NAME				//name of material being used
 }MLModelFeatures;
@@ -104,14 +112,16 @@ typedef struct
 }MLMaterialSwitch;
 
 //construct model
-MLModel3D* MLModel3DCreate(MLVertex3D* vertices,unsigned int numVertices, MLFace3D* faces, unsigned int numFaces, MLTexelXY* textureVertices, unsigned int numTextureVertices, MLModelMaterial** materials, unsigned int numMaterials) 
+MLModel3D* MLModel3DCreate(MLVertex3D* vertices,  unsigned int numVertices, MLFace3D* faces,  unsigned int numFaces, MLObject3D* objects, unsigned int numObjects, MLTexelXY* textureVertices,  unsigned int numTextureVertices, MLModelMaterial** materials,  unsigned int numMaterials)
 {
 	MLModel3D* newModel = (MLModel3D*)malloc(sizeof(MLModel3D));
 	newModel->vertices = vertices, 
 	newModel->faces = faces; 
+	newModel->objects = objects;
 	newModel->textureVertices = textureVertices; 
 	newModel->numVertices = numVertices;
 	newModel->numFaces = numFaces;
+	newModel->numObjects = numObjects;
 	newModel->numTextureVertices = numTextureVertices;
 	newModel->materials = materials;
 	newModel->numMaterials = numMaterials;
@@ -137,6 +147,8 @@ void MLModel3DDelete(MLModel3D* deletee)
 		free(deletee->textureVertices);
 	if(deletee->faces != NULL)
 		free(deletee->faces);
+	if(deletee->objects != NULL)
+		free(deletee->objects);
 	if(deletee->materials)
 	{
 		MLModelMaterial** materials = deletee->materials;
@@ -180,12 +192,13 @@ MLModel3D* mlModel3DLoadOBJ(const char* filename)
 	MLVertex3D* verts = NULL;				//array of physical vertices
 	MLTexelXY* texVerts = NULL;             //array of texture vertices
 	MLFace3D* faces = NULL;					//array of faces
+	MLObject3D* objects = NULL;				//array of objects
 	char** matLibs = NULL;					//array of material libraries (not actual materials)
 	int* matLibNameLengths = NULL;			//size of each material library's filename
 	MLMaterialSwitch* matSwitches = NULL;	//materials switches at faces
 	MLModel3D* model = NULL;				//model to be created
 	char featureType = '\0';				//type of feature being defined
-	unsigned int vertexCount = 0, faceCount = 0, textureVertexCount = 0, matLibCount = 0, matSwitchCount = 0;
+	unsigned int vertexCount = 0, faceCount = 0, objectCount = 0, textureVertexCount = 0, matLibCount = 0, matSwitchCount = 0;
 	char defaultSwitchName[] = {'-'};
 
 	//--- Declare structures that will be used in linking materials ---//
@@ -234,6 +247,9 @@ MLModel3D* mlModel3DLoadOBJ(const char* filename)
 				case MODEL_SPLIT_FACE:					//two faces
 					faceCount += 2;
 					break;
+				case MODEL_OBJECT:						//defined object
+					objectCount++;
+					break;
 				case MODEL_MAT_LIB:						//material library filename
 					matLibCount++;
 					break;
@@ -250,6 +266,7 @@ MLModel3D* mlModel3DLoadOBJ(const char* filename)
 		verts = (MLVertex3D*)malloc(sizeof(MLVertex3D)*(vertexCount+1));
 		texVerts = (MLTexelXY*)malloc(sizeof(MLTexelXY)*(textureVertexCount+1));
 		faces = (MLFace3D*)malloc(sizeof(MLFace3D)*(faceCount+1));
+		objects = (MLObject3D*)malloc(sizeof(MLObject3D)*(objectCount+1));
 		matLibs = (char**)malloc(sizeof(char*)*matLibCount);											//note that this is not an array of actual materials but the files that specify them, materials will be loaded later
 		matLibNameLengths = (int*)malloc(sizeof(int)*matLibCount);										//size of each material library's filename
 		matSwitches = (MLMaterialSwitch*)malloc(sizeof(MLMaterialSwitch) * (matSwitchCount+1));         //materials switches at faces
@@ -274,6 +291,10 @@ MLModel3D* mlModel3DLoadOBJ(const char* filename)
 		faces[0].normal.x = 0;
 		faces[0].normal.y = 0;
 		faces[0].normal.z = 0;
+		//set the first index of objects to default, objects[0] is used to hold geometry that is defined before an object is created.
+		objectCount = 0;
+		objects[0].firstFace = 0;
+		objects[0].lastFace = 0;
 		//set the first index of texture vertices to a default, textureVerts[0] is used to signify no texture vertex is used
 		texVerts[0].position.x = 0;
 		texVerts[0].position.y = 0;
@@ -294,10 +315,11 @@ MLModel3D* mlModel3DLoadOBJ(const char* filename)
 		//--- Parse through the file again to populate the vertex and face arrays ---//
 		//reset feature type and feature counts
 		featureType = MODEL_UNUSABLE;
-		vertexCount = 0, faceCount = 0, textureVertexCount = 0, matLibCount = 0, matSwitchCount = 0;
+		vertexCount = 0, faceCount = 0, objectCount = 0, textureVertexCount = 0, matLibCount = 0, matSwitchCount = 0;
 		//start counting features (not including material libraries) vertices at one to allow for the special zero index case (the zero index is used in the absence of -1 so unsigned numbers can be used)
 		vertexCount++;
 		faceCount++;
+		objectCount++;
 		textureVertexCount++;
 
 		while((featureType = parseModelData(data, dataTypes, dataSizes, maxDataCount, read, substringBuffer, readSize, objFile, 0)) != MODEL_END)
@@ -340,6 +362,7 @@ MLModel3D* mlModel3DLoadOBJ(const char* filename)
 					f.texVert3 = *(GLushort*)data[6];
 					faces[faceCount] = f;
 					faceCount++;
+					objects[objectCount - 1].lastFace = faceCount - 1;
 					break;
 				case MODEL_SPLIT_FACE:				//two faces 
 					f1.vert1 = *(GLushort*)data[0];
@@ -358,6 +381,12 @@ MLModel3D* mlModel3DLoadOBJ(const char* filename)
 					f2.texVert3 = *(GLushort*)data[4];
 					faces[faceCount] = f2;
 					faceCount++;
+					objects[objectCount - 1].lastFace = faceCount - 1;
+					break;
+				case MODEL_OBJECT:					//defined object
+					objectCount++;
+					objects[objectCount - 1].firstFace = faceCount;
+					objects[objectCount - 1].lastFace = 0;
 					break;
 				case MODEL_MAT_LIB:					//material library filename
 					matLibs[matLibCount] = guCopyString((char*)data[0], NULL, GU_DEFAULT_BUFFER_SIZE);
@@ -501,7 +530,7 @@ MLModel3D* mlModel3DLoadOBJ(const char* filename)
 		}
 
 		//create new model and using vertex and face arrays
-		model =  MLModel3DCreate(verts, vertexCount, faces, faceCount, texVerts, textureVertexCount, mats, matCount);
+		model =  MLModel3DCreate(verts, vertexCount, faces, faceCount, objects, objectCount, texVerts, textureVertexCount, mats, matCount);
 		model->filename = guCopyString(filename, NULL, GU_DEFAULT_BUFFER_SIZE);
 	}
 
@@ -969,6 +998,12 @@ int parseModelData(void** data, int* dataTypes, int* dataSizes, int dataCount, c
 		return freeReadModelReturn(delimiterIndices, MODEL_UNUSABLE);
 	}
 
+	//--- Parse Object ---//
+	else if(read[0] == 'o' || read[0] == 'O')
+	{
+		return freeReadModelReturn(delimiterIndices, MODEL_OBJECT);
+	}
+
 	//--- Parse Vertex ---//
 	else if(read[0] == 'v' || read[0] == 'V')
 	{
@@ -1270,6 +1305,8 @@ MLVertex3D const* mlModel3DGetVertex(MLModel3D const* targetModel, unsigned int 
 unsigned int mlModel3DGetVertexCount(MLModel3D const* targetModel)											{	return targetModel->numVertices;				}
 MLFace3D const* mlModel3DGetFace(MLModel3D const* targetModel, unsigned int index)							{	return &targetModel->faces[index];				}
 unsigned int mlModel3DGetFaceCount(MLModel3D const* targetModel)											{	return targetModel->numFaces;					}
+MLObject3D const* mlModel3DGetObject(MLModel3D const* targetModel, unsigned int index)						{	return &targetModel->objects[index];			}
+unsigned int mlModel3DGetObjectCount(MLModel3D const* targetModel)											{	return targetModel->numObjects;					}		
 MLTexelXY const* mlModel3DGetTextureVertex(MLModel3D const* targetModel, unsigned int index)				{	return &targetModel->textureVertices[index];	}
 unsigned int mlModel3DGetTextureVertexCount(MLModel3D const* targetModel)									{	return targetModel->numTextureVertices;			}
 MLModelMaterial const* mlModel3DGetMaterial(MLModel3D const* targetModel, unsigned int index)				{	return targetModel->materials[index];			}
@@ -1282,6 +1319,8 @@ GLushort mlFace3DGetTextureVertex2(MLFace3D const* targetFace)												{	retu
 GLushort mlFace3DGetTextureVertex3(MLFace3D const* targetFace)												{	return targetFace->texVert3;					}
 GUNormal3D mlFace3DGetNormal(MLFace3D const* targetFace)													{	return targetFace->normal;						}
 GLushort mlFace3DGetMaterial(MLFace3D const* targetFace)													{	return targetFace->materialIndex;				}
+unsigned int mlObject3DGetFirstFace(MLObject3D const* targetObject)											{	return targetObject->firstFace;					}
+unsigned int mlObject3DGetLastFace(MLObject3D const* targetObject)											{	return targetObject->lastFace;					}
 GUPoint3D mlVertex3DGetPosition(MLVertex3D const* targetVertex)												{	return targetVertex->position;					}
 GUNormal3D mlVertex3DGetNormal(MLVertex3D const* targetVertex)												{	return targetVertex->normal;					}
 GUPoint2D mlTexelXYGetPosition(MLTexelXY const* targetTexel)												{	if(targetTexel)	return targetTexel->position;	}

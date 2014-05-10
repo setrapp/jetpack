@@ -39,12 +39,14 @@ public:
 	void Finalize();
 	bool GetVisible();
 	void SetVisible(bool visibility);
+	Model* GetModel(int index); 
 
 protected:
 	map<Material*, pair<ID3D11Buffer*, LONG>> indexBuffers;
 	ID3D11Buffer* vertexBuffer;
 	vector<Vertex> vertices;
 	vector<Mesh*> meshes; 
+	vector<Model*> models;
 	Material* baseMaterial;
 	bool visible;
 };

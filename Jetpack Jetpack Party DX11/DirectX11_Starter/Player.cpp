@@ -78,7 +78,7 @@ void Player::Update(float dt)
 		// When landing, either respawn or stand straight up, depending on standing direction.
 		XMFLOAT3 upDot;
 		XMStoreFloat3(&upDot, XMVector3Dot(XMLoadFloat3(&transform.GetUp()), XMLoadFloat3(&XMFLOAT3(0, 1, 0))));
-		if (upDot.x < minPosture)
+		if (upDot.x < minPosture || jetpack->fuel <= 0) // TODO should only kill for lack of fuel if not landing on fuel station.
 		{
 			Respawn();
 		}

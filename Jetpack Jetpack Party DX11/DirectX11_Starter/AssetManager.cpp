@@ -20,7 +20,7 @@ AssetManager::AssetManager()
 	inputLayouts = new map<ID3D11VertexShader*, ID3D11InputLayout*>();
 	vertexShaders = new map<string, ID3D11VertexShader*>();
 	pixelShaders = new map<string, ID3D11PixelShader*>();
-	materials = new map<string, Material*>();
+	materials = new map<string, pair<Material*, Model*>>();
 	models = new map<string, Model*>();
 }
 
@@ -49,9 +49,9 @@ AssetManager::~AssetManager()
 	}
 	delete pixelShaders;
 
-	for(map<string, Material*>::iterator it = materials->begin(); it != materials->end(); it++)
+	for(map<string, pair<Material*, Model*>>::iterator it = materials->begin(); it != materials->end(); it++)
 	{
-		delete it->second;
+		delete it->second.first;
 	}
 	delete materials;
 
@@ -225,11 +225,11 @@ ID3D11Texture2D AssetManager::GetTexture2D(string name = "default");*/
 
 
 // Materials
-Material* AssetManager::StoreMaterial(Material* material, string name)
+Material* AssetManager::StoreMaterial(Material* material, string name, Model* sourceModel)
 {
 	// Attempt to add new element.
-	pair<map<string, Material*>::iterator, bool> existing;
-	pair<string, Material*> newMaterial(name, material);
+	pair<map<string, pair<Material*, Model*>>::iterator, bool> existing;
+	pair<string, pair<Material*, Model*>> newMaterial(name, pair<Material*, Model*>(material, sourceModel));
 	existing = materials->insert(newMaterial);
 	
 	// If the first attempt failed, destroy the element that is colliding and replace it.
@@ -241,12 +241,12 @@ Material* AssetManager::StoreMaterial(Material* material, string name)
 
 	return material;
 }
-Material* AssetManager::GetMaterial(string name)
+Material* AssetManager::GetMaterial(string name, Model* sourceModel)
 {
 	Material* material = NULL;
-	map<string, Material*>::iterator materialIt = materials->find(name);
+	map<string, pair<Material*, Model*>>::iterator materialIt = materials->find(name);
 	if(materialIt != materials->end()) {
-		material = materialIt->second;
+		material = materialIt->second.first;
 	}
 	return material;
 }
@@ -285,6 +285,17 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 		model->vertices.push_back(vertex);
 	}
 
+	// Load Individual Mesh Groups to Categorize Geometry.
+	unsigned int objectCount = mlModel3DGetObjectCount(objModel);
+	for (int i = 0; i < objectCount; i++)
+	{
+		MLObject3D const* mlObject = mlModel3DGetObject(objModel, i);
+		MeshGroup meshGroup;
+		meshGroup.firstFace = mlObject3DGetFirstFace(mlObject);
+		meshGroup.lastFace = mlObject3DGetLastFace(mlObject);
+		model->meshGroups.push_back(meshGroup);
+	}
+
 	// Load Mesh Indices.
 	unsigned int faceCount = mlModel3DGetFaceCount(objModel);
 	for (int i = 0; i < faceCount; i++) {
@@ -304,14 +315,15 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 		if (mlFaceMat > 0)
 		{
 			MLModelMaterial const* mlMaterial = mlModel3DGetMaterial(objModel, mlFaceMat);
-			string materialName(mlModel3DGetFilename(objModel));
-			materialName += ": ";
+			//string materialName(mlModel3DGetFilename(objModel));
+			//materialName += ": ";
 			char const* mlMatName = mlMaterial->name;
 			if (!mlMatName)
 			{
 				mlMatName = "Default";
 			}
-			materialName += mlMatName;
+			//materialName += mlMatName;
+			string materialName(mlMatName);
 			faceMaterial = GetMaterial(materialName);
 			if (!faceMaterial)
 			{
@@ -323,7 +335,7 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 											XMFLOAT4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]),
 											XMFLOAT4(specular[0], specular[1], specular[2], specular[3]),
 											shininess);
-				StoreMaterial(faceMaterial, materialName);
+				StoreMaterial(faceMaterial, materialName, model);
 			}
 		}
 		else
@@ -362,6 +374,41 @@ Model* AssetManager::GetModel(string name)
 		model = modelIt->second;
 	}
 	return model;
+}
+
+vector<MeshGroup*>* AssetManager::GetMeshGroupsWithMaterial(vector<MeshGroup*>* meshGroupsOut, Model* sourceModel, string desiredMaterialName)
+{
+	if (!sourceModel)
+	{
+		return NULL;
+	}
+
+	Material* desiredMaterial = GetMaterial(desiredMaterialName);
+	if (!desiredMaterial)
+	{
+		return NULL;
+	}
+
+	if (!meshGroupsOut)
+	{
+		meshGroupsOut = new vector<MeshGroup*>();
+	}
+
+	int meshGroupCount = sourceModel->meshGroups.size();
+	for (int i = 0; i < meshGroupCount; i++)
+	{
+		bool usesMaterial = false;
+		for (int j = sourceModel->meshGroups[i].firstFace; j < sourceModel->meshGroups[i].lastFace && !usesMaterial; j++)
+		{
+			if (sourceModel->meshes[j].GetMaterial() == desiredMaterial)
+			{
+				usesMaterial = true;
+				meshGroupsOut->push_back(&sourceModel->meshGroups[i]);
+			}
+		}
+	}
+
+	return meshGroupsOut;
 }
 
 SoundManager* AssetManager::GetSoundManager()

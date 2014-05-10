@@ -84,6 +84,8 @@ void Entity::AddModel(Model* model) {
 		mesh->SetMaterial(model->meshes[i].GetMaterial());
 		meshes.push_back(mesh);
 	}
+
+	models.push_back(model);
 }
 
 void Entity::Update(float dt)
@@ -319,6 +321,11 @@ void Entity::SetVisible(bool visibility)
 			(*it)->entity->SetVisible(visibility);
 		}
 	}
+}
+
+Model* Entity::GetModel(int index)
+{
+	return models[0];
 }
 
 string Entity::getNetworkString(){

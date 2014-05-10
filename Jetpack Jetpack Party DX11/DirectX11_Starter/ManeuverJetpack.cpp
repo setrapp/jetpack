@@ -6,7 +6,7 @@
 ManeuverJetpack::ManeuverJetpack(Entity* player) : Jetpack(player)
 {
 	maxSpeed = 1000;
-	//fuelUseRate = 10;
+	fuelUseRate = 10;
 	forwardAcceleration = 400.0f;
 	backwardAcceleration = 400.0f;
 	strafeAcceleration = 400.0f;

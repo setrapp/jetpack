@@ -47,7 +47,6 @@ void Jetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 {
 	active = false;
 	
-
 	if (fuel > 0)
 	{
 		if (playerControllable)
@@ -78,10 +77,14 @@ void Jetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
 		if (fuel < 0)
 		{
 			fuel == 0;
+			OffThrusters();
 		}
 	}
 
-	HUD::fuel = this->fuel;
+	if (playerControllable)
+	{
+		HUD::fuel = this->fuel;
+	}
 }
 
 void Jetpack::CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity)
@@ -139,6 +142,7 @@ void Jetpack::CreateThrusters()
 		thrusterDirections[i] = XMFLOAT3(0, 1, 0);
 	}
 	OffThrusters();
+	active = false;
 }
 
 void Jetpack::Refuel(int fuelAdd)

@@ -62,7 +62,7 @@ HUD::~HUD(void)
 }
 
 
-inline void HUD::setFuel(float fuelValue)
+/*inline void HUD::setFuel(float fuelValue)
 {
 	this->fuel = fuelValue;
 }
@@ -71,7 +71,7 @@ inline void HUD::setFuel(float fuelValue)
 inline float HUD::getFuel()
 {
 	return this->fuel;
-}
+}*/
 
 
 inline void HUD::setRank(short newRank)

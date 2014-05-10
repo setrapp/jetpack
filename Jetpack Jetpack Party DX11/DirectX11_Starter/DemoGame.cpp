@@ -205,11 +205,11 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 blue	= XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/cube.obj");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicJetMan.obj", "jetman");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Fireball.obj", "fireball");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/BasicTrack.obj", "terrain");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrackNav.obj", "terrain_nav");
+	//AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/cube.obj");
+	//AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicJetMan.obj", "jetman");
+	//AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/Fireball.obj", "fireball");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrack.obj", "terrain");
+	//AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrackNav.obj", "terrain_nav");
 
 	// Create orthographic and projection plane for deferred rendering.
 	float halfWindowWidth = windowWidth / 2, halfWindowHieght= windowHeight / 2;
@@ -272,11 +272,19 @@ void DemoGame::CreateGeometryBuffers()
 	entities.push_back(floor);
 	floor->Finalize();
 
+	// TEMP
+	Material* temp = AssetManager::Instance()->GetMaterial("Checkpoint", floor->GetModel(0));
+	temp->diffuse = XMFLOAT4(1, 0, 0, 1);
+	vector<MeshGroup*> checkpoints;
+	AssetManager::Instance()->GetMeshGroupsWithMaterial(&checkpoints, floor->GetModel(0), "Checkpoint");
+	// TODO figure out how to turn separated objects into geometry . . . maybe make a geometry split function in asset manager
+
 	Entity* navMesh = new Entity();
 	navMesh->AddModel(AssetManager::Instance()->GetModel("terrain_nav"));
 	navMesh->transform.SetTranslation(floor->transform.GetTranslation());
 	navMesh->transform.SetLocalScale(floor->transform.GetScale());
 	//entities.push_back(navMesh);
+	navMesh->transform.SetParent(&floor->transform);
 	navMesh->Finalize();
 }
 
