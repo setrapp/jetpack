@@ -17,8 +17,10 @@ Menu::Menu(FontRenderer* renderer, SpriteRenderer* spRenderer, const short Scree
 {
 	guiMan = new GUIManager();	
 
-	GUIText* nG = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, 0 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"NEW GAME", 1, AnimationType::RIGHTTOLEFT, renderer, 4000, Colors::Black);
-	guiMan->Add("NEWGAME", nG);
+	GUIText* sp = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, -100 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"SINGLEPLAYER", 1, AnimationType::RIGHTTOLEFT, renderer, 4000, Colors::Black);
+	guiMan->Add("SINGLEPLAYER", sp);
+	GUIText* mp = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, 0 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"MULTIPLAYER", 1, AnimationType::RIGHTTOLEFT, renderer, 4000, Colors::Black);
+	guiMan->Add("MULTIPLAYER", mp);
 	GUIText* settings = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, 100 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"SETTINGS", 3, AnimationType::RIGHTTOLEFT, renderer, 4000, Colors::Black);
 	guiMan->Add("SETTINGS", settings);
 	GUIText* exit = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, 200 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"EXIT", 5, AnimationType::RIGHTTOLEFT, renderer, 4000, Colors::Black);
@@ -27,10 +29,10 @@ Menu::Menu(FontRenderer* renderer, SpriteRenderer* spRenderer, const short Scree
 	if(!r)
 		r = new RECT();
 
-	r->left		= nG->GetRect().x	-	TICKER_WIDTH;
-	r->top		= nG->GetRect().y	+	TICKER_TOP_OFFSET;
-	r->right	= nG->GetRect().x;						//End it where the text starts
-	r->bottom	= nG->GetRect().y	+	TICKER_HEIGHT; //End its y where the 
+	r->left		= sp->GetRect().x	-	TICKER_WIDTH;
+	r->top		= sp->GetRect().y	+	TICKER_TOP_OFFSET;
+	r->right	= sp->GetRect().x;						//End it where the text starts
+	r->bottom	= sp->GetRect().y	+	TICKER_HEIGHT; //End its y where the 
 
 	guiMan->Add("Texture", new GUITexture(r, L"../Assets/Textures/jetpackimage.png", spRenderer));
 
@@ -38,8 +40,8 @@ Menu::Menu(FontRenderer* renderer, SpriteRenderer* spRenderer, const short Scree
 	guiMan->Add("Background", new GUITexture(p, L"../Assets/Textures/Menu_bg.png", spRenderer, true));
 	delete p;
 
-	guiMan->_guiElements["NEWGAME"]->SetDepth(0.5f);
-	guiMan->_guiElements["SETTINGS"]->SetDepth(0.5f);
+	guiMan->_guiElements["SINGLEPLAYER"]->SetDepth(0.5f);
+	guiMan->_guiElements["MULTIPLAYER"]->SetDepth(0.5f);
 	guiMan->_guiElements["EXIT"]->SetDepth(0.5f);
 	guiMan->_guiElements["Texture"]->SetDepth(0);
 	guiMan->_guiElements["Background"]->SetDepth(1);
@@ -47,7 +49,7 @@ Menu::Menu(FontRenderer* renderer, SpriteRenderer* spRenderer, const short Scree
 	this->fontRenderer = renderer;	
 	
 	currstate = GameState::MenuState;
-	menuOptions = MENU_OPTIONS::NEWGAME;
+	menuOptions = MENU_OPTIONS::SINGLEPLAYER;
 }
 
 void Menu::OnClickNewGame()
@@ -58,26 +60,43 @@ void Menu::OnClickNewGame()
 GameState Menu::Update(const float dt)
 {	
 	guiMan->Update(dt);
-	if(guiMan->_guiElements["NEWGAME"]->Clicked())
+	if(guiMan->_guiElements["SINGLEPLAYER"]->Clicked())
 		return GameState::Playing;	
 
 	if(guiMan->_guiElements["EXIT"]->Clicked())
 		PostQuitMessage(0);
 
-	if(guiMan->_guiElements["NEWGAME"]->IsMouseHovering() || menuOptions == MENU_OPTIONS::NEWGAME)
+	if(guiMan->_guiElements["SINGLEPLAYER"]->IsMouseHovering() || menuOptions == MENU_OPTIONS::SINGLEPLAYER)
 	{
-		guiMan->_guiElements["NEWGAME"]->SetColor(XMFLOAT4(1, 1, 1, 1));
-		guiMan->_guiElements["NEWGAME"]->SetScale(XMFLOAT2(1.105f, 1.105f));
-		menuOptions = MENU_OPTIONS::NEWGAME;
+		guiMan->_guiElements["SINGLEPLAYER"]->SetColor(XMFLOAT4(1, 1, 1, 1));
+		guiMan->_guiElements["SINGLEPLAYER"]->SetScale(XMFLOAT2(1.105f, 1.105f));
+		menuOptions = MENU_OPTIONS::SINGLEPLAYER;
 		GUITexture* tex = (GUITexture*)(guiMan->_guiElements["Texture"]);
-		RECT* rectBig = GetRECTFromRect(guiMan->_guiElements["NEWGAME"]->GetRect());
+		RECT* rectBig = GetRECTFromRect(guiMan->_guiElements["SINGLEPLAYER"]->GetRect());
 		tex->SetRect(rectBig);
 		delete rectBig;
 	}
 	else
 	{
-		guiMan->_guiElements["NEWGAME"]->SetColor(XMFLOAT4(0, 0, 0, 1));
-		guiMan->_guiElements["NEWGAME"]->SetScale(XMFLOAT2(1, 1));
+		guiMan->_guiElements["SINGLEPLAYER"]->SetColor(XMFLOAT4(0, 0, 0, 1));
+		guiMan->_guiElements["SINGLEPLAYER"]->SetScale(XMFLOAT2(1, 1));
+
+	}
+
+	if(guiMan->_guiElements["MULTIPLAYER"]->IsMouseHovering() || menuOptions == MENU_OPTIONS::MULTIPLAYER)
+	{
+		guiMan->_guiElements["MULTIPLAYER"]->SetColor(XMFLOAT4(1, 1, 1, 1));
+		guiMan->_guiElements["MULTIPLAYER"]->SetScale(XMFLOAT2(1.105f, 1.105f));
+		menuOptions = MENU_OPTIONS::MULTIPLAYER;
+		GUITexture* tex = (GUITexture*)(guiMan->_guiElements["Texture"]);
+		RECT* rectBig = GetRECTFromRect(guiMan->_guiElements["MULTIPLAYER"]->GetRect());
+		tex->SetRect(rectBig);
+		delete rectBig;
+	}
+	else
+	{
+		guiMan->_guiElements["MULTIPLAYER"]->SetColor(XMFLOAT4(0, 0, 0, 1));
+		guiMan->_guiElements["MULTIPLAYER"]->SetScale(XMFLOAT2(1, 1));
 
 	}
 
@@ -127,7 +146,7 @@ GameState Menu::KeyboardInputProcess()
 		if(r->top > 200 + TICKER_TOP_OFFSET)
 			{
 				r->top = TICKER_TOP_OFFSET;
-				r->bottom = guiMan->_guiElements["NEWGAME"]->GetRect()->y + TICKER_HEIGHT; 
+				r->bottom = guiMan->_guiElements["SINGLEPLAYER"]->GetRect()->y + TICKER_HEIGHT; 
 			}
 		GUITexture* tex = (GUITexture*)(guiMan->_guiElements["Texture"]);
 		tex->SetRect(r);	
@@ -139,7 +158,7 @@ GameState Menu::KeyboardInputProcess()
 		//Because the height of the fonts is 100
 		r->top -= 100;
 		r->bottom -= 100;
-		float x = guiMan->_guiElements["NEWGAME"]->GetRect()->y	+ TICKER_TOP_OFFSET;
+		float x = guiMan->_guiElements["SINGLEPLAYER"]->GetRect()->y	+ TICKER_TOP_OFFSET;
 		if(r->top < x)
 			{
 				r->top = guiMan->_guiElements["EXIT"]->GetRect()->y+ TICKER_TOP_OFFSET;
@@ -155,7 +174,9 @@ GameState Menu::KeyboardInputProcess()
 			{
 				switch(menuOptions)
 				{
-				case MENU_OPTIONS::NEWGAME: return GameState::Playing;
+				case MENU_OPTIONS::SINGLEPLAYER: return GameState::Playing;
+					break;
+				case MENU_OPTIONS::MULTIPLAYER: return GameState::MenuState;
 					break;
 				case MENU_OPTIONS::SETTINGS: return GameState::MenuState;
 					break;
@@ -203,7 +224,7 @@ Menu::MENU_OPTIONS Menu::changeOptions(MENU_OPTIONS currentOption, int changeBy)
 {
 	if(currentOption + changeBy < 0)
 		return MENU_OPTIONS::EXIT;
-	return (MENU_OPTIONS)((currentOption + changeBy) % 3);
+	return (MENU_OPTIONS)((currentOption + changeBy) % 4);
 }
 
 

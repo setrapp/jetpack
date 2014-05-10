@@ -21,9 +21,10 @@ class Menu
 public:
 	typedef enum MENU_OPTIONS
 	{
-		NEWGAME = 0,
-		SETTINGS = 1,
-		EXIT= 2
+		SINGLEPLAYER = 0,
+		MULTIPLAYER = 1,
+		SETTINGS = 2,
+		EXIT= 3
 	};
 
 	Menu(FontRenderer* renderer, SpriteRenderer* spRenderer, const short ScreenWidth, const short ScreenHeight);
