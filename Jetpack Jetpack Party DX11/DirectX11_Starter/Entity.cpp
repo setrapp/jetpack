@@ -107,18 +107,20 @@ void Entity::AddMeshGroup(Model* sourceModel, MeshGroup* meshGroup, bool removeF
 	// If specified, set faces on the source model to NULL so they will be ignored.
 	if (removeFacesFromModel)
 	{
-		/*for (int i = meshGroup->firstFace; i <= meshGroup->lastFace && i < meshCount; meshGroup->lastFace--)
-		{
-			sourceModel->meshes.erase(sourceModel->meshes.begin() + i);
-		}
+		int indexShift = (meshGroup->lastFace - meshGroup->firstFace) + 1;
 		for (int i = 0; i < sourceModel->meshGroups.size(); i++)
 		{
 			if(sourceModel->meshGroups[i].firstFace > meshGroup->lastFace)
 			{
-				sourceModel->meshGroups[i].firstFace -= meshGroup->lastFace - meshGroup->firstFace;
-				sourceModel->meshGroups[i].lastFace -= meshGroup->lastFace - meshGroup->firstFace;
+				
+				sourceModel->meshGroups[i].firstFace -= indexShift;
+				sourceModel->meshGroups[i].lastFace -= indexShift;
 			}
-		}*/
+		}
+		for (int i = meshGroup->firstFace; i <= meshGroup->lastFace && i < meshCount; meshGroup->lastFace--)
+		{
+			sourceModel->meshes.erase(sourceModel->meshes.begin() + i);
+		}
 	}
 }
 
