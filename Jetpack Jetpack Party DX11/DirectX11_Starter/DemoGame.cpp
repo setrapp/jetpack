@@ -277,9 +277,11 @@ void DemoGame::CreateGeometryBuffers()
 	temp->diffuse = XMFLOAT4(1, 0, 0, 1);
 	vector<MeshGroup*> checkpoints;
 	AssetManager::Instance()->GetMeshGroupsWithMaterial(&checkpoints, floor->GetModel(0), "Checkpoint");
-	Entity* checkpoint = AssetManager::Instance()->EntifyMeshGroup(NULL, floor->GetModel(0), checkpoints[7]);
+	Entity* checkpoint = AssetManager::Instance()->EntifyMeshGroup(NULL, floor->GetModel(0), checkpoints[0]);
 	entities.push_back(checkpoint);
-	checkpoint->transform.Translate(XMFLOAT3(0, 200, 0));
+	checkpoint->transform.Translate(XMFLOAT3(0, 200, -800));
+	checkpoint->transform.Scale(XMFLOAT3(1000, 1000, 1000));
+	checkpoint->Finalize();
 
 	Entity* navMesh = new Entity();
 	navMesh->AddModel(AssetManager::Instance()->GetModel("terrain_nav"));

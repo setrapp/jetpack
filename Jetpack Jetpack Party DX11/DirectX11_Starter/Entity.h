@@ -23,8 +23,9 @@ class Entity
 public:
 	Entity();
 	virtual ~Entity();
-	void AddTriangle(Vertex* v, UINT* u, bool moveIndicesToEnd = true);
-	void AddQuad(Vertex* v, UINT* u, bool moveIndicesToEnd = true);
+	void AddTriangle(Vertex* v, UINT* u);
+	void AddQuad(Vertex* v, UINT* u);
+	void AddMeshGroup(Model* sourceModel, MeshGroup* meshGroup);
 	void AddModel(Model* model);
 	virtual void Update(float dt);
 	void Draw(EntityDrawArgs const* drawArgs, XMFLOAT4X4 const* view = NULL, XMFLOAT4X4 const* projection = NULL);

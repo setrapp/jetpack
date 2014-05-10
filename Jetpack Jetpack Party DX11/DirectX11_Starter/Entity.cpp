@@ -33,14 +33,11 @@ Entity::~Entity(void)
 	}
 }
 
-void Entity::AddTriangle(Vertex* v, UINT* i, bool moveIndicesToEnd)
+void Entity::AddTriangle(Vertex* v, UINT* i)
 {
-	if (moveIndicesToEnd)
+	for (int j = 0; j < 3; j++)
 	{
-		for (int j = 0; j < 3; j++)
-		{
-			i[j] += vertices.size();
-		}
+		i[j] += vertices.size();
 	}
 
 	for(int i = 0; i < 3; i++)
@@ -49,14 +46,11 @@ void Entity::AddTriangle(Vertex* v, UINT* i, bool moveIndicesToEnd)
 	meshes.push_back(m);
 }
 
-void Entity::AddQuad(Vertex* v, UINT* i, bool moveIndicesToEnd)
+void Entity::AddQuad(Vertex* v, UINT* i)
 {
-	if (moveIndicesToEnd)
+	for (int j = 0; j < 6; j++)
 	{
-		for (int j = 0; j < 6; j++)
-		{
-			i[j] += vertices.size();
-		}
+		i[j] += vertices.size();
 	}
 
 	for(int i = 0; i < 4; i++)
@@ -65,6 +59,28 @@ void Entity::AddQuad(Vertex* v, UINT* i, bool moveIndicesToEnd)
 	Mesh* m2 = new Mesh(i + 3);
 	meshes.push_back(m1);
 	meshes.push_back(m2);
+}
+
+void Entity::AddMeshGroup(Model* sourceModel, MeshGroup* meshGroup)
+{
+	int vertexCount = sourceModel->vertices.size();
+	int meshCount = sourceModel->meshes.size();
+
+	for (int i = meshGroup->firstFace; i < meshGroup->lastFace && i < meshCount; i++)
+	{
+		UINT* indices = sourceModel->meshes[i].GetIndices();
+		Vertex vertices[3] = {sourceModel->vertices[indices[0]], sourceModel->vertices[indices[1]], sourceModel->vertices[indices[2]]};
+		for (int j = 0; j < 3; j++)
+		{
+			indices[j] += this->vertices.size();
+		}
+		meshes.push_back(new Mesh(indices));
+	}
+
+	for (int i = 0; i < vertexCount; i++)
+	{
+		vertices.push_back(sourceModel->vertices[i]);
+	}
 }
 
 void Entity::AddModel(Model* model) {
