@@ -25,7 +25,7 @@ public:
 	virtual ~Entity();
 	void AddTriangle(Vertex* v, UINT* u);
 	void AddQuad(Vertex* v, UINT* u);
-	void AddMeshGroup(Model* sourceModel, MeshGroup* meshGroup);
+	void AddMeshGroup(Model* sourceModel, MeshGroup* meshGroup, bool removeFacesFromModel = false);
 	void AddModel(Model* model);
 	void RecenterGeometry();
 	virtual void Update(float dt);

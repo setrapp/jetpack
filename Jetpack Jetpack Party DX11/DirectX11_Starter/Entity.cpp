@@ -61,7 +61,7 @@ void Entity::AddQuad(Vertex* v, UINT* i)
 	meshes.push_back(m2);
 }
 
-void Entity::AddMeshGroup(Model* sourceModel, MeshGroup* meshGroup)
+void Entity::AddMeshGroup(Model* sourceModel, MeshGroup* meshGroup, bool removeFacesFromModel)
 {
 	int existingVertexCount = vertices.size();
 	int vertexCount = sourceModel->vertices.size();
@@ -77,7 +77,9 @@ void Entity::AddMeshGroup(Model* sourceModel, MeshGroup* meshGroup)
 			indices[j] += existingVertexCount;
 		}
 		meshGroupIndices.push_back(indices);
-		meshes.push_back(new Mesh(indices));
+		Mesh* newMesh = new Mesh(indices);
+		newMesh->SetMaterial(sourceModel->meshes[i].GetMaterial());
+		meshes.push_back(newMesh);
 	}
 	
 	// Extract relavant vertices and point face indices at them.
@@ -99,6 +101,15 @@ void Entity::AddMeshGroup(Model* sourceModel, MeshGroup* meshGroup)
 					meshes[j]->GetIndices()[k] = vertices.size() - 1;
 				}
 			}
+		}
+	}
+
+	// If specified, remove geometry from the original model.
+	if (removeFacesFromModel)
+	{
+		for (int i = meshGroup->firstFace; i <= meshGroup->lastFace && i < meshCount; meshGroup->lastFace--)
+		{
+			sourceModel->meshes.erase(sourceModel->meshes.begin() + i);
 		}
 	}
 }
