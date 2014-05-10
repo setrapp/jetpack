@@ -275,7 +275,7 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 		Vertex vertex;
 		vertex.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
 		vertex.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
-		if (hasUVs) {
+		if (hasUVs && i<mlModel3DGetTextureVertexCount(objModel)) {
 			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(objModel, i);
 			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
 			vertex.UV = XMFLOAT2(guUV.x, guUV.y);

@@ -53,8 +53,8 @@ namespace ServerApp
                 
                 //100.66.70.6
                 //06-46-42-64
-                IPEndPoint localEndPoint = new IPEndPoint(new IPAddress(0x06464264), 8080);
-
+                //IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Parse("100.66.70.6"), 8080);
+                IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8080);
                 // Create a TCP/IP socket.
                 Socket listener = new Socket(AddressFamily.InterNetwork,
                     SocketType.Stream, ProtocolType.Tcp);

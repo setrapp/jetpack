@@ -55,7 +55,7 @@ void Player::Update(float dt)
 	jetpack->allowInputForces = !grounded; //TODO This might not be useful anymore
 	jetpack->Update(dt, &velocity, &angularVelocity);
 
-	// Clamp velocity withing max speed.
+	// Clamp velocity within max speed.
 	transform.ClampVector(&velocity, (grounded ? maxSpeed : jetpack->maxSpeed), 0);
 
 	// Update world velocity and apply world space accelerations.
@@ -63,6 +63,9 @@ void Player::Update(float dt)
 
 	// TODO gravity should be handled by rigid body.
 	XMFLOAT3 position = transform.GetTranslation();
+
+
+	//if the y position is greater than 0, add the gravity vector to the existing y velocity.
 	if (position.y > 0)
 	{
 		grounded = false;
@@ -73,6 +76,7 @@ void Player::Update(float dt)
 			worldVelocity.y = gravity.y;
 		}
 	} 
+	//if you are below 0, handle situation for when the ground is hit
 	else if (worldVelocity.y <= 0 && (position.y < 0 || !grounded))
 	{
 		// When landing, either respawn or stand straight up, depending on standing direction.
@@ -102,7 +106,7 @@ void Player::Update(float dt)
 	XMStoreFloat3(&dtAngularVelocity, XMVectorScale(XMLoadFloat3(&angularVelocity), dt));
 	transform.Rotate(dtAngularVelocity);
 
-	// Slow the character a bit so that it comes to a nice stop over time.
+	// Slow the character a bit so that it comes to a nice stop over time. (friction)
 	if (grounded) {
 		XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), (1 - ((1 - groundSpeedDampening) * dt))));
 		XMStoreFloat3(&angularVelocity, XMVectorScale(XMLoadFloat3(&angularVelocity), (1 - ((1 - groundSpeedDampening) * dt))));
@@ -224,7 +228,7 @@ void Player::Update(float dt)
 void Player::CheckInput(float dt)
 {
 	networkSendTimer-=dt;
-	bool cubeInputReceived= false;
+	bool cubeInputReceived= true;
 	if (grounded)
 	{
 		/*if(IPMan::GetIPMan()->GetKey(KeyType::FORWARD))

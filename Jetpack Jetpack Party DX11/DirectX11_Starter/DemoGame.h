@@ -27,7 +27,7 @@
 #include "DeferredRenderer.h"
 #include "HUD.h"
 
-#define PLAYER_COUNT 2
+#define PLAYER_COUNT 1
 
 using namespace DirectX;
 

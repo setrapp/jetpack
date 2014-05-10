@@ -432,13 +432,13 @@ LRESULT DXGame::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_ACTIVATE:
 		if( LOWORD(wParam) == WA_INACTIVE )
 		{
-			gamePaused = true;
-			timer.Stop();
+			//gamePaused = true;
+			//timer.Stop();
 		}
 		else
 		{
-			gamePaused = false;
-			timer.Start();
+			//gamePaused = false;
+			//timer.Start();
 		}
 		return 0;
 		// WM_SETFOCUS is sent when the window recieves keyboard focus.
