@@ -33,11 +33,30 @@ Entity::~Entity(void)
 	}
 }
 
-void Entity::AddQuad(Vertex* v, UINT* i)
+void Entity::AddTriangle(Vertex* v, UINT* i, bool moveIndicesToEnd)
 {
-	for (int j = 0; j < 6; j++)
+	if (moveIndicesToEnd)
 	{
-		i[j] += vertices.size();
+		for (int j = 0; j < 3; j++)
+		{
+			i[j] += vertices.size();
+		}
+	}
+
+	for(int i = 0; i < 3; i++)
+		vertices.push_back(v[i]);
+	Mesh* m = new Mesh(i);
+	meshes.push_back(m);
+}
+
+void Entity::AddQuad(Vertex* v, UINT* i, bool moveIndicesToEnd)
+{
+	if (moveIndicesToEnd)
+	{
+		for (int j = 0; j < 6; j++)
+		{
+			i[j] += vertices.size();
+		}
 	}
 
 	for(int i = 0; i < 4; i++)
@@ -46,19 +65,6 @@ void Entity::AddQuad(Vertex* v, UINT* i)
 	Mesh* m2 = new Mesh(i + 3);
 	meshes.push_back(m1);
 	meshes.push_back(m2);
-}
-
-void Entity::AddTriangle(Vertex* v, UINT* i)
-{
-	for (int j = 0; j < 3; j++)
-	{
-		i[j] += vertices.size();
-	}
-
-	for(int i = 0; i < 4; i++)
-		vertices.push_back(v[i]);
-	Mesh* m = new Mesh(i);
-	meshes.push_back(m);
 }
 
 void Entity::AddModel(Model* model) {

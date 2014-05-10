@@ -52,7 +52,8 @@ public:
 	Model* GetModel(string name = "default");
 
 	// Mesh Groups
-	vector<MeshGroup*>* GetMeshGroupsWithMaterial(vector<MeshGroup*>* meshGroupsOut, Model* sourceModel, string name = "default");
+	vector<MeshGroup*>* GetMeshGroupsWithMaterial(vector<MeshGroup*>* meshGroupsOut, Model* sourceModel, string desiredMaterialName = "default");
+	Entity* EntifyMeshGroup(Entity* entityOut, Model* sourceModel, MeshGroup* meshGroup);
 
 	SoundManager* GetSoundManager();
 	

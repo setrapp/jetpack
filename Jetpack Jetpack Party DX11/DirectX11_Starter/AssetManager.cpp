@@ -411,6 +411,30 @@ vector<MeshGroup*>* AssetManager::GetMeshGroupsWithMaterial(vector<MeshGroup*>* 
 	return meshGroupsOut;
 }
 
+Entity* AssetManager::EntifyMeshGroup(Entity* entityOut, Model* sourceModel, MeshGroup* meshGroup)
+{
+	if (!sourceModel || !meshGroup)
+	{
+		return NULL;
+	}
+
+	if (!entityOut)
+	{
+		entityOut = new Entity();
+	}
+
+	int meshCount = sourceModel->meshes.size();
+	for (int i = meshGroup->firstFace; i < meshGroup->lastFace && i < meshCount; i++)
+	{
+		UINT* indices = sourceModel->meshes[i].GetIndices();
+		Vertex vertices[3] = {sourceModel->vertices[indices[0]], sourceModel->vertices[indices[1]], sourceModel->vertices[indices[2]]};
+		entityOut->AddTriangle(vertices, indices, false);
+	}
+	entityOut->Finalize();
+
+	return entityOut;
+}
+
 SoundManager* AssetManager::GetSoundManager()
 {
 	return soundManager;
