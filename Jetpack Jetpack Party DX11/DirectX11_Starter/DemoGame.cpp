@@ -82,9 +82,6 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	mouseLook = NULL;
 }
 
-		
-	
-
 DemoGame::~DemoGame()
 {
 	ReleaseMacro(vsModelConstantBuffer);
@@ -266,20 +263,26 @@ void DemoGame::CreateGeometryBuffers()
 	gift->Finalize();
 
 	Model* terrainModel = AssetManager::Instance()->GetModel("terrain");
-	vector<MeshGroup*> checkpoints;
-	AssetManager::Instance()->GetMeshGroupsWithMaterial(&checkpoints, terrainModel, "Checkpoint");
-
-	for (int i = 0; i < checkpoints.size(); i++)
+	
+	vector<MeshGroup*> checkpointMeshGroups;
+	AssetManager::Instance()->GetMeshGroupsWithMaterial(&checkpointMeshGroups, terrainModel, "Checkpoint");
+	for (int i = 0; i < checkpointMeshGroups.size(); i++)
 	{
-		Entity* checkpoint = new Entity();
-		checkpoint->AddMeshGroup(terrainModel, checkpoints[i], true);
+		FuelStation* checkpoint = new FuelStation(10, true);
+		checkpoint->AddMeshGroup(terrainModel, checkpointMeshGroups[i], true);
+		fuelStations.push_back(checkpoint);
+		checkpoints.push_back(checkpoint);
 		entities.push_back(checkpoint);
 		//checkpoint->transform.SetParent(&floor->transform);
 		checkpoint->transform.Scale(XMFLOAT3(1000, 1000, 1000));
 		checkpoint->RecenterGeometry();
 		checkpoint->transform.Translate(XMFLOAT3(0, -400, 0)); // TODO make RecenterGeometry do this automatically, does parenting work?
+		checkpoint->SetBaseMaterial("Checkpoint", terrainModel);
 		checkpoint->Finalize();
 	}
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0, 0, 0, 01), XMFLOAT4(0, 0, 1, 1), XMFLOAT4(0, 0, 0, 0), 128), "targetCheckpoint");
+
+	// TODO add fuel stations.
 
 	Entity* floor = new Entity();
 	floor->AddModel(terrainModel);
@@ -446,12 +449,7 @@ void DemoGame::UpdateScene(float dt)
 			AssetManager::Instance()->addedEntities.pop();
 		}
 
-		//temp 
-		for (int i = 21; i < 29; i++)
-		{
-			//entities[i]->transform.Translate(entities[i]->transform.InverseTransformDirection(XMFLOAT3(0, 0, -0.001 *dt)));
-			entities[i]->transform.Rotate(XMFLOAT3(0, 1 * dt, 0));
-		}
+		LocateNearestFuelStations();
 
 		for(Entity* e: entities)
 		{
@@ -699,5 +697,57 @@ void DemoGame::AttachCameraToPlayer()
 	XMStoreFloat3(&target, XMVectorAdd(XMLoadFloat3(&player->transform.GetTranslation()), (3 * XMLoadFloat3(&player->transform.GetForward()))));
 	XMFLOAT3 up = player->transform.GetUp();
 	playerCamera->LookAt(eye, target, up);
+}
+
+void DemoGame::LocateNearestFuelStations()
+{
+	// TODO track checkpoint and fuel station
+	// TODO only rotate the controllable player's target
+
+	FuelStation* oldPlayerTarget = player->targetCheckpoint;
+
+	for (int i = 0; i < PLAYER_COUNT; i++)
+	{
+		if (!players[i]->targetCheckpoint)
+		{
+			players[i]->targetCheckpoint = checkpoints[0];
+			players[i]->targetPosition = players[i]->targetCheckpoint->transform.GetTranslation();
+		}
+		else
+		{
+			float distSqr;
+			XMStoreFloat(&distSqr, XMVector3LengthSq(XMVectorSubtract(XMLoadFloat3(&players[i]->targetCheckpoint->transform.GetTranslation()), XMLoadFloat3(&players[i]->transform.GetTranslation()))));
+			if (distSqr < 1000 * 1000)
+			{
+				if (players[i]->targetCheckpoint->GetCheckpointNum() < checkpoints.size() - 1)
+				{
+					players[i]->targetCheckpoint = checkpoints[players[i]->targetCheckpoint->GetCheckpointNum() + 1];
+					players[i]->targetPosition = players[i]->targetCheckpoint->transform.GetTranslation();
+				}
+				else
+				{
+					players[i]->targetCheckpoint = NULL;
+					players[i]->targetPosition = XMFLOAT3(0, 0, 0);
+				}
+			}
+		}
+	}
+
+	// Update controlled player target.
+	if (oldPlayerTarget != player->targetCheckpoint)
+	{
+		if (player->targetCheckpoint)
+		{
+			player->targetCheckpoint->SetBaseMaterial("targetCheckpoint");
+			player->targetCheckpoint->Finalize();
+			player->targetCheckpoint->spin = true;
+		}
+		if (oldPlayerTarget)
+		{
+			oldPlayerTarget->SetBaseMaterial("Checkpoint", AssetManager::Instance()->GetModel("terrain"));
+			oldPlayerTarget->Finalize();
+			oldPlayerTarget->spin = false;
+		}
+	}
 }
 #pragma endregion

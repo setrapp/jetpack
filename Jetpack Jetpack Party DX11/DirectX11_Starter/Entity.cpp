@@ -287,9 +287,9 @@ inline Material Entity::GetBaseMaterialSafe() const
 	return *this->baseMaterial;
 }
 
-void Entity::SetBaseMaterial(string name, bool forceOnAllMeshes)
+void Entity::SetBaseMaterial(string name, Model* sourceModel, bool forceOnAllMeshes)
 {
-	Material* newBaseMaterial = AssetManager::Instance()->GetMaterial(name);
+	Material* newBaseMaterial = AssetManager::Instance()->GetMaterial(name, sourceModel);
 	Material* defaultMaterial = AssetManager::Instance()->GetMaterial();
 	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end(); it++)
 	{

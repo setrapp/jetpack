@@ -6,6 +6,7 @@
 #include "MessageTypes.h"
 #include <queue>
 #include "Jetpack.h"
+#include "FuelStation.h"
 #include "ManeuverJetpack.h"
 
 class Player : public Entity
@@ -28,6 +29,8 @@ public:
 	XMFLOAT3 respawnPosition;
 	XMFLOAT3 respawnLocalRotation;
 	XMFLOAT3 targetPosition; 
+	FuelStation* targetCheckpoint;
+	FuelStation* targetFuelStation;
 
 private:
 	void CheckInput(float dt);

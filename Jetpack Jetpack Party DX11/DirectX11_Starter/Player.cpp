@@ -24,6 +24,8 @@ Player::Player()
 	loggedIn=false;
 	controllable = false;
 	targetPosition = XMFLOAT3(400, 200, 5000);
+	targetCheckpoint = NULL;
+	targetFuelStation = NULL;
 }
 
 Player::~Player()

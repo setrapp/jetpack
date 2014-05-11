@@ -101,6 +101,7 @@
     <ClCompile Include="DXGame.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FontManager.cpp" />
+    <ClCompile Include="FuelStation.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GeneralUtility\GUMathUtility.cpp" />
     <ClCompile Include="GeneralUtility\GUParseUtility.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="FontManager.h" />
     <ClInclude Include="FontRenderer.h" />
+    <ClInclude Include="FuelStation.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameTimer.h" />

@@ -11,6 +11,7 @@
 #include "Mesh.h"
 #include "Entity.h"
 #include "Camera.h"
+#include "FuelStation.h"
 #include "ControllableCamera.h"
 #include "GameState.h"
 #include "Menu.h"
@@ -67,6 +68,7 @@ private:
 	void LoadSoundAssets();
 	void CreatePlayers();
 	void AttachCameraToPlayer();
+	void LocateNearestFuelStations();
 
 private:
 
@@ -114,6 +116,8 @@ private:
 	bool mouseCursorVisibility;
 	bool flag;
 	Player* players[PLAYER_COUNT];
+	vector<FuelStation*> fuelStations;
+	vector<FuelStation*> checkpoints;
 };
 
 #endif

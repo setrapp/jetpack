@@ -33,7 +33,7 @@ public:
 	void LoadTexture(wchar_t* path);
 	Material* GetBaseMaterial();
 	inline Material GetBaseMaterialSafe() const;
-	void SetBaseMaterial(string name = "default", bool forceOnAllMeshes = true);
+	void SetBaseMaterial(string name = "default", Model* sourceModel = NULL, bool forceOnAllMeshes = true);
 	inline vector<Mesh*> GetMeshes() const;
 	string getNetworkString();
 	Transform transform;
