@@ -14,6 +14,8 @@
 #include "ControllableCamera.h"
 #include "GameState.h"
 #include "Menu.h"
+#include "LoginScreen.h"
+#include "LobbyScreen.h"
 #include "Sfx.h"
 #include "Camera.h"
 #include "AssetManager.h"
@@ -109,6 +111,8 @@ private:
 	Camera* camera;
 	GameState currentState;
 	Menu* menu;
+	LoginScreen* loginScreen;
+	LobbyScreen* lobbyScreen;
 	MouseLook* mouseLook;
 	HUD* m_hud;
 	bool mouseCursorVisibility;

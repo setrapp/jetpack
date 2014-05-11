@@ -138,6 +138,12 @@
     <ClCompile Include="HUD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LoginScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LobbyScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXGame.h">
@@ -297,6 +303,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Skybox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbyScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

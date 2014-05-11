@@ -107,6 +107,8 @@ DemoGame::~DemoGame()
 	delete light;
 	delete camera;
 	delete menu;
+	delete loginScreen;
+	delete lobbyScreen;
 	delete mouseLook;
 	delete spriteRenderer;
 }
@@ -160,7 +162,7 @@ bool DemoGame::Init()
 	RECT rect;
 	GetClientRect(GetActiveWindow(), &rect);	
 	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/Fonts/font.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );	
-
+	loginScreen = new LoginScreen(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/Fonts/font.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );		
 	LoadShadersAndInputLayout();
 
 	AssetManager::Instance()->StoreMaterial(new Material());
@@ -406,6 +408,10 @@ void DemoGame::OnResize()
 		if(menu)
 			menu->WindowResize();
 	}
+	else if(currentState == GameState::Login){
+		if(loginScreen)
+			loginScreen->WindowResize();
+	}
 
 	if(m_hud)
 		if(currentState == GameState::Playing)
@@ -423,8 +429,9 @@ void DemoGame::UpdateScene(float dt)
 	{
 		currentState = Helper::GoBackOnce(currentState);
 #ifndef _PAUSEMENU
-		if(currentState == GameState::Paused)
-			currentState = GameState::MenuState;
+		if(currentState == GameState::Paused){
+					currentState = GameState::MenuState;
+		}
 #endif
 	}
 
@@ -460,6 +467,13 @@ void DemoGame::UpdateScene(float dt)
 	if(currentState == GameState::MenuState)
 	{
 		GameState newState = menu->Update(dt);
+		if (currentState != newState)
+		{
+			mouseLook->ResetCursor();
+			currentState = newState;
+		}
+	}else if(currentState == GameState::Login){
+		GameState newState = loginScreen->Update(dt);
 		if (currentState != newState)
 		{
 			mouseLook->ResetCursor();
@@ -555,6 +569,15 @@ void DemoGame::DrawScene()
 	{
 		spriteRenderer->Begin();
 		menu->Render();
+		spriteRenderer->End();
+		if(!mouseCursorVisibility)
+		{
+			mouseCursorVisibility = true;
+			ShowCursor(mouseCursorVisibility);
+		}
+	}else if(currentState == GameState::Login){
+		spriteRenderer->Begin();
+		loginScreen->Render();
 		spriteRenderer->End();
 		if(!mouseCursorVisibility)
 		{

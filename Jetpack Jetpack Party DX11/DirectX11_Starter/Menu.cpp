@@ -19,8 +19,7 @@ Menu::Menu(FontRenderer* renderer, SpriteRenderer* spRenderer, const short Scree
 
 	GUIText* sp = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, -100 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"SINGLEPLAYER", 1, AnimationType::RIGHTTOLEFT, renderer, 4000, Colors::Black);
 	guiMan->Add("SINGLEPLAYER", sp);
-	GUITextBox* mp = new GUITextBox(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, 0 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"MULTIPLAYER", 1, AnimationType::RIGHTTOLEFT, renderer, 4000,
-		L"../Assets/Textures/textboxbackground.png", spRenderer, Colors::Black);
+	GUIText* mp = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, 0 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"MULTIPLAYER", 1, AnimationType::RIGHTTOLEFT, renderer, 4000, Colors::Black);
 	guiMan->Add("MULTIPLAYER", mp);
 	GUIText* settings = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, 100 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"SETTINGS", 3, AnimationType::RIGHTTOLEFT, renderer, 4000, Colors::Black);
 	guiMan->Add("SETTINGS", settings);
@@ -64,6 +63,9 @@ GameState Menu::Update(const float dt)
 	if(guiMan->_guiElements["SINGLEPLAYER"]->Clicked())
 		return GameState::Playing;	
 
+	if(guiMan->_guiElements["MULTIPLAYER"]->Clicked())
+		return GameState::Login;	
+
 	if(guiMan->_guiElements["EXIT"]->Clicked())
 		PostQuitMessage(0);
 
@@ -96,7 +98,7 @@ GameState Menu::Update(const float dt)
 	}
 	else
 	{
-		guiMan->_guiElements["MULTIPLAYER"]->SetColor(XMFLOAT4(1, 1, 1, 1));
+		guiMan->_guiElements["MULTIPLAYER"]->SetColor(XMFLOAT4(0, 0, 0, 1));
 		guiMan->_guiElements["MULTIPLAYER"]->SetScale(XMFLOAT2(1, 1));
 
 	}
@@ -177,7 +179,7 @@ GameState Menu::KeyboardInputProcess()
 				{
 				case MENU_OPTIONS::SINGLEPLAYER: return GameState::Playing;
 					break;
-				case MENU_OPTIONS::MULTIPLAYER: return GameState::MenuState;
+				case MENU_OPTIONS::MULTIPLAYER: return GameState::Playing;
 					break;
 				case MENU_OPTIONS::SETTINGS: return GameState::MenuState;
 					break;
