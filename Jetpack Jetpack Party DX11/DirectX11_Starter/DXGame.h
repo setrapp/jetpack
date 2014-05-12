@@ -73,6 +73,7 @@ protected:
 	bool      minimized;
 	bool      maximized;
 	bool      resizing;
+	bool windowFocused;
 
 	// Timer for running the game on delta time
 	GameTimer timer;

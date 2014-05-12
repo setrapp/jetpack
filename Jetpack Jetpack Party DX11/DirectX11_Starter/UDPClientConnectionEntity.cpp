@@ -15,6 +15,7 @@ UDPClientConnectionEntity::UDPClientConnectionEntity(void)
 {
 	isConnected=false;
 	networkMessages = queue<string>();
+	lastMessageCountReceived= 0;
 }
 
 UDPClientConnectionEntity::~UDPClientConnectionEntity(void)

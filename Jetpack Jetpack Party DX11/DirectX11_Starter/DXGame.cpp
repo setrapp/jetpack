@@ -434,11 +434,13 @@ LRESULT DXGame::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			//gamePaused = true;
 			//timer.Stop();
+			windowFocused=false;
 		}
 		else
 		{
 			//gamePaused = false;
 			//timer.Start();
+			windowFocused= true;
 		}
 		return 0;
 		// WM_SETFOCUS is sent when the window recieves keyboard focus.

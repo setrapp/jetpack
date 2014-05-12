@@ -9,13 +9,17 @@ Player::Player()
 	worldVelocity = XMFLOAT3(0, 0, 0);
 	angularVelocity = XMFLOAT3(0, 0, 0);
 	maxSpeed = 200;
+	updateTimer=0.25f;
 	forwardAcceleration = 100.0f;
 	backwardAcceleration = 100.0f;
 	strafeAcceleration = 100.0f;
 	gravityAcceleration = 600.0f;
 	terminalVelocity = 500000;
-	groundSpeedDampening = 0.1f;
-	airSpeedDampening = 0.3f;
+	//groundSpeedDampening = 0.1f;
+	//airSpeedDampening = 0.3f;
+
+	groundSpeedDampening = 0.0f;
+	airSpeedDampening = 0.0f;
 	grounded = true;
 	jetpack = new ManeuverJetpack(this);
 	clientEntity = new UDPClientConnectionEntity();
@@ -52,6 +56,7 @@ void Player::Update(float dt)
 		CheckInput(dt);
 	}
 	// Update jetpack.
+
 	jetpack->allowInputForces = !grounded; //TODO This might not be useful anymore
 	jetpack->Update(dt, &velocity, &angularVelocity);
 
@@ -130,6 +135,15 @@ void Player::Update(float dt)
 		angularVelocity.x = angularVelocity.y = angularVelocity.z = 0;
 	}
 
+	std::map<int, XMFLOAT3>::iterator iter;
+	for (iter = networkedEntityVelocities.begin(); iter != networkedEntityVelocities.end(); iter++) {
+		XMFLOAT3 translateBy= XMFLOAT3(iter->second.x* updateTimer * dt ,iter->second.y*updateTimer* dt ,iter->second.z* updateTimer* dt);
+		networkedEntities[iter->first]->transform.Translate(translateBy);
+    }
+
+
+
+
 	while(!clientEntity->networkMessages.empty()){
 
 		
@@ -141,16 +155,20 @@ void Player::Update(float dt)
 		while(std::getline(stringsplitter,curString, '\n')){
 			stringParts.push_back(curString);
 		}
+
 		int toSwitch= atoi(stringParts.at(0).c_str());
 		MessageTypes::Server msgType= (MessageTypes::Server)toSwitch;
 
+		int messageCount= atoi(stringParts.at(1).c_str());
+		if((messageCount>clientEntity->lastMessageCountReceived) || msgType!=MessageTypes::Server::MovementUpdate || messageCount==0){
+		clientEntity->lastMessageCountReceived=messageCount;
 		switch(msgType){
 			//add all players if you are entering the games
 		case MessageTypes::Server::AddExistingUsers:
 
 			this->socketNumber= atoi(stringParts.at(1).c_str());
 
-			for(int i=2; i<(int)stringParts.size()-1; i+=2){
+			for(int i=3; i<(int)stringParts.size()-1; i+=2){
 				int targetSocket= atoi(stringParts.at(i).c_str());
 
 				string unparsedPosition= stringParts.at(i+1);
@@ -159,7 +177,6 @@ void Player::Update(float dt)
 				cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
 				cube->Finalize();
 				cube->transform.Translate(XMFLOAT3(0, 0, 0));
-				cube->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
 				networkedEntities[cube->socketNumber]=cube;
 				AssetManager::Instance()->addedEntities.push(cube);
 
@@ -187,39 +204,39 @@ void Player::Update(float dt)
 			cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
 			cube->Finalize();
 			cube->transform.Translate(XMFLOAT3(0, 0, 0));
-			cube->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
-			cube->socketNumber=atoi(stringParts.at(1).c_str());
+			cube->socketNumber=atoi(stringParts.at(2).c_str());
 			networkedEntities[cube->socketNumber]=cube;
+			networkedEntityVelocities[cube->socketNumber]= XMFLOAT3(0, 0, 0);
 			AssetManager::Instance()->addedEntities.push(cube);
 			break;
 
 			//a list of sockets and the positions of the data is sent, the positions of all the associated entities is updated.
 		case MessageTypes::Server::MovementUpdate:
-			for(int i=1; i<(int)stringParts.size()-1; i+=2){
+			for(int i=2; i<(int)stringParts.size()-1; i+=2){
 				int targetSocket= atoi(stringParts.at(i).c_str());
 				if((networkedEntities[targetSocket]!=NULL) && targetSocket!=this->socketNumber){
 					string unparsedPosition= stringParts.at(i+1);
 
 					std::vector<std::string>* vectorParts = breakIntoParts(unparsedPosition);
 
-					XMFLOAT3 newVector= XMFLOAT3(strtod(vectorParts->at(0).c_str(),0),strtod(vectorParts->at(1).c_str(),0),strtod(vectorParts->at(2).c_str(),0));
+					XMFLOAT3 velocityVector= XMFLOAT3(strtod(vectorParts->at(0).c_str(),0),strtod(vectorParts->at(1).c_str(),0),strtod(vectorParts->at(2).c_str(),0));
+					networkedEntityVelocities[targetSocket] = velocityVector;
+
+					XMFLOAT3 newVector= XMFLOAT3(strtod(vectorParts->at(3).c_str(),0),strtod(vectorParts->at(4).c_str(),0),strtod(vectorParts->at(5).c_str(),0));
 					XMFLOAT3 currentTransform=networkedEntities[targetSocket]->transform.GetTranslation();
 
 					//calculates how much to translate the body in question
 					networkedEntities[targetSocket]->transform.Translate(XMFLOAT3(newVector.x-currentTransform.x,newVector.y-currentTransform.y,newVector.z-currentTransform.z));
-					XMFLOAT3X3 newRotMatrix= XMFLOAT3X3(strtod(vectorParts->at(3).c_str(),0),strtod(vectorParts->at(4).c_str(),0),strtod(vectorParts->at(5).c_str(),0),
-												  strtod(vectorParts->at(6).c_str(),0),strtod(vectorParts->at(7).c_str(),0),strtod(vectorParts->at(8).c_str(),0),
-												  strtod(vectorParts->at(9).c_str(),0),strtod(vectorParts->at(10).c_str(),0),strtod(vectorParts->at(11).c_str(),0));
+					XMFLOAT3X3 newRotMatrix= XMFLOAT3X3(strtod(vectorParts->at(6).c_str(),0),strtod(vectorParts->at(7).c_str(),0),strtod(vectorParts->at(8).c_str(),0),
+												  strtod(vectorParts->at(9).c_str(),0),strtod(vectorParts->at(10).c_str(),0),strtod(vectorParts->at(11).c_str(),0),
+												  strtod(vectorParts->at(12).c_str(),0),strtod(vectorParts->at(13).c_str(),0),strtod(vectorParts->at(14).c_str(),0));
 					networkedEntities[targetSocket]->transform.SetLocalRotation(newRotMatrix);
-
-
-
 				}
-
 			}
 		}
 		clientEntity->networkMessages.pop();
 			
+		}
 	}
 
 	Entity::Update(dt);
@@ -273,8 +290,11 @@ void Player::CheckInput(float dt)
 
 	if(clientEntity && clientEntity->isConnected && networkSendTimer<0.0f && cubeInputReceived && loggedIn){
 		XMFLOAT3 curTransform= transform.GetTranslation();
-		networkSendTimer=0.04f;
-		clientEntity->sendMessage(MessageTypes::Client::MovementUpdate,getNetworkString());
+		networkSendTimer=updateTimer + networkSendTimer;
+		string curNetworkString= getNetworkString();
+		string toAddString= to_string(worldVelocity.x) + "," + to_string(worldVelocity.y)+ "," + to_string(worldVelocity.z) + ",";
+		curNetworkString = toAddString + curNetworkString;
+		clientEntity->sendMessage(MessageTypes::Client::MovementUpdate,curNetworkString);
 	}
 }
 

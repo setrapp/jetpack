@@ -27,6 +27,7 @@ public:
 	void DieWithError(char* errorMessage);
 	void sendMessage(MessageTypes::Client msgType, string sentMessage);
 	void connectClient(string address);
+	int lastMessageCountReceived;
 	static void listenForResponse(void* stuff);
 	static queue<string> networkMessages;
 	UDPClientConnectionEntity(void);

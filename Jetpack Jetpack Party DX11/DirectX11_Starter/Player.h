@@ -23,6 +23,7 @@ public:
 	UDPClientConnectionEntity* clientEntity;
 	Entity* networkedCube;
 	std::map<int,Entity*> networkedEntities;
+	std::map<int,XMFLOAT3> networkedEntityVelocities;
 	float networkSendTimer;
 	bool loggedIn;
 	bool controllable;
@@ -30,6 +31,7 @@ public:
 	XMFLOAT3 respawnPosition;
 	XMFLOAT3 respawnLocalRotation;
 	XMFLOAT3 targetPosition; 
+	float updateTimer;
 
 private:
 	void CheckInput(float dt);

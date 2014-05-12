@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
+using System.Timers;
 namespace UDPServer
 {
     class Program
@@ -32,9 +33,10 @@ namespace UDPServer
             // Thread signal.
             public static Dictionary<IPEndPoint, int> userList = new Dictionary<IPEndPoint, int>();
             public static Dictionary<IPEndPoint, string> sentValues = new Dictionary<IPEndPoint, string>();
-            public static int userCounter = 1;
+            public static int userCounter = 0;
             static IPEndPoint ipep;
             static UdpClient newsock;
+            public static int msgCount= 0;
 
             public AsynchronousSocketListener()
             {
@@ -46,6 +48,13 @@ namespace UDPServer
                 {
                     //starts the initial listen for a received connection
                     newsock.BeginReceive(new AsyncCallback(recv), null);
+                    Timer aTimer = new System.Timers.Timer(100);
+
+                    // Hook up the Elapsed event for the timer.
+                    aTimer.Elapsed += new ElapsedEventHandler(OnMovementUpdateEvent);
+
+                    aTimer.Interval = 250;
+                    aTimer.Enabled = true;
                 }
                 catch (Exception e)
                 {
@@ -56,60 +65,64 @@ namespace UDPServer
 
             private static void recv(IAsyncResult res)
             {
+
                 //grabs the data sent from the client
                 IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 8000);
-                byte[] received = newsock.EndReceive(res, ref endpoint);
-                string[] splitContent = Encoding.ASCII.GetString(received).Split('\n');
-                MessageTypes.Client messageType = (MessageTypes.Client)int.Parse(splitContent[0]);
-
-                switch (messageType)
+                try
                 {
-                    case MessageTypes.Client.Login:
-                        if(!userList.ContainsKey(endpoint)){
-
-                            //adds the new client data to the dictionaries
-                            userCounter++;
-                            userList.Add(endpoint, userCounter);
-                            sentValues.Add(endpoint, "0,0,0,1,0,0,0,1,0,0,0,1");
-
-                            //to the players already in the game, just send the id of the new player
-                            string toAlreadyAdded = userList[endpoint].ToString();
-
-                            //to the player currently entering the game, send your ID first
-                            string sendToAdded = userList[endpoint].ToString() + "\n";
-
-                            foreach (KeyValuePair<IPEndPoint, string> entry in sentValues)
+                    byte[] received = newsock.EndReceive(res, ref endpoint);
+                    string[] splitContent = Encoding.ASCII.GetString(received).Split('\n');
+                    MessageTypes.Client messageType = (MessageTypes.Client)int.Parse(splitContent[0]);
+                    switch (messageType)
+                    {
+                        case MessageTypes.Client.Login:
+                            if (!userList.ContainsKey(endpoint))
                             {
-                                if (!entry.Key.Equals(endpoint))
-                                    sendToAdded += userList[entry.Key] + "\n" + entry.Value + "\n";
-                            }
 
-                            foreach (KeyValuePair<IPEndPoint, int> entry in userList)
-                            {
-                                if (entry.Key.Equals(endpoint))
+                                //adds the new client data to the dictionaries
+                                userCounter++;
+                                userList.Add(endpoint, userCounter);
+                                sentValues.Add(endpoint, "0,0,0,1,0,0,0,1,0,0,0,1");
+
+                                //to the players already in the game, just send the id of the new player
+                                string toAlreadyAdded = userList[endpoint].ToString();
+
+                                //to the player currently entering the game, send your ID first
+                                string sendToAdded = userList[endpoint].ToString() + "\n";
+
+                                foreach (KeyValuePair<IPEndPoint, string> entry in sentValues)
                                 {
-                                    Send(entry.Key, MessageTypes.Server.AddExistingUsers, sendToAdded);
+                                    if (!entry.Key.Equals(endpoint))
+                                        sendToAdded += userList[entry.Key] + "\n" + entry.Value + "\n";
                                 }
-                                else
+
+                                foreach (KeyValuePair<IPEndPoint, int> entry in userList)
                                 {
-                                    Send(entry.Key, MessageTypes.Server.AddNewUser, toAlreadyAdded);
+                                    if (entry.Key.Equals(endpoint))
+                                    {
+                                        Send(entry.Key, MessageTypes.Server.AddExistingUsers, sendToAdded);
+                                    }
+                                    else
+                                    {
+                                        Send(entry.Key, MessageTypes.Server.AddNewUser, toAlreadyAdded);
+                                    }
                                 }
                             }
-                        }
-                        break;
+                            break;
 
-                    case MessageTypes.Client.MovementUpdate:
-                        sentValues[endpoint] = splitContent[1];
-                        string toSend = "";
-                        foreach (KeyValuePair<IPEndPoint, int> entry in userList)
-                        {
-                            toSend += entry.Value + "\n" + sentValues[entry.Key] + "\n";
-                        }
-                        SendAll(MessageTypes.Server.MovementUpdate,toSend);
-
-                        break;
+                        case MessageTypes.Client.MovementUpdate:
+                            sentValues[endpoint] = splitContent[1];
+                            break;
+                    }
+                    newsock.BeginReceive(new AsyncCallback(recv), null);
                 }
-                newsock.BeginReceive(new AsyncCallback(recv), null);
+                catch (Exception e)
+                {
+                    userList.Remove(endpoint);
+                    sentValues.Remove(endpoint);
+                    Console.WriteLine(e.ToString());
+                }
+
                 
             }
 
@@ -120,8 +133,9 @@ namespace UDPServer
 
             private static void Send(IPEndPoint handler, MessageTypes.Server type, String data = "")
             {
+                msgCount++;
                 // Convert the string data to byte data using ASCII encoding.
-                string toSend=(int)type + "\n" + data;
+                string toSend=(int)type + "\n" + msgCount + "\n" + data;
                 Byte[] byteData = Encoding.ASCII.GetBytes(toSend);
                 newsock.BeginSend(byteData, byteData.Length, handler, new AsyncCallback(SendCallback), new StateObject(handler, toSend));
             }
@@ -141,7 +155,6 @@ namespace UDPServer
                 try
                 {
                     Console.WriteLine("What was sent: " + sentTo.whatWasSent);
-                    Console.WriteLine("number of bytes sent: {0}", newsock.EndSend(ar));
                 }
                 catch (Exception e)
                 {
@@ -149,6 +162,18 @@ namespace UDPServer
                     sentValues.Remove(sentTo.endpoint);
                     Console.WriteLine(e.ToString());
                 }
+            }
+
+
+            private static void OnMovementUpdateEvent(object source, ElapsedEventArgs e)
+            {
+                //Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
+                string toSend = "";
+                foreach (KeyValuePair<IPEndPoint, int> entry in userList)
+                {
+                    toSend += entry.Value + "\n" + sentValues[entry.Key] + "\n";
+                }
+                SendAll(MessageTypes.Server.MovementUpdate, toSend);
             }
 
         }

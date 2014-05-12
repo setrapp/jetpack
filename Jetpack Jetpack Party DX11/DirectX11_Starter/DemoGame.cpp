@@ -424,6 +424,7 @@ void DemoGame::OnResize()
 // Update the scene.
 void DemoGame::UpdateScene(float dt)
 {	
+
 	(IPMan::GetIPMan()->GetAllKeys());
 	if (IPMan::GetIPMan()->GetBack())
 	{
