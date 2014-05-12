@@ -1,0 +1,160 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Net;
+using System.Net.Sockets;
+namespace UDPServer
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            AsynchronousSocketListener a = new AsynchronousSocketListener();
+        }
+
+        public class StateObject
+        {
+            // Client  socket.
+            public IPEndPoint endpoint = null;
+            // Size of receive buffer.
+            public string whatWasSent = null;
+
+            public StateObject(IPEndPoint ws, string wss)
+            {
+                endpoint = ws;
+                whatWasSent = wss;
+            }
+        }
+        public class AsynchronousSocketListener
+        {
+            // Thread signal.
+            public static Dictionary<IPEndPoint, int> userList = new Dictionary<IPEndPoint, int>();
+            public static Dictionary<IPEndPoint, string> sentValues = new Dictionary<IPEndPoint, string>();
+            public static int userCounter = 1;
+            static IPEndPoint ipep;
+            static UdpClient newsock;
+
+            public AsynchronousSocketListener()
+            {
+                ipep = new IPEndPoint(IPAddress.Any, 8080);
+                newsock = new UdpClient(ipep);
+
+                Console.WriteLine("Waiting for a client...");
+                try
+                {
+                    //starts the initial listen for a received connection
+                    newsock.BeginReceive(new AsyncCallback(recv), null);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+                Console.Read();
+            }
+
+            private static void recv(IAsyncResult res)
+            {
+                //grabs the data sent from the client
+                IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 8000);
+                byte[] received = newsock.EndReceive(res, ref endpoint);
+                string[] splitContent = Encoding.ASCII.GetString(received).Split('\n');
+                MessageTypes.Client messageType = (MessageTypes.Client)int.Parse(splitContent[0]);
+
+                switch (messageType)
+                {
+                    case MessageTypes.Client.Login:
+                        if(!userList.ContainsKey(endpoint)){
+
+                            //adds the new client data to the dictionaries
+                            userCounter++;
+                            userList.Add(endpoint, userCounter);
+                            sentValues.Add(endpoint, "0,0,0,1,0,0,0,1,0,0,0,1");
+
+                            //to the players already in the game, just send the id of the new player
+                            string toAlreadyAdded = userList[endpoint].ToString();
+
+                            //to the player currently entering the game, send your ID first
+                            string sendToAdded = userList[endpoint].ToString() + "\n";
+
+                            foreach (KeyValuePair<IPEndPoint, string> entry in sentValues)
+                            {
+                                if (!entry.Key.Equals(endpoint))
+                                    sendToAdded += userList[entry.Key] + "\n" + entry.Value + "\n";
+                            }
+
+                            foreach (KeyValuePair<IPEndPoint, int> entry in userList)
+                            {
+                                if (entry.Key.Equals(endpoint))
+                                {
+                                    Send(entry.Key, MessageTypes.Server.AddExistingUsers, sendToAdded);
+                                }
+                                else
+                                {
+                                    Send(entry.Key, MessageTypes.Server.AddNewUser, toAlreadyAdded);
+                                }
+                            }
+                        }
+                        break;
+
+                    case MessageTypes.Client.MovementUpdate:
+                        sentValues[endpoint] = splitContent[1];
+                        string toSend = "";
+                        foreach (KeyValuePair<IPEndPoint, int> entry in userList)
+                        {
+                            toSend += entry.Value + "\n" + sentValues[entry.Key] + "\n";
+                        }
+                        SendAll(MessageTypes.Server.MovementUpdate,toSend);
+
+                        break;
+                }
+                newsock.BeginReceive(new AsyncCallback(recv), null);
+                
+            }
+
+            private static void Send(IPEndPoint handler, MessageTypes.Server type, int data)
+            {
+                Send(handler, type, "" + data);
+            }
+
+            private static void Send(IPEndPoint handler, MessageTypes.Server type, String data = "")
+            {
+                // Convert the string data to byte data using ASCII encoding.
+                string toSend=(int)type + "\n" + data;
+                Byte[] byteData = Encoding.ASCII.GetBytes(toSend);
+                newsock.BeginSend(byteData, byteData.Length, handler, new AsyncCallback(SendCallback), new StateObject(handler, toSend));
+            }
+
+            private static void SendAll(MessageTypes.Server type, String data)
+            {
+                byte[] byteData = Encoding.ASCII.GetBytes((int)type + "\n" + data);
+                foreach (KeyValuePair<IPEndPoint, int> entry in userList)
+                {
+                    Send(entry.Key, type, data);
+                }
+            }
+
+            private static void SendCallback(IAsyncResult ar)
+            {
+                StateObject sentTo = (StateObject)ar.AsyncState;
+                try
+                {
+                    Console.WriteLine("What was sent: " + sentTo.whatWasSent);
+                    Console.WriteLine("number of bytes sent: {0}", newsock.EndSend(ar));
+                }
+                catch (Exception e)
+                {
+                    userList.Remove(sentTo.endpoint);
+                    sentValues.Remove(sentTo.endpoint);
+                    Console.WriteLine(e.ToString());
+                }
+            }
+
+        }
+
+
+
+
+    }
+}

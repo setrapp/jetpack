@@ -144,6 +144,9 @@
     <ClCompile Include="LobbyScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UDPClientConnectionEntity.cpp">
+      <Filter>Source Files\Networking</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXGame.h">
@@ -310,6 +313,9 @@
     </ClInclude>
     <ClInclude Include="LobbyScreen.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UDPClientConnectionEntity.h">
+      <Filter>Header Files\Networking</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

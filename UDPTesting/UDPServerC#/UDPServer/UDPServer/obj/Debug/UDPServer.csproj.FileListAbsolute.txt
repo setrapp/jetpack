@@ -1,0 +1,7 @@
+D:\jetpack\UDPTesting\UDPClientTest\UDPServer\UDPServer\bin\Debug\UDPServer.exe.config
+D:\jetpack\UDPTesting\UDPServerC#\UDPServer\UDPServer\bin\Debug\UDPServer.exe.config
+D:\jetpack\UDPTesting\UDPServerC#\UDPServer\UDPServer\bin\Debug\UDPServer.exe
+D:\jetpack\UDPTesting\UDPServerC#\UDPServer\UDPServer\bin\Debug\UDPServer.pdb
+D:\jetpack\UDPTesting\UDPServerC#\UDPServer\UDPServer\obj\Debug\UDPServer.csprojResolveAssemblyReference.cache
+D:\jetpack\UDPTesting\UDPServerC#\UDPServer\UDPServer\obj\Debug\UDPServer.exe
+D:\jetpack\UDPTesting\UDPServerC#\UDPServer\UDPServer\obj\Debug\UDPServer.pdb

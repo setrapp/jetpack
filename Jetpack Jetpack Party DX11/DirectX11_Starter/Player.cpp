@@ -18,7 +18,7 @@ Player::Player()
 	airSpeedDampening = 0.3f;
 	grounded = true;
 	jetpack = new ManeuverJetpack(this);
-	clientEntity = new ClientConnectionEntity();
+	clientEntity = new UDPClientConnectionEntity();
 	clientEntity->connectClient("127.0.0.1");
 	networkSendTimer=0.0f;
 	loggedIn=false;
@@ -273,7 +273,7 @@ void Player::CheckInput(float dt)
 
 	if(clientEntity && clientEntity->isConnected && networkSendTimer<0.0f && cubeInputReceived && loggedIn){
 		XMFLOAT3 curTransform= transform.GetTranslation();
-		networkSendTimer=0.2f;
+		networkSendTimer=0.04f;
 		clientEntity->sendMessage(MessageTypes::Client::MovementUpdate,getNetworkString());
 	}
 }

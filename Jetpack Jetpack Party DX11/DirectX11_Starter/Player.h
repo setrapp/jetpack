@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Camera.h"
 #include "ClientConnectionEntity.h"
+#include "UDPClientConnectionEntity.h"
 #include "MessageTypes.h"
 #include <queue>
 #include "Jetpack.h"
@@ -18,7 +19,8 @@ public:
 	vector<string>* breakIntoParts(string s);
 
 public:
-	ClientConnectionEntity* clientEntity;
+	//ClientConnectionEntity* clientEntity;
+	UDPClientConnectionEntity* clientEntity;
 	Entity* networkedCube;
 	std::map<int,Entity*> networkedEntities;
 	float networkSendTimer;

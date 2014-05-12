@@ -117,6 +117,7 @@
     <ClCompile Include="ModelLoad\MLModelViewer.c" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="UDPClientConnectionEntity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\XInputValues.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="UDPClientConnectionEntity.h" />
     <ClInclude Include="XController.h" />
     <ClInclude Include="XInputValues.h" />
     <ClInclude Include="XNew.h" />
