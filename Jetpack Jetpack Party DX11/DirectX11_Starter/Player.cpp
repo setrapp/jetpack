@@ -25,7 +25,9 @@ Player::Player()
 	clientEntity = new UDPClientConnectionEntity();
 	clientEntity->connectClient("127.0.0.1");
 	networkSendTimer=0.0f;
-	loggedIn=false;
+	//loggedIn=false;
+	clientEntity->sendMessage(MessageTypes::Client::Login,"");
+	loggedIn=true;
 	controllable = false;
 	targetPosition = XMFLOAT3(400, 200, 5000);
 }

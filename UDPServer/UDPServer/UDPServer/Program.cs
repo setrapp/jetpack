@@ -82,7 +82,7 @@ namespace UDPServer
                                 //adds the new client data to the dictionaries
                                 userCounter++;
                                 userList.Add(endpoint, userCounter);
-                                sentValues.Add(endpoint, "0,0,0,1,0,0,0,1,0,0,0,1");
+                                sentValues.Add(endpoint, "0,0,0,0,0,0,1,0,0,0,1,0,0,0,1");
 
                                 //to the players already in the game, just send the id of the new player
                                 string toAlreadyAdded = userList[endpoint].ToString();
