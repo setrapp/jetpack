@@ -260,6 +260,12 @@ void Player::CheckInput(float dt)
 		}*/
 	}
 
+	//temp
+	if (GetAsyncKeyState('E'))
+	{
+		transform.SetLocalRotation(XMFLOAT3(0, PI, 0));
+	}
+
 	//Should use IPMan
 	if (GetAsyncKeyState('R'))
 	{

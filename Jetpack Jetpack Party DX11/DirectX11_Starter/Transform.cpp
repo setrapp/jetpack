@@ -233,7 +233,7 @@ XMFLOAT3 Transform::ClampVector(XMFLOAT3* vector, float maxMagnitude, float minM
 	}
 }
 
-XMFLOAT3 Transform::RotationToEuler(XMFLOAT3X3 const* rotationMatrix) const
+XMFLOAT3 Transform::RotationToEuler(XMFLOAT3X3 const* rotationMatrix, XMFLOAT3 expectedForward) const
 {
 	XMFLOAT3 eulerAngles(0, 0, 0);
 	if (!rotationMatrix)
@@ -256,6 +256,14 @@ XMFLOAT3 Transform::RotationToEuler(XMFLOAT3X3 const* rotationMatrix) const
 	else
 	{
 		eulerAngles.y = asin(rotationMatrix->_31);
+
+		float expectedDotForward;
+		XMStoreFloat(&expectedDotForward, XMVector3Dot(XMLoadFloat3(&expectedForward), XMVector3Transform(XMLoadFloat3(&XMFLOAT3(0, 0, 1)), XMMatrixRotationY(eulerAngles.y))));
+		if (expectedDotForward < 0)
+		{
+			eulerAngles.y = PI - eulerAngles.y;
+		}
+
 		float cosY = cos(eulerAngles.y);
 		eulerAngles.x = -atan2(rotationMatrix->_32 / cosY, rotationMatrix->_33 / cosY);
 		eulerAngles.z = -atan2(rotationMatrix->_21 / cosY, rotationMatrix->_11 / cosY);
@@ -310,7 +318,7 @@ XMFLOAT3X3 Transform::GetRotation() const
 
 XMFLOAT3 Transform::GetEulerAngles() const
 {
-	return RotationToEuler(&GetRotation());
+	return RotationToEuler(&GetRotation(), forward);
 }
 
 XMFLOAT3X3 Transform::GetLocalRotation() const
@@ -320,7 +328,9 @@ XMFLOAT3X3 Transform::GetLocalRotation() const
 
 XMFLOAT3 Transform::GetLocalEulerAngles() const
 {
-	return RotationToEuler(&rotation);
+	XMFLOAT3 expectedForward;
+	XMStoreFloat3(&expectedForward, XMVector3Transform(XMLoadFloat3(&XMFLOAT3(0, 0, 1)), XMLoadFloat3x3(&rotation)));
+	return RotationToEuler(&rotation, expectedForward);
 }
 
 void Transform::SetLocalRotation(XMFLOAT3 newEulerAngles)
