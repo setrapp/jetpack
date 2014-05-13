@@ -8,6 +8,9 @@ class BulletManager
 {
 private:
 
+	static BulletManager* instance;
+
+	//Needed to initialize 
 	///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
 	btDefaultCollisionConfiguration* collisionConfiguration;
 	
@@ -36,97 +39,38 @@ public:
 	//Track Collision Shape
 	btBvhTriangleMeshShape* trackCollisionShape;
 
-BulletManager()
-{
-	//Physics
-	{
-		InitPhysics();
-		btCollisionShape* sphericalBody = new btSphereShape(btScalar(1.));
-		btTransform startTransform;
-		startTransform.setOrigin(btVector3(0,0,0));
-		btScalar mass=1.0;
-		btVector3 localInertia(0,0,0);
-		sphericalBody->calculateLocalInertia(mass,localInertia);
-		this->SetPlayerConstructionInfo(sphericalBody,startTransform,mass,localInertia);
-	}
-}
+BulletManager();
 
-//Initialize Bullet Discrete Dynamics World
-void InitPhysics()
-{
-	//Initializations:
-
-	//default collision configuration
-	collisionConfiguration = new btDefaultCollisionConfiguration();
-	
-	//default collision dispatcher
-	dispatcher = new	btCollisionDispatcher(collisionConfiguration);
-	
-	//btDbvtBroadphase is a good general purpose broadphase
-	overlappingPairCache = new btDbvtBroadphase();
-	
-	//default constraint solver
-	solver = new btSequentialImpulseConstraintSolver;
-	
-	//Initialize Discrete Dynamics World
-	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,overlappingPairCache,solver,collisionConfiguration);
-
-	//Set default forces in the world
-	dynamicsWorld->setGravity(btVector3(0,-10,0));
-}
+BulletManager* Instance();
 
 //End Bullet
-void ExitPhysics()
-{
-
-}
+void ExitPhysics();
 
 //Callback
-void Update(float dt)
-{
+void Update(float dt);
 
-}
-
-~BulletManager()
-{
-	ExitPhysics();
-}
+//
+~BulletManager();
 
 //Construct Player's Rigid Body. 
 //Implement box collider
 //Rigid Body constructor needs a struct of parameters. 
 //Collision manager creates that and stores it (for all other player objects that may be instantiated later).
-void SetPlayerConstructionInfo(btCollisionShape* playerShape,btTransform& startTransform,btScalar mass,const btVector3& localInertia)
-{
-	//Gathering Rigid Body Construction Info
-	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-	playerConstructionInfo = new btRigidBody::btRigidBodyConstructionInfo(mass,myMotionState,playerShape,localInertia);
-}
+void SetPlayerConstructionInfo(btCollisionShape* playerShape,btTransform& startTransform,btScalar mass,const btVector3& localInertia);
 
-btRigidBody::btRigidBodyConstructionInfo* GetPlayerConstructionInfo()
-{
-	return playerConstructionInfo;
-}
+btRigidBody::btRigidBodyConstructionInfo* GetPlayerConstructionInfo();
 
 //Construct Track Rigid Body (yet to be implemented)
 //Needs a mesh collider.
-void SetTrackConstructionInfo(Entity* track)
-{
-	trackCollisionShape = track->phys_entityPhysicsData->entityMeshShape;
-}
+void SetTrackConstructionInfo(Entity* track);
 
-btRigidBody::btRigidBodyConstructionInfo* GetTrackConstructionInfo()
-{
-	return trackConstructionInfo;
-}
+btRigidBody::btRigidBodyConstructionInfo* GetTrackConstructionInfo();
 
 //Covert XMVector3 to btVector3
-void MoveRigidBodyWithEntity(XMFLOAT3& playerTranslation, btRigidBody* entityBody)
-{
-	btTransform temp;
-	temp.setOrigin(btVector3(playerTranslation.x, playerTranslation.y, playerTranslation.z));
-	entityBody->getMotionState()->setWorldTransform(temp);
-}
+void MoveRigidBodyWithEntity(XMFLOAT3& playerTranslation, btRigidBody* entityBody);
+
+
+//Create rigid body from entity and model.
 
 //
 };
