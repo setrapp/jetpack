@@ -21,12 +21,11 @@ struct EntityDrawArgs
 struct EntityPhysicsData
 {
 	btVector3* entityVertices;
-	int* entityNumOfTriangles;
+	int entityNumOfTriangles;
 	int* entityIndices;
 	btVector3 aabbMin , aabbMax;
 	btTriangleIndexVertexArray* entityIndexVertexArray;
-	btBvhTriangleMeshShape* entiyMeshShape;
-
+	btBvhTriangleMeshShape* entityMeshShape;
 };
 
 class Entity

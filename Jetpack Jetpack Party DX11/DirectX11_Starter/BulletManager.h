@@ -112,7 +112,7 @@ btRigidBody::btRigidBodyConstructionInfo* GetPlayerConstructionInfo()
 //Needs a mesh collider.
 void SetTrackConstructionInfo(Entity* track)
 {
-	
+	trackCollisionShape = track->phys_entityPhysicsData->entityMeshShape;
 }
 
 btRigidBody::btRigidBodyConstructionInfo* GetTrackConstructionInfo()
