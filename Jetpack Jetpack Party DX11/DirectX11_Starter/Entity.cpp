@@ -335,8 +335,8 @@ Model* Entity::GetModel(int index)
 }
 
 string Entity::getNetworkString(){
-	XMFLOAT3 curTransform= transform.GetTranslation();
-	XMFLOAT3X3 curRotation = transform.GetRotation();
+	XMFLOAT3 curTransform= transform.GetLocalTranslation();
+	XMFLOAT3X3 curRotation = transform.GetLocalRotation();
 	std::ostringstream ss1;
 	ss1 << curTransform.x;
 	ss1 << ",";

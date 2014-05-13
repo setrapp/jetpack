@@ -40,7 +40,7 @@ namespace UDPServer
 
             public AsynchronousSocketListener()
             {
-                ipep = new IPEndPoint(IPAddress.Any, 8080);
+                ipep = new IPEndPoint(IPAddress.Any, 8080); 
                 newsock = new UdpClient(ipep);
 
                 Console.WriteLine("Waiting for a client...");
@@ -53,7 +53,7 @@ namespace UDPServer
                     // Hook up the Elapsed event for the timer.
                     aTimer.Elapsed += new ElapsedEventHandler(OnMovementUpdateEvent);
 
-                    aTimer.Interval = 250;
+                    aTimer.Interval = 100;
                     aTimer.Enabled = true;
                 }
                 catch (Exception e)

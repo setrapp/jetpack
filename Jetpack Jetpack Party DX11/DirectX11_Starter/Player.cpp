@@ -9,14 +9,14 @@ Player::Player()
 	worldVelocity = XMFLOAT3(0, 0, 0);
 	angularVelocity = XMFLOAT3(0, 0, 0);
 	maxSpeed = 200;
-	updateTimer=0.25f;
+	updateTimer=0.1f;
 	forwardAcceleration = 100.0f;
 	backwardAcceleration = 100.0f;
 	strafeAcceleration = 100.0f;
 	gravityAcceleration = 600.0f;
 	terminalVelocity = 500000;
-	//groundSpeedDampening = 0.1f;
-	//airSpeedDampening = 0.3f;
+	groundSpeedDampening = 0.1f;
+	airSpeedDampening = 0.3f;
 
 	groundSpeedDampening = 0.0f;
 	airSpeedDampening = 0.0f;
@@ -135,10 +135,21 @@ void Player::Update(float dt)
 		angularVelocity.x = angularVelocity.y = angularVelocity.z = 0;
 	}
 
+	/*
+	//Dead reckoning system
 	std::map<int, XMFLOAT3>::iterator iter;
 	for (iter = networkedEntityVelocities.begin(); iter != networkedEntityVelocities.end(); iter++) {
 		XMFLOAT3 translateBy= XMFLOAT3(iter->second.x* updateTimer * dt ,iter->second.y*updateTimer* dt ,iter->second.z* updateTimer* dt);
 		networkedEntities[iter->first]->transform.Translate(translateBy);
+    }*/
+
+	//Dead reckoning system
+	std::map<int, PositionLerp>::iterator iter;
+	for (iter = networkedEntityLerps.begin(); iter != networkedEntityLerps.end(); iter++) {
+		XMFLOAT3 newPos= networkedEntityLerps[iter->first].getNewPosition(dt,updateTimer);
+		XMFLOAT3 currentPosition=networkedEntities[iter->first]->transform.GetLocalTranslation();
+		networkedEntities[iter->first]->transform.Translate(XMFLOAT3(newPos.x-currentPosition.x,newPos.y-currentPosition.y,newPos.z-currentPosition.z));
+		//networkedEntities[iter->first]->transform.Translate(XMFLOAT3(currentPosition.x - newPos.x, currentPosition.y - newPos.y, currentPosition.z - newPos.z));
     }
 
 
@@ -207,6 +218,7 @@ void Player::Update(float dt)
 			cube->socketNumber=atoi(stringParts.at(2).c_str());
 			networkedEntities[cube->socketNumber]=cube;
 			networkedEntityVelocities[cube->socketNumber]= XMFLOAT3(0, 0, 0);
+			networkedEntityLerps[cube->socketNumber]= PositionLerp();
 			AssetManager::Instance()->addedEntities.push(cube);
 			break;
 
@@ -222,11 +234,17 @@ void Player::Update(float dt)
 					XMFLOAT3 velocityVector= XMFLOAT3(strtod(vectorParts->at(0).c_str(),0),strtod(vectorParts->at(1).c_str(),0),strtod(vectorParts->at(2).c_str(),0));
 					networkedEntityVelocities[targetSocket] = velocityVector;
 
-					XMFLOAT3 newVector= XMFLOAT3(strtod(vectorParts->at(3).c_str(),0),strtod(vectorParts->at(4).c_str(),0),strtod(vectorParts->at(5).c_str(),0));
-					XMFLOAT3 currentTransform=networkedEntities[targetSocket]->transform.GetTranslation();
+					XMFLOAT3 receivedVector= XMFLOAT3(strtod(vectorParts->at(3).c_str(),0),strtod(vectorParts->at(4).c_str(),0),strtod(vectorParts->at(5).c_str(),0));
+					XMFLOAT3 currentPosition=networkedEntities[targetSocket]->transform.GetLocalTranslation();
+					networkedEntityLerps[targetSocket].setNewTarget(receivedVector, currentPosition);
 
+					//reset the lerps
+					XMFLOAT3 newPosition=networkedEntityLerps[targetSocket].getNewPosition(dt,updateTimer);
+ 
 					//calculates how much to translate the body in question
-					networkedEntities[targetSocket]->transform.Translate(XMFLOAT3(newVector.x-currentTransform.x,newVector.y-currentTransform.y,newVector.z-currentTransform.z));
+					//networkedEntities[targetSocket]->transform.Translate(XMFLOAT3(newPosition.x-currentPosition.x,newPosition.y-currentPosition.y,newPosition.z-currentPosition.z));
+					//networkedEntities[targetSocket]->transform.Translate(XMFLOAT3(currentPosition.x-newPosition.x,currentPosition.y-newPosition.y,currentPosition.z-newPosition.z));
+
 					XMFLOAT3X3 newRotMatrix= XMFLOAT3X3(strtod(vectorParts->at(6).c_str(),0),strtod(vectorParts->at(7).c_str(),0),strtod(vectorParts->at(8).c_str(),0),
 												  strtod(vectorParts->at(9).c_str(),0),strtod(vectorParts->at(10).c_str(),0),strtod(vectorParts->at(11).c_str(),0),
 												  strtod(vectorParts->at(12).c_str(),0),strtod(vectorParts->at(13).c_str(),0),strtod(vectorParts->at(14).c_str(),0));

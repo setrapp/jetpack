@@ -8,6 +8,7 @@
 #include <queue>
 #include "Jetpack.h"
 #include "ManeuverJetpack.h"
+#include "PositionLerp.h"
 
 class Player : public Entity
 {
@@ -24,6 +25,7 @@ public:
 	Entity* networkedCube;
 	std::map<int,Entity*> networkedEntities;
 	std::map<int,XMFLOAT3> networkedEntityVelocities;
+	std::map<int,PositionLerp> networkedEntityLerps;
 	float networkSendTimer;
 	bool loggedIn;
 	bool controllable;
