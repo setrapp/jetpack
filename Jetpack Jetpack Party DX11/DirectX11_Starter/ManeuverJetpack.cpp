@@ -190,18 +190,11 @@ void ManeuverJetpack::ApplyForces(float dt, XMFLOAT3* velocity, XMFLOAT3* angula
 		active = true;
 	}
 	// Right Side
-	if(thrusterActives[Thruster::BOTTOM_RIGHT])
+	if(thrusterActives[Thruster::FRONT_RIGHT])
 	{
-		velocity->y += ascentAcceleration * dt;
-		angularVelocity->z += bottomSpin * dt;
-		thrusters[Thruster::BOTTOM_RIGHT]->SetVisible(true);
-		active = true;
-	}
-	if(thrusterActives[Thruster::BACK_RIGHT])
-	{
-		velocity->z += forwardAcceleration * dt;
-		angularVelocity->y -= backSpin * dt;
-		thrusters[Thruster::BACK_RIGHT]->SetVisible(true);
+		velocity->z -= backwardAcceleration * dt;
+		angularVelocity->y += frontSpin * dt;
+		thrusters[Thruster::FRONT_RIGHT]->SetVisible(true);
 		active = true;
 	}
 	if(thrusterActives[Thruster::SIDE_RIGHT])
@@ -211,11 +204,105 @@ void ManeuverJetpack::ApplyForces(float dt, XMFLOAT3* velocity, XMFLOAT3* angula
 		thrusters[Thruster::SIDE_RIGHT]->SetVisible(true);
 		active = true;
 	}
-	if(thrusterActives[Thruster::FRONT_RIGHT])
+	if(thrusterActives[Thruster::BACK_RIGHT])
 	{
-		velocity->z -= backwardAcceleration * dt;
-		angularVelocity->y += frontSpin * dt;
-		thrusters[Thruster::FRONT_RIGHT]->SetVisible(true);
+		velocity->z += forwardAcceleration * dt;
+		angularVelocity->y -= backSpin * dt;
+		thrusters[Thruster::BACK_RIGHT]->SetVisible(true);
 		active = true;
 	}
+	if(thrusterActives[Thruster::BOTTOM_RIGHT])
+	{
+		velocity->y += ascentAcceleration * dt;
+		angularVelocity->z += bottomSpin * dt;
+		thrusters[Thruster::BOTTOM_RIGHT]->SetVisible(true);
+		active = true;
+	}
+	
+	
+}
+
+void ManeuverJetpack::updateThrusters(int thrusterData){
+
+#pragma region ThrusterParsing
+	if(thrusterData>=128){
+		thrusterActives[Thruster::FRONT_LEFT]=true;
+		thrusters[Thruster::FRONT_LEFT]->SetVisible(true);
+		thrusterData-=128;
+	}
+	else{
+		thrusterActives[Thruster::FRONT_LEFT]=false;
+		thrusters[Thruster::FRONT_LEFT]->SetVisible(false);
+	}
+
+	if(thrusterData>=64){
+		thrusterActives[Thruster::SIDE_LEFT]=true;
+		thrusters[Thruster::SIDE_LEFT]->SetVisible(true);
+		thrusterData-=64;
+	}
+	else{
+		thrusterActives[Thruster::SIDE_LEFT]=false;
+		thrusters[Thruster::SIDE_LEFT]->SetVisible(false);
+	}
+
+	if(thrusterData>=32){
+		thrusterActives[Thruster::BACK_LEFT]=true;
+		thrusters[Thruster::BACK_LEFT]->SetVisible(true);
+		thrusterData-=32;
+	}
+	else{
+		thrusterActives[Thruster::BACK_LEFT]=false;
+		thrusters[Thruster::BACK_LEFT]->SetVisible(false);
+	}
+
+	if(thrusterData>=16){
+		thrusterActives[Thruster::BOTTOM_LEFT]=true;
+		thrusters[Thruster::BOTTOM_LEFT]->SetVisible(true);
+		thrusterData-=16;
+	}
+	else{
+		thrusterActives[Thruster::BOTTOM_LEFT]=false;
+		thrusters[Thruster::BOTTOM_LEFT]->SetVisible(false);
+	}
+
+	if(thrusterData>=8){
+		thrusterActives[Thruster::FRONT_LEFT]=true;
+		thrusters[Thruster::FRONT_LEFT]->SetVisible(true);
+		thrusterData-=8;
+	}
+	else{
+		thrusterActives[Thruster::FRONT_RIGHT]=false;
+		thrusters[Thruster::FRONT_RIGHT]->SetVisible(false);
+	}
+
+	if(thrusterData>=4){
+		thrusterActives[Thruster::SIDE_RIGHT]=true;
+		thrusters[Thruster::SIDE_RIGHT]->SetVisible(true);
+		thrusterData-=4;
+	}
+	else{
+		thrusterActives[Thruster::SIDE_RIGHT]=false;
+		thrusters[Thruster::SIDE_RIGHT]->SetVisible(false);
+	}
+
+	if(thrusterData>=2){
+		thrusterActives[Thruster::BACK_RIGHT]=true;
+		thrusters[Thruster::BACK_RIGHT]->SetVisible(true);
+		thrusterData-=2;
+	}
+	else{
+		thrusterActives[Thruster::BACK_RIGHT]=false;
+		thrusters[Thruster::BACK_RIGHT]->SetVisible(false);
+	}
+
+	if(thrusterData>=1){
+		thrusterActives[Thruster::BOTTOM_RIGHT]=true;
+		thrusters[Thruster::BOTTOM_RIGHT]->SetVisible(true);
+	}
+	else{
+		thrusterActives[Thruster::BOTTOM_RIGHT]=false;
+		thrusters[Thruster::BOTTOM_RIGHT]->SetVisible(false);
+	}
+#pragma endregion ThrusterParsing
+
 }

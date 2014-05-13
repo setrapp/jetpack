@@ -36,7 +36,6 @@ Player::~Player()
 {
 	delete jetpack;
 	delete clientEntity;
-	delete networkedCube;
 }
 
 void Player::Update(float dt)
@@ -145,13 +144,12 @@ void Player::Update(float dt)
 		networkedEntities[iter->first]->transform.Translate(translateBy);
     }*/
 
-	//Dead reckoning system
+	//Lagging LERP system update
 	std::map<int, PositionLerp>::iterator iter;
 	for (iter = networkedEntityLerps.begin(); iter != networkedEntityLerps.end(); iter++) {
 		XMFLOAT3 newPos= networkedEntityLerps[iter->first].getNewPosition(dt,updateTimer);
 		XMFLOAT3 currentPosition=networkedEntities[iter->first]->transform.GetLocalTranslation();
 		networkedEntities[iter->first]->transform.Translate(XMFLOAT3(newPos.x-currentPosition.x,newPos.y-currentPosition.y,newPos.z-currentPosition.z));
-		//networkedEntities[iter->first]->transform.Translate(XMFLOAT3(currentPosition.x - newPos.x, currentPosition.y - newPos.y, currentPosition.z - newPos.z));
     }
 
 
@@ -162,7 +160,7 @@ void Player::Update(float dt)
 		
 		string readData= clientEntity->networkMessages.front();
 		string curString;
-		Entity* cube;
+		NetworkedPlayer* cube;
 		std::vector<std::string> stringParts;
 		std::istringstream stringsplitter(readData);
 		while(std::getline(stringsplitter,curString, '\n')){
@@ -185,13 +183,8 @@ void Player::Update(float dt)
 				int targetSocket= atoi(stringParts.at(i).c_str());
 
 				string unparsedPosition= stringParts.at(i+1);
-				cube = new Entity();
-				cube->socketNumber= targetSocket;
-				cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
-				cube->Finalize();
-				cube->transform.Translate(XMFLOAT3(0, 0, 0));
-				networkedEntities[cube->socketNumber]=cube;
-				AssetManager::Instance()->addedEntities.push(cube);
+				AddNewUser(targetSocket);
+
 
 				std::vector<std::string>* vectorParts = breakIntoParts(unparsedPosition);
 
@@ -213,15 +206,7 @@ void Player::Update(float dt)
 			//adding a player that recently joined
 		case MessageTypes::Server::AddNewUser:
 			loggedIn=true;
-			cube = new Entity();
-			cube->AddModel(AssetManager::Instance()->GetModel("jetman"));
-			cube->Finalize();
-			cube->transform.Translate(XMFLOAT3(0, 0, 0));
-			cube->socketNumber=atoi(stringParts.at(2).c_str());
-			networkedEntities[cube->socketNumber]=cube;
-			networkedEntityVelocities[cube->socketNumber]= XMFLOAT3(0, 0, 0);
-			networkedEntityLerps[cube->socketNumber]= PositionLerp();
-			AssetManager::Instance()->addedEntities.push(cube);
+			AddNewUser(atoi(stringParts.at(2).c_str()));
 			break;
 
 			//a list of sockets and the positions of the data is sent, the positions of all the associated entities is updated.
@@ -233,23 +218,20 @@ void Player::Update(float dt)
 
 					std::vector<std::string>* vectorParts = breakIntoParts(unparsedPosition);
 
-					XMFLOAT3 velocityVector= XMFLOAT3(strtod(vectorParts->at(0).c_str(),0),strtod(vectorParts->at(1).c_str(),0),strtod(vectorParts->at(2).c_str(),0));
-					networkedEntityVelocities[targetSocket] = velocityVector;
+					//XMFLOAT3 velocityVector= XMFLOAT3(strtod(vectorParts->at(0).c_str(),0),strtod(vectorParts->at(1).c_str(),0),strtod(vectorParts->at(2).c_str(),0));
+					//networkedEntityVelocities[targetSocket] = velocityVector;
+					((ManeuverJetpack*)networkedEntities[targetSocket]->jetpack)->updateThrusters(atoi(vectorParts->at(0).c_str()));
 
-					XMFLOAT3 receivedVector= XMFLOAT3(strtod(vectorParts->at(3).c_str(),0),strtod(vectorParts->at(4).c_str(),0),strtod(vectorParts->at(5).c_str(),0));
+					XMFLOAT3 receivedVector= XMFLOAT3(strtod(vectorParts->at(1).c_str(),0),strtod(vectorParts->at(2).c_str(),0),strtod(vectorParts->at(3).c_str(),0));
 					XMFLOAT3 currentPosition=networkedEntities[targetSocket]->transform.GetLocalTranslation();
 					networkedEntityLerps[targetSocket].setNewTarget(receivedVector, currentPosition);
 
 					//reset the lerps
 					XMFLOAT3 newPosition=networkedEntityLerps[targetSocket].getNewPosition(dt,updateTimer);
- 
-					//calculates how much to translate the body in question
-					//networkedEntities[targetSocket]->transform.Translate(XMFLOAT3(newPosition.x-currentPosition.x,newPosition.y-currentPosition.y,newPosition.z-currentPosition.z));
-					//networkedEntities[targetSocket]->transform.Translate(XMFLOAT3(currentPosition.x-newPosition.x,currentPosition.y-newPosition.y,currentPosition.z-newPosition.z));
 
-					XMFLOAT3X3 newRotMatrix= XMFLOAT3X3(strtod(vectorParts->at(6).c_str(),0),strtod(vectorParts->at(7).c_str(),0),strtod(vectorParts->at(8).c_str(),0),
-												  strtod(vectorParts->at(9).c_str(),0),strtod(vectorParts->at(10).c_str(),0),strtod(vectorParts->at(11).c_str(),0),
-												  strtod(vectorParts->at(12).c_str(),0),strtod(vectorParts->at(13).c_str(),0),strtod(vectorParts->at(14).c_str(),0));
+					XMFLOAT3X3 newRotMatrix= XMFLOAT3X3(strtod(vectorParts->at(4).c_str(),0),strtod(vectorParts->at(5).c_str(),0),strtod(vectorParts->at(6).c_str(),0),
+												  strtod(vectorParts->at(7).c_str(),0),strtod(vectorParts->at(8).c_str(),0),strtod(vectorParts->at(9).c_str(),0),
+												  strtod(vectorParts->at(10).c_str(),0),strtod(vectorParts->at(11).c_str(),0),strtod(vectorParts->at(12).c_str(),0));
 					networkedEntities[targetSocket]->transform.SetLocalRotation(newRotMatrix);
 				}
 			}
@@ -268,51 +250,33 @@ void Player::CheckInput(float dt)
 	bool cubeInputReceived= true;
 	if (grounded)
 	{
-		/*if(IPMan::GetIPMan()->GetKey(KeyType::FORWARD))
-		{
-			velocity.z += forwardAcceleration * dt;
-			cubeInputReceived=true;
-		}
-		if(IPMan::GetIPMan()->GetKey(KeyType::BACKWARD))
-		{
-			velocity.z -= backwardAcceleration * dt;
-			cubeInputReceived=true;
-		}
-		if(IPMan::GetIPMan()->GetKey(KeyType::LEFT))
-		{
-			velocity.x -= strafeAcceleration * dt;
-			cubeInputReceived=true;
-		}
-		if(IPMan::GetIPMan()->GetKey(KeyType::RIGHT))
-		{
-			velocity.x += strafeAcceleration * dt;
-			cubeInputReceived=true;
-		}*/
-
-		// TODO should use IPMan
-		/*if (GetAsyncKeyState(VK_SPACE))
-		{
-			// Reset Rotation
-			transform.SetLocalRotation(XMFLOAT3(0, 0, 0));
-			angularVelocity = (XMFLOAT3(0, 0, 0));
-			//grounded = false;
-		}*/
-	}
-
-
-	if(GetAsyncKeyState('V'))
-	{
-		if(clientEntity->isConnected && !loggedIn){
-			clientEntity->sendMessage(MessageTypes::Client::Login,"");
-			loggedIn=true;
-		}
 	}
 
 	if(clientEntity && clientEntity->isConnected && networkSendTimer<0.0f && cubeInputReceived && loggedIn){
 		XMFLOAT3 curTransform= transform.GetTranslation();
 		networkSendTimer=updateTimer + networkSendTimer;
 		string curNetworkString= getNetworkString();
-		string toAddString= to_string(worldVelocity.x) + "," + to_string(worldVelocity.y)+ "," + to_string(worldVelocity.z) + ",";
+		int thrusterData=0;
+		ManeuverJetpack* mJetpack= (ManeuverJetpack*)jetpack;
+		if(mJetpack->thrusterActives[Thruster::BOTTOM_RIGHT])
+			thrusterData++;
+		if(mJetpack->thrusterActives[Thruster::BACK_RIGHT])
+			thrusterData+=2;
+		if(mJetpack->thrusterActives[Thruster::SIDE_RIGHT])
+			thrusterData+=4;
+		if(mJetpack->thrusterActives[Thruster::FRONT_RIGHT])
+			thrusterData+=8;
+		if(mJetpack->thrusterActives[Thruster::BOTTOM_LEFT])
+			thrusterData+=16;
+		if(mJetpack->thrusterActives[Thruster::BACK_LEFT])
+			thrusterData+=32;
+		if(mJetpack->thrusterActives[Thruster::SIDE_LEFT])
+			thrusterData+=64;
+		if(mJetpack->thrusterActives[Thruster::FRONT_LEFT])
+			thrusterData+=128;
+
+		string toAddString= to_string(thrusterData) + ",";
+		//string toAddString= to_string(worldVelocity.x) + "," + to_string(worldVelocity.y)+ "," + to_string(worldVelocity.z) + ",";
 		curNetworkString = toAddString + curNetworkString;
 		clientEntity->sendMessage(MessageTypes::Client::MovementUpdate,curNetworkString);
 	}
@@ -335,4 +299,39 @@ vector<string>* Player::breakIntoParts(string s){
 		vectorParts->push_back(vectorString);
 	}
 	return vectorParts;
+}
+
+void Player::AddNewUser(int playerIndex){
+
+	NetworkedPlayer* newPlayer = new NetworkedPlayer();
+	newPlayer->AddModel(AssetManager::Instance()->GetModel());
+	newPlayer->Finalize();
+	newPlayer->socketNumber=playerIndex;
+	networkedEntities[newPlayer->socketNumber]=newPlayer;
+	networkedEntityVelocities[newPlayer->socketNumber]= XMFLOAT3(0, 0, 0);
+	networkedEntityLerps[newPlayer->socketNumber]= PositionLerp();
+	AssetManager::Instance()->addedEntities.push(newPlayer);
+	
+	Entity* jetman = new Entity();
+	jetman->AddModel(AssetManager::Instance()->GetModel("jetman"));
+	jetman->Finalize();
+	jetman->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
+	jetman->transform.SetParent(&newPlayer->transform);
+	jetman->transform.SetLocalTranslation(XMFLOAT3(0, 0, 0));
+	jetman->transform.Translate(XMFLOAT3(0, -5, 0));
+	AssetManager::Instance()->addedEntities.push(jetman);
+
+	newPlayer->jetpack->isNetworked=true;
+	
+	if (newPlayer->jetpack->thrusterActives)
+	{
+		for (int i = 0; i < newPlayer->jetpack->thrusterCount; i++)
+		{
+			if (newPlayer->jetpack->thrusters[i])
+			{
+				AssetManager::Instance()->addedEntities.push(newPlayer->jetpack->thrusters[i]);
+			}
+		}
+	}
+
 }

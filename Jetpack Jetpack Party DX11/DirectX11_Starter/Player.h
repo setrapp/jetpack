@@ -9,6 +9,7 @@
 #include "Jetpack.h"
 #include "ManeuverJetpack.h"
 #include "PositionLerp.h"
+#include "NetworkedPlayer.h"
 
 class Player : public Entity
 {
@@ -22,12 +23,14 @@ public:
 public:
 	//ClientConnectionEntity* clientEntity;
 	UDPClientConnectionEntity* clientEntity;
-	Entity* networkedCube;
-	std::map<int,Entity*> networkedEntities;
+	std::map<int,NetworkedPlayer*> networkedEntities;
 	std::map<int,XMFLOAT3> networkedEntityVelocities;
 	std::map<int,PositionLerp> networkedEntityLerps;
 	float networkSendTimer;
+	void AddNewUser(int playerIndex);
+
 	bool loggedIn;
+
 	bool controllable;
 	Jetpack* jetpack;
 	XMFLOAT3 respawnPosition;
@@ -51,4 +54,16 @@ private:
 	float groundSpeedDampening;
 	float airSpeedDampening;
 	bool grounded;
+
+	enum Thruster
+	{
+		BOTTOM_LEFT = 0,
+		BOTTOM_RIGHT,
+		BACK_LEFT,
+		BACK_RIGHT,
+		FRONT_LEFT,
+		FRONT_RIGHT,
+		SIDE_LEFT,
+		SIDE_RIGHT
+	};
 };

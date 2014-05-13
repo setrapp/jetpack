@@ -24,6 +24,7 @@ Jetpack::Jetpack(Entity* player)
 	bool playerAI = false;
 	targetAcceleration = XMFLOAT3(0, 0, 0);
 	actionsPerSecond = -1;
+	isNetworked=false;
 	timeSinceAction = 0;
 }
 

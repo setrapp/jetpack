@@ -21,6 +21,7 @@ protected:
 public:
 	static const int MAX_FUEL = -1;
 	bool allowInputForces;
+	bool isNetworked;
 	float maxSpeed;
 	float forwardAcceleration;
 	float backwardAcceleration;

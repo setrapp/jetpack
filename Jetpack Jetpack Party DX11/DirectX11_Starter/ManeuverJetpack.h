@@ -10,14 +10,13 @@ public:
 	void CheckInput(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
 	void ApproachTarget(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
 	void ApplyForces(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelocity);
+	void updateThrusters(int thrusterData);
 
 public:
 	float backSpin;
 	float frontSpin;
 	float sideSpin;
 	float bottomSpin;
-
-private:
 	enum Thruster
 	{
 		BOTTOM_LEFT = 0,
