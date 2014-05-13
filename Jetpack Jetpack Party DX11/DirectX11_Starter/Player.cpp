@@ -14,7 +14,7 @@ Player::Player()
 	strafeAcceleration = 100.0f;
 	gravityAcceleration = 600.0f;
 	terminalVelocity = 500000;
-	groundSpeedDampening = 0.1f;
+	groundSpeedDampening = 0.01f;
 	airSpeedDampening = 0.3f;
 	grounded = true;
 	jetpack = new ManeuverJetpack(this);
@@ -23,7 +23,7 @@ Player::Player()
 	networkSendTimer=0.0f;
 	loggedIn=false;
 	controllable = false;
-	targetPosition = XMFLOAT3(400, 200, 5000);
+	targetPosition = XMFLOAT3(0, 0, 0);
 	targetCheckpoint = NULL;
 	targetFuelStation = NULL;
 }
@@ -260,6 +260,11 @@ void Player::CheckInput(float dt)
 		}*/
 	}
 
+	//Should use IPMan
+	if (GetAsyncKeyState('R'))
+	{
+		Respawn();
+	}
 
 	if(GetAsyncKeyState('V'))
 	{

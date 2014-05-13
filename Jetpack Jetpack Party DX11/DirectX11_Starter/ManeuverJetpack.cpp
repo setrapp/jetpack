@@ -13,7 +13,7 @@ ManeuverJetpack::ManeuverJetpack(Entity* player) : Jetpack(player)
 	ascentAcceleration = 600.0f;
 	backSpin = 30 * (PI / 180);
 	frontSpin = 30 * (PI / 180);
-	sideSpin = 15 * (PI / 180);
+	sideSpin = 5 * (PI / 180);
 	bottomSpin = 10 * (PI / 180);
 	actionsPerSecond = 1.9f;
 	

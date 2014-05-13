@@ -251,7 +251,7 @@ void DemoGame::CreateGeometryBuffers()
 	m_hud = new HUD(spriteRenderer, FontManager::Instance()->GetFont("MENUFONT"));
 	
 
-	Entity* gift = new Entity();
+	/*Entity* gift = new Entity();
 	gift->AddQuad(vertices, indices);
 	
 	gift->transform.SetTranslation(player->targetPosition);
@@ -260,7 +260,7 @@ void DemoGame::CreateGeometryBuffers()
 	gift->SetBaseMaterial("gift");
 	gift->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 	gift->LoadTexture(L"../Assets/Textures/RedGift.png");
-	gift->Finalize();
+	gift->Finalize();*/
 
 	Model* terrainModel = AssetManager::Instance()->GetModel("terrain");
 	
@@ -274,20 +274,20 @@ void DemoGame::CreateGeometryBuffers()
 		checkpoints.push_back(checkpoint);
 		entities.push_back(checkpoint);
 		//checkpoint->transform.SetParent(&floor->transform);
-		checkpoint->transform.Scale(XMFLOAT3(1000, 1000, 1000));
+		checkpoint->transform.Scale(XMFLOAT3(500, 500, 500));
 		checkpoint->RecenterGeometry();
 		checkpoint->transform.Translate(XMFLOAT3(0, -400, 0)); // TODO make RecenterGeometry do this automatically, does parenting work?
 		checkpoint->SetBaseMaterial("Checkpoint", terrainModel);
 		checkpoint->Finalize();
 	}
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0, 0, 0, 01), XMFLOAT4(0, 0, 1, 1), XMFLOAT4(0, 0, 0, 0), 128), "targetCheckpoint");
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 1, 1), XMFLOAT4(0, 0, 0, 0), 128), "targetCheckpoint");
 
 	// TODO add fuel stations.
 
 	Entity* floor = new Entity();
 	floor->AddModel(terrainModel);
 	floor->transform.Translate(XMFLOAT3(0, -400, 0));
-	floor->transform.Scale(XMFLOAT3(1000, 1000, 1000));
+	floor->transform.Scale(XMFLOAT3(500, 500, 500));
 	entities.push_back(floor);
 	floor->Finalize();
 
@@ -721,6 +721,8 @@ void DemoGame::LocateNearestFuelStations()
 			{
 				if (players[i]->targetCheckpoint->GetCheckpointNum() < checkpoints.size() - 1)
 				{
+					players[i]->respawnPosition = players[i]->targetCheckpoint->transform.GetTranslation();
+					players[i]->respawnLocalRotation = players[i]->transform.GetLocalEulerAngles();
 					players[i]->targetCheckpoint = checkpoints[players[i]->targetCheckpoint->GetCheckpointNum() + 1];
 					players[i]->targetPosition = players[i]->targetCheckpoint->transform.GetTranslation();
 				}
