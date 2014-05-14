@@ -139,9 +139,8 @@ bool DemoGame::Init()
 		rasterizerDesc.CullMode = D3D11_CULL_BACK;
 		rasterizerDesc.FillMode = D3D11_FILL_SOLID;
 	}
-	HRESULT hr = device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
-	if (FAILED(hr))
-		int a = 0;
+	HR (device->CreateRasterizerState(&rasterizerDesc, &rasterizerState));
+	
 	deviceContext->RSSetState(rasterizerState);
 	ReleaseMacro(rasterizerState);
 
@@ -211,7 +210,8 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicJetMan.obj", "jetman");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/Fireball.obj", "fireball");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrack.obj", "terrain");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrackNav.obj", "terrain_nav");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrackNav.obj", "terrain_nav");			
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/skybox.obj", "skybox");
 
 	// Create orthographic and projection plane for deferred rendering.
 	float halfWindowWidth = windowWidth / 2, halfWindowHieght= windowHeight / 2;
@@ -290,6 +290,10 @@ void DemoGame::CreateGeometryBuffers()
 	//entities.push_back(navMesh);
 	navMesh->transform.SetParent(&floor->transform);
 	navMesh->Finalize();
+
+	//All you have to do.
+	Entity* skybox = new Skybox(farPlaneDistance);	
+	entities.push_back(skybox);
 }
 
 #pragma endregion
@@ -385,18 +389,18 @@ void DemoGame::OnFocus(bool givenFocus)
 void DemoGame::OnResize()
 {
 	float nearPlane = 0.1f;
-	float farPlane = 100000.0f;
+	farPlaneDistance = 100010.0f;
 	DXGame::OnResize();
 	XMMATRIX P = XMMatrixPerspectiveFovLH(
 		0.25f * 3.1415926535f,
 		AspectRatio(),
 		nearPlane,
-		farPlane);
+		farPlaneDistance);
 
 	XMStoreFloat4x4(&playerCamera->projection, XMMatrixTranspose(P));
 	XMStoreFloat4x4(&debugCamera->projection, XMMatrixTranspose(P));
 
-	projectionInfo.x = (farPlane - nearPlane);
+	projectionInfo.x = (farPlaneDistance - nearPlane);
 
 	if (mouseLook)
 	{
@@ -424,8 +428,6 @@ void DemoGame::OnResize()
 // Update the scene.
 void DemoGame::UpdateScene(float dt)
 {	
-
-	(IPMan::GetIPMan()->GetAllKeys());
 	if (IPMan::GetIPMan()->GetBack())
 	{
 		currentState = Helper::GoBackOnce(currentState);
@@ -473,7 +475,9 @@ void DemoGame::UpdateScene(float dt)
 			mouseLook->ResetCursor();
 			currentState = newState;
 		}
-	}else if(currentState == GameState::Login){
+	}
+	else
+		if(currentState == GameState::Login){
 		GameState newState = loginScreen->Update(dt);
 		if (currentState != newState)
 		{
@@ -481,7 +485,6 @@ void DemoGame::UpdateScene(float dt)
 			currentState = newState;
 		}
 	}
-
 
 	deviceContext->UpdateSubresource(
 	vsModelConstantBuffer,
@@ -500,7 +503,6 @@ void DemoGame::DrawScene()
 	deferredRenderer->SetTargets();
 	deferredRenderer->ClearTargets(clearColor);
 
-#ifndef OPTIMIZATION
 	deviceContext->IASetInputLayout(inputLayout);
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	
@@ -508,7 +510,6 @@ void DemoGame::DrawScene()
 		0,	
 		1, 
 		&vsModelConstantBuffer);
-#endif
 
 	if (currentState == GameState::Playing) {		
 		if(mouseCursorVisibility)
@@ -602,8 +603,6 @@ void DemoGame::DrawScene()
 void DemoGame::FixedUpdate() 
 {    
 }
-
-
 #pragma endregion
 
 #pragma region Mouse Input
@@ -671,6 +670,7 @@ void DemoGame::CreatePlayers()
 		newPlayer->AddModel(AssetManager::Instance()->GetModel());
 		newPlayer->Finalize();
 		entities.push_back(newPlayer);
+
 		players[i] = newPlayer;
 		newPlayer->transform.Translate(XMFLOAT3(50 * (i % 2), 1000, 50 * (i / 2)));
 		newPlayer->respawnPosition = newPlayer->transform.GetTranslation();
@@ -695,7 +695,6 @@ void DemoGame::CreatePlayers()
 			}
 		}
 	}
-
 	player = players[0];
 	player->controllable = true;
 	AttachCameraToPlayer();

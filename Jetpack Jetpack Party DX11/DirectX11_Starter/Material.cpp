@@ -1,6 +1,7 @@
 #define __PATH "content"
 #include "Material.h"
 #include "Toolkit\Inc\WICTextureLoader.h"
+#include "Toolkit\Inc\DDSTextureLoader.h"
 #include "Common.h"
 #include <string>
 #include <wchar.h>
@@ -46,8 +47,11 @@ Material::~Material(void)
 	ReleaseMacro(samplerState);
 }
 
-void Material::ApplyTexture(wchar_t* path)
+void Material::ApplyTexture(wchar_t* path, bool isDDS)
 {
+	//load the texture
+	if(!isDDS)
+	{
 	ID3D11Resource* tex = texture;
 	HR (CreateWICTextureFromFile(
 		DXConnection::Instance()->device, 
@@ -55,19 +59,31 @@ void Material::ApplyTexture(wchar_t* path)
 		path, 
 		&texture, 
 		&this->resourceView));
+	}
+	else
+	{
+		HR (CreateDDSTextureFromFile(
+		DXConnection::Instance()->device, 
+		path, 
+		&texture, 
+		&this->resourceView));
+	}
 
+	//create the sampler.
 	D3D11_SAMPLER_DESC sBufferDesc;
 	sBufferDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 	sBufferDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	sBufferDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 	sBufferDesc.Filter = D3D11_FILTER_ANISOTROPIC;
-	sBufferDesc.MaxAnisotropy = 16;
+	sBufferDesc.MaxAnisotropy = 64;
 	sBufferDesc.MipLODBias = 0;
 
 	DXConnection::Instance()->device->CreateSamplerState(
 		&sBufferDesc,
 		&this->samplerState);
 }
+
+
 
 ShaderMaterial Material::GetShaderMaterial()
 {

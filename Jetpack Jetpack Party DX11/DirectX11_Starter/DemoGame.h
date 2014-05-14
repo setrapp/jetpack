@@ -118,6 +118,8 @@ private:
 	bool mouseCursorVisibility;
 	bool flag;
 	Player* players[PLAYER_COUNT];
+
+	float farPlaneDistance;
 };
 
 #endif

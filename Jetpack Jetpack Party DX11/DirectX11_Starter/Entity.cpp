@@ -188,9 +188,9 @@ void Entity::Draw(EntityDrawArgs const* drawArgs, XMFLOAT4X4 const* view, XMFLOA
 }
 
 
-void Entity::LoadTexture(wchar_t* path)
+void Entity::LoadTexture(wchar_t* path, bool isDDS)
 {	
-	this->baseMaterial->ApplyTexture(path);
+	this->baseMaterial->ApplyTexture(path, isDDS);
 }
 
 
