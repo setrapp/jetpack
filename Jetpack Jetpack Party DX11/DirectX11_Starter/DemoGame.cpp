@@ -389,7 +389,7 @@ void DemoGame::OnFocus(bool givenFocus)
 void DemoGame::OnResize()
 {
 	float nearPlane = 0.1f;
-	farPlaneDistance = 100010.0f;
+	farPlaneDistance = 10000;//10.0f;
 	DXGame::OnResize();
 	XMMATRIX P = XMMatrixPerspectiveFovLH(
 		0.25f * 3.1415926535f,

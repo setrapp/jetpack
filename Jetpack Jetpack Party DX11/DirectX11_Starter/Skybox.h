@@ -28,7 +28,7 @@ public:
 		rastDesc.CullMode = D3D11_CULL_FRONT;
 		DXConnection::Instance()->device->CreateRasterizerState(&rastDesc, &noCull);
 		AddModel(AssetManager::Instance()->GetModel("skybox"));
-		farPlane /= 1.35;
+		farPlane /= 2;
 		transform.Scale(XMFLOAT3(farPlane, farPlane, farPlane));
 		SetBaseMaterial("gift");
 		GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
