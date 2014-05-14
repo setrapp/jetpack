@@ -76,7 +76,7 @@ void Material::ApplyTexture(wchar_t* path, bool isDDS)
 	sBufferDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 	sBufferDesc.Filter = D3D11_FILTER_ANISOTROPIC;
 	sBufferDesc.MaxAnisotropy = 64;
-	sBufferDesc.MipLODBias = 0;
+	sBufferDesc.MipLODBias = 64;
 
 	DXConnection::Instance()->device->CreateSamplerState(
 		&sBufferDesc,

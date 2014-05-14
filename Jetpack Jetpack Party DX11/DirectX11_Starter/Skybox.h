@@ -25,14 +25,16 @@ public:
 		D3D11_RASTERIZER_DESC rastDesc;
 		ZeroMemory(&rastDesc, sizeof(D3D11_RASTERIZER_DESC));
 		rastDesc.FillMode = D3D11_FILL_SOLID;
-		rastDesc.CullMode = D3D11_CULL_NONE;
+		rastDesc.CullMode = D3D11_CULL_FRONT;
 		DXConnection::Instance()->device->CreateRasterizerState(&rastDesc, &noCull);
 		AddModel(AssetManager::Instance()->GetModel("skybox"));
-		farPlane /= 1.2;
+		farPlane /= 1.35;
 		transform.Scale(XMFLOAT3(farPlane, farPlane, farPlane));
-		transform.Translate(XMFLOAT3(0, 0, 20));
-		Finalize();
-		LoadTexture(L"../Assets/Textures/skybox.dds", true);
+		SetBaseMaterial("gift");
+		GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
+		//transform.Translate(XMFLOAT3(0, 0, 20));		
+		__super::LoadTexture(L"../Assets/Textures/skybox.png");
+		Finalize();	
 	}
 
 	~Skybox()
