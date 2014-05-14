@@ -260,6 +260,12 @@ void Player::CheckInput(float dt)
 		}*/
 	}
 
+	// Should be in IPMan
+	if(GetAsyncKeyState('R'))
+	{
+		Respawn();
+	}
+
 
 	if(GetAsyncKeyState('V'))
 	{
