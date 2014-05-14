@@ -36,7 +36,7 @@ BulletManager::BulletManager()
 //Get instance
 BulletManager* BulletManager::Instance()
 {
-	return this;
+	return instance;
 }
 
 
@@ -93,4 +93,9 @@ BulletManager::~BulletManager()
 	delete trackConstructionInfo;
 	delete playerCollisionShape;
 	delete trackCollisionShape;
+}
+
+btCollisionShape* BulletManager::CreateAndAssignCollisionShape(Model* model)
+{
+
 }

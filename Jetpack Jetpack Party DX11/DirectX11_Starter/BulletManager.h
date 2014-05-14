@@ -3,6 +3,7 @@
 
 #include "Bullet\src\btBulletDynamicsCommon.h"
 #include "Entity.h"
+#include "Mesh.h"
 
 class BulletManager
 {
@@ -10,47 +11,38 @@ private:
 
 	static BulletManager* instance;
 
-	//Needed to initialize 
+	//For dynamics world
 	///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
 	btDefaultCollisionConfiguration* collisionConfiguration;
-	
 	///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
 	btCollisionDispatcher* dispatcher;
-	
 	///btDbvtBroadphase is a good general purpose broadphase. You can also try out btAxis3Sweep.
 	btBroadphaseInterface* overlappingPairCache;
-	
 	///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
 	btSequentialImpulseConstraintSolver* solver;
 
 public:
 	
 	btDynamicsWorld* dynamicsWorld;
-
 	//Player Construction Info
 	btRigidBody::btRigidBodyConstructionInfo* playerConstructionInfo;
-
 	//Track Construction Info
 	btRigidBody::btRigidBodyConstructionInfo* trackConstructionInfo;
-
 	//Player Collision Shape
 	btCollisionShape* playerCollisionShape;
-
 	//Track Collision Shape
 	btBvhTriangleMeshShape* trackCollisionShape;
 
 BulletManager();
+~BulletManager();
 
-BulletManager* Instance();
+static BulletManager* Instance();
 
 //End Bullet
 void ExitPhysics();
 
 //Callback
 void Update(float dt);
-
-//
-~BulletManager();
 
 //Construct Player's Rigid Body. 
 //Implement box collider
@@ -69,9 +61,7 @@ btRigidBody::btRigidBodyConstructionInfo* GetTrackConstructionInfo();
 //Covert XMVector3 to btVector3
 void MoveRigidBodyWithEntity(XMFLOAT3& playerTranslation, btRigidBody* entityBody);
 
-
 //Create rigid body from entity and model.
-
-//
+btCollisionShape* CreateAndAssignCollisionShape(Model* model);
 };
 #endif // !_BULLETINIT_H_
