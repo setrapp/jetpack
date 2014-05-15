@@ -414,9 +414,27 @@ void Entity::SetVisible(bool visibility)
 	}
 }
 
+int Entity::GetVertexCount()
+{
+	return vertices.size();
+}
+
+Vertex* Entity::GetVertex(int index)
+{
+	if (index > vertices.size())
+	{
+		return NULL;
+	}
+	return &vertices[index];
+}
+
 Model* Entity::GetModel(int index)
 {
-	return models[0];
+	if (index > models.size())
+	{
+		return NULL;
+	}
+	return models[index];
 }
 
 string Entity::getNetworkString(){

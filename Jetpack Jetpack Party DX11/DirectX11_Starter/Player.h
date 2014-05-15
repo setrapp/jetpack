@@ -35,16 +35,12 @@ public:
 
 private:
 	void CheckInput(float dt);
-	void ComputeJetpackTargets(XMFLOAT3 currentVelocity, XMFLOAT3 currentAngularVelocity);
+	XMFLOAT3 ComputeDesiredVelocity(XMFLOAT3 currentVelocity, XMFLOAT3 currentAngularVelocity);
 
 private:
 	float minPosture;
 	XMFLOAT3 angularVelocity;
 	XMFLOAT3 worldVelocity;
-	float maxSpeed;
-	float forwardAcceleration;
-	float backwardAcceleration;
-	float strafeAcceleration;
 	float gravityAcceleration;
 	float terminalVelocity;
 	float groundSpeedDampening;

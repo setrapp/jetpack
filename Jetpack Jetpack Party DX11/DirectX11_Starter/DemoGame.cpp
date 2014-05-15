@@ -298,6 +298,7 @@ void DemoGame::CreateGeometryBuffers()
 	//entities.push_back(navMesh);
 	navMesh->transform.SetParent(&floor->transform);
 	navMesh->Finalize();
+	//TODO split up navmesh bits and order them based on number from file.
 }
 
 #pragma endregion
@@ -681,6 +682,8 @@ void DemoGame::CreatePlayers()
 				}
 			}
 		}
+
+		// TODO actually determine which navmesh segment the players are in.
 	}
 
 	player = players[0];
@@ -717,7 +720,7 @@ void DemoGame::LocateNearestFuelStations()
 		{
 			float distSqr;
 			XMStoreFloat(&distSqr, XMVector3LengthSq(XMVectorSubtract(XMLoadFloat3(&players[i]->targetCheckpoint->transform.GetTranslation()), XMLoadFloat3(&players[i]->transform.GetTranslation()))));
-			if (distSqr < 100 * 100)
+			if (distSqr < 500 * 500)
 			{
 				if (players[i]->targetCheckpoint->GetCheckpointNum() < checkpoints.size() - 1)
 				{

@@ -41,6 +41,8 @@ public:
 	void Finalize();
 	bool GetVisible();
 	void SetVisible(bool visibility);
+	int GetVertexCount(); 
+	Vertex* GetVertex(int index); 
 	Model* GetModel(int index); 
 
 protected:

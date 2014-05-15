@@ -8,10 +8,6 @@ Player::Player()
 	respawnLocalRotation = XMFLOAT3(0, 0, 0);
 	worldVelocity = XMFLOAT3(0, 0, 0);
 	angularVelocity = XMFLOAT3(0, 0, 0);
-	maxSpeed = 100;
-	forwardAcceleration = 100.0f;
-	backwardAcceleration = 100.0f;
-	strafeAcceleration = 100.0f;
 	gravityAcceleration = 600.0f;
 	terminalVelocity = 1000;
 	groundSpeedDampening = 0.01f;
@@ -49,7 +45,16 @@ void Player::Update(float dt)
 	// Figure out the optimal acceleration to the target position.
 	if (jetpack->playerAI)
 	{
-		ComputeJetpackTargets(velocity, angularVelocity);
+		XMFLOAT3 desiredVelocity = ComputeDesiredVelocity(velocity, angularVelocity);
+		//XMStoreFloat3(&jetpack->targetAcceleration, XMVectorSubtract(desiredVelocity, XMLoadFloat3(&velocity)));
+
+		// Push AI controlled players along vector to next target.
+		//TODO Take this out when jetpack thruster work
+		velocity = desiredVelocity;
+		XMFLOAT3 lookAtTarget;
+		transform.LookAt(transform.GetTranslation(), targetPosition, XMFLOAT3(0, 1, 0));
+		XMStoreFloat3(&worldVelocity, XMVectorScale(XMLoadFloat3(&transform.GetForward()), jetpack->maxSpeed));
+		velocity = transform.InverseTransformDirection(worldVelocity);
 	}
 
 	// Check for user input.
@@ -61,8 +66,8 @@ void Player::Update(float dt)
 	jetpack->allowInputForces = !grounded; //TODO This might not be useful anymore
 	jetpack->Update(dt, &velocity, &angularVelocity);
 
-	// Clamp velocity withing max speed.
-	transform.ClampVector(&velocity, (grounded ? maxSpeed : jetpack->maxSpeed), 0);
+	// Clamp velocity within max speed.
+	transform.ClampVector(&velocity, jetpack->maxSpeed, 0);
 
 	// Update world velocity and apply world space accelerations.
 	worldVelocity = transform.TransformDirection(velocity);
@@ -303,7 +308,7 @@ void Player::Respawn()
 	jetpack->Refuel(Jetpack::MAX_FUEL);
 }
 
-void Player::ComputeJetpackTargets(XMFLOAT3 currentVelocity, XMFLOAT3 currentAngularVelocity)
+XMFLOAT3 Player::ComputeDesiredVelocity(XMFLOAT3 currentVelocity, XMFLOAT3 currentAngularVelocity)
 {
 	// Moving toward target.
 	float towardTargetWeight = 1;
@@ -321,11 +326,11 @@ void Player::ComputeJetpackTargets(XMFLOAT3 currentVelocity, XMFLOAT3 currentAng
 		keepHeightWeight = (1 - (altitude / desiredMinAltitude)) * keepHeightMaxWeight;
 	}
 
-	XMVECTOR desiredDirection = XMLoadFloat3(&currentVelocity);
+	XMVECTOR desiredDirection = XMLoadFloat3(&XMFLOAT3(0, 0, 0));//&currentVelocity);
 	desiredDirection = XMVectorAdd(desiredDirection, XMVectorScale(XMLoadFloat3(&towardTarget), towardTargetWeight));
 	desiredDirection = XMVectorAdd(desiredDirection, XMVectorScale(XMLoadFloat3(&keepHeight), keepHeightWeight));
 	//desiredDirection = XMVector3Normalize(desiredDirection);
-	XMStoreFloat3(&jetpack->targetAcceleration, XMVectorSubtract(desiredDirection, XMLoadFloat3(&currentVelocity)));
+	XMStoreFloat3(&currentVelocity, XMVectorScale(XMVector3Normalize(desiredDirection), jetpack->maxSpeed));
 
 	// Figure out if the character needs to try turning up-right.
 	/*jetpack->targetAngularAcceleration = XMFLOAT3(0, 0, 0);
@@ -362,6 +367,8 @@ void Player::ComputeJetpackTargets(XMFLOAT3 currentVelocity, XMFLOAT3 currentAng
 			jetpack->targetAngularAcceleration.z = -1;
 		}
 	}*/
+
+	return currentVelocity;
 }
 
 vector<string>* Player::breakIntoParts(string s){
