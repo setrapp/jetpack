@@ -24,6 +24,7 @@ Player::Player()
 	loggedIn=false;
 	controllable = false;
 	targetPosition = XMFLOAT3(0, 0, 0);
+	targetUp = XMFLOAT3(0, 1, 0);
 	targetCheckpoint = NULL;
 	targetFuelStation = NULL;
 }
@@ -47,6 +48,24 @@ void Player::Update(float dt)
 	// TODO should only be done if AI controlled.
 	XMVECTOR desiredDirection = XMVectorSubtract(XMLoadFloat3(&targetPosition), XMLoadFloat3(&transform.GetTranslation()));
 	XMStoreFloat3(&jetpack->targetAcceleration, XMVectorSubtract(desiredDirection, XMLoadFloat3(&velocity)));
+
+	// Figure out if the character needs to try turning up-right.
+	jetpack->targetAngularAcceleration = XMFLOAT3(0, 0, 0);
+	float desiredDotUp;
+	XMStoreFloat(&desiredDotUp, XMVector3Dot(XMLoadFloat3(&targetUp), XMLoadFloat3(&transform.GetUp())));
+	if (desiredDotUp < minPosture)
+	{
+		float desiredDotRight;
+		XMStoreFloat(&desiredDotRight, XMVector3Dot(XMLoadFloat3(&targetUp), XMLoadFloat3(&transform.GetRight())));
+		if (desiredDotRight < 0)
+		{
+			jetpack->targetAngularAcceleration.z = 1;
+		}
+		else
+		{
+			jetpack->targetAngularAcceleration.z = -1;
+		}
+	}
 
 	// Check for user input.
 	if (controllable)
@@ -260,10 +279,10 @@ void Player::CheckInput(float dt)
 		}*/
 	}
 
-	//temp
-	if (GetAsyncKeyState('E'))
+	// Should be in IPMan
+	if(GetAsyncKeyState('R'))
 	{
-		transform.SetLocalRotation(XMFLOAT3(0, PI, 0));
+		Respawn();
 	}
 
 	//Should use IPMan

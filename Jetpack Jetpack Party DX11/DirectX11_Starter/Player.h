@@ -29,6 +29,7 @@ public:
 	XMFLOAT3 respawnPosition;
 	XMFLOAT3 respawnLocalRotation;
 	XMFLOAT3 targetPosition; 
+	XMFLOAT3 targetUp;
 	FuelStation* targetCheckpoint;
 	FuelStation* targetFuelStation;
 
