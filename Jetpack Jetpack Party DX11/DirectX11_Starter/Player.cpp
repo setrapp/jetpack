@@ -44,27 +44,9 @@ void Player::Update(float dt)
 
 	XMFLOAT3 velocity = transform.InverseTransformDirection(worldVelocity);
 
-	// Figure out the optimal acceleration to the target position.
-	// TODO should only be done if AI controlled.
-	XMVECTOR desiredDirection = XMVectorSubtract(XMLoadFloat3(&targetPosition), XMLoadFloat3(&transform.GetTranslation()));
-	XMStoreFloat3(&jetpack->targetAcceleration, XMVectorSubtract(desiredDirection, XMLoadFloat3(&velocity)));
-
-	// Figure out if the character needs to try turning up-right.
-	jetpack->targetAngularAcceleration = XMFLOAT3(0, 0, 0);
-	float desiredDotUp;
-	XMStoreFloat(&desiredDotUp, XMVector3Dot(XMLoadFloat3(&targetUp), XMLoadFloat3(&transform.GetUp())));
-	if (desiredDotUp < minPosture)
+	if (jetpack->playerAI)
 	{
-		float desiredDotRight;
-		XMStoreFloat(&desiredDotRight, XMVector3Dot(XMLoadFloat3(&targetUp), XMLoadFloat3(&transform.GetRight())));
-		if (desiredDotRight < 0)
-		{
-			jetpack->targetAngularAcceleration.z = 1;
-		}
-		else
-		{
-			jetpack->targetAngularAcceleration.z = -1;
-		}
+		ComputeJetpackTargets(velocity, angularVelocity);
 	}
 
 	// Check for user input.
@@ -313,6 +295,59 @@ void Player::Respawn()
 	worldVelocity = XMFLOAT3(0, 0, 0);
 	angularVelocity = XMFLOAT3(0, 0, 0);
 	jetpack->Refuel(Jetpack::MAX_FUEL);
+}
+
+void Player::ComputeJetpackTargets(XMFLOAT3 currentVelocity, XMFLOAT3 currentAngularVelocity)
+{
+	// Figure out the optimal acceleration to the target position.
+	// TODO should only be done if AI controlled.
+	XMFLOAT3 desiredDirection;
+	XMStoreFloat3(&desiredDirection, XMVectorSubtract(XMLoadFloat3(&targetPosition), XMLoadFloat3(&transform.GetTranslation())));
+	// Keep the jetpack above the ground.
+	// TODO raycast to ground
+	if (transform.GetTranslation().y < 10)
+	{
+		desiredDirection.y += 1000000;
+	}
+	XMStoreFloat3(&jetpack->targetAcceleration, XMVectorSubtract(XMLoadFloat3(&desiredDirection), XMLoadFloat3(&currentVelocity)));
+
+	
+
+	// Figure out if the character needs to try turning up-right.
+	/*jetpack->targetAngularAcceleration = XMFLOAT3(0, 0, 0);
+	float desiredForwardDotUp;
+	XMStoreFloat(&desiredForwardDotUp, XMVector3Dot(XMLoadFloat3(&targetUp), XMLoadFloat3(&transform.GetUp())));
+	if (desiredForwardDotUp < minPosture)
+	{
+		float desiredForwardDotRight;
+		XMStoreFloat(&desiredForwardDotRight, XMVector3Dot(XMLoadFloat3(&targetUp), XMLoadFloat3(&transform.GetRight())));
+		if (desiredForwardDotRight < 0)
+		{
+			jetpack->targetAngularAcceleration.z = 1;
+		}
+		else
+		{
+			jetpack->targetAngularAcceleration.z = -1;
+		}
+	}*/
+
+	// Figure out if the character needs to try turning up-right.
+	/*jetpack->targetAngularAcceleration = XMFLOAT3(0, 0, 0);
+	float desiredUpDotUp;
+	XMStoreFloat(&desiredUpDotUp, XMVector3Dot(XMLoadFloat3(&targetUp), XMLoadFloat3(&transform.GetUp())));
+	if (desiredUpDotUp < minPosture)
+	{
+		float desiredUpDotRight;
+		XMStoreFloat(&desiredUpDotRight, XMVector3Dot(XMLoadFloat3(&targetUp), XMLoadFloat3(&transform.GetRight())));
+		if (desiredUpDotRight < 0)
+		{
+			jetpack->targetAngularAcceleration.z = 1;
+		}
+		else
+		{
+			jetpack->targetAngularAcceleration.z = -1;
+		}
+	}*/
 }
 
 vector<string>* Player::breakIntoParts(string s){

@@ -35,6 +35,7 @@ public:
 
 private:
 	void CheckInput(float dt);
+	void ComputeJetpackTargets(XMFLOAT3 currentVelocity, XMFLOAT3 currentAngularVelocity);
 
 private:
 	float minPosture;

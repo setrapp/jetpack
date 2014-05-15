@@ -23,6 +23,7 @@ Jetpack::Jetpack(Entity* player)
 	bool playerControllable = false;
 	bool playerAI = false;
 	targetAcceleration = XMFLOAT3(0, 0, 0);
+	targetAngularAcceleration = XMFLOAT3(0, 0, 0);
 	actionsPerSecond = -1;
 	timeSinceAction = 0;
 }

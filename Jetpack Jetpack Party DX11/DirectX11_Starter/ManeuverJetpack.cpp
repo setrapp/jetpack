@@ -60,7 +60,8 @@ void ManeuverJetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelo
 	XMStoreFloat3(&thrusterDirections[Thruster::FRONT_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(-forward, 2), right)));
 	thrusterDirections[Thruster::FRONT_RIGHT] = thrusterDirections[Thruster::FRONT_LEFT];
 	thrusterDirections[Thruster::FRONT_RIGHT].x *= -1;
-	XMStoreFloat3(&thrusterDirections[Thruster::SIDE_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(right, 5), -up)));
+	//XMStoreFloat3(&thrusterDirections[Thruster::SIDE_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(right, 5), -up)));
+	thrusterDirections[Thruster::SIDE_LEFT] = XMFLOAT3(0, 0, 0);
 	thrusterDirections[Thruster::SIDE_RIGHT] = thrusterDirections[Thruster::SIDE_LEFT];
 	thrusterDirections[Thruster::SIDE_RIGHT].x *= -1;
 

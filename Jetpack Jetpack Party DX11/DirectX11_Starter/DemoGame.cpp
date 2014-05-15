@@ -268,7 +268,7 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->GetMeshGroupsWithMaterial(&checkpointMeshGroups, terrainModel, "Checkpoint");
 	for (int i = 0; i < checkpointMeshGroups.size(); i++)
 	{
-		FuelStation* checkpoint = new FuelStation(10, true);
+		FuelStation* checkpoint = new FuelStation(10, i);
 		checkpoint->AddMeshGroup(terrainModel, checkpointMeshGroups[i], true);
 		fuelStations.push_back(checkpoint);
 		checkpoints.push_back(checkpoint);
@@ -740,13 +740,13 @@ void DemoGame::LocateNearestFuelStations()
 	{
 		if (player->targetCheckpoint)
 		{
-			player->targetCheckpoint->SetBaseMaterial("targetCheckpoint");
+			//player->targetCheckpoint->SetBaseMaterial("targetCheckpoint", NULL, true);
 			player->targetCheckpoint->Finalize();
 			player->targetCheckpoint->spin = true;
 		}
 		if (oldPlayerTarget)
 		{
-			oldPlayerTarget->SetBaseMaterial("Checkpoint", AssetManager::Instance()->GetModel("terrain"));
+			//oldPlayerTarget->SetBaseMaterial("Checkpoint", AssetManager::Instance()->GetModel("terrain"), true);
 			oldPlayerTarget->Finalize();
 			oldPlayerTarget->spin = false;
 		}
