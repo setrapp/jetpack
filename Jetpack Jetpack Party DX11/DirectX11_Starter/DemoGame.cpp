@@ -302,13 +302,13 @@ void DemoGame::CreateGeometryBuffers()
 	Model* navMeshModel = AssetManager::Instance()->GetModel("terrain_nav");
 	vector<MeshGroup*> navMeshGroups;
 	AssetManager::Instance()->GetMeshGroupsWithMaterial(&navMeshGroups, navMeshModel, "Nav_Space");
-	//TODO figure out a good proximity. Does not seem to be making correct connections.
+	//TODO figure out a good proximity. Does not seem to be making correct connections. Is this even splitting correctly?
 	for (int i = 0; i < navMeshGroups.size(); i++)
 	{
 		NavMeshSegment* navMeshSegment = new NavMeshSegment(i);
 		navMeshSegment->AddMeshGroup(terrainModel, navMeshGroups[i], true);
 		navMeshSegments.push_back(navMeshSegment);
-		//entities.push_back(navMeshSegment);
+		entities.push_back(navMeshSegment);
 		//navMeshSegment->SetBaseMaterial("Nav_Space", navMeshModel);
 		navMeshSegment->Finalize();
 	}

@@ -48,8 +48,7 @@ void NavMeshSegment::FindConnections(vector<NavMeshSegment*>* possibleConnection
 					XMStoreFloat(&vertexDistanceSqr, XMVector3LengthSq(XMVectorSubtract(XMLoadFloat3(&vertices[j].Position), XMLoadFloat3(&(*it)->GetVertex(k)->Position))));
 					if (vertexDistanceSqr <= connectionProximitySqr)
 					{
-						XMFLOAT3 connectedPos;
-						XMStoreFloat3(&connectedPos, XMVectorScale(XMVectorAdd(XMLoadFloat3(&vertices[j].Position), XMLoadFloat3(&(*it)->GetVertex(k)->Position)), 0.5f));
+						XMFLOAT3 connectedPos = vertices[j].Position;
 						connectedPositions.push_back(connectedPos);
 						if (connectedPositions.size() >= 3)
 						{
@@ -60,8 +59,14 @@ void NavMeshSegment::FindConnections(vector<NavMeshSegment*>* possibleConnection
 								newConnection->secondSegment = *it;
 								this->connections.push_back(newConnection);
 								(*it)->connections.push_back(newConnection);
+								newConnection->connections.push_back(connectedPositions[0]);
+								newConnection->connections.push_back(connectedPositions[1]);
+								newConnection->connections.push_back(connectedPositions[2]);
 							}
-							newConnection->connections.push_back(connectedPos);
+							else
+							{
+								newConnection->connections.push_back(connectedPos);
+							}
 						}
 					}
 				}
