@@ -8,12 +8,12 @@ Player::Player()
 	respawnLocalRotation = XMFLOAT3(0, 0, 0);
 	worldVelocity = XMFLOAT3(0, 0, 0);
 	angularVelocity = XMFLOAT3(0, 0, 0);
-	maxSpeed = 200;
+	maxSpeed = 100;
 	forwardAcceleration = 100.0f;
 	backwardAcceleration = 100.0f;
 	strafeAcceleration = 100.0f;
 	gravityAcceleration = 600.0f;
-	terminalVelocity = 500000;
+	terminalVelocity = 1000;
 	groundSpeedDampening = 0.01f;
 	airSpeedDampening = 0.3f;
 	grounded = true;
@@ -27,6 +27,8 @@ Player::Player()
 	targetUp = XMFLOAT3(0, 1, 0);
 	targetCheckpoint = NULL;
 	targetFuelStation = NULL;
+	desiredMinAltitude = 500;
+	keepHeightMaxWeight = 10;
 }
 
 Player::~Player()
@@ -44,6 +46,7 @@ void Player::Update(float dt)
 
 	XMFLOAT3 velocity = transform.InverseTransformDirection(worldVelocity);
 
+	// Figure out the optimal acceleration to the target position.
 	if (jetpack->playerAI)
 	{
 		ComputeJetpackTargets(velocity, angularVelocity);
@@ -65,7 +68,7 @@ void Player::Update(float dt)
 	worldVelocity = transform.TransformDirection(velocity);
 
 	// TODO gravity should be handled by rigid body.
-	XMFLOAT3 position = transform.GetTranslation();
+	XMFLOAT3 position = transform.GetLocalTranslation();
 	if (position.y > 0)
 	{
 		grounded = false;
@@ -78,6 +81,9 @@ void Player::Update(float dt)
 	} 
 	else if (worldVelocity.y <= 0 && (position.y < 0 || !grounded))
 	{
+		position.y = 0;
+		transform.SetLocalTranslation(position);
+
 		// When landing, either respawn or stand straight up, depending on standing direction.
 		XMFLOAT3 upDot;
 		XMStoreFloat3(&upDot, XMVector3Dot(XMLoadFloat3(&transform.GetUp()), XMLoadFloat3(&XMFLOAT3(0, 1, 0))));
@@ -299,19 +305,27 @@ void Player::Respawn()
 
 void Player::ComputeJetpackTargets(XMFLOAT3 currentVelocity, XMFLOAT3 currentAngularVelocity)
 {
-	// Figure out the optimal acceleration to the target position.
-	// TODO should only be done if AI controlled.
-	XMFLOAT3 desiredDirection;
-	XMStoreFloat3(&desiredDirection, XMVectorSubtract(XMLoadFloat3(&targetPosition), XMLoadFloat3(&transform.GetTranslation())));
-	// Keep the jetpack above the ground.
-	// TODO raycast to ground
-	if (transform.GetTranslation().y < 10)
-	{
-		desiredDirection.y += 1000000;
-	}
-	XMStoreFloat3(&jetpack->targetAcceleration, XMVectorSubtract(XMLoadFloat3(&desiredDirection), XMLoadFloat3(&currentVelocity)));
+	// Moving toward target.
+	float towardTargetWeight = 1;
+	XMFLOAT3 towardTarget;
+	XMStoreFloat3(&towardTarget, XMVector3Normalize(XMVectorSubtract(XMLoadFloat3(&targetPosition), XMLoadFloat3(&transform.GetTranslation()))));
 
-	
+	// Staying up in the air.
+	float keepHeightWeight = 0;
+	XMFLOAT3 keepHeight;
+	XMStoreFloat3(&keepHeight, XMVector3Normalize(XMLoadFloat3(&transform.InverseTransformDirection(XMFLOAT3(0, 1, 0)))));
+	float altitude = transform.GetLocalTranslation().y; // TODO raycast to ground, don't avoid fuel stations
+	float minAltitude = targetPosition.y >= desiredMinAltitude ? desiredMinAltitude : targetPosition.y;
+	if (altitude < minAltitude)
+	{
+		keepHeightWeight = (1 - (altitude / desiredMinAltitude)) * keepHeightMaxWeight;
+	}
+
+	XMVECTOR desiredDirection = XMLoadFloat3(&currentVelocity);
+	desiredDirection = XMVectorAdd(desiredDirection, XMVectorScale(XMLoadFloat3(&towardTarget), towardTargetWeight));
+	desiredDirection = XMVectorAdd(desiredDirection, XMVectorScale(XMLoadFloat3(&keepHeight), keepHeightWeight));
+	//desiredDirection = XMVector3Normalize(desiredDirection);
+	XMStoreFloat3(&jetpack->targetAcceleration, XMVectorSubtract(desiredDirection, XMLoadFloat3(&currentVelocity)));
 
 	// Figure out if the character needs to try turning up-right.
 	/*jetpack->targetAngularAcceleration = XMFLOAT3(0, 0, 0);

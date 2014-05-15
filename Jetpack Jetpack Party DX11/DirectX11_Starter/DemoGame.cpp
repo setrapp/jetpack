@@ -717,7 +717,7 @@ void DemoGame::LocateNearestFuelStations()
 		{
 			float distSqr;
 			XMStoreFloat(&distSqr, XMVector3LengthSq(XMVectorSubtract(XMLoadFloat3(&players[i]->targetCheckpoint->transform.GetTranslation()), XMLoadFloat3(&players[i]->transform.GetTranslation()))));
-			if (distSqr < 1000 * 1000)
+			if (distSqr < 100 * 100)
 			{
 				if (players[i]->targetCheckpoint->GetCheckpointNum() < checkpoints.size() - 1)
 				{
@@ -741,14 +741,15 @@ void DemoGame::LocateNearestFuelStations()
 		if (player->targetCheckpoint)
 		{
 			//player->targetCheckpoint->SetBaseMaterial("targetCheckpoint", NULL, true);
-			player->targetCheckpoint->Finalize();
+			//player->targetCheckpoint->Finalize();
 			player->targetCheckpoint->spin = true;
 		}
 		if (oldPlayerTarget)
 		{
 			//oldPlayerTarget->SetBaseMaterial("Checkpoint", AssetManager::Instance()->GetModel("terrain"), true);
-			oldPlayerTarget->Finalize();
+			//oldPlayerTarget->Finalize();
 			oldPlayerTarget->spin = false;
+			oldPlayerTarget->transform.SetLocalRotation(XMFLOAT3(0, 0, 0));
 		}
 	}
 }

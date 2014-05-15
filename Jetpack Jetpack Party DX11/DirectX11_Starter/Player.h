@@ -50,4 +50,6 @@ private:
 	float groundSpeedDampening;
 	float airSpeedDampening;
 	bool grounded;
+	float desiredMinAltitude;
+	float keepHeightMaxWeight;
 };
