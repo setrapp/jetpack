@@ -291,14 +291,37 @@ void DemoGame::CreateGeometryBuffers()
 	entities.push_back(floor);
 	floor->Finalize();
 
-	Entity* navMesh = new Entity();
+	/*Entity* navMesh = new Entity();
 	navMesh->AddModel(AssetManager::Instance()->GetModel("terrain_nav"));
 	navMesh->transform.SetTranslation(floor->transform.GetTranslation());
 	navMesh->transform.SetLocalScale(floor->transform.GetScale());
 	//entities.push_back(navMesh);
 	navMesh->transform.SetParent(&floor->transform);
-	navMesh->Finalize();
+	navMesh->Finalize();*/
 	//TODO split up navmesh bits and order them based on number from file.
+	Model* navMeshModel = AssetManager::Instance()->GetModel("terrain_nav");
+	vector<MeshGroup*> navMeshGroups;
+	AssetManager::Instance()->GetMeshGroupsWithMaterial(&navMeshGroups, navMeshModel, "Nav_Space");
+	//TODO figure out a good proximity. Does not seem to be making correct connections.
+	for (int i = 0; i < navMeshGroups.size(); i++)
+	{
+		NavMeshSegment* navMeshSegment = new NavMeshSegment(i);
+		navMeshSegment->AddMeshGroup(terrainModel, navMeshGroups[i], true);
+		navMeshSegments.push_back(navMeshSegment);
+		//entities.push_back(navMeshSegment);
+		//navMeshSegment->SetBaseMaterial("Nav_Space", navMeshModel);
+		navMeshSegment->Finalize();
+	}
+	for (int i = 0; i < navMeshSegments.size(); i++)
+	{
+		navMeshSegments[i]->FindConnections(&navMeshSegments);
+	}
+	for (int i = 0; i < navMeshSegments.size(); i++)
+	{
+		navMeshSegments[i]->transform.Scale(XMFLOAT3(500, 500, 500));
+		navMeshSegments[i]->RecenterGeometry();
+		navMeshSegments[i]->transform.Translate(XMFLOAT3(0, -400, 0));
+	}
 }
 
 #pragma endregion

@@ -1,17 +1,26 @@
 #pragma once
 #include "Entity.h"
 
+struct NavMeshConnection;
+
 class NavMeshSegment : public Entity
 {
 public:
-	NavMeshSegment(int segmentNum = -1);
+	NavMeshSegment(int segmentId);
+	~NavMeshSegment();
 	
 	void FindConnections(vector<NavMeshSegment*>* possibleConnections);
-	int GetCheckpointNum();
-	vector<NavMeshSegment*> const* GetConnections();
+	vector<NavMeshConnection*> const* GetConnections();
 
 private:
+	int segmentId;
 	float connectionProximity;
-	int segmentNum;
-	vector<NavMeshSegment*> connections;
+	vector<NavMeshConnection*> connections;
+};
+
+struct NavMeshConnection
+{
+	NavMeshSegment* firstSegment;
+	NavMeshSegment* secondSegment;
+	vector<XMFLOAT3> connections;
 };
