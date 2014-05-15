@@ -30,10 +30,11 @@ public:
 		AddModel(AssetManager::Instance()->GetModel("skybox"));
 		farPlane /= 2;
 		transform.Scale(XMFLOAT3(farPlane, farPlane, farPlane));
-		SetBaseMaterial("gift");
+		SetBaseMaterial("skybox");
 		GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 		//transform.Translate(XMFLOAT3(0, 0, 20));		
 		__super::LoadTexture(L"../Assets/Textures/skybox.png");
+		transform.SetLocalRotation(XMFLOAT3(PI / 2, 0, 0));
 		Finalize();	
 	}
 

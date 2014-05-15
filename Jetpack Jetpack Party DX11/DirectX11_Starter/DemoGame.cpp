@@ -292,6 +292,7 @@ void DemoGame::CreateGeometryBuffers()
 	navMesh->Finalize();
 
 	//All you have to do.
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "skybox");
 	Entity* skybox = new Skybox(farPlaneDistance);	
 	entities.push_back(skybox);
 }
