@@ -173,7 +173,7 @@ void Entity::RecenterGeometry()
 	}
 	XMFLOAT3 translation;
 	XMStoreFloat3(&translation, XMVectorMultiply(XMLoadFloat3(&centroid), XMLoadFloat3(&transform.GetScale())));
-	transform.Translate(translation);
+	transform.SetTranslation(translation);
 }
 
 void Entity::Update(float dt)

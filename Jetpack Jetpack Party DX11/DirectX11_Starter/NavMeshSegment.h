@@ -10,6 +10,8 @@ public:
 	~NavMeshSegment();
 	
 	void FindConnections(vector<NavMeshSegment*>* possibleConnections);
+	bool EntityInside(Entity* entity);
+
 	vector<NavMeshConnection*> const* GetConnections();
 
 private:

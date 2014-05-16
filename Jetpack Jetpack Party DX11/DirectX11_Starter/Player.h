@@ -8,6 +8,7 @@
 #include "Jetpack.h"
 #include "FuelStation.h"
 #include "ManeuverJetpack.h"
+#include "NavMeshSegment.h"
 
 class Player : public Entity
 {
@@ -32,6 +33,7 @@ public:
 	XMFLOAT3 targetUp;
 	FuelStation* targetCheckpoint;
 	FuelStation* targetFuelStation;
+	NavMeshSegment* navMeshSegment;
 
 private:
 	void CheckInput(float dt);

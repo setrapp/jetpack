@@ -96,6 +96,11 @@ DemoGame::~DemoGame()
 		delete entities.at(i);
 	}
 
+	for(int i = 0 ; i < navMeshSegments.size(); i++)
+	{
+		delete navMeshSegments.at(i);
+	}
+
 	delete IPMan::GetIPMan();
 	delete assetManager;
 	delete FontManager::Instance();
@@ -281,8 +286,7 @@ void DemoGame::CreateGeometryBuffers()
 		checkpoint->Finalize();
 	}
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 1, 1), XMFLOAT4(0, 0, 0, 0), 128), "targetCheckpoint");
-
-	// TODO add fuel stations.
+	// TODO add fuel stations. 
 
 	Entity* floor = new Entity();
 	floor->AddModel(terrainModel);
@@ -291,14 +295,6 @@ void DemoGame::CreateGeometryBuffers()
 	entities.push_back(floor);
 	floor->Finalize();
 
-	/*Entity* navMesh = new Entity();
-	navMesh->AddModel(AssetManager::Instance()->GetModel("terrain_nav"));
-	navMesh->transform.SetTranslation(floor->transform.GetTranslation());
-	navMesh->transform.SetLocalScale(floor->transform.GetScale());
-	//entities.push_back(navMesh);
-	navMesh->transform.SetParent(&floor->transform);
-	navMesh->Finalize();*/
-	//TODO split up navmesh bits and order them based on number from file.
 	Model* navMeshModel = AssetManager::Instance()->GetModel("terrain_nav");
 	vector<MeshGroup*> navMeshGroups;
 	AssetManager::Instance()->GetMeshGroupsWithMaterial(&navMeshGroups, navMeshModel, "Nav_Space");
@@ -306,9 +302,9 @@ void DemoGame::CreateGeometryBuffers()
 	for (int i = 0; i < navMeshGroups.size(); i++)
 	{
 		NavMeshSegment* navMeshSegment = new NavMeshSegment(i);
-		navMeshSegment->AddMeshGroup(terrainModel, navMeshGroups[i], true);
+		navMeshSegment->AddMeshGroup(navMeshModel, navMeshGroups[i], true);
 		navMeshSegments.push_back(navMeshSegment);
-		entities.push_back(navMeshSegment);
+		//entities.push_back(navMeshSegment);
 		//navMeshSegment->SetBaseMaterial("Nav_Space", navMeshModel);
 		navMeshSegment->Finalize();
 	}
@@ -322,6 +318,21 @@ void DemoGame::CreateGeometryBuffers()
 		navMeshSegments[i]->RecenterGeometry();
 		navMeshSegments[i]->transform.Translate(XMFLOAT3(0, -400, 0));
 	}
+
+
+	// TODO actually determine which navmesh segment the players and goals are in.
+	for (int i = 0; i < PLAYER_COUNT; i++)
+	{
+		players[i]->navMeshSegment = navMeshSegments[32];
+	}
+	checkpoints[0]->navMeshSegment = navMeshSegments[32];
+	checkpoints[1]->navMeshSegment = navMeshSegments[28];
+	checkpoints[2]->navMeshSegment = navMeshSegments[24];
+	checkpoints[3]->navMeshSegment = navMeshSegments[20];
+	checkpoints[4]->navMeshSegment = navMeshSegments[15];
+	checkpoints[5]->navMeshSegment = navMeshSegments[11];
+	checkpoints[6]->navMeshSegment = navMeshSegments[0];
+	checkpoints[7]->navMeshSegment = navMeshSegments[3];
 }
 
 #pragma endregion
@@ -474,6 +485,14 @@ void DemoGame::UpdateScene(float dt)
 		}
 
 		LocateNearestFuelStations();
+		//temp
+		/*for (int i = 0; i < navMeshSegments.size(); i++)
+		{
+			if (navMeshSegments[32]->EntityInside(player))
+			{
+				int a = 0;
+			}
+		}*/
 
 		for(Entity* e: entities)
 		{
@@ -705,12 +724,10 @@ void DemoGame::CreatePlayers()
 				}
 			}
 		}
-
-		// TODO actually determine which navmesh segment the players are in.
 	}
 
 	player = players[0];
-	//player->controllable = true;
+	player->controllable = true;
 	AttachCameraToPlayer();
 }
 
