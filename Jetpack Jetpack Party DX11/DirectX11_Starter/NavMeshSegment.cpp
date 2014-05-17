@@ -70,6 +70,7 @@ void NavMeshSegment::FindConnections(vector<NavMeshSegment*>* possibleConnection
 			}
 		}
 
+		/*TODO find meshes with vertices*/
 		if (!alreadyConnected)
 		{
 			NavMeshConnection* newConnection = NULL;
@@ -93,15 +94,15 @@ void NavMeshSegment::FindConnections(vector<NavMeshSegment*>* possibleConnection
 								newConnection->secondSegment = *it;
 								this->connections.push_back(newConnection);
 								(*it)->connections.push_back(newConnection);
-								newConnection->connections.push_back(connectedPositions[0]);
-								newConnection->connections.push_back(connectedPositions[1]);
-								newConnection->connections.push_back(connectedPositions[2]);
+								newConnection->connectionVertices.push_back(connectedPositions[0]);
+								newConnection->connectionVertices.push_back(connectedPositions[1]);
+								newConnection->connectionVertices.push_back(connectedPositions[2]);
 								XMStoreFloat3(&newConnection->centroid, XMVectorScale(XMVectorAdd(XMVectorAdd(XMLoadFloat3(&connectedPositions[0]), XMLoadFloat3(&connectedPositions[1])), XMLoadFloat3(&connectedPositions[2])), 1.0f / 3));
 							}
 							else
 							{
-								newConnection->connections.push_back(connectedPos);
-								XMStoreFloat3(&newConnection->centroid, XMVectorScale(XMVectorAdd(XMVectorScale(XMLoadFloat3(&newConnection->centroid), (newConnection->connections.size() - 1)), XMLoadFloat3(&connectedPos)), 1.0f / newConnection->connections.size()));
+								newConnection->connectionVertices.push_back(connectedPos);
+								XMStoreFloat3(&newConnection->centroid, XMVectorScale(XMVectorAdd(XMVectorScale(XMLoadFloat3(&newConnection->centroid), (newConnection->connectionVertices.size() - 1)), XMLoadFloat3(&connectedPos)), 1.0f / newConnection->connectionVertices.size()));
 							}
 						}
 					}
@@ -177,7 +178,7 @@ bool NavMeshSegment::FindPathTo(NavMeshSegment* destintation, XMFLOAT3 startPosi
 			{
 				// Compute distance to the neighbor.
 				float costToConnection;
-				XMStoreFloat(&costToConnection, XMVector3Length(XMVectorSubtract(XMLoadFloat3(&connections[i]->centroid), XMLoadFloat3(&segmentEnterPos))));
+				XMStoreFloat(&costToConnection, XMVector3Length(XMVectorSubtract(XMLoadFloat3(&current->connections[i]->centroid), XMLoadFloat3(&segmentEnterPos))));
 				costToConnection += gScores[current].second;
 
 				// If the neighbor has not been opened yet, open it and prioritize it base on cost to reach.
@@ -233,6 +234,7 @@ bool NavMeshSegment::FindPathPositions(vector<NavMeshSegment*>* path, XMFLOAT3 s
 		if (connection)
 		{
 			positionsOut->push_back(segment->transform.TransformPoint(connection->centroid));
+			//positionsOut->push_back(segment->NearestPointOnMesh();
 		}
 		else
 		{
@@ -283,22 +285,16 @@ bool NavMeshSegment::EntityInside(Entity* entity)
 		UINT* indices = meshes[i]->GetIndices();
 		XMStoreFloat3(&facePos, XMVectorScale(XMVectorAdd(XMVectorAdd(XMLoadFloat3(&vertices[indices[0]].Position), XMLoadFloat3(&vertices[indices[1]].Position)), XMLoadFloat3(&vertices[indices[2]].Position)), 0.3333f));
 		XMStoreFloat3(&faceNormal, XMVectorScale(XMVectorAdd(XMVectorAdd(XMLoadFloat3(&vertices[indices[0]].Normal), XMLoadFloat3(&vertices[indices[1]].Normal)), XMLoadFloat3(&vertices[indices[2]].Normal)), 0.3333f));
+
+		XMFLOAT3 faceNormal2;
+		XMStoreFloat3(&faceNormal2, XMVector3Normalize(XMVector3Cross(
+			XMVectorSubtract(XMLoadFloat3(&vertices[indices[1]].Position), XMLoadFloat3(&vertices[indices[0]].Position)), 
+			XMVectorSubtract(XMLoadFloat3(&vertices[indices[2]].Position), XMLoadFloat3(&vertices[indices[0]].Position)))));
+
 		XMFLOAT3 faceToPos;
 		XMStoreFloat3(&faceToPos, XMVector3Normalize(XMVectorSubtract(XMLoadFloat3(&posInSegment), XMLoadFloat3(&facePos))));
-		/*if (vertToPos.x > vertToPos.y && vertToPos.x > vertToPos.z)
-		{
-			vertToPos.x = vertNorm.x = 0;
-		}
-		else if (vertToPos.y > vertToPos.z)
-		{
-			vertToPos.y = vertNorm.y = 0;
-		}
-		else
-		{
-			vertToPos.z = vertNorm.z = 0;
-		}*/
 		float toDotNorm;
-		XMStoreFloat(&toDotNorm, XMVector3Dot(XMLoadFloat3(&faceToPos), XMLoadFloat3(&faceNormal)));
+		XMStoreFloat(&toDotNorm, XMVector3Dot(XMLoadFloat3(&faceToPos), XMLoadFloat3(&faceNormal2)));
 		if (toDotNorm < 0)
 		{
 			outsideFace= true;

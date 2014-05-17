@@ -176,6 +176,39 @@ void Entity::RecenterGeometry()
 	transform.SetTranslation(translation);
 }
 
+XMFLOAT3 Entity::NearestPointOnMesh(int meshIndex, XMFLOAT3 point, bool pointInEntitySpace, XMFLOAT3* normalOut)
+{
+	// Find vertices and compute face normal.
+	Mesh* mesh = meshes[meshIndex];
+	UINT* meshIndices = mesh->GetIndices();
+	Vertex meshVertices[] = {vertices[meshIndices[0]], vertices[meshIndices[1]], vertices[meshIndices[2]]};
+	XMFLOAT3 faceNormal;
+	XMStoreFloat3(&faceNormal, XMVector3Normalize(XMVector3Cross(
+			XMVectorSubtract(XMLoadFloat3(&meshVertices[1].Position), XMLoadFloat3(&meshVertices[0].Position)), 
+			XMVectorSubtract(XMLoadFloat3(&meshVertices[2].Position), XMLoadFloat3(&meshVertices[0].Position)))));
+	
+	// Ensure that point is in entity space.
+	if (!pointInEntitySpace)
+	{
+		point = transform.InverseTransformPoint(point);
+	}
+
+	// Find nearest point on mesh to given point.
+	XMFLOAT3 vertToPoint;
+	XMStoreFloat3(&vertToPoint, XMVectorSubtract(XMLoadFloat3(&point), XMLoadFloat3(&meshVertices[0].Position)));
+	float toDotNorm;
+	XMStoreFloat(&toDotNorm, XMVector3Dot(XMLoadFloat3(&vertToPoint), XMLoadFloat3(&faceNormal)));
+	XMFLOAT3 meshPoint;
+	XMStoreFloat3(&meshPoint, XMVectorSubtract(XMLoadFloat3(&point), XMVectorScale(XMLoadFloat3(&faceNormal), toDotNorm)));
+
+	// Ensure that returned point is in the correct space.
+	if (!pointInEntitySpace)
+	{
+		meshPoint = transform.TransformPoint(meshPoint);
+	}
+	return meshPoint;
+}
+
 void Entity::Update(float dt)
 {
 	
@@ -426,6 +459,31 @@ Vertex* Entity::GetVertex(int index)
 		return NULL;
 	}
 	return &vertices[index];
+}
+
+int Entity::GetMeshCount()
+{
+	return meshes.size();
+}
+
+Mesh* Entity::GetMesh(int index)
+{
+	if (index > meshes.size())
+	{
+		return NULL;
+	}
+	return meshes[index];
+}
+
+Mesh* GetMesh(Vertex indexedVertices[3])
+{
+	//TODO find mesh that uses all these vertices.
+	return NULL;
+}
+
+int Entity::GetModelCount()
+{
+	return models.size();
 }
 
 Model* Entity::GetModel(int index)

@@ -30,7 +30,9 @@ struct NavMeshConnection
 {
 	NavMeshSegment* firstSegment;
 	NavMeshSegment* secondSegment;
-	vector<XMFLOAT3> connections;
+	vector<int> firstMeshIndices;
+	vector<int> secondMeshIndices;
+	vector<XMFLOAT3> connectionVertices;
 	XMFLOAT3 centroid;
 };
 

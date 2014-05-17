@@ -319,12 +319,31 @@ void DemoGame::CreateGeometryBuffers()
 	for (int i = 0; i < navMeshSegments.size(); i++)
 	{
 		navMeshSegments[i]->transform.Scale(XMFLOAT3(500, 500, 500));
-		//navMeshSegments[i]->RecenterGeometry();
 		navMeshSegments[i]->transform.Translate(XMFLOAT3(0, -400, 0));
 	}
 
 
 	// TODO actually determine which navmesh segment the players and goals are in.
+	for (int i = 0; i < PLAYER_COUNT; i++)
+	{
+		for (int j = 0; j < navMeshSegments.size(); j++)
+		{
+			if (navMeshSegments[j]->EntityInside(players[i]))
+			{
+				players[i]->navMeshSegment = navMeshSegments[j];
+			}
+		}
+	}
+	/*for (int i = 0; i < checkpoints.size(); i++)
+	{
+		for (int j = 0; j < navMeshSegments.size(); j++)
+		{
+			if (navMeshSegments[j]->EntityInside(checkpoints[i]))
+			{
+				checkpoints[i]->navMeshSegment = navMeshSegments[j];
+			}
+		}
+	}*/
 	for (int i = 0; i < PLAYER_COUNT; i++)
 	{
 		players[i]->navMeshSegment = navMeshSegments[32];
