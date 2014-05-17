@@ -176,10 +176,8 @@ void Entity::RecenterGeometry()
 	transform.SetTranslation(translation);
 }
 
-XMFLOAT3 Entity::NearestPointOnMesh(int meshIndex, XMFLOAT3 point, bool pointInEntitySpace, XMFLOAT3* normalOut)
+XMFLOAT3 Entity::NearestPointOnMesh(Mesh* mesh, XMFLOAT3 point, bool pointInEntitySpace, XMFLOAT3* normalOut)
 {
-	// Find vertices and compute face normal.
-	Mesh* mesh = meshes[meshIndex];
 	UINT* meshIndices = mesh->GetIndices();
 	Vertex meshVertices[] = {vertices[meshIndices[0]], vertices[meshIndices[1]], vertices[meshIndices[2]]};
 	XMFLOAT3 faceNormal;
@@ -473,12 +471,6 @@ Mesh* Entity::GetMesh(int index)
 		return NULL;
 	}
 	return meshes[index];
-}
-
-Mesh* GetMesh(Vertex indexedVertices[3])
-{
-	//TODO find mesh that uses all these vertices.
-	return NULL;
 }
 
 int Entity::GetModelCount()

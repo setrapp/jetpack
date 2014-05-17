@@ -4,6 +4,7 @@ inline float EstimateCost(NavMeshSegment* start, NavMeshSegment* destintation);
 inline float EstimateCost(XMFLOAT3 start, XMFLOAT3 destintation);
 inline void CostPriorityInsert(vector<NavMeshSegment*>* target, map<NavMeshSegment*, pair<XMFLOAT3, float>>* existingCosts, NavMeshSegment* insertee, float cost);
 inline bool ReconstructPath(map<NavMeshSegment*, NavMeshSegment*>* pathBack, NavMeshSegment* destination, vector<NavMeshSegment*>* pathOut);
+inline bool FindMeshesFromVertices(map<Vertex*, vector<Mesh*>*>* vertexMeshes, vector<Vertex*>* verticesIn, vector<Mesh*>* meshesOut);
 
 NavMeshSegment::NavMeshSegment(int segmentId) : Entity()
 {
@@ -44,6 +45,31 @@ NavMeshSegment::~NavMeshSegment()
 	{
 		delete connectionDistances[i];
 	}
+
+	for (int i = 0; i < vertices.size(); i++)
+
+	{
+		delete vertexMeshes.at(&vertices[i]);
+	}
+}
+
+void NavMeshSegment::Finalize()
+{
+	Entity::Finalize();
+
+	// Give vertices links to meshes that use them.
+	vertexMeshes.clear();
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		vertexMeshes.insert(pair<Vertex*, vector<Mesh*>*>(&vertices[i], new vector<Mesh*>()));
+	}
+	for (int i = 0; i < meshes.size(); i++)
+	{
+		UINT* meshIndices = meshes[i]->GetIndices();
+		vertexMeshes[&vertices[meshIndices[0]]]->push_back(meshes[i]);
+		vertexMeshes[&vertices[meshIndices[1]]]->push_back(meshes[i]);
+		vertexMeshes[&vertices[meshIndices[2]]]->push_back(meshes[i]);
+	}
 }
 
 void NavMeshSegment::FindConnections(vector<NavMeshSegment*>* possibleConnections)
@@ -75,6 +101,8 @@ void NavMeshSegment::FindConnections(vector<NavMeshSegment*>* possibleConnection
 		{
 			NavMeshConnection* newConnection = NULL;
 			vector<XMFLOAT3> connectedPositions;
+			vector<Vertex*> firstConnectedVertices;
+			vector<Vertex*> secondConnectedVertices;
 			int otherVertexCount = (*it)->GetVertexCount();
 			for (int j = 0; j < vertexCount; j++)
 			{
@@ -85,6 +113,8 @@ void NavMeshSegment::FindConnections(vector<NavMeshSegment*>* possibleConnection
 					{
 						XMFLOAT3 connectedPos = vertices[j].Position;
 						connectedPositions.push_back(connectedPos);
+						firstConnectedVertices.push_back(&vertices[j]);
+						secondConnectedVertices.push_back((*it)->GetVertex(k));
 						if (connectedPositions.size() >= 3)
 						{
 							if (!newConnection)
@@ -107,6 +137,13 @@ void NavMeshSegment::FindConnections(vector<NavMeshSegment*>* possibleConnection
 						}
 					}
 				}
+			}
+
+			// Find connected meshes for the connected vertices.
+			if (newConnection)
+			{
+				FindMeshesFromVertices(&this->vertexMeshes, &firstConnectedVertices, &newConnection->firstMeshes);
+				FindMeshesFromVertices(&(*it)->vertexMeshes, &secondConnectedVertices, &newConnection->secondMeshes);
 			}
 		}
 	}
@@ -356,9 +393,9 @@ void CostPriorityInsert(vector<NavMeshSegment*>* target, map<NavMeshSegment*, pa
 	}
 }
 
-inline bool ReconstructPath(map<NavMeshSegment*, NavMeshSegment*>* pathBack, NavMeshSegment* destination, vector<NavMeshSegment*>* pathOut)
+bool ReconstructPath(map<NavMeshSegment*, NavMeshSegment*>* pathBack, NavMeshSegment* destination, vector<NavMeshSegment*>* pathOut)
 {
-	if (!pathBack && !pathOut)
+	if (!pathBack || !pathOut)
 	{
 		return false;
 	}
@@ -371,4 +408,36 @@ inline bool ReconstructPath(map<NavMeshSegment*, NavMeshSegment*>* pathBack, Nav
 	}
 
 	return true;
+}
+
+bool FindMeshesFromVertices(map<Vertex*, vector<Mesh*>*>* vertexMeshes, vector<Vertex*>* verticesIn, vector<Mesh*>* meshesOut)
+{
+	if (!vertexMeshes || !verticesIn || !meshesOut)
+	{
+		return false;
+	}
+	int vertCount = verticesIn->size();
+	for (int i = 0; i < vertCount; i++)
+	{
+		vector<Mesh*>* meshesOnVert1 = vertexMeshes->at(verticesIn->at(i));
+		int meshCount = meshesOnVert1->size();
+		for (int m = 0; m < meshCount; m++)
+		{
+			for (int j = i + 1; j < vertCount; j++)
+			{
+				vector<Mesh*>* meshesOnVert2 = vertexMeshes->at(verticesIn->at(j));
+				if (find(meshesOnVert2->begin(), meshesOnVert2->end(), meshesOnVert1->at(m)) != meshesOnVert2->end())
+				{
+					for (int k = j + 1; k < vertCount; k++)
+					{
+						vector<Mesh*>* meshesOnVert3 = vertexMeshes->at(verticesIn->at(k));
+						if (find(meshesOnVert3->begin(), meshesOnVert3->end(), meshesOnVert1->at(m)) != meshesOnVert3->end())
+						{
+							meshesOut->push_back(meshesOnVert1->at(m));
+						}
+					}
+				}
+			}
+		}
+	}
 }
