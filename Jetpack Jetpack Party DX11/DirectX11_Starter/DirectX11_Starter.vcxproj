@@ -154,6 +154,7 @@
     <ClInclude Include="HUD.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Jetpack.h" />
+    <ClInclude Include="Jukebox.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LobbyScreen.h" />
     <ClInclude Include="LoginScreen.h" />

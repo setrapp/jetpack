@@ -42,7 +42,6 @@ private:
 	ID3D11Resource*				fuelResource;
 	float						fontScale;
 	float						xTextOffset;
-	FontRenderer*				font;
 
 public:
 	//Pass it as a percentage. Min 0% and max 100%

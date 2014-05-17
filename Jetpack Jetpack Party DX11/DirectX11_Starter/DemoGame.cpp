@@ -160,8 +160,9 @@ bool DemoGame::Init()
 	spriteRenderer = new SpriteRenderer(deviceContext);
 	RECT rect;
 	GetClientRect(GetActiveWindow(), &rect);	
-	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/Fonts/font.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );	
-	loginScreen = new LoginScreen(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/Fonts/font.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );		
+	//FontManager::Instance()->AddFont("L"../Assets/Fonts/test.spriteFont");
+	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/Fonts/test2.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );	
+	loginScreen = new LoginScreen(FontManager::Instance()->AddFont("LOGIN", device, spriteRenderer, L"../Assets/Fonts/test2.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );		
 	LoadShadersAndInputLayout();
 
 	AssetManager::Instance()->StoreMaterial(new Material());
@@ -372,12 +373,11 @@ void DemoGame::LoadSoundAssets()
 	SoundId id;
 	id = SoundId::SAMPLEBG;
 	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sounds/SampleBG.wav");
-	id = SoundId::SINK;
-	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sounds/Sunk.wav");
-	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SAMPLEBG, true, true);
-	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SINK);
+	assetManager->Instance()->GetSoundManager()->LoadSound(SoundId::THRUSTER, L"../Assets/Sounds/SoundEffects/Thruster.wav");
+	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SAMPLEBG, true, true, 0.05);
+	//assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SINK);
 	#ifdef _DEBUG
-    assetManager->Instance()->GetSoundManager()->Mute(true);
+    //assetManager->Instance()->GetSoundManager()->Mute(true);
 	#endif
 }
 

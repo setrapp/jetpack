@@ -13,7 +13,7 @@ public :
 	{
 		if(engine)
 			{
-				effectEffect.reset(new SoundEffect(engine, path));				
+				effectEffect.reset(new SoundEffect(engine, path));	
 				effect = effectEffect.get()->CreateInstance(SOUND_EFFECT_INSTANCE_FLAGS::SoundEffectInstance_Use3D);			
 				if(!effect)
 				{
@@ -22,6 +22,8 @@ public :
 			}
 		else
 			throw 1;
+
+		currentVolume = 1;
 	}
 
 	~SoundInstance(void)
@@ -32,6 +34,7 @@ public :
 
 	inline void SoundInstance::Play(bool loop)
 	{
+		
 		if(effect)
 			effect->Play(loop);
 	}
@@ -85,6 +88,7 @@ public :
 		if(effect)
 		{
 			effect->SetVolume(vol);
+			currentVolume = vol;
 		}
 	}
 
@@ -93,15 +97,19 @@ public :
 		if(effect)
 		{
 			if(mute)
+			{
 				effect->SetVolume(0);
+			}
 			else
+			{
 				effect->SetVolume(1);
+			}
 		}
 	}
 
 private:
 	std::unique_ptr<SoundEffect> effectEffect;
 	std::unique_ptr<SoundEffectInstance> effect;
-	
+	float currentVolume;
 };
 }

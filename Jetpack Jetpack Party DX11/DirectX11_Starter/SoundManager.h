@@ -15,8 +15,8 @@ typedef enum SoundId
 	//NAME = id
 	NONE = 0,
 	SAMPLEBG = 1,
-	SINK = 2,
-	THRUSTER = 3,
+	COUNTDOWN = 2,
+	THRUSTER = 3,	
 };
 
 class SoundManager
@@ -57,7 +57,7 @@ public:
 	}
 
 	//Plays a particular sound effect
-	void SoundManager::PlaySoundInstance(SoundId name, bool loop = false, bool safePlay = false)
+	void SoundManager::PlaySoundInstance(SoundId name, bool loop = false, bool safePlay = false, float volume = 1)
 	{
 		auto w = Contains(name);
 		if(w != SoundMap->end())
@@ -66,7 +66,17 @@ public:
 				w->second->SafePlay(loop);
 			else
 				w->second->Play(loop);
+			
+		w->second->ChangeVolume(volume);
 		}
+
+	}
+
+	void SoundManager::StopSoundInstance(SoundId name)
+	{
+		auto w = Contains(name);
+		if(w != SoundMap->end())
+			w->second->Stop();
 	}
 	
 	//Pans a Sound Instace
@@ -176,6 +186,8 @@ private:
 	AUDIO_STREAM_CATEGORY category;
 	bool mute;
 	std::map<SoundId, SoundInstance*>* SoundMap;
+	//Background tunes only
+//	std::queue<SoundInstance*> jukebox;
 	int oldkeystate;
 
 	inline map<SoundId, SoundInstance*>::iterator Contains(SoundId name) const

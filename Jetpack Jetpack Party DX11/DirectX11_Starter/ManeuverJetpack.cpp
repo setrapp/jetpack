@@ -2,6 +2,8 @@
 #include "Common.h"
 #include "Entity.h"
 //#include "Player.h"
+#include "SoundManager.h"
+#include "AssetManager.h"
 
 ManeuverJetpack::ManeuverJetpack(Entity* player) : Jetpack(player)
 {
@@ -161,6 +163,7 @@ void ManeuverJetpack::ApplyForces(float dt, XMFLOAT3* velocity, XMFLOAT3* angula
 {
 	// TODO: These should use IPMan
 	// Left Side
+
 	if(thrusterActives[Thruster::FRONT_LEFT])
 	{
 		velocity->z -= backwardAcceleration * dt;
@@ -219,7 +222,10 @@ void ManeuverJetpack::ApplyForces(float dt, XMFLOAT3* velocity, XMFLOAT3* angula
 		active = true;
 	}
 	
-	
+	if(active)
+		AssetManager::Instance()->GetSoundManager()->PlaySoundInstance(SoundId::THRUSTER, false, true, 0.5);
+	else
+		AssetManager::Instance()->GetSoundManager()->StopSoundInstance(SoundId::THRUSTER);
 }
 
 void ManeuverJetpack::updateThrusters(int thrusterData){

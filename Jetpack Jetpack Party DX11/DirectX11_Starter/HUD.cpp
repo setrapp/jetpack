@@ -9,7 +9,6 @@ HUD::HUD(SpriteRenderer* renderer, FontRenderer* fontRenderer)
 	this->renderer			= renderer;
 	this->fontRenderer		= fontRenderer;
 	
-	font = FontManager::Instance()->GetFont("LOGIN");
 
 	Reset();
 
@@ -30,6 +29,9 @@ HUD::HUD(SpriteRenderer* renderer, FontRenderer* fontRenderer)
 
 inline void HUD::Reset()
 {
+	
+	//font = FontManager::Instance()->GetFont("LOGIN");
+
 	RECT tempRect;
 	screen = new Rect();
 
@@ -50,7 +52,7 @@ inline void HUD::Reset()
 
 	fuelText				= new Rect();
 	*fuelText				= *fuelRect;
-	fuelText->x				-= font->GetSpriteFont()->MeasureString(L"FUEL ").m128_f32[1] * fontScale + fuelRect->width * 1.27;
+	fuelText->x				-= FontManager::Instance()->GetFont("LOGIN")->GetSpriteFont()->MeasureString(L"FUEL ").m128_f32[1] * fontScale + fuelRect->width * 1.27;
 	fuelText->y				+= 20;
 
 	xTextOffset = fontRenderer->GetSpriteFont()->MeasureString(L"Position \n 10 / 10").m128_f32[1] * fontScale;
@@ -62,6 +64,7 @@ HUD::~HUD(void)
 	delete HUDBGRect;
 	delete fuelRect;
 	delete screen;
+	delete fuelText;
 
 	ReleaseMacro(HUDTexture);
 	ReleaseMacro(fuelTexture);
@@ -127,7 +130,7 @@ void HUD::Render()
 		fuelTexture, 
 		*temp1);
 
-	font->GetSpriteFont()->DrawString(
+	FontManager::Instance()->GetFont("LOGIN")->GetSpriteFont()->DrawString(
 		renderer->GetSpriteBatch(), 
 		L"FUEL ", 
 		XMLoadFloat2(&XMFLOAT2(fuelText->width + fuelText->x, 20 * fontScale)), 
