@@ -27,6 +27,7 @@
 #include "XNew.h"
 #include <dinput.h>
 #include "DeferredRenderer.h"
+#include "NetworkManager.h"
 #include "HUD.h"
 
 #define PLAYER_COUNT 1
@@ -118,6 +119,7 @@ private:
 	bool mouseCursorVisibility;
 	bool flag;
 	Player* players[PLAYER_COUNT];
+	NetworkManager* networkManager;
 
 	float farPlaneDistance;
 };

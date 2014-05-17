@@ -116,6 +116,7 @@
     <ClCompile Include="ModelLoad\MLMaterialLoader.c" />
     <ClCompile Include="ModelLoad\MLModelViewer.c" />
     <ClCompile Include="NetworkedPlayer.cpp" />
+    <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PositionLerp.cpp" />
     <ClCompile Include="Transform.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="ModelLoad\MLModelViewer.h" />
     <ClInclude Include="MouseLook.h" />
     <ClInclude Include="NetworkedPlayer.h" />
+    <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PositionLerp.h" />
     <ClInclude Include="Rect.h" />

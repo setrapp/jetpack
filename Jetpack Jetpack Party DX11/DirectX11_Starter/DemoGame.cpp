@@ -439,6 +439,9 @@ void DemoGame::UpdateScene(float dt)
 #endif
 	}
 
+	if(networkManager){
+		networkManager->Update(dt);
+	}
 	assetManager->Instance()->GetSoundManager()->Update();
 	if(currentState == GameState::Playing)
 	{
@@ -671,7 +674,6 @@ void DemoGame::CreatePlayers()
 		newPlayer->AddModel(AssetManager::Instance()->GetModel());
 		newPlayer->Finalize();
 		entities.push_back(newPlayer);
-
 		players[i] = newPlayer;
 		newPlayer->transform.Translate(XMFLOAT3(50 * (i % 2), 1000, 50 * (i / 2)));
 		newPlayer->respawnPosition = newPlayer->transform.GetTranslation();
@@ -697,6 +699,7 @@ void DemoGame::CreatePlayers()
 		}
 	}
 	player = players[0];
+	networkManager= new NetworkManager(&player);
 	player->controllable = true;
 	AttachCameraToPlayer();
 }
