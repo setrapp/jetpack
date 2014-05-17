@@ -253,6 +253,7 @@ bool NavMeshSegment::FindPathPositions(vector<NavMeshSegment*>* path, XMFLOAT3 s
 	}
 
 	bool brokenPath = false;
+	XMFLOAT3 prevPos = startPosition;
 	for (int i = 0; i + 1 < path->size() && !brokenPath; i++)
 	{
 		NavMeshConnection* connection = NULL;
@@ -271,7 +272,19 @@ bool NavMeshSegment::FindPathPositions(vector<NavMeshSegment*>* path, XMFLOAT3 s
 		if (connection)
 		{
 			positionsOut->push_back(segment->transform.TransformPoint(connection->centroid));
-			//positionsOut->push_back(segment->NearestPointOnMesh();
+			/*Mesh* connectionMesh = connection->firstMeshes[0];
+			if (segment = connection->secondSegment)
+			{
+				connectionMesh = connection->secondMeshes[0];
+			}
+			positionsOut->push_back(segment->ProjectPointOnMesh(connectionMesh, prevPos, false));
+			prevPos = positionsOut->at(positionsOut->size() - 1);
+			//temp
+			prevPos = segment->ProjectPointOnMesh(connectionMesh, prevPos, false);
+
+			//temp
+			XMFLOAT3 a = segment->transform.TransformPoint(connection->centroid);
+			int b = 0;*/
 		}
 		else
 		{

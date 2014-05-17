@@ -38,7 +38,7 @@ inline void HUD::Reset()
 	delete temp;
 
 	HUDBGRect				= new Rect(0, 0, screen->width, 250);
-	fuelRect				= new Rect(screen->width / 2 - 125, 0, 250, 100);
+	fuelRect				= new Rect(screen->width / 2 - 600, 5, 1200, 85);
 	rank					= 1;
 	maxRacers				= 10;
 	fontScale				= (float)screen->width / (float)screen->height;
@@ -93,15 +93,26 @@ inline void HUD::setMaxRacers(unsigned short maxRacers)
 
 void HUD::Render()
 {
-	renderer->Begin(SpriteSortMode::SpriteSortMode_Texture);
+	renderer->Begin(SpriteSortMode::SpriteSortMode_BackToFront);//SpriteSortMode::SpriteSortMode_Texture);
 	RECT* temp1;
 	RECT* temp2;
 
-	//since the width is 250. 
-	fuelRect->width = fuel * 2.5f;
+	//since the width is 1200. 
+	fuelRect->width = fuel * 12.0f;
 
 	temp1 = Rect::GetRECTFromRect(fuelRect);
 	temp2 = Rect::GetRECTFromRect(HUDBGRect);
+	
+	//Draw fuel bar
+	renderer->GetSpriteBatch()->Draw(
+		fuelTexture, 
+		*temp1, 
+		nullptr, 
+		XMLoadFloat4(&XMFLOAT4(1, 1, 1, 1)), 
+		0,
+		XMFLOAT2(0, 0), 
+		DirectX::SpriteEffects::SpriteEffects_None,
+		0.5f);
 
 	//Draw bg first
 	renderer->GetSpriteBatch()->Draw(
@@ -109,12 +120,10 @@ void HUD::Render()
 		*temp2, 
 		nullptr, 
 		XMLoadFloat4(&XMFLOAT4(1, 1, 1, 1)), 
+		0,
+		XMFLOAT2(0, 0),
+		DirectX::SpriteEffects::SpriteEffects_None,
 		0);
-	
-	//Draw fuel bar
-	renderer->GetSpriteBatch()->Draw(
-		fuelTexture, 
-		*temp1);
 
 	//building the string
 	wstringstream* ss = new wstringstream();
@@ -126,14 +135,14 @@ void HUD::Render()
 	wstring* t = new wstring(ss->str());
 
 	//draw string
-	fontRenderer->GetSpriteFont()->DrawString(
+	/*fontRenderer->GetSpriteFont()->DrawString(
 		renderer->GetSpriteBatch(), 
 		t->c_str(), 
 		XMLoadFloat2(&XMFLOAT2(HUDBGRect->width + HUDBGRect->x - xTextOffset, 20 * fontScale)), 
 		Colors::Green, 
 		0, 
 		g_XMZero, 
-		fontScale); 
+		fontScale); */
 
 
 	renderer->End();

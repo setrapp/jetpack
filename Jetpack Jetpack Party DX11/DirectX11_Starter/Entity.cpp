@@ -176,7 +176,7 @@ void Entity::RecenterGeometry()
 	transform.SetTranslation(translation);
 }
 
-XMFLOAT3 Entity::NearestPointOnMesh(Mesh* mesh, XMFLOAT3 point, bool pointInEntitySpace, XMFLOAT3* normalOut)
+XMFLOAT3 Entity::ProjectPointOnMesh(Mesh* mesh, XMFLOAT3 point, bool pointInEntitySpace, XMFLOAT3* normalOut)
 {
 	UINT* meshIndices = mesh->GetIndices();
 	Vertex meshVertices[] = {vertices[meshIndices[0]], vertices[meshIndices[1]], vertices[meshIndices[2]]};
@@ -193,7 +193,7 @@ XMFLOAT3 Entity::NearestPointOnMesh(Mesh* mesh, XMFLOAT3 point, bool pointInEnti
 
 	// Find nearest point on mesh to given point.
 	XMFLOAT3 vertToPoint;
-	XMStoreFloat3(&vertToPoint, XMVectorSubtract(XMLoadFloat3(&point), XMLoadFloat3(&meshVertices[0].Position)));
+	XMStoreFloat3(&vertToPoint, XMVectorSubtract(XMLoadFloat3(&point), XMLoadFloat3(&meshVertices[1].Position)));
 	float toDotNorm;
 	XMStoreFloat(&toDotNorm, XMVector3Dot(XMLoadFloat3(&vertToPoint), XMLoadFloat3(&faceNormal)));
 	XMFLOAT3 meshPoint;

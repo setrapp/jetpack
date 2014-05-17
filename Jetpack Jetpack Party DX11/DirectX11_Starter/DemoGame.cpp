@@ -750,7 +750,7 @@ void DemoGame::CreatePlayers()
 	}
 
 	player = players[0];
-	//player->controllable = true;
+	player->controllable = true;
 	AttachCameraToPlayer();
 }
 
