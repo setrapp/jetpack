@@ -15,7 +15,8 @@ typedef enum SoundId
 	//NAME = id
 	NONE = 0,
 	SAMPLEBG = 1,
-	SINK = 2
+	SINK = 2,
+	THRUSTER = 3,
 };
 
 class SoundManager

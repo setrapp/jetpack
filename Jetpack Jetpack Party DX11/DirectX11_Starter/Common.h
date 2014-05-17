@@ -18,7 +18,7 @@ using namespace std;
 
 #define Print(x) { if(x) { printf(x); } }
 
-#define ReleaseMacro(x) { if(x){ x->Release(); x = 0; } }
+#define ReleaseMacro(x) { if(x){ x->Release(); /*delete x;*/  x = 0; } }
 
 // Macro for popping up a text box based
 // on a failed HRESULT and then quitting (only in debug builds)

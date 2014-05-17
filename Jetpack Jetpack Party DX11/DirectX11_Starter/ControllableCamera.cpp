@@ -28,27 +28,27 @@ void ControllableCamera::CheckInput(float dt)
 	
 	if(IPMan::GetIPMan()->GetKey('S'))
 	{
-		velocity.z -= 1000 * dt;
+		velocity.z -= 100000 * dt;
 	}
 	if(IPMan::GetIPMan()->GetKey('W'))
 	{
-		velocity.z += 1000 * dt;
+		velocity.z += 100000 * dt;
 	}
 	if(IPMan::GetIPMan()->GetKey('D'))
 	{
-		velocity.x += 1000 * dt;
+		velocity.x += 100000 * dt;
 	}
 	if(IPMan::GetIPMan()->GetKey('A'))
 	{
-		velocity.x -= 1000 * dt;
+		velocity.x -= 100000 * dt;
 	}
 	if(IPMan::GetIPMan()->GetKey('Q'))
 	{
-		velocity.y -= 1000 * dt;
+		velocity.y -= 100000 * dt;
 	}
 	if(IPMan::GetIPMan()->GetKey('E'))
 	{
-		velocity.y += 1000 * dt;
+		velocity.y += 100000 * dt;
 	}
 
 	// Clamp to max speed.

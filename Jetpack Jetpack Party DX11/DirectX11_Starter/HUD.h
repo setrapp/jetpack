@@ -33,6 +33,7 @@ private:
 	Rect*						HUDBGRect;
 	Rect*						fuelRect;
 	Rect*						screen;
+	Rect*						fuelText;
 	short						rank;
 	unsigned short				maxRacers;
 	ID3D11ShaderResourceView*	HUDTexture;
@@ -41,6 +42,7 @@ private:
 	ID3D11Resource*				fuelResource;
 	float						fontScale;
 	float						xTextOffset;
+	FontRenderer*				font;
 
 public:
 	//Pass it as a percentage. Min 0% and max 100%

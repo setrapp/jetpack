@@ -111,6 +111,12 @@ DemoGame::~DemoGame()
 	delete lobbyScreen;
 	delete mouseLook;
 	delete spriteRenderer;
+
+	/*if(players)
+		delete []players;*/
+
+	//if(skyboxAttached)
+	//	skyboxAttached->~Skybox();
 }
 
 #pragma endregion
@@ -160,8 +166,8 @@ bool DemoGame::Init()
 	spriteRenderer = new SpriteRenderer(deviceContext);
 	RECT rect;
 	GetClientRect(GetActiveWindow(), &rect);	
-	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/Fonts/font.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );	
-	loginScreen = new LoginScreen(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/Fonts/font.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );		
+	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/Fonts/menu.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );	
+	loginScreen = new LoginScreen(FontManager::Instance()->AddFont("LOGIN", device, spriteRenderer, L"../Assets/Fonts/test.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );		
 	LoadShadersAndInputLayout();
 
 	AssetManager::Instance()->StoreMaterial(new Material());
@@ -232,6 +238,10 @@ void DemoGame::CreateGeometryBuffers()
 	deferredPlane->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("deferred");
 	deferredPlane->Finalize();
 	
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "skybox");
+	Entity* skybox = new Skybox(farPlaneDistance, playerCamera->transform.GetTranslation());	
+	this->skyboxAttached = (Skybox*)skybox;
+
 	CreatePlayers();
 	
 	Vertex vertices[] = 
@@ -292,8 +302,7 @@ void DemoGame::CreateGeometryBuffers()
 	navMesh->Finalize();
 
 	//All you have to do.
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "skybox");
-	Entity* skybox = new Skybox(farPlaneDistance);	
+	
 	entities.push_back(skybox);
 }
 
@@ -359,8 +368,9 @@ void DemoGame::LoadSoundAssets()
 	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sounds/Sunk.wav");
 	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SAMPLEBG, true, true);
 	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SINK);
+	assetManager->Instance()->GetSoundManager()->LoadSound(SoundId::THRUSTER, L"../Assets/Sounds/SoundEffects/Thruster.wav");
 	#ifdef _DEBUG
-    assetManager->Instance()->GetSoundManager()->Mute(true);
+    assetManager->Instance()->GetSoundManager()->Mute(false);
 	#endif
 }
 
@@ -455,6 +465,8 @@ void DemoGame::UpdateScene(float dt)
 		{
 			e->Update(dt);
 		}
+
+		skyboxAttached->Update(dt, playerCamera->transform.GetTranslation());
 	}
 
 	if(camera != debugCamera)
@@ -502,6 +514,7 @@ void DemoGame::DrawScene()
 	// Prepare for rendering to textures.
 	deviceContext->PSSetShaderResources(0, TARGET_COUNT, nullShaderResources);
 	deferredRenderer->SetTargets();
+	
 	deferredRenderer->ClearTargets(clearColor);
 
 	deviceContext->IASetInputLayout(inputLayout);
@@ -699,6 +712,8 @@ void DemoGame::CreatePlayers()
 	player = players[0];
 	player->controllable = true;
 	AttachCameraToPlayer();
+	
+	this->skyboxAttached->oldPos = player->transform.GetTranslation();
 }
 
 void DemoGame::AttachCameraToPlayer()

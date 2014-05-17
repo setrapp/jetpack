@@ -7,8 +7,8 @@
 #include "DXGame.h"
 
 #define TICKER_WIDTH			50
-#define TICKER_TOP_OFFSET		40
-#define TICKER_HEIGHT			145 - TICKER_TOP_OFFSET
+#define TICKER_TOP_OFFSET		0
+#define TICKER_HEIGHT			80 - TICKER_TOP_OFFSET
 
 #define MENUBUTTONS_TOP_OFFSET  screenHeight / 2	+ 200
 #define MENUBUTTONS_LEFT_OFFSET screenWidth / 2		- 300
@@ -17,13 +17,13 @@ Menu::Menu(FontRenderer* renderer, SpriteRenderer* spRenderer, const short Scree
 {
 	guiMan = new GUIManager();	
 
-	GUIText* sp = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, -100 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"SINGLEPLAYER", 1, AnimationType::RIGHTTOLEFT, renderer, 4000, Colors::Black);
+	GUIText* sp = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, -100 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"SINGLEPLAYER", 1, AnimationType::BOTTOMTOTOP, renderer, 4000, Colors::Black);
 	guiMan->Add("SINGLEPLAYER", sp);
-	GUIText* mp = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, 0 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"MULTIPLAYER", 1, AnimationType::RIGHTTOLEFT, renderer, 4000, Colors::Black);
+	GUIText* mp = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, 0 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"MULTIPLAYER", 3, AnimationType::BOTTOMTOTOP, renderer, 4000, Colors::Black);
 	guiMan->Add("MULTIPLAYER", mp);
-	GUIText* settings = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, 100 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"SETTINGS", 3, AnimationType::RIGHTTOLEFT, renderer, 4000, Colors::Black);
+	GUIText* settings = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, 100 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"SETTINGS", 5, AnimationType::BOTTOMTOTOP, renderer, 4000, Colors::Black);
 	guiMan->Add("SETTINGS", settings);
-	GUIText* exit = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, 200 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"EXIT", 5, AnimationType::RIGHTTOLEFT, renderer, 4000, Colors::Black);
+	GUIText* exit = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, 200 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"EXIT", 7, AnimationType::BOTTOMTOTOP, renderer, 4000, Colors::Black);
 	guiMan->Add("EXIT", exit);	
 
 	if(!r)

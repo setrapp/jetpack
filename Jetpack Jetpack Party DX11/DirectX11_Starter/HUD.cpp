@@ -1,4 +1,5 @@
 #include "HUD.h"
+#include "FontManager.h"
 #include "Debug.h"
 
 float HUD::fuel = 0;
@@ -7,9 +8,10 @@ HUD::HUD(SpriteRenderer* renderer, FontRenderer* fontRenderer)
 {	
 	this->renderer			= renderer;
 	this->fontRenderer		= fontRenderer;
+	
+	font = FontManager::Instance()->GetFont("LOGIN");
 
 	Reset();
-
 
 	HR (CreateWICTextureFromFile(DXConnection::Instance()->device, 
 		DXConnection::Instance()->deviceContext,
@@ -19,9 +21,10 @@ HUD::HUD(SpriteRenderer* renderer, FontRenderer* fontRenderer)
 
 	HR (CreateWICTextureFromFile(DXConnection::Instance()->device, 
 		DXConnection::Instance()->deviceContext,
-	L"../Assets/HUD/fuel.png",
-	&this->fuelResource,
-	&this->fuelTexture));
+		L"../Assets/HUD/fuel.png",
+		&this->fuelResource,
+		&this->fuelTexture));
+
 	fontScale = 1;
 }
 
@@ -44,6 +47,11 @@ inline void HUD::Reset()
 	fontScale				= (float)screen->width / (float)screen->height;
 	//Reverse current aspect ratio, so we can scale to other ratios too. 
 	fontScale			   *= (float)9 / (float)16;
+
+	fuelText				= new Rect();
+	*fuelText				= *fuelRect;
+	fuelText->x				-= font->GetSpriteFont()->MeasureString(L"FUEL ").m128_f32[1] * fontScale + fuelRect->width * 1.27;
+	fuelText->y				+= 20;
 
 	xTextOffset = fontRenderer->GetSpriteFont()->MeasureString(L"Position \n 10 / 10").m128_f32[1] * fontScale;
 }
@@ -94,14 +102,17 @@ inline void HUD::setMaxRacers(unsigned short maxRacers)
 void HUD::Render()
 {
 	renderer->Begin(SpriteSortMode::SpriteSortMode_Texture);
+
 	RECT* temp1;
 	RECT* temp2;
+	RECT* temp3;
 
 	//since the width is 250. 
 	fuelRect->width = fuel * 2.5f;
 
 	temp1 = Rect::GetRECTFromRect(fuelRect);
 	temp2 = Rect::GetRECTFromRect(HUDBGRect);
+	temp3 = Rect::GetRECTFromRect(fuelText);
 
 	//Draw bg first
 	renderer->GetSpriteBatch()->Draw(
@@ -115,6 +126,16 @@ void HUD::Render()
 	renderer->GetSpriteBatch()->Draw(
 		fuelTexture, 
 		*temp1);
+
+	font->GetSpriteFont()->DrawString(
+		renderer->GetSpriteBatch(), 
+		L"FUEL ", 
+		XMLoadFloat2(&XMFLOAT2(fuelText->width + fuelText->x, 20 * fontScale)), 
+		Colors::Green, 
+		0, 
+		g_XMZero, 
+		fontScale); 
+
 
 	//building the string
 	wstringstream* ss = new wstringstream();
@@ -142,6 +163,7 @@ void HUD::Render()
 	delete t;
 	delete ss;
 	delete temp1;
+	delete temp3;
 	delete temp2;
 }
 
