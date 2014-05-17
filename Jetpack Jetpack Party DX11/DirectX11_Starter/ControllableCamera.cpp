@@ -4,7 +4,7 @@
 ControllableCamera::ControllableCamera()
 {
 	velocity = XMFLOAT3(0, 0, 0);
-	maxSpeed = 1000;
+	maxSpeed = 1000000000000000;
 	groundSpeedDampening = 0.95f;
 	controllable = false;
 }
@@ -61,7 +61,6 @@ void ControllableCamera::CheckInput(float dt)
 		velocity.y = velocity.y * (maxSpeed / velocityMag);
 		velocity.z = velocity.z * (maxSpeed / velocityMag);
 	}
-
 	if(IPMan::GetIPMan()->GetKey('Y'))
 	{
 		transform.Rotate(XMFLOAT3(0, -1 * dt, 0));

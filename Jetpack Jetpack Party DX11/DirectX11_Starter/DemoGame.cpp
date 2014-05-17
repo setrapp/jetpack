@@ -212,6 +212,7 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrack.obj", "terrain");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrackNav.obj", "terrain_nav");			
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/skybox.obj", "skybox");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/JetDude.obj","jetdude");
 
 	// Create orthographic and projection plane for deferred rendering.
 	float halfWindowWidth = windowWidth / 2, halfWindowHieght= windowHeight / 2;
@@ -259,7 +260,7 @@ void DemoGame::CreateGeometryBuffers()
 	Entity* gift = new Entity();
 	gift->AddQuad(vertices, indices);
 	
-	gift->transform.SetTranslation(player->targetPosition);
+	//gift->transform.SetTranslation(player->targetPosition);
 	entities.push_back(gift);
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
 	gift->SetBaseMaterial("gift");
@@ -292,9 +293,25 @@ void DemoGame::CreateGeometryBuffers()
 	navMesh->Finalize();
 
 	//All you have to do.
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "skybox");
+	/*AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "skybox");
 	Entity* skybox = new Skybox(farPlaneDistance);	
 	entities.push_back(skybox);
+	*/
+
+	//All you have to do.
+	//AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "jetdude");
+	Entity* jetDude = new Entity();
+	jetDude->AddModel(AssetManager::Instance()->GetModel("jetdude"));
+
+
+	entities.push_back(jetDude);
+
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 1), "cake");
+	jetDude->SetBaseMaterial("cake");
+	jetDude->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
+	jetDude->LoadTexture(L"../Assets/Textures/JetDudeUV_In.png");
+
+	jetDude->Finalize();
 }
 
 #pragma endregion
@@ -455,6 +472,7 @@ void DemoGame::UpdateScene(float dt)
 		{
 			e->Update(dt);
 		}
+		
 	}
 
 	if(camera != debugCamera)
@@ -668,6 +686,7 @@ void DemoGame::CreatePlayers()
 	for (int i = 0; i < PLAYER_COUNT; i++)
 	{
 		Player* newPlayer = new Player();
+
 		newPlayer->AddModel(AssetManager::Instance()->GetModel());
 		newPlayer->Finalize();
 		entities.push_back(newPlayer);

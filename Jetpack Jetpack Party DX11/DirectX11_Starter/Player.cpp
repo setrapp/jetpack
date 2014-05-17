@@ -314,6 +314,10 @@ void Player::AddNewUser(int playerIndex){
 	
 	Entity* jetman = new Entity();
 	jetman->AddModel(AssetManager::Instance()->GetModel("jetman"));
+	/*AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16),"jetDudeMaterial");
+	jetman->SetBaseMaterial("jetDudeMaterial");
+	jetman->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("jetDudeMaterial");
+	jetman->LoadTexture(L"../Assets/Textures/JetDudeUV_In.png");*/
 	jetman->Finalize();
 	jetman->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
 	jetman->transform.SetParent(&newPlayer->transform);
