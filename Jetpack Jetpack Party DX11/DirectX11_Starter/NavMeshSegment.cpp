@@ -1,5 +1,10 @@
 #include "NavMeshSegment.h"
 
+inline float EstimateCost(NavMeshSegment* start, NavMeshSegment* destintation);
+inline float EstimateCost(XMFLOAT3 start, XMFLOAT3 destintation);
+inline void CostPriorityInsert(vector<NavMeshSegment*>* target, map<NavMeshSegment*, pair<XMFLOAT3, float>>* existingCosts, NavMeshSegment* insertee, float cost);
+inline bool ReconstructPath(map<NavMeshSegment*, NavMeshSegment*>* pathBack, NavMeshSegment* destination, vector<NavMeshSegment*>* pathOut);
+
 NavMeshSegment::NavMeshSegment(int segmentId) : Entity()
 {
 	this->segmentId = segmentId;
@@ -34,9 +39,13 @@ NavMeshSegment::~NavMeshSegment()
 			}
 		}
 	}
+
+	for (int i = 0; i < connectionDistances.size(); i++)
+	{
+		delete connectionDistances[i];
+	}
 }
 
-#include "Debug.h"
 void NavMeshSegment::FindConnections(vector<NavMeshSegment*>* possibleConnections)
 {
 	if (!possibleConnections)
@@ -87,11 +96,12 @@ void NavMeshSegment::FindConnections(vector<NavMeshSegment*>* possibleConnection
 								newConnection->connections.push_back(connectedPositions[0]);
 								newConnection->connections.push_back(connectedPositions[1]);
 								newConnection->connections.push_back(connectedPositions[2]);
-								Debug::Log("" + this->segmentId + ' ' + (*it)->segmentId + '\n');
+								XMStoreFloat3(&newConnection->centroid, XMVectorScale(XMVectorAdd(XMVectorAdd(XMLoadFloat3(&connectedPositions[0]), XMLoadFloat3(&connectedPositions[1])), XMLoadFloat3(&connectedPositions[2])), 1.0f / 3));
 							}
 							else
 							{
 								newConnection->connections.push_back(connectedPos);
+								XMStoreFloat3(&newConnection->centroid, XMVectorScale(XMVectorAdd(XMVectorScale(XMLoadFloat3(&newConnection->centroid), (newConnection->connections.size() - 1)), XMLoadFloat3(&connectedPos)), 1.0f / newConnection->connections.size()));
 							}
 						}
 					}
@@ -99,6 +109,142 @@ void NavMeshSegment::FindConnections(vector<NavMeshSegment*>* possibleConnection
 			}
 		}
 	}
+}
+
+void NavMeshSegment::ComputeConnectionDistances()
+{
+	for (int i = 0; i < connections.size(); i++)
+	{
+		for (int j = i + 1; j < connections.size(); j++)
+		{
+			NavMeshConnectionDistance* newDistance = new NavMeshConnectionDistance();
+			newDistance->firstConnection = connections[i];
+			newDistance->secondConnection = connections[j];
+			XMStoreFloat(&newDistance->averageDistance, XMVector3Length(XMVectorSubtract(XMLoadFloat3(&connections[j]->centroid), XMLoadFloat3(&connections[i]->centroid))));
+			connectionDistances.push_back(newDistance);
+		}
+	}
+}
+
+bool NavMeshSegment::FindPathTo(NavMeshSegment* destintation, XMFLOAT3 startPosition, XMFLOAT3 destinationPosition, vector<NavMeshSegment*>* pathOut)
+{
+	// TODO Check if start position is within starting segement and destination is within destination segement (or just pass in destination position and find destination node
+
+	if (!pathOut)
+	{
+		return false;
+	}
+
+	// A* time!!!
+	vector<NavMeshSegment*> open;
+	vector<NavMeshSegment*> closed;
+	map<NavMeshSegment*, NavMeshSegment*> pathBack;
+	map<NavMeshSegment*, pair<XMFLOAT3, float>> gScores;
+	map<NavMeshSegment*, pair<XMFLOAT3, float>> fScores;
+
+	gScores.insert(pair<NavMeshSegment*, pair<XMFLOAT3, float>>(this, pair<XMFLOAT3, float>(startPosition, 0)));
+	fScores.insert(pair<NavMeshSegment*, pair<XMFLOAT3, float>>(this, pair<XMFLOAT3, float>(startPosition, gScores[this].second + EstimateCost(gScores[this].first, destinationPosition))));
+	pathBack.insert(pair<NavMeshSegment*, NavMeshSegment*>(this, NULL));
+
+	bool pathFound = false;
+	open.push_back(this);
+	while(!pathFound && open.size() > 0)
+	{
+		// If the destination has been found, reconstruct the path.
+		NavMeshSegment* current = open[0];
+		if (current == destintation)
+		{
+			ReconstructPath(&pathBack, current, pathOut);
+		}
+
+		// Move to current to closed list.
+		open.erase(open.begin());
+		closed.push_back(current);
+
+		// Add neighbors to open list.
+		XMFLOAT3 segmentEnterPos = gScores[current].first;
+		for (int i = 0; i < current->connections.size(); i++)
+		{
+			// Pick the Neighbor
+			NavMeshSegment* neighbor = current->connections[i]->firstSegment;
+			if (neighbor == current)
+			{
+				neighbor = current->connections[i]->secondSegment;
+			}
+
+			// Ignore segments that have already been closed.
+			if (find(closed.begin(), closed.end(), neighbor) == closed.end())
+			{
+				// Compute distance to the neighbor.
+				float costToConnection;
+				XMStoreFloat(&costToConnection, XMVector3Length(XMVectorSubtract(XMLoadFloat3(&connections[i]->centroid), XMLoadFloat3(&segmentEnterPos))));
+				costToConnection += gScores[current].second;
+
+				// If the neighbor has not been opened yet, open it and prioritize it base on cost to reach.
+				if (find(open.begin(), open.end(), neighbor) == open.end())
+				{
+					gScores.insert(pair<NavMeshSegment*, pair<XMFLOAT3, float>>(neighbor, pair<XMFLOAT3, float>(current->connections[i]->centroid, costToConnection)));
+					fScores.insert(pair<NavMeshSegment*, pair<XMFLOAT3, float>>(neighbor, pair<XMFLOAT3, float>(current->connections[i]->centroid, gScores[neighbor].second + EstimateCost(gScores[neighbor].first, destinationPosition))));
+					pathBack.insert(pair<NavMeshSegment*, NavMeshSegment*>(neighbor, current));
+					CostPriorityInsert(&open, &gScores, neighbor, gScores[neighbor].second);
+				}
+				else
+				{
+					// If the neighbor has already been opened and the current cost to reach it
+					// is less the previous best cost, update the opening.
+					if (costToConnection < gScores[neighbor].second)
+					{
+						gScores[neighbor] = pair<XMFLOAT3, float>(current->connections[i]->centroid, costToConnection);
+						fScores[neighbor] = pair<XMFLOAT3, float>(current->connections[i]->centroid, gScores[neighbor].second + EstimateCost(gScores[neighbor].first, destinationPosition));
+						pathBack[neighbor]= current;
+						CostPriorityInsert(&open, &gScores, neighbor, gScores[neighbor].second);
+					}
+				}
+			}	
+		}
+	}
+
+	return pathFound;
+}
+
+bool NavMeshSegment::FindPathPositions(vector<NavMeshSegment*>* path, XMFLOAT3 startPosition, XMFLOAT3 destinationPosition, vector<XMFLOAT3>* positionsOut)
+{
+	if (!path || !positionsOut)
+	{
+		return false;
+	}
+
+	bool brokenPath = false;
+	for (int i = 0; i + 1 < path->size() && !brokenPath; i++)
+	{
+		NavMeshConnection* connection = NULL;
+		NavMeshSegment* segment = path->at(i);
+		NavMeshSegment* nextSegment = path->at(i + 1);
+		for(int j = 0; j < segment->connections.size() && !connection; j++)
+		{
+			if ((segment->connections[j]->firstSegment == segment && segment->connections[j]->secondSegment == nextSegment) ||
+				(segment->connections[j]->secondSegment == segment && segment->connections[j]->firstSegment == nextSegment))
+			{
+				connection = segment->connections[j];
+			}
+		}
+		// TODO Find nearest point on each connecting face for both start and destination,
+		// and weighted average each pair based on distance from either end.
+		if (connection)
+		{
+			positionsOut->push_back(segment->transform.TransformPoint(connection->centroid));
+		}
+		else
+		{
+			brokenPath = true;
+		}
+	}
+	if (!brokenPath)
+	{
+		positionsOut->push_back(destinationPosition);
+	}
+
+	return brokenPath;
 }
 
 bool NavMeshSegment::EntityInside(Entity* entity)
@@ -164,4 +310,69 @@ bool NavMeshSegment::EntityInside(Entity* entity)
 vector<NavMeshConnection*> const* NavMeshSegment::GetConnections()
 {
 	return &connections;
+}
+
+vector<NavMeshConnectionDistance*> const* NavMeshSegment::GetConnectionDistances()
+{
+	return &connectionDistances;
+}
+
+// Non-Class Functions
+float EstimateCost(NavMeshSegment* start, NavMeshSegment* destintation)
+{
+	return (EstimateCost(start->transform.GetTranslation(), destintation->transform.GetTranslation()));
+}
+
+float EstimateCost(XMFLOAT3 start, XMFLOAT3 destintation)
+{
+	float cost;
+	XMStoreFloat(&cost, XMVector3Length(XMVectorSubtract(XMLoadFloat3(&start), XMLoadFloat3(&destintation))));
+	return cost;
+}
+
+void CostPriorityInsert(vector<NavMeshSegment*>* target, map<NavMeshSegment*, pair<XMFLOAT3, float>>* existingCosts, NavMeshSegment* insertee, float cost)
+{
+	if (!target || !existingCosts)
+	{
+		return;
+	}
+
+	vector<NavMeshSegment*>::iterator inserteeIt = find(target->begin(), target->end(), insertee);
+	if (inserteeIt != target->end())
+	{
+		target->erase(inserteeIt);
+	}
+	
+	
+	bool inserted = false;
+	for (int i = 0; i < target->size(); i++)
+	{
+		if (cost < existingCosts->at(target->at(0)).second)
+		{
+			target->insert(target->begin() + i, insertee);
+			inserted = true;
+		}
+	}
+	if (!inserted)
+	{
+		inserted = true;
+		target->push_back(insertee);
+	}
+}
+
+inline bool ReconstructPath(map<NavMeshSegment*, NavMeshSegment*>* pathBack, NavMeshSegment* destination, vector<NavMeshSegment*>* pathOut)
+{
+	if (!pathBack && !pathOut)
+	{
+		return false;
+	}
+
+	NavMeshSegment* current = destination;
+	while (pathBack->at(current))
+	{
+		pathOut->insert(pathOut->begin(), current);
+		current = pathBack->at(current);
+	}
+
+	return true;
 }

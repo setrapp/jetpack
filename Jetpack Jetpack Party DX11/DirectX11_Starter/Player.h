@@ -34,6 +34,8 @@ public:
 	FuelStation* targetCheckpoint;
 	FuelStation* targetFuelStation;
 	NavMeshSegment* navMeshSegment;
+	vector<NavMeshSegment*> navMeshToTarget;
+	vector<XMFLOAT3> pathToTarget;
 
 private:
 	void CheckInput(float dt);
