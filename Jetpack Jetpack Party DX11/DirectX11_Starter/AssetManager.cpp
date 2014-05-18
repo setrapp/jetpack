@@ -1,6 +1,8 @@
 #include "AssetManager.h"
 #include "SoundManager.h"
 
+int IndexVertex(vector<pair<UINT,UINT>>* posUVPairs, UINT positionIndex, UINT uvIndex);
+
 AssetManager* AssetManager::instance = NULL;
 AssetManager* AssetManager::Instance() 
 {
@@ -270,7 +272,7 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 		int i = 0;
 	}
 	// Load Vertices.
-	unsigned int vertexCount = mlModel3DGetVertexCount(objModel);
+	/*unsigned int vertexCount = mlModel3DGetVertexCount(objModel);
 	for (int i = 0; i < vertexCount; i++) {
 		MLVertex3D const*  mlVertex = mlModel3DGetVertex(objModel, i);
 		GUPoint3D guPoint = mlVertex3DGetPosition(mlVertex);
@@ -289,11 +291,7 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 		}
 		
 		model->vertices.push_back(vertex);
-	}
-
-
-
-	
+	}*/	
 
 	// Load Individual Mesh Groups to Categorize Geometry.
 	unsigned int objectCount = mlModel3DGetObjectCount(objModel);
@@ -306,18 +304,35 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 		model->meshGroups.push_back(meshGroup);
 	}
 
+	
 	// Load Mesh Indices.
+	vector<pair<UINT,UINT>>* posUVPairs = new vector<pair<UINT,UINT>>();
 	unsigned int faceCount = mlModel3DGetFaceCount(objModel);
 	for (int i = 0; i < faceCount; i++) {
 		// Retrieve current face.
 		MLFace3D const* face = mlModel3DGetFace(objModel, i);
 
-		// Retrieve vertices that make up current face.
-		UINT mlIndices[3];
-		mlIndices[0] = mlFace3DGetVertex1(face);
-		mlIndices[1] = mlFace3DGetVertex2(face);
-		mlIndices[2] = mlFace3DGetVertex3(face);
-		Mesh newMesh(mlIndices);
+		// Retrieve position that make up current face.
+		UINT mlPosIndices[3];
+		mlPosIndices[0] = mlFace3DGetVertex1(face);
+		mlPosIndices[1] = mlFace3DGetVertex2(face);
+		mlPosIndices[2] = mlFace3DGetVertex3(face);
+
+		// Retrieve uv that make up current face
+		UINT mlUVIndices[3] = {mlPosIndices[0], mlPosIndices[1], mlPosIndices[2]};
+		if (hasUVs)
+		{
+			mlUVIndices[0] = mlFace3DGetTextureVertex1(face);
+			mlUVIndices[1] = mlFace3DGetTextureVertex2(face);
+			mlUVIndices[2] = mlFace3DGetTextureVertex3(face);
+		}
+		
+		// Index vertices that make up current face
+		UINT mlVertIndices[3];
+		mlVertIndices[0] = IndexVertex(posUVPairs, mlPosIndices[0], mlUVIndices[0]);
+		mlVertIndices[1] = IndexVertex(posUVPairs, mlPosIndices[1], mlUVIndices[1]);
+		mlVertIndices[2] = IndexVertex(posUVPairs, mlPosIndices[2], mlUVIndices[2]);
+		Mesh newMesh(mlVertIndices);
 
 		// Get material of current case.
 		short mlFaceMat = mlFace3DGetMaterial(face);
@@ -325,14 +340,11 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 		if (mlFaceMat > 0)
 		{
 			MLModelMaterial const* mlMaterial = mlModel3DGetMaterial(objModel, mlFaceMat);
-			//string materialName(mlModel3DGetFilename(objModel));
-			//materialName += ": ";
 			char const* mlMatName = mlMaterial->name;
 			if (!mlMatName)
 			{
 				mlMatName = "Default";
 			}
-			//materialName += mlMatName;
 			string materialName(mlMatName);
 			faceMaterial = GetMaterial(materialName);
 			if (!faceMaterial)
@@ -357,6 +369,29 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 		model->meshes.push_back(newMesh);
 	}
 
+	// Construct Vertices.
+	unsigned int vertexCount = posUVPairs->size();
+	for (int i = 0; i < vertexCount; i++) {
+		MLVertex3D const*  mlVertex = mlModel3DGetVertex(objModel, posUVPairs->at(i).first);
+		GUPoint3D guPoint = mlVertex3DGetPosition(mlVertex);
+
+		GUNormal3D guNormal = mlVertex3DGetNormal(mlVertex);
+		Vertex vertex;
+		vertex.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
+		vertex.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
+		
+		if (hasUVs/* && i < mlModel3DGetTextureVertexCount(objModel)*/) {
+			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(objModel, posUVPairs->at(i).second);
+			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
+			vertex.UV = XMFLOAT2(guUV.x, guUV.y);
+		} else {
+			vertex.UV = XMFLOAT2(0, 0);
+		}
+		
+		model->vertices.push_back(vertex);
+	}
+
+	delete posUVPairs;
 	MLModel3DDelete(objModel);
 
 	return StoreModel(model, name);
@@ -450,4 +485,29 @@ SoundManager* AssetManager::GetSoundManager()
 	return soundManager;
 }
 
-	
+// Non-Class Functions
+int IndexVertex(vector<pair<UINT,UINT>>* posUVPairs, UINT positionIndex, UINT uvIndex)
+{
+	int pairIndex = -1;
+	if (!posUVPairs)
+	{
+		return pairIndex;
+	}
+
+	int pairCount = posUVPairs->size();
+	for (int i = 0; i < pairCount && pairIndex < 0; i++)
+	{
+		if (posUVPairs->at(i).first == positionIndex && posUVPairs->at(i).second == uvIndex)
+		{
+			pairIndex = i;
+		}
+	}
+
+	if (pairIndex < 0)
+	{
+		posUVPairs->push_back(pair<UINT,UINT>(positionIndex, uvIndex));
+		pairIndex = posUVPairs->size() - 1;
+	}
+
+	return pairIndex;
+}
