@@ -4,16 +4,18 @@
 
 using namespace DirectX;
 
+
 namespace JetpackAudio
 {
 class SoundInstance
 {
 public :
-	SoundInstance(wchar_t* path, AudioEngine* engine)
+	SoundInstance(const wchar_t* path, AudioEngine* engine)
 	{
 		if(engine)
 			{
-				effectEffect.reset(new SoundEffect(engine, path));	
+				effectEffect.reset(new SoundEffect(engine, path));
+				sizeMS = effectEffect.get()->GetSampleDurationMS();
 				effect = effectEffect.get()->CreateInstance(SOUND_EFFECT_INSTANCE_FLAGS::SoundEffectInstance_Use3D);			
 				if(!effect)
 				{
@@ -22,7 +24,7 @@ public :
 			}
 		else
 			throw 1;
-
+		
 		currentVolume = 1;
 	}
 
@@ -102,14 +104,22 @@ public :
 			}
 			else
 			{
-				effect->SetVolume(1);
+				effect->SetVolume(currentVolume);
 			}
 		}
 	}
 
+	inline size_t sizeInMilliseconds()
+	{
+		return sizeMS;
+	}
+
+	
+	std::unique_ptr<SoundEffectInstance> effect;
+
 private:
 	std::unique_ptr<SoundEffect> effectEffect;
-	std::unique_ptr<SoundEffectInstance> effect;
 	float currentVolume;
+	size_t sizeMS;
 };
 }

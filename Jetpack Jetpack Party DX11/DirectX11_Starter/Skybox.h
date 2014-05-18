@@ -23,7 +23,7 @@ public:
 	
 	XMFLOAT3 oldPos;
 
-	Skybox(float farPlane, XMFLOAT3 playerCurrentPosition)
+	Skybox(float farPlane,  Entity* player)
 	{
 		D3D11_RASTERIZER_DESC rastDesc;
 		ZeroMemory(&rastDesc, sizeof(D3D11_RASTERIZER_DESC));
@@ -38,8 +38,9 @@ public:
 		//transform.Translate(XMFLOAT3(0, 0, 20));		
 		__super::LoadTexture(L"../Assets/Textures/Skyboxnew1.png");
 		transform.SetLocalRotation(XMFLOAT3(PI / 2, 0, 0));
-		oldPos = playerCurrentPosition;
+		//oldPos = playerCurrentPosition;
 		Finalize();	
+		transform.SetParent(&player->transform);
 	}
 
 	~Skybox()
@@ -50,7 +51,7 @@ public:
 	void Update(float dt, XMFLOAT3 newPosition)
 	{
 		//XMVECTOR diff = XMVector3Length(XMVectorSubtract(XMLoadFloat3(&newPosition), XMLoadFloat3(&oldPos)));
-		//XMFLOAT3 translationReqd;
+		XMFLOAT3 translationReqd;
 		//diff = XMVector4Normalize(diff);
 		//XMStoreFloat3(&translationReqd, diff);
 		//
@@ -62,9 +63,9 @@ public:
 
 		//
 		////
-		//translationReqd = this->transform.GetTranslation();
-		//Debug::Log("POS::\n");
-		//Debug::Log(Debug::ToString(XMFLOAT4(translationReqd.x, translationReqd.y, translationReqd.z, 0)));
+		translationReqd = this->transform.GetTranslation();
+		Debug::Log("POS::\n");
+		Debug::Log(Debug::ToString(XMFLOAT4(translationReqd.x, translationReqd.y, translationReqd.z, 0)));
 		//this->transform.Translate(translationReqd);
 	}
 

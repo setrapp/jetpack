@@ -1,10 +1,14 @@
 #pragma once
 #ifndef _SOUNDMANAGER_H
 #define _SOUNDMANAGER_H
+
+
 #include <string>
 #include "SoundInstance.h"
 #include "InputManager.h"
 #include "AudioWaveManager.h"
+#include "Jukebox.h"
+
 
 using namespace DirectX;
 using namespace JetpackAudio;
@@ -21,7 +25,10 @@ typedef enum SoundId
 
 class SoundManager
 {
-public:
+public:	
+	JukeBox* jukebox;
+	JukeBox* menuJukeBox;
+
 	SoundManager(void)
 	{
 		CoInitializeEx(nullptr, COINIT_MULTITHREADED);
@@ -33,6 +40,20 @@ public:
 		mute = false;
 		oldkeystate= -1;
 		SoundMap = new map<SoundId, SoundInstance*>();
+
+
+		jukebox = new JukeBox();	
+		jukebox->AddTrack(L"../Assets/Sounds/JukeBox/0.wav", engineSfx);
+		jukebox->AddTrack(L"../Assets/Sounds/JukeBox/1.wav", engineSfx);
+		jukebox->AddTrack(L"../Assets/Sounds/JukeBox/2.wav", engineSfx);
+		jukebox->AddTrack(L"../Assets/Sounds/JukeBox/3.wav", engineSfx);
+		jukebox->AddTrack(L"../Assets/Sounds/JukeBox/4.wav", engineSfx);
+
+		menuJukeBox = new JukeBox();
+		menuJukeBox->AddTrack(L"../Assets/Sounds/JukeBox/1.wav", engineSfx);
+		menuJukeBox->AddTrack(L"../Assets/Sounds/JukeBox/2.wav", engineSfx);
+		menuJukeBox->AddTrack(L"../Assets/Sounds/JukeBox/3.wav", engineSfx);
+		menuJukeBox->AddTrack(L"../Assets/Sounds/JukeBox/4.wav", engineSfx);
 	}
 
 	~SoundManager(void)
@@ -44,6 +65,8 @@ public:
 		delete SoundMap;
 		delete engineSfx;
 		delete waveformatex;
+		delete jukebox;
+		delete menuJukeBox;
 	}
 
 	void SoundManager::LoadSound(SoundId name, wchar_t* path)
@@ -111,7 +134,7 @@ public:
 	}
 
 	//always call this
-	void SoundManager::Update()
+	void SoundManager::Update(float dt)
 	{
 		if(IPMan::GetIPMan()->GetKey('M') && IPMan::GetIPMan()->GetKey('M') != oldkeystate)
 		{
@@ -120,6 +143,12 @@ public:
 		}
 		oldkeystate = IPMan::GetIPMan()->GetKey('M');
 		engineSfx->Update();
+
+		if(jukebox->Playing())
+			jukebox->Update(dt);
+
+		if(menuJukeBox->Playing())
+			menuJukeBox->Update(dt);
 	}
 
 	//This is an expensive operation and it is inclusive of the default update()
@@ -156,6 +185,8 @@ public:
 			iterator->second->Mute(mute);
 			iterator++;
 		}
+			jukebox->MUTE(mute);
+			menuJukeBox->MUTE(mute);
 	}
 
 	//Sets the volume of all the soundtracks loaded
@@ -179,6 +210,35 @@ public:
 		}
 	}
 
+	void PlayJukeBox()
+	{
+		jukebox->Play();
+	}
+
+	void PauseJukeBox()
+	{
+		jukebox->Pause();
+	}
+
+	void StopJukeBox()
+	{
+		jukebox->Stop();
+	}
+
+	void PlayMenuJukeBox()
+	{
+		menuJukeBox->Play();
+	}
+
+	void PauseMenuJukeBox()
+	{
+		menuJukeBox->Pause();
+	}
+
+	void StopMenuJukeBox()
+	{
+		menuJukeBox->Stop();
+	}
 private:
 	AudioEngine* engineSfx;
 	AUDIO_ENGINE_FLAGS flags;
@@ -186,8 +246,6 @@ private:
 	AUDIO_STREAM_CATEGORY category;
 	bool mute;
 	std::map<SoundId, SoundInstance*>* SoundMap;
-	//Background tunes only
-//	std::queue<SoundInstance*> jukebox;
 	int oldkeystate;
 
 	inline map<SoundId, SoundInstance*>::iterator Contains(SoundId name) const

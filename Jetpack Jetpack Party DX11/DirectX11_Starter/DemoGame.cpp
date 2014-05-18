@@ -37,6 +37,7 @@
 #include "SpriteRenderer.h"
 #include "HUD.h"
 #include "Skybox.h"
+#include "Jukebox.h"
 
 using namespace std;
 InputManager* IPMan::inputManager = NULL;
@@ -294,10 +295,10 @@ void DemoGame::CreateGeometryBuffers()
 	navMesh->Finalize();
 
 	//All you have to do.
-	/*AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "skybox");
-	Entity* skybox = new Skybox(farPlaneDistance);	
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "skybox");
+	Entity* skybox = new Skybox(farPlaneDistance, player);	
 	entities.push_back(skybox);
-	*/
+	
 
 	//All you have to do.
 	//AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "jetdude");
@@ -371,8 +372,8 @@ void DemoGame::LoadShadersAndInputLayout()
 void DemoGame::LoadSoundAssets()
 {
 	SoundId id;
-	id = SoundId::SAMPLEBG;
-	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sounds/SampleBG.wav");
+	//id = SoundId::SAMPLEBG;
+	//assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sounds/SampleBG.wav");
 	assetManager->Instance()->GetSoundManager()->LoadSound(SoundId::THRUSTER, L"../Assets/Sounds/SoundEffects/Thruster.wav");
 	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SAMPLEBG, true, true, 0.05);
 	//assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SINK);
@@ -456,10 +457,16 @@ void DemoGame::UpdateScene(float dt)
 #endif
 	}
 
-	assetManager->Instance()->GetSoundManager()->Update();
+	assetManager->Instance()->GetSoundManager()->Update(dt);
 	if(currentState == GameState::Playing)
 	{
 		this->deltaTime = dt;
+
+		if(!AssetManager::Instance()->GetSoundManager()->jukebox->Playing())
+			AssetManager::Instance()->GetSoundManager()->PlayJukeBox();
+
+		if(AssetManager::Instance()->GetSoundManager()->menuJukeBox->Playing())
+			AssetManager::Instance()->GetSoundManager()->PauseMenuJukeBox();
 
 		while (!AssetManager::Instance()->addedEntities.empty())
 		{
@@ -467,7 +474,7 @@ void DemoGame::UpdateScene(float dt)
 			AssetManager::Instance()->addedEntities.pop();
 		}
 
-
+		
 		for(Entity* e: entities)
 		{
 			e->Update(dt);
@@ -488,6 +495,14 @@ void DemoGame::UpdateScene(float dt)
 
 	if(currentState == GameState::MenuState)
 	{
+		
+		if(!AssetManager::Instance()->GetSoundManager()->menuJukeBox->Playing())
+			AssetManager::Instance()->GetSoundManager()->PlayMenuJukeBox();
+
+		if(AssetManager::Instance()->GetSoundManager()->jukebox->Playing())
+			AssetManager::Instance()->GetSoundManager()->PauseJukeBox();
+
+
 		GameState newState = menu->Update(dt);
 		if (currentState != newState)
 		{
