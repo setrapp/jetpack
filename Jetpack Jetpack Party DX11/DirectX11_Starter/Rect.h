@@ -13,8 +13,10 @@ public:
 		height = 0;
 	}
 
-	Rect(int x, int y, int width, int height)
+	inline Rect(int x, int y, int width, int height)
 	{
+		if(!this)
+		{}
 		this->x = x;
 		this->y = y;
 		this->width = width;
@@ -23,6 +25,12 @@ public:
 
 	~Rect(void)
 	{
+	}
+
+	inline void MoveRect(const int xnew, const int ynew)
+	{
+		this->x += xnew;
+		this->y += ynew;
 	}
 
 	const inline bool Rect::Contains(const int x, const int y)
@@ -34,14 +42,25 @@ public:
 		return false;
 	}
 
-	static RECT ConvertToRECT(Rect* rect)
+	inline static RECT* GetRECTFromRect(Rect* rect)
 	{
-		RECT r;
-		r.left = rect->x;
-		r.top = rect->y ;
-		r.right = rect->width - r.left;
-		r.bottom = rect->height -  r.top;
+		RECT* r = new RECT();
+		r->left = rect->x;
+		r->top = rect->y ;
+		r->right = rect->width + r->left;
+		r->bottom = rect->height +  r->top;
 		return r;
+	}
+
+
+	inline static Rect* GetRectFromRECT(const RECT* rectOld)
+	{
+		Rect* rect = new Rect();
+		rect->x = rectOld->left;
+		rect->y = rectOld->top;
+		rect->width = rectOld->left + rectOld->right;
+		rect->height = rectOld->top + rectOld->bottom;
+		return rect;
 	}
 };
 #endif

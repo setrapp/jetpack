@@ -4,7 +4,7 @@
 ControllableCamera::ControllableCamera()
 {
 	velocity = XMFLOAT3(0, 0, 0);
-	maxSpeed = 1000;
+	maxSpeed = 1000000000000000;
 	groundSpeedDampening = 0.95f;
 	controllable = false;
 }
@@ -28,27 +28,27 @@ void ControllableCamera::CheckInput(float dt)
 	
 	if(IPMan::GetIPMan()->GetKey('S'))
 	{
-		velocity.z -= 1000 * dt;
+		velocity.z -= 100000 * dt;
 	}
 	if(IPMan::GetIPMan()->GetKey('W'))
 	{
-		velocity.z += 1000 * dt;
+		velocity.z += 100000 * dt;
 	}
 	if(IPMan::GetIPMan()->GetKey('D'))
 	{
-		velocity.x += 1000 * dt;
+		velocity.x += 100000 * dt;
 	}
 	if(IPMan::GetIPMan()->GetKey('A'))
 	{
-		velocity.x -= 1000 * dt;
+		velocity.x -= 100000 * dt;
 	}
 	if(IPMan::GetIPMan()->GetKey('Q'))
 	{
-		velocity.y -= 1000 * dt;
+		velocity.y -= 100000 * dt;
 	}
 	if(IPMan::GetIPMan()->GetKey('E'))
 	{
-		velocity.y += 1000 * dt;
+		velocity.y += 100000 * dt;
 	}
 
 	// Clamp to max speed.
@@ -61,7 +61,6 @@ void ControllableCamera::CheckInput(float dt)
 		velocity.y = velocity.y * (maxSpeed / velocityMag);
 		velocity.z = velocity.z * (maxSpeed / velocityMag);
 	}
-
 	if(IPMan::GetIPMan()->GetKey('Y'))
 	{
 		transform.Rotate(XMFLOAT3(0, -1 * dt, 0));

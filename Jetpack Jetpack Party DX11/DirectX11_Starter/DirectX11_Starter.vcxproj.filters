@@ -126,9 +126,39 @@
     <ClCompile Include="Jetpack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="ManeuverJetpack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+=======
+    <ClCompile Include="BulletManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ManeuverJetpack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LobbyScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UDPClientConnectionEntity.cpp">
+      <Filter>Source Files\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="PositionLerp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkedPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+>>>>>>> 195b231df48e0ced54bdf1eb2a2c9c7b91eb404f
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXGame.h">
@@ -275,17 +305,49 @@
     <ClInclude Include="GUITextures.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="ManeuverJetpack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BulletManager.h">
       <Filter>Header Files\Core\Physics</Filter>
+=======
+    <ClInclude Include="BulletManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ManeuverJetpack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbyScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UDPClientConnectionEntity.h">
+      <Filter>Header Files\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="PositionLerp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkedPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Jukebox.h">
+      <Filter>Header Files\Sound</Filter>
+>>>>>>> 195b231df48e0ced54bdf1eb2a2c9c7b91eb404f
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Toolkit\Src\Shaders\DGSLPhong.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="Shaders\SimplePixelShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
@@ -293,6 +355,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Shaders\TexturePixelShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\DeferredPixelShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

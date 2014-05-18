@@ -351,7 +351,7 @@ int DXGame::Run()
 				// Standard game loop type stuff
 				CalculateFrameStats();
 				UpdateScene(timer.DeltaTime());
-				DrawScene();
+				DrawScene(); 
 				elapsedTime += (LONG64)(timer.DeltaTime() * 10000);
                 if(((__int64)elapsedTime > 60))
                 {
@@ -432,13 +432,15 @@ LRESULT DXGame::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_ACTIVATE:
 		if( LOWORD(wParam) == WA_INACTIVE )
 		{
-			gamePaused = true;
-			timer.Stop();
+			//gamePaused = true;
+			//timer.Stop();
+			windowFocused=false;
 		}
 		else
 		{
-			gamePaused = false;
-			timer.Start();
+			//gamePaused = false;
+			//timer.Start();
+			windowFocused= true;
 		}
 		return 0;
 		// WM_SETFOCUS is sent when the window recieves keyboard focus.

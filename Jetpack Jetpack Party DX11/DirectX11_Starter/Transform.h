@@ -140,7 +140,7 @@ public:
 	void UpdateLocalAndWorld();
 
 private:
-	void ApplyRotation(XMMATRIX* rotation);
+	void ApplyRotation(XMFLOAT3 rotation);
 };
 
 

@@ -35,15 +35,37 @@ Entity::~Entity(void)
 	{
 		delete *it;
 	}
-	//ReleaseMacro(vertexBuffer);
-	//ReleaseMacro(indexBuffer);
+	ReleaseMacro(vertexBuffer);
+	for (map<Material*, pair<ID3D11Buffer*, LONG>>::iterator it = indexBuffers.begin(); it != indexBuffers.end(); it++)
+	{
+		ReleaseMacro(it->second.first);
+	}
 }
 
-void Entity::AddQuad(Vertex* v, UINT* i)
+void Entity::AddTriangle(Vertex* v, UINT* i, bool moveIndicesToEnd)
 {
-	for (int j = 0; j < 6; j++)
+	if (moveIndicesToEnd)
 	{
-		i[j] += vertices.size();
+		for (int j = 0; j < 3; j++)
+		{
+			i[j] += vertices.size();
+		}
+	}
+
+	for(int i = 0; i < 3; i++)
+		vertices.push_back(v[i]);
+	Mesh* m = new Mesh(i);
+	meshes.push_back(m);
+}
+
+void Entity::AddQuad(Vertex* v, UINT* i, bool moveIndicesToEnd)
+{
+	if (moveIndicesToEnd)
+	{
+		for (int j = 0; j < 6; j++)
+		{
+			i[j] += vertices.size();
+		}
 	}
 
 	for(int i = 0; i < 4; i++)
@@ -52,19 +74,6 @@ void Entity::AddQuad(Vertex* v, UINT* i)
 	Mesh* m2 = new Mesh(i + 3);
 	meshes.push_back(m1);
 	meshes.push_back(m2);
-}
-
-void Entity::AddTriangle(Vertex* v, UINT* i)
-{
-	for (int j = 0; j < 3; j++)
-	{
-		i[j] += vertices.size();
-	}
-
-	for(int i = 0; i < 4; i++)
-		vertices.push_back(v[i]);
-	Mesh* m = new Mesh(i);
-	meshes.push_back(m);
 }
 
 void Entity::AddModel(Model* model) {
@@ -90,6 +99,8 @@ void Entity::AddModel(Model* model) {
 		mesh->SetMaterial(model->meshes[i].GetMaterial());
 		meshes.push_back(mesh);
 	}
+
+	models.push_back(model);
 }
 
 void Entity::Update(float dt)
@@ -97,7 +108,7 @@ void Entity::Update(float dt)
 	
 }
 
-void Entity::Draw(EntityDrawArgs const* drawArgs)
+void Entity::Draw(EntityDrawArgs const* drawArgs, XMFLOAT4X4 const* view, XMFLOAT4X4 const* projection)
 {
 	if (!visible || !drawArgs)
 	{
@@ -127,8 +138,22 @@ void Entity::Draw(EntityDrawArgs const* drawArgs)
 	VertexShaderModelConstantBuffer perPrimitiveVSConstantBuffer;
 	perPrimitiveVSConstantBuffer.world = transform.GetWorldMatrix();
 	perPrimitiveVSConstantBuffer.inverseTranspose = inverseTranspose;
-	perPrimitiveVSConstantBuffer.view = drawArgs->vsModelConstantBufferData->view;
-	perPrimitiveVSConstantBuffer.projection = drawArgs->vsModelConstantBufferData->projection;
+	if (view)
+	{
+		perPrimitiveVSConstantBuffer.view = *view;
+	}
+	else
+	{
+		perPrimitiveVSConstantBuffer.view = drawArgs->vsModelConstantBufferData->view;
+	}
+	if (projection)
+	{
+		perPrimitiveVSConstantBuffer.projection = *projection;
+	}
+	else
+	{
+		perPrimitiveVSConstantBuffer.projection = drawArgs->vsModelConstantBufferData->projection;
+	}
 
 	// Update vertex shader constant buffer with per primitive buffer.
 	DXConnection::Instance()->deviceContext->UpdateSubresource(drawArgs->vsModelConstantBuffer, 0, nullptr, &perPrimitiveVSConstantBuffer, 0, 0);
@@ -172,9 +197,9 @@ void Entity::Draw(EntityDrawArgs const* drawArgs)
 }
 
 
-void Entity::LoadTexture(wchar_t* path)
+void Entity::LoadTexture(wchar_t* path, bool isDDS)
 {	
-	this->baseMaterial->ApplyTexture(path);
+	this->baseMaterial->ApplyTexture(path, isDDS);
 }
 
 
@@ -313,9 +338,14 @@ void Entity::SetVisible(bool visibility)
 	}
 }
 
+Model* Entity::GetModel(int index)
+{
+	return models[0];
+}
+
 string Entity::getNetworkString(){
-	XMFLOAT3 curTransform= transform.GetTranslation();
-	XMFLOAT3X3 curRotation = transform.GetRotation();
+	XMFLOAT3 curTransform= transform.GetLocalTranslation();
+	XMFLOAT3X3 curRotation = transform.GetLocalRotation();
 	std::ostringstream ss1;
 	ss1 << curTransform.x;
 	ss1 << ",";

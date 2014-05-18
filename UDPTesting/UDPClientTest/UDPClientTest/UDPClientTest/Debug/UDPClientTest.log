@@ -1,0 +1,15 @@
+﻿Build started 5/11/2014 8:55:16 PM.
+     1>Project "D:\jetpack\UDPTesting\UDPClientTest\UDPClientTest\UDPClientTest\UDPClientTest.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\UDPClientTest.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt UDPClientConnectionEntity.cpp
+         UDPClientConnectionEntity.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\jetpack\UDPTesting\UDPClientTest\UDPClientTest\Debug\UDPClientTest.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\jetpack\UDPTesting\UDPClientTest\UDPClientTest\Debug\UDPClientTest.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\jetpack\UDPTesting\UDPClientTest\UDPClientTest\Debug\UDPClientTest.lib" /MACHINE:X86 Debug\stdafx.obj
+         Debug\UDPClientConnectionEntity.obj
+         Debug\UDPClientTest.obj
+         UDPClientTest.vcxproj -> D:\jetpack\UDPTesting\UDPClientTest\UDPClientTest\Debug\UDPClientTest.exe
+     1>Done Building Project "D:\jetpack\UDPTesting\UDPClientTest\UDPClientTest\UDPClientTest\UDPClientTest.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.18

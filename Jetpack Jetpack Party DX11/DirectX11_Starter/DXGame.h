@@ -8,8 +8,8 @@
 // -------------------------------------------------------------
 
 #pragma once
-#define screenWidth 800	
-#define screenHeight 600
+#define screenWidth		1920	
+#define screenHeight	1080
 
 #include "Common.h"
 #include "Windows.h"
@@ -73,6 +73,7 @@ protected:
 	bool      minimized;
 	bool      maximized;
 	bool      resizing;
+	bool windowFocused;
 
 	// Timer for running the game on delta time
 	GameTimer timer;

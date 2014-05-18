@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UDPClientTest", "UDPClientTest\UDPClientTest.vcxproj", "{69DCCEA6-C055-46CD-B9EF-1376A4696914}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UDPServerTest", "UDPServerTest\UDPServerTest.vcxproj", "{4D314164-FE62-47E7-81D3-5BD97C01B374}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{69DCCEA6-C055-46CD-B9EF-1376A4696914}.Debug|Win32.ActiveCfg = Debug|Win32
+		{69DCCEA6-C055-46CD-B9EF-1376A4696914}.Debug|Win32.Build.0 = Debug|Win32
+		{69DCCEA6-C055-46CD-B9EF-1376A4696914}.Release|Win32.ActiveCfg = Release|Win32
+		{69DCCEA6-C055-46CD-B9EF-1376A4696914}.Release|Win32.Build.0 = Release|Win32
+		{4D314164-FE62-47E7-81D3-5BD97C01B374}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4D314164-FE62-47E7-81D3-5BD97C01B374}.Debug|Win32.Build.0 = Debug|Win32
+		{4D314164-FE62-47E7-81D3-5BD97C01B374}.Release|Win32.ActiveCfg = Release|Win32
+		{4D314164-FE62-47E7-81D3-5BD97C01B374}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

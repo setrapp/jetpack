@@ -14,7 +14,7 @@ public:
 	Material(XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT4 specular, UINT shininess);
 	Material(wchar_t* path);
 	~Material(void);	
-	void ApplyTexture(wchar_t* path);
+	void ApplyTexture(wchar_t* path, bool isDDS = false);
 	ShaderMaterial GetShaderMaterial();
 	XMFLOAT4 ambient;
 	XMFLOAT4 diffuse;

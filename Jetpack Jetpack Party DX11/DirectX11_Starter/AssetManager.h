@@ -43,14 +43,20 @@ public:
 	//ID3D11Texture2D GetTexture2D(string name = "default");
 
 	// Materials
-	Material* StoreMaterial(Material* material, string name = "default");
-	Material* GetMaterial(string name = "default");
+	Material* StoreMaterial(Material* material, string name = "default", Model* sourceModel = NULL);
+	Material* GetMaterial(string name = "default", Model* sourceModel = NULL);
 
 	// Models
 	Model* CreateAndStoreModel(string filePath, string name = "default");
 	Model* StoreModel(Model* model, string name = "default");
 	Model* GetModel(string name = "default");
+
+	// Mesh Groups
+	vector<MeshGroup*>* GetMeshGroupsWithMaterial(vector<MeshGroup*>* meshGroupsOut, Model* sourceModel, string desiredMaterialName = "default");
+	Entity* EntifyMeshGroup(Entity* entityOut, Model* sourceModel, MeshGroup* meshGroup);
+
 	SoundManager* GetSoundManager();
+	
 	static AssetManager* Instance();
 	std::queue<Entity*> addedEntities;
 
@@ -60,7 +66,7 @@ private:
 	map<string, ID3D11VertexShader*>* vertexShaders;
 	map<string, ID3D11PixelShader*>* pixelShaders;
 	map<string, ID3D11Texture2D*>* texture2Ds;
-	map<string, Material*>* materials;
+	map<string, pair<Material*, Model*>>* materials;
 	map<string, Model*>* models;
 	SoundManager* soundManager;
 };

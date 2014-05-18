@@ -2,9 +2,10 @@
 #define _GAMESTATE_H
 enum GameState
 {
-	Started,
+	MenuState,
 	Playing,
 	GameLobby,
+	Login,
 	Paused,
 	Won,
 	Lost

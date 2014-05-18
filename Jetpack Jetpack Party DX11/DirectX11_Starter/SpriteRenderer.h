@@ -2,7 +2,11 @@
 #include <d3d11.h>
 #include "Toolkit\Inc\SpriteBatch.h"
 #include "Renderer.h"
+#include "Toolkit\Inc\CommonStates.h"
+#include "DXConnection.h"
 
+
+using namespace DirectX;
 class SpriteRenderer: Renderer
 {
 public:
@@ -10,6 +14,7 @@ public:
 	{
 		this->deviceContext = deviceContext;
 		spriteBatch = new DirectX::SpriteBatch(deviceContext);
+		begun = false;
 	}
 
 	~SpriteRenderer(void)
@@ -22,14 +27,21 @@ public:
 		return this->spriteBatch;
 	}
 
-	inline void SpriteRenderer::Begin()
+	inline void SpriteRenderer::Begin(SpriteSortMode spriteMode = SpriteSortMode::SpriteSortMode_BackToFront)
 	{
 		// Store states that about to change.
 		deviceContext->OMGetBlendState(&blendState, blendVector, &blendMask);
-		deviceContext->OMGetDepthStencilState(&depthStencilState, &pStencil);
+		deviceContext->OMGetDepthStencilState(&depthStencilState, NULL);
 		deviceContext->RSGetState(&rasterizerState);
-
-		this->spriteBatch->Begin(DirectX::SpriteSortMode::SpriteSortMode_FrontToBack, nullptr,nullptr,nullptr,nullptr,nullptr, DirectX::XMMatrixIdentity());
+		
+		CommonStates states(DXConnection::Instance()->device);
+		deviceContext->OMSetBlendState(states.NonPremultiplied(), nullptr, 0xFFFFFFFF);
+		spriteBatch->Begin(spriteMode, nullptr, nullptr, nullptr, nullptr, [=]
+		{			
+			CommonStates states(DXConnection::Instance()->device);
+			deviceContext->OMSetBlendState( states.NonPremultiplied(), nullptr, 0xFFFFFFFF);
+		});
+		begun = true;
 	}
 
 	inline void SpriteRenderer::End()
@@ -38,8 +50,21 @@ public:
 
 		// Reset states to what they were before begin.
 		deviceContext->OMSetBlendState(blendState, blendVector, blendMask);
-		deviceContext->OMSetDepthStencilState(depthStencilState, pStencil);
+		deviceContext->OMSetDepthStencilState(depthStencilState, NULL);
 		deviceContext->RSSetState(rasterizerState);
+		if (blendState)
+		{
+			blendState->Release();
+		}
+		if (depthStencilState)
+		{
+			depthStencilState->Release();
+		}
+		if (rasterizerState)
+		{
+			rasterizerState->Release();
+		}
+		begun = false;
 	}
 
 private: 
@@ -49,6 +74,6 @@ private:
 	FLOAT blendVector[4];
 	UINT blendMask;
 	ID3D11DepthStencilState* depthStencilState;
-	UINT pStencil;
 	ID3D11RasterizerState* rasterizerState;
+	bool begun;
 };

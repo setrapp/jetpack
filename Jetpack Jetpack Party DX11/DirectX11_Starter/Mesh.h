@@ -19,8 +19,15 @@ private:
 	Material* material;
 };
 
+struct MeshGroup
+{
+	unsigned int firstFace;
+	unsigned int lastFace;
+};
+
 struct Model 
 {
 	vector<Vertex> vertices;
 	vector<Mesh> meshes;
+	vector<MeshGroup> meshGroups;
 };                                                                                                                                                                                                                                                                                                      

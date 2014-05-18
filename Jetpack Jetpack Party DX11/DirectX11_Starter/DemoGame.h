@@ -14,17 +14,23 @@
 #include "ControllableCamera.h"
 #include "GameState.h"
 #include "Menu.h"
+#include "LoginScreen.h"
+#include "LobbyScreen.h"
 #include "Sfx.h"
 #include "Camera.h"
 #include "AssetManager.h"
 #include "Light.h"
-//#include "SoundManager.h"
 #include "MouseLook.h"
 #include "Debug.h"
 #include "InputManager.h"
 #include <queue>
 #include "XNew.h"
 #include <dinput.h>
+#include "DeferredRenderer.h"
+#include "HUD.h"
+#include "Skybox.h"
+
+#define PLAYER_COUNT 1
 
 using namespace DirectX;
 
@@ -62,6 +68,7 @@ private:
 	void CreateGeometryBuffers();
 	void LoadShadersAndInputLayout();
 	void LoadSoundAssets();
+	void CreatePlayers();
 	void AttachCameraToPlayer();
 
 private:
@@ -80,15 +87,21 @@ private:
 	VertexShaderModelConstantBuffer vsModelConstantBufferData;
 	ID3D11Buffer* materialsAndLightsConstantBuffer;
 	MaterialsAndLightsConstantBuffer materialsAndLightsConstantBufferData;
+	XMFLOAT4 projectionInfo;
+	DeferredRenderer* deferredRenderer;
+	XMFLOAT4X4 deferredView;
+	XMFLOAT4X4 deferredProjection;
+	Entity* deferredPlane;
+	ID3D11DepthStencilState* deferredDepthlessState;
+	ID3D11RenderTargetView* nullRenderTargets[TARGET_COUNT];
+	ID3D11ShaderResourceView* nullShaderResources[TARGET_COUNT];
 
 	// Keeps track of the old mouse position.  Useful for 
 	// determining how far the mouse moved in a single frame.
 	POINT prevMousePos;
-
 	Light* light;
 
 	std::vector<Entity*> entities;
-
 	SpriteRenderer* spriteRenderer;
 
 	Camera* playerCamera;
@@ -96,13 +109,22 @@ private:
 	Camera* camera;
 	GameState currentState;
 	Menu* menu;
+	LoginScreen* loginScreen;
+	LobbyScreen* lobbyScreen;
 	MouseLook* mouseLook;
-
+	HUD* m_hud;
 	bool mouseCursorVisibility;
 	bool flag;
+<<<<<<< HEAD
 
 	//Physics
 	BulletManager* bullet;
+=======
+	Player* players[PLAYER_COUNT];
+	Skybox* skyboxAttached;
+
+	float farPlaneDistance;
+>>>>>>> 195b231df48e0ced54bdf1eb2a2c9c7b91eb404f
 };
 
 #endif

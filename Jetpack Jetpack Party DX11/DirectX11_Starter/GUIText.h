@@ -4,6 +4,7 @@
 #include "Common.h"
 #include "Rect.h"
 #include "FontRenderer.h"
+#include "SpriteRenderer.h"
 #include <functional>
 #include <utility>
 #include "AnimationBase.h"
@@ -20,10 +21,10 @@ public :
 		 //You can have the width declared as 0. It will be taken care of considering the size of string.
 		 //0 Height will make the rect only as long as the font size
 		 //Item count represents how late you want the animation to affect for the item. Set it to 0 to have all items show up at once.
-		 GUIText(Rect* rect, wchar_t* str, int itemCount, AnimationType anim, FontRenderer* renderer, float animationSpeed, FXMVECTOR color = Colors::White, XMFLOAT2 Scale =XMFLOAT2(1, 1), float rotation = 0, float depth = 1, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
+		 GUIText(Rect* rect, wchar_t* str, int itemCount, AnimationType anim, FontRenderer* renderer, float animationSpeed, FXMVECTOR color = Colors::White, XMFLOAT2 Scale =XMFLOAT2(1, 1), float rotation = 0, float depth = 0, SpriteEffects spriteEffects = DirectX::SpriteEffects::SpriteEffects_None)
 		 {
 			 this->str = str;
-			 this->rect = rect;
+			 this->rect = new Rect();
 			 this->fontRenderer = renderer;
 			 auto sp = this->fontRenderer->GetSpriteFont();
 
@@ -37,6 +38,7 @@ public :
 			 	rect->height = sp->MeasureString(str).m128_f32[1];
 			 }
 
+			 SetRect(rect);
 			 XMStoreFloat4(&this->color, color);
 			 this->rotation = rotation;
 			 this->depth = depth;
@@ -66,6 +68,7 @@ public :
 					 {
 						 basePosition = XMFLOAT2(this->rect->x, this->rect->y + offset + rect1.top + rect1.bottom + offset * itemCount);
 					 }
+			startPosition = basePosition;
 			 Origin = XMFLOAT2();	
 			 this->animationSpeed = animationSpeed;
 		 }
@@ -145,18 +148,18 @@ private :
 	inline void Animate(float dt)
 	{
 		if(animation == AnimationType::LEFTTORIGHT || animation == AnimationType::RIGHTTOLEFT)
+		{
+			if(basePosition.x == startPosition.x || abs(rect->x - startPosition.x) > abs(basePosition.x - startPosition.x))
 			{
-				if((int)basePosition.x != (int)rect->x)
-				{
-					if(animation == AnimationType::LEFTTORIGHT)
-						basePosition.x+=dt;
-					else
-						basePosition.x-=dt;
-				}
+				if(animation == AnimationType::LEFTTORIGHT)
+					basePosition.x+=dt;
+				else
+					basePosition.x-=dt;
 			}
+		}
 		else
 		{
-			if((int)basePosition.y != (int)rect->y)
+			if(basePosition.y == startPosition.y || abs(rect->y - startPosition.y) > abs(basePosition.y - startPosition.y))
 			{
 				if(animation == AnimationType::TOPTOBOTTOM)
 						basePosition.y+=dt;

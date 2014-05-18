@@ -18,6 +18,7 @@ cbuffer materialsAndLights : register(b1)
 {
 	Material material;
 	Light light;
+	float4 projectionInfo;
 }
 
 struct VertexToPixel
@@ -27,12 +28,18 @@ struct VertexToPixel
 	float2 uv			: TEXCOORD0;
 	float3 toEye		: NORMAL1;
 	float3 toLight		: NORMAL2;
+	float2 depth		: TEXCOORD1;
 };
 
-//Texture2D myTexture : register(t0);
-//SamplerState mySampler : register(s0);
+struct PixelOutput
+{
+	float4 ambient	: SV_TARGET0;
+	float4 diffuse	: SV_TARGET1;
+	float4 normal	: SV_TARGET2;
+	float4 depth	: SV_TARGET3;
+};
 
-float4 main(VertexToPixel input) : SV_TARGET
+PixelOutput main(VertexToPixel input) : SV_TARGET
 {
 	// Extract color data.
 	float4 inAmbient = material.ambient;
@@ -46,7 +53,7 @@ float4 main(VertexToPixel input) : SV_TARGET
 	input.toLight = normalize(input.toLight);
 
 	// Ambient
-	float4 ambient = inAmbient * light.ambient;
+	/*float4 ambient = inAmbient * light.ambient;
 
 	// Diffuse and Specular
 	float4 diffuse = float4(0, 0, 0, 0);
@@ -63,7 +70,15 @@ float4 main(VertexToPixel input) : SV_TARGET
 		{
 			specular = inSpecular * light.specular * specularIntensity;
 		}
-	}
+	}*/
 
-	return ambient + diffuse + specular;
+	// Depth
+	float depth = input.depth.x / input.depth.y;
+
+	PixelOutput output;
+	output.ambient = inAmbient;
+	output.diffuse = inDiffuse;
+	output.normal = float4(input.normal, 0);
+	output.depth = float4(depth, depth, depth, 1);
+	return output;
 }

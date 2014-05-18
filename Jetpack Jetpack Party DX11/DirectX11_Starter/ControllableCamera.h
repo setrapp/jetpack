@@ -11,6 +11,7 @@ public:
 
 public:
 	bool controllable;
+
 private:
 	XMFLOAT3 velocity;
 	float maxSpeed;

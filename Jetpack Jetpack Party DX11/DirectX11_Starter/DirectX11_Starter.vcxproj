@@ -55,7 +55,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\inc;$(SolutionDir)\Toolkit\inc;%(AdditionalIncludeDirectories);$(DXSDK_DIR)\Lib\x64;$(ProjectDir)\Bullet\src</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -93,6 +93,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ClientConnectionEntity.cpp" />
     <ClCompile Include="ControllableCamera.cpp" />
+    <ClCompile Include="DeferredRenderer.cpp" />
     <ClCompile Include="DemoGame.cpp" />
     <ClCompile Include="DXConnection.cpp" />
     <ClCompile Include="dxerr.cpp" />
@@ -102,16 +103,22 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GeneralUtility\GUMathUtility.cpp" />
     <ClCompile Include="GeneralUtility\GUParseUtility.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Jetpack.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LobbyScreen.cpp" />
+    <ClCompile Include="LoginScreen.cpp" />
     <ClCompile Include="ManeuverJetpack.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ModelLoad\MLMaterialLoader.c" />
     <ClCompile Include="ModelLoad\MLModelViewer.c" />
+    <ClCompile Include="NetworkedPlayer.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PositionLerp.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="UDPClientConnectionEntity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\XInputValues.h" />
@@ -125,6 +132,7 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="ControllableCamera.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="DeferredRenderer.h" />
     <ClInclude Include="DemoGame.h" />
     <ClInclude Include="DXConnection.h" />
     <ClInclude Include="dxerr.h" />
@@ -142,9 +150,13 @@
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="GUITextBox.h" />
     <ClInclude Include="GUITextures.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Jetpack.h" />
+    <ClInclude Include="Jukebox.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="LobbyScreen.h" />
+    <ClInclude Include="LoginScreen.h" />
     <ClInclude Include="ManeuverJetpack.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Menu.h" />
@@ -153,19 +165,26 @@
     <ClInclude Include="ModelLoad\MLMaterialLoader.h" />
     <ClInclude Include="ModelLoad\MLModelViewer.h" />
     <ClInclude Include="MouseLook.h" />
+    <ClInclude Include="NetworkedPlayer.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PositionLerp.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Rigidbody.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="SoundInstance.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="UDPClientConnectionEntity.h" />
     <ClInclude Include="XController.h" />
     <ClInclude Include="XInputValues.h" />
     <ClInclude Include="XNew.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Shaders\DeferredPixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+    </FxCompile>
     <FxCompile Include="Shaders\SimplePixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
@@ -175,11 +194,6 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Shaders\TexturePixelShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="Toolkit\Src\Shaders\DGSLPhong.hlsl">
-      <FileType>Document</FileType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>

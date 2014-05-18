@@ -3,10 +3,13 @@
 #include "Entity.h"
 #include "Camera.h"
 #include "ClientConnectionEntity.h"
-#include "MessageTypes.h";
+#include "UDPClientConnectionEntity.h"
+#include "MessageTypes.h"
 #include <queue>
 #include "Jetpack.h"
 #include "ManeuverJetpack.h"
+#include "PositionLerp.h"
+#include "NetworkedPlayer.h"
 
 class Player : public Entity
 {
@@ -15,23 +18,34 @@ public:
 	Player(const btRigidBody::btRigidBodyConstructionInfo& rbInfo);
 	~Player();
 	void Update(float dt);
+	void Respawn();
+	vector<string>* breakIntoParts(string s);
 
 public:
-	ClientConnectionEntity* clientEntity;
-	Entity* networkedCube;
-	std::map<int,Entity*> networkedEntities;
+	//ClientConnectionEntity* clientEntity;
+	UDPClientConnectionEntity* clientEntity;
+	std::map<int,NetworkedPlayer*> networkedEntities;
+	std::map<int,XMFLOAT3> networkedEntityVelocities;
+	std::map<int,PositionLerp> networkedEntityLerps;
 	float networkSendTimer;
-	vector<string>* breakIntoParts(string s);
+	void AddNewUser(int playerIndex);
+
 	bool loggedIn;
+
 	bool controllable;
 	Jetpack* jetpack;
+	XMFLOAT3 respawnPosition;
+	XMFLOAT3 respawnLocalRotation;
+	XMFLOAT3 targetPosition; 
+	float updateTimer;
 
 private:
 	void CheckInput(float dt);
 
 private:
+	float minPosture;
 	XMFLOAT3 angularVelocity;
-	XMFLOAT3 velocity;
+	XMFLOAT3 worldVelocity;
 	float maxSpeed;
 	float forwardAcceleration;
 	float backwardAcceleration;
@@ -41,4 +55,16 @@ private:
 	float groundSpeedDampening;
 	float airSpeedDampening;
 	bool grounded;
+
+	enum Thruster
+	{
+		BOTTOM_LEFT = 0,
+		BOTTOM_RIGHT,
+		BACK_LEFT,
+		BACK_RIGHT,
+		FRONT_LEFT,
+		FRONT_RIGHT,
+		SIDE_LEFT,
+		SIDE_RIGHT
+	};
 };
