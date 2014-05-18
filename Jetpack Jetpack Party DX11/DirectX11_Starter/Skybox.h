@@ -18,6 +18,7 @@ using namespace DirectX;
 class Skybox : public Entity
 {
 	ID3D11RasterizerState* noCull;
+	ID3D11DepthStencilState* DSLessEqual;
 
 public:
 	
@@ -40,7 +41,7 @@ public:
 		transform.SetLocalRotation(XMFLOAT3(PI / 2, 0, 0));
 		//oldPos = playerCurrentPosition;
 		Finalize();	
-		transform.SetParent(&player->transform);
+		//transform.SetParent(&player->transform);
 	}
 
 	~Skybox()
@@ -51,7 +52,7 @@ public:
 	void Update(float dt, XMFLOAT3 newPosition)
 	{
 		//XMVECTOR diff = XMVector3Length(XMVectorSubtract(XMLoadFloat3(&newPosition), XMLoadFloat3(&oldPos)));
-		XMFLOAT3 translationReqd;
+	//	XMFLOAT3 translationReqd;
 		//diff = XMVector4Normalize(diff);
 		//XMStoreFloat3(&translationReqd, diff);
 		//
@@ -60,21 +61,39 @@ public:
 		//btClamp<float>(translationReqd.z, -1, 1);
 		//this->transform.Translate(XMFLOAT3(0, translationReqd.z, 0));
 		////this->transform.Translate(XMFLOAT3(0, translationReqd.z, 0));
+		//XMFLOAT3 temp ;
+		//XMStoreFloat3(&temp, XMVector4Normalize(XMLoadFloat3(&this->transform.GetTranslation())));
+		//this->transform.Translate(temp);
+		//translationReqd = this->transform.GetTranslation();
+		//Debug::Log("POS::\n");
+		//Debug::Log(Debug::ToString(XMFLOAT4(translationReqd.x, translationReqd.y, translationReqd.z, 0)));
+		//this->transform.Translate(translationReqd);
 
-		//
-		////
-		translationReqd = this->transform.GetTranslation();
+		XMFLOAT3 translationNeeded ;
+		translationNeeded = newPosition;
+		translationNeeded.y -= 1000;
+		this->transform.SetTranslation(translationNeeded);
+		XMFLOAT3 translationReqd = this->transform.GetTranslation();
 		Debug::Log("POS::\n");
 		Debug::Log(Debug::ToString(XMFLOAT4(translationReqd.x, translationReqd.y, translationReqd.z, 0)));
-		//this->transform.Translate(translationReqd);
 	}
 
 public:
 	void Draw(EntityDrawArgs const* drawArgs, XMFLOAT4X4 const* view = NULL, XMFLOAT4X4 const* projection = NULL)
 	{				
-		//DXConnection::Instance()->deviceContext->ClearState();/*(0, NULL, D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);*/
+		//D3D11_DEPTH_STENCIL_DESC desc;
+		D3D11_DEPTH_STENCIL_DESC dssDesc;
+		ZeroMemory(&dssDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
+		dssDesc.DepthEnable = true;
+		dssDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		dssDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+		DXConnection::Instance()->device->CreateDepthStencilState(&dssDesc, &DSLessEqual);
+		DXConnection::Instance()->deviceContext->OMSetDepthStencilState(DSLessEqual, 0);
 		DXConnection::Instance()->deviceContext->RSSetState(noCull);
+
 		__super::Draw(drawArgs, view, projection);
+
 		DXConnection::Instance()->deviceContext->RSSetState(NULL);
+		DXConnection::Instance()->deviceContext->OMSetDepthStencilState(NULL, 0);
 	}
 };

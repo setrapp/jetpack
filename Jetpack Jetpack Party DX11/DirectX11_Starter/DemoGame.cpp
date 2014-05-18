@@ -301,7 +301,7 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "skybox");
 	Entity* skybox = new Skybox(farPlaneDistance, player);	
 	entities.push_back(skybox);
-	
+	skyboxAttached = static_cast<Skybox*>(skybox);
 
 	//All you have to do.
 	//AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "jetdude");
@@ -486,7 +486,7 @@ void DemoGame::UpdateScene(float dt)
 		{
 			e->Update(dt);
 		}
-		
+		skyboxAttached->Update(dt, player->transform.GetTranslation());
 	}
 
 	if(camera != debugCamera)
