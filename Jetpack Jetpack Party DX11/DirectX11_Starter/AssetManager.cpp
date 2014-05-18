@@ -263,18 +263,23 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 	}
 
 	Model* model = new Model();
-	
+	int texCount= mlModel3DGetTextureVertexCount(objModel);
 	bool hasUVs = mlModel3DGetTextureVertexCount(objModel) > 1;
-
+	if(name == "jetdude"){
+		//asdfasdf
+		int i = 0;
+	}
 	// Load Vertices.
 	unsigned int vertexCount = mlModel3DGetVertexCount(objModel);
 	for (int i = 0; i < vertexCount; i++) {
 		MLVertex3D const*  mlVertex = mlModel3DGetVertex(objModel, i);
 		GUPoint3D guPoint = mlVertex3DGetPosition(mlVertex);
+
 		GUNormal3D guNormal = mlVertex3DGetNormal(mlVertex);
 		Vertex vertex;
 		vertex.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
 		vertex.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
+		
 		if (hasUVs && i<mlModel3DGetTextureVertexCount(objModel)) {
 			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(objModel, i);
 			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
@@ -282,8 +287,13 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 		} else {
 			vertex.UV = XMFLOAT2(0, 0);
 		}
+		
 		model->vertices.push_back(vertex);
 	}
+
+
+
+	
 
 	// Load Individual Mesh Groups to Categorize Geometry.
 	unsigned int objectCount = mlModel3DGetObjectCount(objModel);

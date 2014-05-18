@@ -19,6 +19,14 @@ using namespace DirectX;
 class LoginScreen
 {
 public:
+	typedef enum MENU_OPTIONS
+	{
+		SINGLEPLAYER = 0,
+		MULTIPLAYER = 1,
+		SETTINGS = 2,
+		EXIT= 3
+	};
+
 	LoginScreen(FontRenderer* renderer, SpriteRenderer* spRenderer, const short ScreenWidth, const short ScreenHeight);
 	~LoginScreen(void);
 	GameState Update(float dt);
@@ -32,6 +40,8 @@ private:
 	GameState currstate;
 	GUITextBox* b ;	
 	RECT* r;
+
+	MENU_OPTIONS menuOptions;
 };
 	
 

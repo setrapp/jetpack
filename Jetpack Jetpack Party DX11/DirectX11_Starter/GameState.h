@@ -8,6 +8,7 @@ enum GameState
 	Login,
 	Paused,
 	Won,
-	Lost
+	Lost,
+	Settings
 };
 #endif

@@ -36,8 +36,8 @@ Menu::Menu(FontRenderer* renderer, SpriteRenderer* spRenderer, const short Scree
 
 	guiMan->Add("Texture", new GUITexture(r, L"../Assets/Textures/jetpackimage.png", spRenderer));
 
-	auto p = Rect::GetRECTFromRect(new Rect(0, 0, ScreenWidth, ScreenHeight));
-	guiMan->Add("Background", new GUITexture(p, L"../Assets/Textures/Menu_bg.png", spRenderer, true));
+	auto p = Rect::GetRECTFromRect(new Rect(ScreenWidth/4, ScreenHeight/16, ScreenWidth/2, ScreenHeight/2));
+	guiMan->Add("Background", new GUITexture(p, L"../Assets/Textures/menu.jpg", spRenderer, true));
 	delete p;
 
 	guiMan->_guiElements["SINGLEPLAYER"]->SetDepth(0.5f);
@@ -179,9 +179,9 @@ GameState Menu::KeyboardInputProcess()
 				{
 				case MENU_OPTIONS::SINGLEPLAYER: return GameState::Playing;
 					break;
-				case MENU_OPTIONS::MULTIPLAYER: return GameState::Playing;
+				case MENU_OPTIONS::MULTIPLAYER: return GameState::Login;
 					break;
-				case MENU_OPTIONS::SETTINGS: return GameState::MenuState;
+				case MENU_OPTIONS::SETTINGS: return GameState::Settings;
 					break;
 				case MENU_OPTIONS::EXIT: 
 					exit(1);

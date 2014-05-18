@@ -51,7 +51,7 @@ GameState LoginScreen::Update(const float dt)
 	guiMan->Update(dt);
 
 	if(guiMan->_guiElements["MULTIPLAYER"]->Clicked())
-		return GameState::Playing;	
+		return GameState::GameLobby;	
 
 	if(guiMan->_guiElements["EXIT"]->Clicked())
 		PostQuitMessage(0);
@@ -127,7 +127,6 @@ GameState LoginScreen::KeyboardInputProcess()
 				r->bottom = guiMan->_guiElements["EXIT"]->GetRect()->y+TICKER_HEIGHT;
 			}*/
 	}
-
 		return GameState::Login;
 }
 
