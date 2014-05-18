@@ -301,7 +301,6 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "skybox");
 	Entity* skybox = new Skybox(farPlaneDistance, player);	
 	entities.push_back(skybox);
-	skyboxAttached = static_cast<Skybox*>(skybox);
 
 	//All you have to do.
 	//AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "jetdude");
@@ -378,14 +377,14 @@ void DemoGame::LoadShadersAndInputLayout()
 
 void DemoGame::LoadSoundAssets()
 {
-	SoundId id;
+	//SoundId id;
 	//id = SoundId::SAMPLEBG;
 	//assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sounds/SampleBG.wav");
-	//assetManager->Instance()->GetSoundManager()->LoadSound(SoundId::THRUSTER, L"../Assets/Sounds/SoundEffects/Thruster.wav");
+	assetManager->Instance()->GetSoundManager()->LoadSound(SoundId::THRUSTER, L"../Assets/Sounds/SoundEffects/Thruster.wav");
 	//assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SAMPLEBG, true, true, 0.05);
 	//assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SINK);
 	#ifdef _DEBUG
-    //assetManager->Instance()->GetSoundManager()->Mute(true);
+		assetManager->Instance()->GetSoundManager()->Mute(true);
 	#endif
 }
 
@@ -415,7 +414,7 @@ void DemoGame::OnFocus(bool givenFocus)
 void DemoGame::OnResize()
 {
 	float nearPlane = 0.1f;
-	farPlaneDistance = 10000;//10.0f;
+	farPlaneDistance = 15000;//10.0f;
 	DXGame::OnResize();
 	XMMATRIX P = XMMatrixPerspectiveFovLH(
 		0.25f * 3.1415926535f,
@@ -435,8 +434,8 @@ void DemoGame::OnResize()
 
 	if(currentState == GameState::MenuState)
 	{
-		if(menu)
-			menu->WindowResize();
+	/*	if(menu)
+			menu->WindowResize();*/
 	}
 	else if(currentState == GameState::Login){
 		if(loginScreen)
@@ -464,16 +463,16 @@ void DemoGame::UpdateScene(float dt)
 #endif
 	}
 
-	/*assetManager->Instance()->GetSoundManager()->Update(dt);*/
+	assetManager->Instance()->GetSoundManager()->Update(dt);
 	if(currentState == GameState::Playing)
 	{
 		this->deltaTime = dt;
 
-		/*if(!AssetManager::Instance()->GetSoundManager()->jukebox->Playing())
+		if(!AssetManager::Instance()->GetSoundManager()->jukebox->Playing())
 			AssetManager::Instance()->GetSoundManager()->PlayJukeBox();
 
 		if(AssetManager::Instance()->GetSoundManager()->menuJukeBox->Playing())
-			AssetManager::Instance()->GetSoundManager()->PauseMenuJukeBox();*/
+			AssetManager::Instance()->GetSoundManager()->PauseMenuJukeBox();
 
 		while (!AssetManager::Instance()->addedEntities.empty())
 		{
@@ -486,7 +485,6 @@ void DemoGame::UpdateScene(float dt)
 		{
 			e->Update(dt);
 		}
-		skyboxAttached->Update(dt, player->transform.GetTranslation());
 	}
 
 	if(camera != debugCamera)
@@ -503,11 +501,11 @@ void DemoGame::UpdateScene(float dt)
 	if(currentState == GameState::MenuState)
 	{
 		
-		/*if(!AssetManager::Instance()->GetSoundManager()->menuJukeBox->Playing())
+		if(!AssetManager::Instance()->GetSoundManager()->menuJukeBox->Playing())
 			AssetManager::Instance()->GetSoundManager()->PlayMenuJukeBox();
 
 		if(AssetManager::Instance()->GetSoundManager()->jukebox->Playing())
-			AssetManager::Instance()->GetSoundManager()->PauseJukeBox();*/
+			AssetManager::Instance()->GetSoundManager()->PauseJukeBox();
 
 
 		GameState newState = menu->Update(dt);
@@ -520,11 +518,11 @@ void DemoGame::UpdateScene(float dt)
 	if(currentState == GameState::GameLobby)
 	{
 		
-		/*if(!AssetManager::Instance()->GetSoundManager()->menuJukeBox->Playing())
+		if(!AssetManager::Instance()->GetSoundManager()->menuJukeBox->Playing())
 			AssetManager::Instance()->GetSoundManager()->PlayMenuJukeBox();
 
 		if(AssetManager::Instance()->GetSoundManager()->jukebox->Playing())
-			AssetManager::Instance()->GetSoundManager()->PauseJukeBox();*/
+			AssetManager::Instance()->GetSoundManager()->PauseJukeBox();
 
 
 		GameState newState = lobbyScreen->Update(dt);

@@ -241,6 +241,8 @@ Material* AssetManager::StoreMaterial(Material* material, string name, Model* so
 
 	return material;
 }
+
+
 Material* AssetManager::GetMaterial(string name, Model* sourceModel)
 {
 	Material* material = NULL;
@@ -291,10 +293,6 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 		model->vertices.push_back(vertex);
 	}
 
-
-
-	
-
 	// Load Individual Mesh Groups to Categorize Geometry.
 	unsigned int objectCount = mlModel3DGetObjectCount(objModel);
 	for (int i = 0; i < objectCount; i++)
@@ -309,6 +307,7 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 	// Load Mesh Indices.
 	unsigned int faceCount = mlModel3DGetFaceCount(objModel);
 	for (int i = 0; i < faceCount; i++) {
+
 		// Retrieve current face.
 		MLFace3D const* face = mlModel3DGetFace(objModel, i);
 

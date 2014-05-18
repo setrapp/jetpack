@@ -116,8 +116,7 @@ private:
 	bool mouseCursorVisibility;
 	bool flag;
 	Player* players[PLAYER_COUNT];
-	Skybox* skyboxAttached;
-
+	
 	float farPlaneDistance;
 };
 

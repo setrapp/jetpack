@@ -7,7 +7,9 @@
 #include "Common.h"
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <ostream>
+#include <string>
+#include <wchar.h>
 #include "AssetManager.h"
 using namespace DirectX;
 

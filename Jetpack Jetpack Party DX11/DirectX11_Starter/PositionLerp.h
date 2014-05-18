@@ -11,6 +11,7 @@ public:
 
 	PositionLerp(void);
 	~PositionLerp(void);
+
 private:
 	XMFLOAT3 prevPosition;
 	XMFLOAT3 currentPosition;
