@@ -127,6 +127,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <ClCompile Include="ManeuverJetpack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -134,12 +135,15 @@
     <ClCompile Include="BulletManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+=======
+>>>>>>> c93ac5f68345f02894b4b8257f63415371ced7b2
     <ClCompile Include="DeferredRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ManeuverJetpack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="HUD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -159,6 +163,11 @@
       <Filter>Source Files</Filter>
     </ClCompile>
 >>>>>>> 195b231df48e0ced54bdf1eb2a2c9c7b91eb404f
+=======
+    <ClCompile Include="..\..\..\..\Arun%27s Stuff\Jetpacks\Jetpack Jetpack Party DX11\DirectX11_Starter\BulletManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+>>>>>>> c93ac5f68345f02894b4b8257f63415371ced7b2
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXGame.h">
@@ -306,12 +315,15 @@
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <ClInclude Include="ManeuverJetpack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BulletManager.h">
       <Filter>Header Files\Core\Physics</Filter>
 =======
+=======
+>>>>>>> c93ac5f68345f02894b4b8257f63415371ced7b2
     <ClInclude Include="BulletManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -320,6 +332,7 @@
     </ClInclude>
     <ClInclude Include="ManeuverJetpack.h">
       <Filter>Header Files</Filter>
+<<<<<<< HEAD
     </ClInclude>
     <ClInclude Include="HUD.h">
       <Filter>Header Files</Filter>
@@ -345,6 +358,8 @@
     <ClInclude Include="Jukebox.h">
       <Filter>Header Files\Sound</Filter>
 >>>>>>> 195b231df48e0ced54bdf1eb2a2c9c7b91eb404f
+=======
+>>>>>>> c93ac5f68345f02894b4b8257f63415371ced7b2
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

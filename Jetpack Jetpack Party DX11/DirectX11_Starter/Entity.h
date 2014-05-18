@@ -18,6 +18,16 @@ struct EntityDrawArgs
 	MaterialsAndLightsConstantBuffer* materialsAndLightsConstantBufferData;
 };
 
+struct EntityPhysicsData
+{
+	btVector3* entityVertices;
+	int entityNumOfTriangles;
+	int* entityIndices;
+	btVector3 aabbMin , aabbMax;
+	btTriangleIndexVertexArray* entityIndexVertexArray;
+	btBvhTriangleMeshShape* entityMeshShape;
+};
+
 class Entity
 {
 public:
@@ -38,12 +48,18 @@ public:
 	void Finalize();
 	bool GetVisible();
 	void SetVisible(bool visibility);
+<<<<<<< HEAD
 	Model* GetModel(int index); 
 
 	virtual void Update(float dt);
 	virtual void Draw(EntityDrawArgs const* drawArgs, XMFLOAT4X4 const* view = NULL, XMFLOAT4X4 const* projection = NULL);
 
+=======
+	//Also has a rigid Body
+>>>>>>> c93ac5f68345f02894b4b8257f63415371ced7b2
 	btRigidBody* rigidBody;
+	//Struct containing data to create entity mesh collider
+	EntityPhysicsData* phys_entityPhysicsData;
 
 protected:
 	map<Material*, pair<ID3D11Buffer*, LONG>> indexBuffers;

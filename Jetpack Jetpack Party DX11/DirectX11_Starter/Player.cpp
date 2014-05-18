@@ -25,32 +25,42 @@ Player::Player()
 	clientEntity = new UDPClientConnectionEntity();
 	clientEntity->connectClient("127.0.0.1");
 	networkSendTimer=0.0f;
+<<<<<<< HEAD
 	//loggedIn=false;
 	clientEntity->sendMessage(MessageTypes::Client::Login,"");
 	loggedIn=true;
 	controllable = false;
 	targetPosition = XMFLOAT3(400, 200, 5000);
+=======
+	loggedIn=false;
+	controllable = true;
+	//No Rigid Body
+	rigidBody = NULL;
+>>>>>>> c93ac5f68345f02894b4b8257f63415371ced7b2
 }
 
 Player::Player(const btRigidBody::btRigidBodyConstructionInfo& rbInfo)
 {
-	velocity = XMFLOAT3(0, 0, 0);
+	minPosture = 0.95f;
+	respawnPosition = XMFLOAT3(0, 0, 0);
+	respawnLocalRotation = XMFLOAT3(0, PI / 2, 0);
+	worldVelocity = XMFLOAT3(0, 0, 0);
 	angularVelocity = XMFLOAT3(0, 0, 0);
 	maxSpeed = 200;
 	forwardAcceleration = 100.0f;
 	backwardAcceleration = 100.0f;
 	strafeAcceleration = 100.0f;
-	gravityAcceleration = 300.0f;
-	terminalVelocity = 5000;
+	gravityAcceleration = 600.0f;
+	terminalVelocity = 500000;
 	groundSpeedDampening = 0.1f;
-	airSpeedDampening = 0.5f;
+	airSpeedDampening = 0.3f;
 	grounded = true;
 	jetpack = new ManeuverJetpack(this);
 	clientEntity = new ClientConnectionEntity();
 	clientEntity->connectClient("127.0.0.1");
 	networkSendTimer=0.0f;
 	loggedIn=false;
-	controllable = true;
+	//Also constructing the Rigid Body
 	rigidBody = new btRigidBody(rbInfo);
 }
 
@@ -58,6 +68,12 @@ Player::~Player()
 {
 	delete jetpack;
 	delete clientEntity;
+<<<<<<< HEAD
+=======
+	delete networkedCube;
+	if (rigidBody != NULL)
+		rigidBody = NULL;
+>>>>>>> c93ac5f68345f02894b4b8257f63415371ced7b2
 }
 
 void Player::Update(float dt)

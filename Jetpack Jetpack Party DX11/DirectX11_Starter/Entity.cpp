@@ -13,11 +13,12 @@ using namespace DirectX;
 
 Entity::Entity()
 {
+
 	baseMaterial = AssetManager::Instance()->GetMaterial();
 	socketNumber=0;
 	visible = true;
 	transform.entity = this;
-	rigidBody = NULL;		//Not a Rigid body
+	rigidBody = NULL;	//Not a Rigid body
 }
 
 Entity::Entity(const btRigidBody::btRigidBodyConstructionInfo& rbInfo)
@@ -236,13 +237,22 @@ inline vector<Mesh*> Entity::GetMeshes() const
 
 void Entity::Finalize()
 {
+	
 	if (meshes.size() < 1 || vertices.size() < 1)
 	{
 		return;
 	}
+	Vertex first = vertices.at(0);
+
+	//MANAGE THIS!!!!!!!!
+	phys_entityPhysicsData = new EntityPhysicsData();
+
+	phys_entityPhysicsData->aabbMin= btVector3(first.Position.x,first.Position.y,first.Position.z);
+	phys_entityPhysicsData->aabbMax= btVector3(first.Position.x,first.Position.y,first.Position.z);
 
 	map<Material*, vector<UINT>*> indicesAll;
 	long totalMeshes = meshes.size();
+	int numOfIndices = 0;
 	for(int i = 0; i < totalMeshes; i++)
 	{
 		Material* meshMaterial = meshes[i]->GetMaterial();
@@ -261,8 +271,27 @@ void Entity::Finalize()
 		for(short j= 0; j < 3; j++)
 		{
 			materialIndices->push_back(indices[j]);
+			numOfIndices++;
 		}
 	}
+
+
+	//Physics
+	
+	phys_entityPhysicsData->entityIndices = new int[numOfIndices];
+	phys_entityPhysicsData->entityNumOfTriangles = 0;
+
+	for(int i = 0; i < totalMeshes; i++)
+	{
+		UINT* indices = meshes.at(i)->GetIndices();
+		for(short j= 0; j < 3; j++)
+		{
+			phys_entityPhysicsData->entityIndices[i*3 + j] = indices[j];
+		}
+		phys_entityPhysicsData->entityNumOfTriangles++;
+	}
+	
+	//
 
 	for (map<Material*, vector<UINT>*>::iterator it = indicesAll.begin(); it != indicesAll.end(); it++)
 	{
@@ -305,6 +334,47 @@ void Entity::Finalize()
 		&vbd,
 		&initialVertexData,
 		&vertexBuffer));
+
+	//Physics
+	//Calculating AABB-Max and Min
+	phys_entityPhysicsData->entityVertices = new btVector3[vertices.size()];
+	for (int i=0; i<vertices.size(); i++)
+	{
+		Vertex temp = vertices.at(i);
+		phys_entityPhysicsData->entityVertices[i].setX((btScalar)temp.Position.x);
+		phys_entityPhysicsData->entityVertices[i].setY((btScalar)temp.Position.y);
+		phys_entityPhysicsData->entityVertices[i].setZ((btScalar)temp.Position.z);
+		//aabbMax
+		if (temp.Position.x > (float)phys_entityPhysicsData->aabbMax.x())
+			phys_entityPhysicsData->aabbMax.setX((btScalar)temp.Position.x);
+		if (temp.Position.y > (float)phys_entityPhysicsData->aabbMax.y())
+			phys_entityPhysicsData->aabbMax.setY((btScalar)temp.Position.y);
+		if (temp.Position.z > (float)phys_entityPhysicsData->aabbMax.z())
+			phys_entityPhysicsData->aabbMax.setZ((btScalar)temp.Position.z);
+		//aabbMin
+		if (temp.Position.x < (float)phys_entityPhysicsData->aabbMin.x())
+			phys_entityPhysicsData->aabbMin.setX((btScalar)temp.Position.x);
+		if (temp.Position.y < (float)phys_entityPhysicsData->aabbMin.y())
+			phys_entityPhysicsData->aabbMin.setY((btScalar)temp.Position.y);
+		if (temp.Position.z < (float)phys_entityPhysicsData->aabbMin.z())
+			phys_entityPhysicsData->aabbMin.setZ((btScalar)temp.Position.z);
+	}
+
+	//Creatng index vertex arrays	
+	phys_entityPhysicsData->entityIndexVertexArray = new btTriangleIndexVertexArray(
+		phys_entityPhysicsData->entityNumOfTriangles,
+		phys_entityPhysicsData->entityIndices,
+		0,
+		vertices.size(),
+		(btScalar*)&phys_entityPhysicsData->entityVertices[0].x(),
+		0);
+
+	phys_entityPhysicsData->entityMeshShape = new btBvhTriangleMeshShape(
+		phys_entityPhysicsData->entityIndexVertexArray,
+		true,
+		phys_entityPhysicsData->aabbMin,
+		phys_entityPhysicsData->aabbMax);
+	//
 
 	for(map<Material*, vector<UINT>*>::iterator it = indicesAll.begin(); it != indicesAll.end(); it++)
 	{
