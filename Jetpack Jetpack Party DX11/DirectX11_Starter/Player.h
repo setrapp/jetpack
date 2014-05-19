@@ -26,6 +26,7 @@ public:
 	XMFLOAT3 respawnPosition;
 	XMFLOAT3 respawnLocalRotation;
 	XMFLOAT3 targetPosition; 
+	string playerName;
 	
 
 private:

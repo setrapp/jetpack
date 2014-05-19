@@ -15,6 +15,7 @@ public:
 	NetworkedPlayer(void);
 	~NetworkedPlayer(void);
 	Jetpack* jetpack;
+	string playerName;
 	void Update(float dt);
 };
 

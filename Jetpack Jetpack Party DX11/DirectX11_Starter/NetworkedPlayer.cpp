@@ -4,7 +4,7 @@
 NetworkedPlayer::NetworkedPlayer(void)
 {
 	jetpack = new ManeuverJetpack(this);
-
+	playerName="";
 }
 
 

@@ -17,14 +17,14 @@ public:
 	NetworkManager(Player** p);
 	~NetworkManager(void);
 	vector<string>* breakIntoParts(string s);
-	//ClientConnectionEntity* clientEntity;
 	UDPClientConnectionEntity* clientEntity;
 	std::map<int,NetworkedPlayer*> networkedEntities;
 	std::map<int,XMFLOAT3> networkedEntityVelocities;
 	std::map<int,PositionLerp> networkedEntityLerps;
+	std::queue<string> outputValues;
 	float networkSendTimer;
 	Player* player;
-	void AddNewUser(int playerIndex);
+	void AddNewUser(int playerIndex, string name);
 	float updateTimer;
 	bool loggedIn;
 	Jetpack* jetpack;

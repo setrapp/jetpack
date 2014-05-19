@@ -9,7 +9,6 @@ NetworkManager::NetworkManager(Player** p)
 	clientEntity = new UDPClientConnectionEntity();
 	clientEntity->connectClient("127.0.0.1");
 	networkSendTimer=0.0f;
-	clientEntity->sendMessage(MessageTypes::Client::Login,"");
 	loggedIn=true;
 }
 
@@ -42,19 +41,21 @@ void NetworkManager::Update(float dt){
 		int messageCount= atoi(stringParts.at(1).c_str());
 		if((messageCount>clientEntity->lastMessageCountReceived) || msgType!=MessageTypes::Server::MovementUpdate || messageCount==0){
 		clientEntity->lastMessageCountReceived=messageCount;
+		stringParts.erase(stringParts.begin());
+		stringParts.erase(stringParts.begin());
+
 		switch(msgType){
 			//add all players if you are entering the games
 		case MessageTypes::Server::AddExistingUsers:
 			
-			playerSocketNumber= atoi(stringParts.at(1).c_str());
+			playerSocketNumber= atoi(stringParts.at(0).c_str());
 			player->socketNumber=playerSocketNumber;
-			for(int i=3; i<(int)stringParts.size()-1; i+=2){
+			player->playerName= stringParts.at(1);
+			
+			for(int i=2; i<(int)stringParts.size()-1; i+=3){
 				int targetSocket= atoi(stringParts.at(i).c_str());
-
-				string unparsedPosition= stringParts.at(i+1);
-				AddNewUser(targetSocket);
-
-
+				AddNewUser(targetSocket,stringParts.at(i+1));
+				string unparsedPosition= stringParts.at(i+2);
 				std::vector<std::string>* vectorParts = breakIntoParts(unparsedPosition);
 
 				XMFLOAT3 newVector= XMFLOAT3(strtod(vectorParts->at(0).c_str(),0),strtod(vectorParts->at(1).c_str(),0),strtod(vectorParts->at(2).c_str(),0));
@@ -75,14 +76,15 @@ void NetworkManager::Update(float dt){
 			//adding a player that recently joined
 		case MessageTypes::Server::AddNewUser:
 			loggedIn=true;
-			AddNewUser(atoi(stringParts.at(2).c_str()));
+			AddNewUser(atoi(stringParts.at(0).c_str()),stringParts.at(1));
 			break;
 
 			//a list of sockets and the positions of the data is sent, the positions of all the associated entities is updated.
 		case MessageTypes::Server::MovementUpdate:
-			for(int i=2; i<(int)stringParts.size()-1; i+=2){
+			for(int i=0; i<(int)stringParts.size()-1; i+=3){
 				int targetSocket= atoi(stringParts.at(i).c_str());
 				if((networkedEntities[targetSocket]!=NULL) && targetSocket!=playerSocketNumber){
+
 					string unparsedPosition= stringParts.at(i+1);
 
 					std::vector<std::string>* vectorParts = breakIntoParts(unparsedPosition);
@@ -157,7 +159,7 @@ vector<string>* NetworkManager::breakIntoParts(string s){
 	return vectorParts;
 }
 
-void NetworkManager::AddNewUser(int playerIndex){
+void NetworkManager::AddNewUser(int playerIndex, string name){
 
 	NetworkedPlayer* newPlayer = new NetworkedPlayer();
 	newPlayer->AddModel(AssetManager::Instance()->GetModel());

@@ -31,8 +31,10 @@ namespace UDPServer
         public class AsynchronousSocketListener
         {
             // Thread signal.
+            public static List<string> playerNames = new List<string>();
             public static Dictionary<IPEndPoint, int> userList = new Dictionary<IPEndPoint, int>();
             public static Dictionary<IPEndPoint, string> sentValues = new Dictionary<IPEndPoint, string>();
+            public static Dictionary<int, string> nameMap = new Dictionary<int, string>();
             public static int userCounter = 0;
             static IPEndPoint ipep;
             static UdpClient newsock;
@@ -40,6 +42,11 @@ namespace UDPServer
 
             public AsynchronousSocketListener()
             {
+                playerNames.Add("Sam");
+                playerNames.Add("Nick");
+                playerNames.Add("Rushabh");
+                playerNames.Add("Arun");
+                playerNames.Add("Alex");
                 ipep = new IPEndPoint(IPAddress.Any, 8080); 
                 newsock = new UdpClient(ipep);
 
@@ -78,22 +85,25 @@ namespace UDPServer
                         case MessageTypes.Client.Login:
                             if (!userList.ContainsKey(endpoint))
                             {
-
                                 //adds the new client data to the dictionaries
                                 userCounter++;
+
+                                string newPlayerName = playerNames[0];
+                                playerNames.RemoveAt(0);
+                                nameMap.Add(userCounter, newPlayerName);
                                 userList.Add(endpoint, userCounter);
                                 sentValues.Add(endpoint, "0,0,0,0,0,0,1,0,0,0,1,0,0,0,1");
 
                                 //to the players already in the game, just send the id of the new player
-                                string toAlreadyAdded = userList[endpoint].ToString();
+                                string toAlreadyAdded = userList[endpoint].ToString() + "\n" + newPlayerName;
 
                                 //to the player currently entering the game, send your ID first
-                                string sendToAdded = userList[endpoint].ToString() + "\n";
+                                string sendToAdded = userList[endpoint].ToString() + "\n" + newPlayerName + "\n";
 
                                 foreach (KeyValuePair<IPEndPoint, string> entry in sentValues)
                                 {
                                     if (!entry.Key.Equals(endpoint))
-                                        sendToAdded += userList[entry.Key] + "\n" + entry.Value + "\n";
+                                        sendToAdded += userList[entry.Key] + "\n" +nameMap[userList[entry.Key]] + "\n" + entry.Value + "\n";
                                 }
 
                                 foreach (KeyValuePair<IPEndPoint, int> entry in userList)
