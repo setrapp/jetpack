@@ -42,7 +42,6 @@ private:
 	GameState currstate;
 	GUITextBox* b ;	
 	RECT* r;	
-	
 
 	MENU_OPTIONS menuOptions;
 	

@@ -161,9 +161,9 @@ bool DemoGame::Init()
 	spriteRenderer = new SpriteRenderer(deviceContext);
 	RECT rect;
 	GetClientRect(GetActiveWindow(), &rect);	
-	//FontManager::Instance()->AddFont("L"../Assets/Fonts/test.spriteFont");
-	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/Fonts/test2.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );	
-	loginScreen = new LoginScreen(FontManager::Instance()->AddFont("LOGIN", device, spriteRenderer, L"../Assets/Fonts/test2.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );		
+	menu        = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/Fonts/test2.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );	
+	loginScreen = new LoginScreen(FontManager::Instance()->AddFont("LOGIN", device, spriteRenderer, L"../Assets/Fonts/test2.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );	
+	lobbyScreen = new LobbyScreen(FontManager::Instance()->AddFont("LOBBY", device, spriteRenderer, L"../Assets/Fonts/test2.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );	
 	LoadShadersAndInputLayout();
 
 	AssetManager::Instance()->StoreMaterial(new Material());
@@ -437,9 +437,9 @@ void DemoGame::OnResize()
 	/*	if(menu)
 			menu->WindowResize();*/
 	}
-	else if(currentState == GameState::Login){
-		if(loginScreen)
-			loginScreen->WindowResize();
+	else if(currentState == GameState::GameLobby){
+		if(lobbyScreen)
+			lobbyScreen->WindowResize();
 	}
 
 	if(m_hud)
@@ -509,22 +509,17 @@ void DemoGame::UpdateScene(float dt)
 
 
 		GameState newState = menu->Update(dt);
+
+
+
 		if (currentState != newState)
 		{
 			mouseLook->ResetCursor();
 			currentState = newState;
 		}
 	}
-	if(currentState == GameState::GameLobby)
+	else if(currentState == GameState::GameLobby)
 	{
-		
-		if(!AssetManager::Instance()->GetSoundManager()->menuJukeBox->Playing())
-			AssetManager::Instance()->GetSoundManager()->PlayMenuJukeBox();
-
-		if(AssetManager::Instance()->GetSoundManager()->jukebox->Playing())
-			AssetManager::Instance()->GetSoundManager()->PauseJukeBox();
-
-
 		GameState newState = lobbyScreen->Update(dt);
 		if (currentState != newState)
 		{
@@ -532,15 +527,14 @@ void DemoGame::UpdateScene(float dt)
 			currentState = newState;
 		}
 	}
-	else
-		if(currentState == GameState::Login){
+	/*else if(currentState == GameState::Login){
 		GameState newState = loginScreen->Update(dt);
 		if (currentState != newState)
 		{
 			mouseLook->ResetCursor();
 			currentState = newState;
 		}
-	}
+	}*/
 
 	deviceContext->UpdateSubresource(
 	vsModelConstantBuffer,
@@ -633,18 +627,9 @@ void DemoGame::DrawScene()
 			mouseCursorVisibility = true;
 			ShowCursor(mouseCursorVisibility);
 		}
-	}else if(currentState == GameState::Login){
-		spriteRenderer->Begin();
-		loginScreen->Render();
-		spriteRenderer->End();
-		if(!mouseCursorVisibility)
-		{
-			mouseCursorVisibility = true;
-			ShowCursor(mouseCursorVisibility);
-		}
 	}else if(currentState == GameState::GameLobby){
 		spriteRenderer->Begin();
-		loginScreen->Render();
+		lobbyScreen->Render();
 		spriteRenderer->End();
 		if(!mouseCursorVisibility)
 		{
