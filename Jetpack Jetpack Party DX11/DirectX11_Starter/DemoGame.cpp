@@ -37,7 +37,6 @@
 #include "SpriteRenderer.h"
 #include "HUD.h"
 #include "Skybox.h"
-#include "Jukebox.h"
 
 using namespace std;
 InputManager* IPMan::inputManager = NULL;
@@ -161,9 +160,8 @@ bool DemoGame::Init()
 	spriteRenderer = new SpriteRenderer(deviceContext);
 	RECT rect;
 	GetClientRect(GetActiveWindow(), &rect);	
-	menu        = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/Fonts/test2.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );	
-	loginScreen = new LoginScreen(FontManager::Instance()->AddFont("LOGIN", device, spriteRenderer, L"../Assets/Fonts/test2.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );	
-	lobbyScreen = new LobbyScreen(FontManager::Instance()->AddFont("LOBBY", device, spriteRenderer, L"../Assets/Fonts/test2.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );	
+	menu = new Menu(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/Fonts/font.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );	
+	loginScreen = new LoginScreen(FontManager::Instance()->AddFont("MENUFONT", device, spriteRenderer, L"../Assets/Fonts/font.spritefont"), spriteRenderer, rect.left + rect.right, rect.top + rect.bottom );		
 	LoadShadersAndInputLayout();
 
 	AssetManager::Instance()->StoreMaterial(new Material());
@@ -214,10 +212,6 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrack.obj", "terrain");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrackNav.obj", "terrain_nav");			
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/skybox.obj", "skybox");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/JetDude.obj","jetdude");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/test1.obj","jetdude2");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/JetFlip.obj","jetdude3");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/blenderTri.obj","jetdude4");
 
 	// Create orthographic and projection plane for deferred rendering.
 	float halfWindowWidth = windowWidth / 2, halfWindowHieght= windowHeight / 2;
@@ -265,12 +259,12 @@ void DemoGame::CreateGeometryBuffers()
 	Entity* gift = new Entity();
 	gift->AddQuad(vertices, indices);
 	
-	//gift->transform.SetTranslation(player->targetPosition);
+	gift->transform.SetTranslation(player->targetPosition);
 	entities.push_back(gift);
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
 	gift->SetBaseMaterial("gift");
 	gift->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
-	gift->LoadTexture(L"../Assets/Textures/test.png");
+	gift->LoadTexture(L"../Assets/Textures/RedGift.png");
 	gift->Finalize();
 
 	Entity* floor = new Entity();
@@ -297,29 +291,10 @@ void DemoGame::CreateGeometryBuffers()
 	navMesh->transform.SetParent(&floor->transform);
 	navMesh->Finalize();
 
-	
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "skybox");
-	Entity* skybox = new Skybox(farPlaneDistance, player);	
-	entities.push_back(skybox);
-
 	//All you have to do.
-	//AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "jetdude");
-	Entity* jetDude = new Entity();
-	//jetDude->AddQuad(vertices, indices);
-	//jetDude->AddModel(AssetManager::Instance()->GetModel("jetdude"));
-	jetDude->AddModel(AssetManager::Instance()->GetModel("jetdude4"));
-
-	entities.push_back(jetDude);
-
-
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 1), "cake");
-	jetDude->SetBaseMaterial("cake");
-	//Material* temp2 = AssetManager::Instance()->GetMaterial("cake", jetDude->GetModel(0));
-	//temp2->diffuse = XMFLOAT4(1, 0, 0, 1);
-	jetDude->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
-	jetDude->LoadTexture(L"../Assets/Textures/JetDudeUV_In.png");
-
-	jetDude->Finalize();
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "skybox");
+	Entity* skybox = new Skybox(farPlaneDistance);	
+	entities.push_back(skybox);
 }
 
 #pragma endregion
@@ -377,14 +352,15 @@ void DemoGame::LoadShadersAndInputLayout()
 
 void DemoGame::LoadSoundAssets()
 {
-	//SoundId id;
-	//id = SoundId::SAMPLEBG;
-	//assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sounds/SampleBG.wav");
-	assetManager->Instance()->GetSoundManager()->LoadSound(SoundId::THRUSTER, L"../Assets/Sounds/SoundEffects/Thruster.wav");
-	//assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SAMPLEBG, true, true, 0.05);
-	//assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SINK);
+	SoundId id;
+	id = SoundId::SAMPLEBG;
+	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sounds/SampleBG.wav");
+	id = SoundId::SINK;
+	assetManager->Instance()->GetSoundManager()->LoadSound(id, L"../Assets/Sounds/Sunk.wav");
+	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SAMPLEBG, true, true);
+	assetManager->Instance()->GetSoundManager()->PlaySoundInstance(SoundId::SINK);
 	#ifdef _DEBUG
-		assetManager->Instance()->GetSoundManager()->Mute(true);
+    assetManager->Instance()->GetSoundManager()->Mute(true);
 	#endif
 }
 
@@ -414,7 +390,7 @@ void DemoGame::OnFocus(bool givenFocus)
 void DemoGame::OnResize()
 {
 	float nearPlane = 0.1f;
-	farPlaneDistance = 15000;//10.0f;
+	farPlaneDistance = 10000;//10.0f;
 	DXGame::OnResize();
 	XMMATRIX P = XMMatrixPerspectiveFovLH(
 		0.25f * 3.1415926535f,
@@ -434,12 +410,12 @@ void DemoGame::OnResize()
 
 	if(currentState == GameState::MenuState)
 	{
-	/*	if(menu)
-			menu->WindowResize();*/
+		if(menu)
+			menu->WindowResize();
 	}
-	else if(currentState == GameState::GameLobby){
-		if(lobbyScreen)
-			lobbyScreen->WindowResize();
+	else if(currentState == GameState::Login){
+		if(loginScreen)
+			loginScreen->WindowResize();
 	}
 
 	if(m_hud)
@@ -463,16 +439,13 @@ void DemoGame::UpdateScene(float dt)
 #endif
 	}
 
-	assetManager->Instance()->GetSoundManager()->Update(dt);
+	if(networkManager){
+		networkManager->Update(dt);
+	}
+	assetManager->Instance()->GetSoundManager()->Update();
 	if(currentState == GameState::Playing)
 	{
 		this->deltaTime = dt;
-
-		if(!AssetManager::Instance()->GetSoundManager()->jukebox->Playing())
-			AssetManager::Instance()->GetSoundManager()->PlayJukeBox();
-
-		if(AssetManager::Instance()->GetSoundManager()->menuJukeBox->Playing())
-			AssetManager::Instance()->GetSoundManager()->PauseMenuJukeBox();
 
 		while (!AssetManager::Instance()->addedEntities.empty())
 		{
@@ -480,7 +453,7 @@ void DemoGame::UpdateScene(float dt)
 			AssetManager::Instance()->addedEntities.pop();
 		}
 
-		
+
 		for(Entity* e: entities)
 		{
 			e->Update(dt);
@@ -500,41 +473,22 @@ void DemoGame::UpdateScene(float dt)
 
 	if(currentState == GameState::MenuState)
 	{
-		
-		if(!AssetManager::Instance()->GetSoundManager()->menuJukeBox->Playing())
-			AssetManager::Instance()->GetSoundManager()->PlayMenuJukeBox();
-
-		if(AssetManager::Instance()->GetSoundManager()->jukebox->Playing())
-			AssetManager::Instance()->GetSoundManager()->PauseJukeBox();
-
-
 		GameState newState = menu->Update(dt);
-
-
-
 		if (currentState != newState)
 		{
 			mouseLook->ResetCursor();
 			currentState = newState;
 		}
 	}
-	else if(currentState == GameState::GameLobby)
-	{
-		GameState newState = lobbyScreen->Update(dt);
-		if (currentState != newState)
-		{
-			mouseLook->ResetCursor();
-			currentState = newState;
-		}
-	}
-	/*else if(currentState == GameState::Login){
+	else
+		if(currentState == GameState::Login){
 		GameState newState = loginScreen->Update(dt);
 		if (currentState != newState)
 		{
 			mouseLook->ResetCursor();
 			currentState = newState;
 		}
-	}*/
+	}
 
 	deviceContext->UpdateSubresource(
 	vsModelConstantBuffer,
@@ -627,9 +581,9 @@ void DemoGame::DrawScene()
 			mouseCursorVisibility = true;
 			ShowCursor(mouseCursorVisibility);
 		}
-	}else if(currentState == GameState::GameLobby){
+	}else if(currentState == GameState::Login){
 		spriteRenderer->Begin();
-		lobbyScreen->Render();
+		loginScreen->Render();
 		spriteRenderer->End();
 		if(!mouseCursorVisibility)
 		{
@@ -717,11 +671,9 @@ void DemoGame::CreatePlayers()
 	for (int i = 0; i < PLAYER_COUNT; i++)
 	{
 		Player* newPlayer = new Player();
-
 		newPlayer->AddModel(AssetManager::Instance()->GetModel());
 		newPlayer->Finalize();
 		entities.push_back(newPlayer);
-
 		players[i] = newPlayer;
 		newPlayer->transform.Translate(XMFLOAT3(50 * (i % 2), 1000, 50 * (i / 2)));
 		newPlayer->respawnPosition = newPlayer->transform.GetTranslation();
@@ -747,6 +699,7 @@ void DemoGame::CreatePlayers()
 		}
 	}
 	player = players[0];
+	networkManager= new NetworkManager(&player);
 	player->controllable = true;
 	AttachCameraToPlayer();
 }
