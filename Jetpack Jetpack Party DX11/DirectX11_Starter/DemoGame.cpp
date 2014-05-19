@@ -308,19 +308,14 @@ void DemoGame::CreateGeometryBuffers()
 	//jetDude->AddQuad(vertices, indices);
 	//jetDude->AddModel(AssetManager::Instance()->GetModel("jetdude"));
 	jetDude->AddModel(AssetManager::Instance()->GetModel("jetdude4"));
-
 	entities.push_back(jetDude);
-
-
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 1), "cake");
 	jetDude->SetBaseMaterial("cake");
 	//Material* temp2 = AssetManager::Instance()->GetMaterial("cake", jetDude->GetModel(0));
 	//temp2->diffuse = XMFLOAT4(1, 0, 0, 1);
 	jetDude->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 	//jetDude->LoadTexture(L"../Assets/Textures/JetDudeUV_In.png");
-	//jetDude->LoadTexture(L"../Assets/Textures/JetDudeUV_In_FlippedOff.png");
-	jetDude->LoadTexture(L"../Assets/Textures/test.png");
-
+	jetDude->LoadTexture(L"../Assets/Textures/JetDudeUV_In_Opposite.png");
 	jetDude->Finalize();
 }
 
