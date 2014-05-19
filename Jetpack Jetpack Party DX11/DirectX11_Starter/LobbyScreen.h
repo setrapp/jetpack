@@ -37,14 +37,17 @@ public:
 	void WindowResize();
 	GameState KeyboardInputProcess();
 	RECT* GetRECTFromRect(Rect* rect);
+	int additionCount;
 private:
 	FontRenderer* fontRenderer;
 	GUIManager* guiMan;
 	GameState currstate;
 	GUITextBox* b ;	
 	RECT* r;	
-
+	bool multiplayerClicked;
 	MENU_OPTIONS menuOptions;
+	vector<string> addedNameVector;
+	vector<wstring> addedLongNameVector;
 };
 
 #endif

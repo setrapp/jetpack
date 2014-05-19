@@ -64,7 +64,7 @@ GameState Menu::Update(const float dt)
 		return GameState::Playing;	
 
 	if(guiMan->_guiElements["MULTIPLAYER"]->Clicked())
-		return GameState::Login;	
+		return GameState::GameLobby;
 
 	if(guiMan->_guiElements["EXIT"]->Clicked())
 		PostQuitMessage(0);
@@ -88,7 +88,7 @@ GameState Menu::Update(const float dt)
 
 	if(guiMan->_guiElements["MULTIPLAYER"]->IsMouseHovering() || menuOptions == MENU_OPTIONS::MULTIPLAYER)
 	{
-		guiMan->_guiElements["MULTIPLAYER"]->SetColor(XMFLOAT4(1, 1, 1, 1));
+		guiMan->_guiElements["MULTIPLAYER"]->SetColor(XMFLOAT4(1, 0, 0, 1));
 		guiMan->_guiElements["MULTIPLAYER"]->SetScale(XMFLOAT2(1, 1));
 		menuOptions = MENU_OPTIONS::MULTIPLAYER;
 		GUITexture* tex = (GUITexture*)(guiMan->_guiElements["Texture"]);
@@ -98,7 +98,7 @@ GameState Menu::Update(const float dt)
 	}
 	else
 	{
-		guiMan->_guiElements["MULTIPLAYER"]->SetColor(XMFLOAT4(0, 0, 0, 1));
+		guiMan->_guiElements["MULTIPLAYER"]->SetColor(XMFLOAT4(1, 0, 0, 1));
 		guiMan->_guiElements["MULTIPLAYER"]->SetScale(XMFLOAT2(1, 1));
 
 	}
@@ -179,7 +179,7 @@ GameState Menu::KeyboardInputProcess()
 				{
 				case MENU_OPTIONS::SINGLEPLAYER: return GameState::Playing;
 					break;
-				case MENU_OPTIONS::MULTIPLAYER: return GameState::Login;
+				case MENU_OPTIONS::MULTIPLAYER: return GameState::GameLobby;
 					break;
 				case MENU_OPTIONS::SETTINGS: return GameState::Settings;
 					break;
