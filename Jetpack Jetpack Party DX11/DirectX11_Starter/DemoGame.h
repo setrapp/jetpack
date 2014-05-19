@@ -28,6 +28,7 @@
 #include <dinput.h>
 #include "DeferredRenderer.h"
 #include "NetworkManager.h"
+#include "Skybox.h"
 #include "HUD.h"
 
 #define PLAYER_COUNT 1

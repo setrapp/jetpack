@@ -1,0 +1,31 @@
+diff a/Jetpack Jetpack Party DX11/DirectX11_Starter/DemoGame.cpp b/Jetpack Jetpack Party DX11/DirectX11_Starter/DemoGame.cpp	(rejected hunks)
+@@ -439,24 +439,21 @@
+ #endif
+ 	}
+ 
+-	assetManager->Instance()->GetSoundManager()->Update(dt);
++	if(networkManager){
++		networkManager->Update(dt);
++	}
++	assetManager->Instance()->GetSoundManager()->Update();
+ 	if(currentState == GameState::Playing)
+ 	{
+ 		this->deltaTime = dt;
+ 
+-		if(!AssetManager::Instance()->GetSoundManager()->jukebox->Playing())
+-			AssetManager::Instance()->GetSoundManager()->PlayJukeBox();
+-
+-		if(AssetManager::Instance()->GetSoundManager()->menuJukeBox->Playing())
+-			AssetManager::Instance()->GetSoundManager()->PauseMenuJukeBox();
+-
+ 		while (!AssetManager::Instance()->addedEntities.empty())
+ 		{
+ 			entities.push_back(AssetManager::Instance()->addedEntities.front());
+ 			AssetManager::Instance()->addedEntities.pop();
+ 		}
+ 
+-		
++
+ 		for(Entity* e: entities)
+ 		{
+ 			e->Update(dt);
