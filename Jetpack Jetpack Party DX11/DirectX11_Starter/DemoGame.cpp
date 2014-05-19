@@ -317,7 +317,9 @@ void DemoGame::CreateGeometryBuffers()
 	//Material* temp2 = AssetManager::Instance()->GetMaterial("cake", jetDude->GetModel(0));
 	//temp2->diffuse = XMFLOAT4(1, 0, 0, 1);
 	jetDude->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
-	jetDude->LoadTexture(L"../Assets/Textures/JetDudeUV_In.png");
+	//jetDude->LoadTexture(L"../Assets/Textures/JetDudeUV_In.png");
+	//jetDude->LoadTexture(L"../Assets/Textures/JetDudeUV_In_FlippedOff.png");
+	jetDude->LoadTexture(L"../Assets/Textures/test.png");
 
 	jetDude->Finalize();
 }
