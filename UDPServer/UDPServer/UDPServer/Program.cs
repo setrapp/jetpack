@@ -79,52 +79,55 @@ namespace UDPServer
                 {
                     byte[] received = newsock.EndReceive(res, ref endpoint);
                     string[] splitContent = Encoding.ASCII.GetString(received).Split('\n');
-                    MessageTypes.Client messageType = (MessageTypes.Client)int.Parse(splitContent[0]);
-                    switch (messageType)
+                    if (splitContent != null)
                     {
-                        case MessageTypes.Client.Login:
-                            if (!userList.ContainsKey(endpoint))
-                            {
-                                //adds the new client data to the dictionaries
-                                userCounter++;
-
-                                string newPlayerName = playerNames[0];
-                                playerNames.RemoveAt(0);
-                                nameMap.Add(userCounter, newPlayerName);
-                                userList.Add(endpoint, userCounter);
-                                sentValues.Add(endpoint, "0,0,0,0,0,0,1,0,0,0,1,0,0,0,1");
-
-                                //to the players already in the game, just send the id of the new player
-                                string toAlreadyAdded = userList[endpoint].ToString() + "\n" + newPlayerName;
-
-                                //to the player currently entering the game, send your ID first
-                                string sendToAdded = userList[endpoint].ToString() + "\n" + newPlayerName + "\n";
-
-                                foreach (KeyValuePair<IPEndPoint, string> entry in sentValues)
+                        MessageTypes.Client messageType = (MessageTypes.Client)int.Parse(splitContent[0]);
+                        switch (messageType)
+                        {
+                            case MessageTypes.Client.Login:
+                                if (!userList.ContainsKey(endpoint))
                                 {
-                                    if (!entry.Key.Equals(endpoint))
-                                        sendToAdded += userList[entry.Key] + "\n" +nameMap[userList[entry.Key]] + "\n" + entry.Value + "\n";
-                                }
+                                    //adds the new client data to the dictionaries
+                                    userCounter++;
 
-                                foreach (KeyValuePair<IPEndPoint, int> entry in userList)
-                                {
-                                    if (entry.Key.Equals(endpoint))
+                                    string newPlayerName = playerNames[0];
+                                    playerNames.RemoveAt(0);
+                                    nameMap.Add(userCounter, newPlayerName);
+                                    userList.Add(endpoint, userCounter);
+                                    sentValues.Add(endpoint, "0,0,0,0,0,0,1,0,0,0,1,0,0,0,1");
+
+                                    //to the players already in the game, just send the id of the new player
+                                    string toAlreadyAdded = userList[endpoint].ToString() + "\n" + newPlayerName;
+
+                                    //to the player currently entering the game, send your ID first
+                                    string sendToAdded = userList[endpoint].ToString() + "\n" + newPlayerName + "\n";
+
+                                    foreach (KeyValuePair<IPEndPoint, string> entry in sentValues)
                                     {
-                                        Send(entry.Key, MessageTypes.Server.AddExistingUsers, sendToAdded);
+                                        if (!entry.Key.Equals(endpoint))
+                                            sendToAdded += userList[entry.Key] + "\n" + nameMap[userList[entry.Key]] + "\n" + entry.Value + "\n";
                                     }
-                                    else
+
+                                    foreach (KeyValuePair<IPEndPoint, int> entry in userList)
                                     {
-                                        Send(entry.Key, MessageTypes.Server.AddNewUser, toAlreadyAdded);
+                                        if (entry.Key.Equals(endpoint))
+                                        {
+                                            Send(entry.Key, MessageTypes.Server.AddExistingUsers, sendToAdded);
+                                        }
+                                        else
+                                        {
+                                            Send(entry.Key, MessageTypes.Server.AddNewUser, toAlreadyAdded);
+                                        }
                                     }
                                 }
-                            }
-                            break;
+                                break;
 
-                        case MessageTypes.Client.MovementUpdate:
-                            sentValues[endpoint] = splitContent[1];
-                            break;
+                            case MessageTypes.Client.MovementUpdate:
+                                sentValues[endpoint] = splitContent[1];
+                                break;
+                        }
+                        newsock.BeginReceive(new AsyncCallback(recv), null);
                     }
-                    newsock.BeginReceive(new AsyncCallback(recv), null);
                 }
                 catch (Exception e)
                 {

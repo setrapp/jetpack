@@ -11,5 +11,11 @@ public:
 	{
 		Login, MovementUpdate
 	};
+
+	enum class MainClass
+	{
+		PlayerAdd
+	};
+
 };
 #endif
