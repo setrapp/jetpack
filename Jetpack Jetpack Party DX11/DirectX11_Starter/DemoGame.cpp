@@ -80,6 +80,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
 	mouseCursorVisibility = true;
 	mouseLook = NULL;
+	includeAI = true;
 }
 
 DemoGame::~DemoGame()
@@ -206,7 +207,6 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicJetMan.obj", "jetman");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/Fireball.obj", "fireball");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrack.obj", "terrain");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrackNav.obj", "terrain_nav");
 
 	// Create orthographic and projection plane for deferred rendering.
 	float halfWindowWidth = windowWidth / 2, halfWindowHieght= windowHeight / 2;
@@ -291,36 +291,30 @@ void DemoGame::CreateGeometryBuffers()
 	entities.push_back(floor);
 	floor->Finalize();
 
-	/*Entity* navMesh = new Entity();
-	navMesh->AddModel(AssetManager::Instance()->GetModel("terrain_nav"));
-	navMesh->transform.SetTranslation(floor->transform.GetTranslation());
-	navMesh->transform.SetLocalScale(floor->transform.GetScale());
-	//entities.push_back(navMesh);
-	navMesh->transform.SetParent(&floor->transform);
-	navMesh->Finalize();*/
-	//TODO split up navmesh bits and order them based on number from file.
-	Model* navMeshModel = AssetManager::Instance()->GetModel("terrain_nav");
-	vector<MeshGroup*> navMeshGroups;
-	AssetManager::Instance()->GetMeshGroupsWithMaterial(&navMeshGroups, navMeshModel, "Nav_Space");
-	//TODO figure out a good proximity. Does not seem to be making correct connections. Is this even splitting correctly?
-	for (int i = 0; i < navMeshGroups.size(); i++)
+	if (includeAI)
 	{
-		NavMeshSegment* navMeshSegment = new NavMeshSegment(i);
-		navMeshSegment->AddMeshGroup(terrainModel, navMeshGroups[i], true);
-		navMeshSegments.push_back(navMeshSegment);
-		entities.push_back(navMeshSegment);
-		//navMeshSegment->SetBaseMaterial("Nav_Space", navMeshModel);
-		navMeshSegment->Finalize();
-	}
-	for (int i = 0; i < navMeshSegments.size(); i++)
-	{
-		navMeshSegments[i]->FindConnections(&navMeshSegments);
-	}
-	for (int i = 0; i < navMeshSegments.size(); i++)
-	{
-		navMeshSegments[i]->transform.Scale(XMFLOAT3(500, 500, 500));
-		navMeshSegments[i]->RecenterGeometry();
-		navMeshSegments[i]->transform.Translate(XMFLOAT3(0, -400, 0));
+		AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrackNav.obj", "terrain_nav");
+		Model* navMeshModel = AssetManager::Instance()->GetModel("terrain_nav");
+		vector<MeshGroup*> navMeshGroups;
+		AssetManager::Instance()->GetMeshGroupsWithMaterial(&navMeshGroups, navMeshModel, "Nav_Space");
+		for (int i = 0; i < navMeshGroups.size(); i++)
+		{
+			NavMeshSegment* navMeshSegment = new NavMeshSegment(i);
+			navMeshSegment->AddMeshGroup(terrainModel, navMeshGroups[i], true);
+			navMeshSegments.push_back(navMeshSegment);
+			//entities.push_back(navMeshSegment);
+			navMeshSegment->Finalize();
+		}
+		for (int i = 0; i < navMeshSegments.size(); i++)
+		{
+			navMeshSegments[i]->FindConnections(&navMeshSegments);
+		}
+		for (int i = 0; i < navMeshSegments.size(); i++)
+		{
+			navMeshSegments[i]->transform.Scale(XMFLOAT3(500, 500, 500));
+			navMeshSegments[i]->RecenterGeometry();
+			navMeshSegments[i]->transform.Translate(XMFLOAT3(0, -400, 0));
+		}
 	}
 }
 

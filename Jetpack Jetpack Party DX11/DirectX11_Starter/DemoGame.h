@@ -120,6 +120,7 @@ private:
 	vector<FuelStation*> fuelStations;
 	vector<FuelStation*> checkpoints;
 	vector<NavMeshSegment*> navMeshSegments;
+	bool includeAI;
 };
 
 #endif
