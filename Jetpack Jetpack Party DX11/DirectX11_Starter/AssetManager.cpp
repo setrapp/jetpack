@@ -267,10 +267,6 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 	Model* model = new Model();
 	int texCount= mlModel3DGetTextureVertexCount(objModel);
 	bool hasUVs = mlModel3DGetTextureVertexCount(objModel) > 1;
-	if(name == "jetdude"){
-		//asdfasdf
-		int i = 0;
-	}
 
 	// Load Individual Mesh Groups to Categorize Geometry.
 	unsigned int objectCount = mlModel3DGetObjectCount(objModel);
@@ -283,7 +279,6 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 		model->meshGroups.push_back(meshGroup);
 	}
 
-	
 	// Load Mesh Indices.
 	vector<pair<UINT,UINT>>* posUVPairs = new vector<pair<UINT,UINT>>();
 	unsigned int faceCount = mlModel3DGetFaceCount(objModel);
@@ -433,30 +428,6 @@ vector<MeshGroup*>* AssetManager::GetMeshGroupsWithMaterial(vector<MeshGroup*>* 
 	}
 
 	return meshGroupsOut;
-}
-
-Entity* AssetManager::EntifyMeshGroup(Entity* entityOut, Model* sourceModel, MeshGroup* meshGroup)
-{
-	if (!sourceModel || !meshGroup)
-	{
-		return NULL;
-	}
-
-	if (!entityOut)
-	{
-		entityOut = new Entity();
-	}
-
-	int meshCount = sourceModel->meshes.size();
-	for (int i = meshGroup->firstFace; i < meshGroup->lastFace && i < meshCount; i++)
-	{
-		UINT* indices = sourceModel->meshes[i].GetIndices();
-		Vertex vertices[3] = {sourceModel->vertices[indices[0]], sourceModel->vertices[indices[1]], sourceModel->vertices[indices[2]]};
-		entityOut->AddTriangle(vertices, indices, false);
-	}
-	entityOut->Finalize();
-
-	return entityOut;
 }
 
 SoundManager* AssetManager::GetSoundManager()

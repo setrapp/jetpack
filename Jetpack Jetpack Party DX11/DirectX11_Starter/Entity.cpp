@@ -35,14 +35,11 @@ Entity::~Entity(void)
 	}
 }
 
-void Entity::AddTriangle(Vertex* v, UINT* i, bool moveIndicesToEnd)
+void Entity::AddTriangle(Vertex* v, UINT* i)
 {
-	if (moveIndicesToEnd)
+	for (int j = 0; j < 3; j++)
 	{
-		for (int j = 0; j < 3; j++)
-		{
-			i[j] += vertices.size();
-		}
+		i[j] += vertices.size();
 	}
 
 	for(int i = 0; i < 3; i++)
@@ -51,14 +48,11 @@ void Entity::AddTriangle(Vertex* v, UINT* i, bool moveIndicesToEnd)
 	meshes.push_back(m);
 }
 
-void Entity::AddQuad(Vertex* v, UINT* i, bool moveIndicesToEnd)
+void Entity::AddQuad(Vertex* v, UINT* i)
 {
-	if (moveIndicesToEnd)
+	for (int j = 0; j < 6; j++)
 	{
-		for (int j = 0; j < 6; j++)
-		{
-			i[j] += vertices.size();
-		}
+		i[j] += vertices.size();
 	}
 
 	for(int i = 0; i < 4; i++)
@@ -67,6 +61,69 @@ void Entity::AddQuad(Vertex* v, UINT* i, bool moveIndicesToEnd)
 	Mesh* m2 = new Mesh(i + 3);
 	meshes.push_back(m1);
 	meshes.push_back(m2);
+}
+
+void Entity::AddMeshGroup(Model* sourceModel, MeshGroup* meshGroup, bool removeFacesFromModel)
+{
+	int existingVertexCount = vertices.size();
+	int vertexCount = sourceModel->vertices.size();
+	int meshCount = sourceModel->meshes.size();
+	vector<UINT*> meshGroupIndices;
+
+	// Extract relevant faces.
+	for (int i = meshGroup->firstFace; i <= meshGroup->lastFace && i < meshCount; i++)
+	{
+		UINT* indices = sourceModel->meshes[i].GetIndices();
+		for (int j = 0; j < 3; j++)
+		{
+			indices[j] += existingVertexCount;
+		}
+		meshGroupIndices.push_back(indices);
+		Mesh* newMesh = new Mesh(indices);
+		newMesh->SetMaterial(sourceModel->meshes[i].GetMaterial());
+		meshes.push_back(newMesh);
+	}
+	
+	// Extract relavant vertices and point face indices at them.
+	int meshGroupIndexCount = meshGroupIndices.size();
+	for (int i = 0; i < vertexCount; i++)
+	{
+		bool vertexFound = false;
+		for (int j = 0; j < meshGroupIndexCount; j++)
+		{
+			for (int k = 0; k < 3; k++)
+			{
+				if (meshGroupIndices[j][k] == i)
+				{
+					if (!vertexFound)
+					{
+						vertices.push_back(sourceModel->vertices[i]);
+						vertexFound = true;
+					}
+					meshes[j]->GetIndices()[k] = vertices.size() - 1;
+				}
+			}
+		}
+	}
+
+	// If specified, set faces on the source model to NULL so they will be ignored.
+	if (removeFacesFromModel)
+	{
+		int indexShift = (meshGroup->lastFace - meshGroup->firstFace) + 1;
+		for (int i = 0; i < sourceModel->meshGroups.size(); i++)
+		{
+			if(sourceModel->meshGroups[i].firstFace > meshGroup->lastFace)
+			{
+				
+				sourceModel->meshGroups[i].firstFace -= indexShift;
+				sourceModel->meshGroups[i].lastFace -= indexShift;
+			}
+		}
+		for (int i = meshGroup->firstFace; i <= meshGroup->lastFace && i < meshCount; meshGroup->lastFace--)
+		{
+			sourceModel->meshes.erase(sourceModel->meshes.begin() + i);
+		}
+	}
 }
 
 void Entity::AddModel(Model* model) {
@@ -94,6 +151,62 @@ void Entity::AddModel(Model* model) {
 	}
 
 	models.push_back(model);
+}
+
+void Entity::RecenterGeometry()
+{
+	transform.SetTranslation(XMFLOAT3(0, 0, 0));
+	int vertexCount = vertices.size();
+	XMFLOAT3 centroid = XMFLOAT3(0, 0, 0);
+	for (int i = 0; i < vertexCount; i++)
+	{
+		centroid.x += vertices[i].Position.x;
+		centroid.y += vertices[i].Position.y;
+		centroid.z += vertices[i].Position.z;
+	}
+	centroid.x /= vertexCount;
+	centroid.y /= vertexCount;
+	centroid.z /= vertexCount;
+	for (int i = 0; i < vertexCount; i++)
+	{
+		vertices[i].Position.x -= centroid.x;
+		vertices[i].Position.y -= centroid.y;
+		vertices[i].Position.z -= centroid.z;
+	}
+	XMFLOAT3 translation;
+	XMStoreFloat3(&translation, XMVectorMultiply(XMLoadFloat3(&centroid), XMLoadFloat3(&transform.GetScale())));
+	transform.SetTranslation(translation);
+}
+
+XMFLOAT3 Entity::ProjectPointOnMesh(Mesh* mesh, XMFLOAT3 point, bool pointInEntitySpace, XMFLOAT3* normalOut)
+{
+	UINT* meshIndices = mesh->GetIndices();
+	Vertex meshVertices[] = {vertices[meshIndices[0]], vertices[meshIndices[1]], vertices[meshIndices[2]]};
+	XMFLOAT3 faceNormal;
+	XMStoreFloat3(&faceNormal, XMVector3Normalize(XMVector3Cross(
+			XMVectorSubtract(XMLoadFloat3(&meshVertices[1].Position), XMLoadFloat3(&meshVertices[0].Position)), 
+			XMVectorSubtract(XMLoadFloat3(&meshVertices[2].Position), XMLoadFloat3(&meshVertices[0].Position)))));
+	
+	// Ensure that point is in entity space.
+	if (!pointInEntitySpace)
+	{
+		point = transform.InverseTransformPoint(point);
+	}
+
+	// Find nearest point on mesh to given point.
+	XMFLOAT3 vertToPoint;
+	XMStoreFloat3(&vertToPoint, XMVectorSubtract(XMLoadFloat3(&point), XMLoadFloat3(&meshVertices[1].Position)));
+	float toDotNorm;
+	XMStoreFloat(&toDotNorm, XMVector3Dot(XMLoadFloat3(&vertToPoint), XMLoadFloat3(&faceNormal)));
+	XMFLOAT3 meshPoint;
+	XMStoreFloat3(&meshPoint, XMVectorSubtract(XMLoadFloat3(&point), XMVectorScale(XMLoadFloat3(&faceNormal), toDotNorm)));
+
+	// Ensure that returned point is in the correct space.
+	if (!pointInEntitySpace)
+	{
+		meshPoint = transform.TransformPoint(meshPoint);
+	}
+	return meshPoint;
 }
 
 void Entity::Update(float dt)
@@ -207,9 +320,9 @@ inline Material Entity::GetBaseMaterialSafe() const
 	return *this->baseMaterial;
 }
 
-void Entity::SetBaseMaterial(string name, bool forceOnAllMeshes)
+void Entity::SetBaseMaterial(string name, Model* sourceModel, bool forceOnAllMeshes)
 {
-	Material* newBaseMaterial = AssetManager::Instance()->GetMaterial(name);
+	Material* newBaseMaterial = AssetManager::Instance()->GetMaterial(name, sourceModel);
 	Material* defaultMaterial = AssetManager::Instance()->GetMaterial();
 	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end(); it++)
 	{
@@ -239,21 +352,24 @@ void Entity::Finalize()
 	for(int i = 0; i < totalMeshes; i++)
 	{
 		Material* meshMaterial = meshes[i]->GetMaterial();
-		map<Material*, vector<UINT>*>::iterator matIt = indicesAll.find(meshMaterial);
-		vector<UINT>* materialIndices;
-		if (matIt != indicesAll.end())
+		if (meshMaterial)
 		{
-			materialIndices = matIt->second;
-		}
-		else
-		{
-			materialIndices = new vector<UINT>;
-			indicesAll.insert(pair<Material*, vector<UINT>*>(meshMaterial, materialIndices));
-		}
-		UINT* indices = meshes.at(i)->GetIndices();
-		for(short j= 0; j < 3; j++)
-		{
-			materialIndices->push_back(indices[j]);
+			map<Material*, vector<UINT>*>::iterator matIt = indicesAll.find(meshMaterial);
+			vector<UINT>* materialIndices;
+			if (matIt != indicesAll.end())
+			{
+				materialIndices = matIt->second;
+			}
+			else
+			{
+				materialIndices = new vector<UINT>;
+				indicesAll.insert(pair<Material*, vector<UINT>*>(meshMaterial, materialIndices));
+			}
+			UINT* indices = meshes.at(i)->GetIndices();
+			for(short j= 0; j < 3; j++)
+			{
+				materialIndices->push_back(indices[j]);
+			}
 		}
 	}
 
@@ -331,9 +447,46 @@ void Entity::SetVisible(bool visibility)
 	}
 }
 
+int Entity::GetVertexCount()
+{
+	return vertices.size();
+}
+
+Vertex* Entity::GetVertex(int index)
+{
+	if (index > vertices.size())
+	{
+		return NULL;
+	}
+	return &vertices[index];
+}
+
+int Entity::GetMeshCount()
+{
+	return meshes.size();
+}
+
+Mesh* Entity::GetMesh(int index)
+{
+	if (index > meshes.size())
+	{
+		return NULL;
+	}
+	return meshes[index];
+}
+
+int Entity::GetModelCount()
+{
+	return models.size();
+}
+
 Model* Entity::GetModel(int index)
 {
-	return models[0];
+	if (index > models.size())
+	{
+		return NULL;
+	}
+	return models[index];
 }
 
 string Entity::getNetworkString(){

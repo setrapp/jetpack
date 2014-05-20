@@ -11,6 +11,8 @@
 #include "Mesh.h"
 #include "Entity.h"
 #include "Camera.h"
+#include "FuelStation.h"
+#include "NavMeshSegment.h"
 #include "ControllableCamera.h"
 #include "GameState.h"
 #include "Menu.h"
@@ -71,6 +73,7 @@ private:
 	void LoadSoundAssets();
 	void CreatePlayers();
 	void AttachCameraToPlayer();
+	void LocateNearestFuelStations();
 
 private:
 
@@ -123,6 +126,9 @@ private:
 	NetworkManager* networkManager;
 
 	float farPlaneDistance;
+	vector<FuelStation*> fuelStations;
+	vector<FuelStation*> checkpoints;
+	vector<NavMeshSegment*> navMeshSegments;
 };
 
 #endif

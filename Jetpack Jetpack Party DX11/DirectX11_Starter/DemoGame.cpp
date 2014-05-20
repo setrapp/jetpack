@@ -82,9 +82,6 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	mouseLook = NULL;
 }
 
-		
-	
-
 DemoGame::~DemoGame()
 {
 	ReleaseMacro(vsModelConstantBuffer);
@@ -97,6 +94,11 @@ DemoGame::~DemoGame()
 	for(int i = 0 ; i < entities.size(); i++)
 	{
 		delete entities.at(i);
+	}
+
+	for(int i = 0 ; i < navMeshSegments.size(); i++)
+	{
+		delete navMeshSegments.at(i);
 	}
 
 	delete IPMan::GetIPMan();
@@ -136,7 +138,7 @@ bool DemoGame::Init()
 	else
 	{
 		ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
-		rasterizerDesc.CullMode = D3D11_CULL_FRONT;
+		rasterizerDesc.CullMode = D3D11_CULL_BACK;
 		rasterizerDesc.FillMode = D3D11_FILL_SOLID;
 	}
 	HR (device->CreateRasterizerState(&rasterizerDesc, &rasterizerState));
@@ -209,8 +211,8 @@ void DemoGame::CreateGeometryBuffers()
 
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/cube.obj");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/Fireball.obj", "fireball");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/VR_Track.obj", "terrain");
-	//AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrack.obj", "terrain");
+	//AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/VR_Track.obj", "terrain");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrack.obj", "terrain");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrackNav.obj", "terrain_nav");			
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/skybox.obj", "skybox");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/JetDude.obj","jetdude");
@@ -259,7 +261,7 @@ void DemoGame::CreateGeometryBuffers()
 	m_hud = new HUD(spriteRenderer, FontManager::Instance()->GetFont("MENUFONT"));
 	
 
-	Entity* gift = new Entity();
+	/*Entity* gift = new Entity();
 	gift->AddQuad(vertices, indices);
 	
 	//gift->transform.SetTranslation(player->targetPosition);
@@ -267,33 +269,103 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), 1, 16), "gift");
 	gift->SetBaseMaterial("gift");
 	gift->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
-	gift->LoadTexture(L"../Assets/Textures/test.png");
+	gift->LoadTexture(L"../Assets/Textures/RedGift.png");
 	gift->Finalize();*/
 
+	Model* terrainModel = AssetManager::Instance()->GetModel("terrain");
+	
+	/*vector<MeshGroup*> checkpointMeshGroups;
+	AssetManager::Instance()->GetMeshGroupsWithMaterial(&checkpointMeshGroups, terrainModel, "Checkpoint");
+	for (int i = 0; i < checkpointMeshGroups.size(); i++)
+	{
+		FuelStation* checkpoint = new FuelStation(10, i);
+		checkpoint->AddMeshGroup(terrainModel, checkpointMeshGroups[i], true);
+		fuelStations.push_back(checkpoint);
+		checkpoints.push_back(checkpoint);
+		entities.push_back(checkpoint);
+		//checkpoint->transform.SetParent(&floor->transform);
+		checkpoint->transform.Scale(XMFLOAT3(500, 500, 500));
+		checkpoint->RecenterGeometry();
+		checkpoint->transform.Translate(XMFLOAT3(0, -400, 0)); // TODO make RecenterGeometry do this automatically, does parenting work?
+		checkpoint->SetBaseMaterial("Checkpoint", terrainModel);
+		checkpoint->Finalize();
+	}
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 1, 1), 0, 128), "targetCheckpoint");*/
+	// TODO add fuel stations. 
+
 	Entity* floor = new Entity();
-	floor->AddModel(AssetManager::Instance()->GetModel("terrain"));
+	floor->AddModel(terrainModel);
 	// Load jetman texture.
 	Material* terrianMat = AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 0.3f), XMFLOAT4(1, 1, 1, 1), 0, 1), "terrain");
 	terrianMat->ApplyTexture(L"../Assets/Textures/Track_Canyon_Texture.png");
 	terrianMat->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 	floor->SetBaseMaterial("terrain");
 	floor->transform.Translate(XMFLOAT3(0, -0.4f, 0));
-	//floor->transform.Scale(XMFLOAT3(10, 10, 10));
+	floor->transform.Scale(XMFLOAT3(10, 10, 10));
 	entities.push_back(floor);
 	floor->Finalize();
 
-	Entity* navMesh = new Entity();
-	navMesh->AddModel(AssetManager::Instance()->GetModel("terrain_nav"));
-	navMesh->transform.SetTranslation(floor->transform.GetTranslation());
-	navMesh->transform.SetLocalScale(floor->transform.GetScale());
-	//entities.push_back(navMesh);
-	navMesh->transform.SetParent(&floor->transform);
-	navMesh->Finalize();
+	/*Model* navMeshModel = AssetManager::Instance()->GetModel("terrain_nav");
+	vector<MeshGroup*> navMeshGroups;
+	AssetManager::Instance()->GetMeshGroupsWithMaterial(&navMeshGroups, navMeshModel, "Nav_Space");
+	//TODO figure out a good proximity. Does not seem to be making correct connections. Is this even splitting correctly?
+	for (int i = 0; i < navMeshGroups.size(); i++)
+	{
+		NavMeshSegment* navMeshSegment = new NavMeshSegment(i);
+		navMeshSegment->AddMeshGroup(navMeshModel, navMeshGroups[i], true);
+		navMeshSegments.push_back(navMeshSegment);
+		//entities.push_back(navMeshSegment);
+		//navMeshSegment->SetBaseMaterial("Nav_Space", navMeshModel);
+		navMeshSegment->Finalize();
+	}
+	for (int i = 0; i < navMeshSegments.size(); i++)
+	{
+		navMeshSegments[i]->FindConnections(&navMeshSegments);
+	}
+	/*for (int i = 0; i < navMeshSegments.size(); i++)dont use???
+	{
+		navMeshSegments[i]->ComputeConnectionDistances();
+	}*/
+	/*for (int i = 0; i < navMeshSegments.size(); i++)
+	{
+		navMeshSegments[i]->transform.Scale(XMFLOAT3(500, 500, 500));
+		navMeshSegments[i]->transform.Translate(XMFLOAT3(0, -400, 0));
+	}*/
 
-	
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), 0, 128), "skybox");
-	Entity* skybox = new Skybox(farPlaneDistance, player);	
-	entities.push_back(skybox);
+
+	// TODO actually determine which navmesh segment the players and goals are in.
+	/*for (int i = 0; i < PLAYER_COUNT; i++)
+	{
+		for (int j = 0; j < navMeshSegments.size(); j++)
+		{
+			if (navMeshSegments[j]->EntityInside(players[i]))
+			{
+				players[i]->navMeshSegment = navMeshSegments[j];
+			}
+		}
+	}*/
+	/*for (int i = 0; i < checkpoints.size(); i++)
+	{
+		for (int j = 0; j < navMeshSegments.size(); j++)
+		{
+			if (navMeshSegments[j]->EntityInside(checkpoints[i]))
+			{
+				checkpoints[i]->navMeshSegment = navMeshSegments[j];
+			}
+		}
+	}*/
+	/*for (int i = 0; i < PLAYER_COUNT; i++)
+	{
+		players[i]->navMeshSegment = navMeshSegments[32];
+	}
+	checkpoints[0]->navMeshSegment = navMeshSegments[32];
+	checkpoints[1]->navMeshSegment = navMeshSegments[28];
+	checkpoints[2]->navMeshSegment = navMeshSegments[24];
+	checkpoints[3]->navMeshSegment = navMeshSegments[20];
+	checkpoints[4]->navMeshSegment = navMeshSegments[15];
+	checkpoints[5]->navMeshSegment = navMeshSegments[11];
+	checkpoints[6]->navMeshSegment = navMeshSegments[0];
+	checkpoints[7]->navMeshSegment = navMeshSegments[3];*/
 }
 
 #pragma endregion
@@ -412,8 +484,8 @@ void DemoGame::OnResize()
 			menu->WindowResize();*/
 	}
 	else if(currentState == GameState::GameLobby){
-		if(lobbyScreen)
-			lobbyScreen->WindowResize();
+		/*if(lobbyScreen)
+			lobbyScreen->WindowResize();*/
 	}
 
 	if(m_hud)
@@ -498,7 +570,8 @@ void DemoGame::UpdateScene(float dt)
 			AssetManager::Instance()->addedEntities.pop();
 		}
 
-		
+		LocateNearestFuelStations();
+
 		for(Entity* e: entities)
 		{
 			e->Update(dt);
@@ -570,6 +643,8 @@ void DemoGame::UpdateScene(float dt)
 // Clear the screen, redraw everything, present
 void DemoGame::DrawScene()
 {
+	//deviceContext->ClearRenderTargetView(renderTargetView, clearColor);
+	//deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	// Prepare for rendering to textures.
 	deviceContext->PSSetShaderResources(0, TARGET_COUNT, nullShaderResources);
 	deferredRenderer->SetTargets();
@@ -801,5 +876,90 @@ void DemoGame::AttachCameraToPlayer()
 	XMStoreFloat3(&target, XMVectorAdd(XMLoadFloat3(&player->transform.GetTranslation()), (0.03f * XMLoadFloat3(&player->transform.GetForward()))));
 	XMFLOAT3 up = player->transform.GetUp();
 	playerCamera->LookAt(eye, target, up);
+}
+
+void DemoGame::LocateNearestFuelStations()
+{
+	return;
+	// TODO track checkpoint and fuel station
+	// TODO only rotate the controllable player's target
+
+	FuelStation* oldPlayerTarget = player->targetCheckpoint;
+
+	for (int i = 0; i < PLAYER_COUNT; i++)
+	{
+		FuelStation* targetCheckpoint = NULL;
+		if (!players[i]->targetCheckpoint)
+		{
+			targetCheckpoint = checkpoints[0];
+		}
+		else
+		{
+			float distSqr;
+			XMStoreFloat(&distSqr, XMVector3LengthSq(XMVectorSubtract(XMLoadFloat3(&players[i]->targetPosition), XMLoadFloat3(&players[i]->transform.GetTranslation()))));
+			if (distSqr < 500 * 500)
+			{
+				// If reaching the target checkpoint, pick a new checkpoint.
+				if (players[i]->navMeshSegment == players[i]->targetCheckpoint->navMeshSegment)
+				{
+					if (players[i]->targetCheckpoint->GetCheckpointNum() < checkpoints.size() - 1)
+					{
+						players[i]->respawnPosition = players[i]->targetCheckpoint->transform.GetTranslation();
+						players[i]->respawnLocalRotation = players[i]->transform.GetLocalEulerAngles();
+						targetCheckpoint = checkpoints[players[i]->targetCheckpoint->GetCheckpointNum() + 1];
+					}
+					else
+					{
+
+						players[i]->targetCheckpoint = NULL;
+						players[i]->targetPosition = XMFLOAT3(0, 0, 0);
+					}
+				}
+				// Else, target the next path point.
+				else
+				{
+					// If the player is not near the target checkpoint or but has no path, find a path to the target checkpoint.
+					if (players[i]->navMeshToTarget.size() < 2 || players[i]->pathToTarget.size() < 2)
+					{
+						targetCheckpoint = players[i]->targetCheckpoint;
+					}
+					else
+					{
+						players[i]->navMeshToTarget.erase(players[i]->navMeshToTarget.begin());
+						players[i]->navMeshSegment = *players[i]->navMeshToTarget.begin();
+						players[i]->pathToTarget.erase(players[i]->pathToTarget.begin());
+						players[i]->targetPosition = *players[i]->pathToTarget.begin();
+					}
+				}
+			}
+		}
+		if (targetCheckpoint)
+		{
+			players[i]->targetCheckpoint = targetCheckpoint;
+			players[i]->navMeshToTarget.clear();
+			players[i]->navMeshSegment->FindPathTo(players[i]->targetCheckpoint->navMeshSegment, players[i]->transform.GetTranslation(), players[i]->targetCheckpoint->transform.GetTranslation(), &players[i]->navMeshToTarget);
+			players[i]->pathToTarget.clear();
+			players[i]->navMeshSegment->FindPathPositions(&players[i]->navMeshToTarget, players[i]->transform.GetTranslation(), players[i]->targetCheckpoint->transform.GetTranslation(), &players[i]->pathToTarget);
+			players[i]->targetPosition = *players[i]->pathToTarget.begin();
+		}
+	}
+
+	// Update controlled player target.
+	if (oldPlayerTarget != player->targetCheckpoint)
+	{
+		if (player->targetCheckpoint)
+		{
+			//player->targetCheckpoint->SetBaseMaterial("targetCheckpoint", NULL, true);
+			//player->targetCheckpoint->Finalize();
+			player->targetCheckpoint->spin = true;
+		}
+		if (oldPlayerTarget)
+		{
+			//oldPlayerTarget->SetBaseMaterial("Checkpoint", AssetManager::Instance()->GetModel("terrain"), true);
+			//oldPlayerTarget->Finalize();
+			oldPlayerTarget->spin = false;
+			oldPlayerTarget->transform.SetLocalRotation(XMFLOAT3(0, 0, 0));
+		}
+	}
 }
 #pragma endregion

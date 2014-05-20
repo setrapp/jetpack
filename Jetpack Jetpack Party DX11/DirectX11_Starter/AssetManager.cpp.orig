@@ -267,31 +267,31 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 	Model* model = new Model();
 	int texCount= mlModel3DGetTextureVertexCount(objModel);
 	bool hasUVs = mlModel3DGetTextureVertexCount(objModel) > 1;
+<<<<<<< HEAD
 	if(name == "jetdude"){
 		//asdfasdf
 		int i = 0;
-	}
+=======
+
 	// Load Vertices.
-	/*unsigned int vertexCount = mlModel3DGetVertexCount(objModel);
+	unsigned int vertexCount = mlModel3DGetVertexCount(objModel);
 	for (int i = 0; i < vertexCount; i++) {
 		MLVertex3D const*  mlVertex = mlModel3DGetVertex(objModel, i);
 		GUPoint3D guPoint = mlVertex3DGetPosition(mlVertex);
-
 		GUNormal3D guNormal = mlVertex3DGetNormal(mlVertex);
 		Vertex vertex;
 		vertex.Position = XMFLOAT3(guPoint.x, guPoint.y, guPoint.z);
 		vertex.Normal = XMFLOAT3(guNormal.x, guNormal.y, guNormal.z);
-		
-		if (hasUVs && i<mlModel3DGetTextureVertexCount(objModel)) {
+		if (hasUVs && i < mlModel3DGetTextureVertexCount(objModel)) {
 			MLTexelXY const* mlTexel = mlModel3DGetTextureVertex(objModel, i);
 			GUPoint2D guUV = mlTexelXYGetPosition(mlTexel);
 			vertex.UV = XMFLOAT2(guUV.x, guUV.y);
 		} else {
 			vertex.UV = XMFLOAT2(0, 0);
 		}
-		
 		model->vertices.push_back(vertex);
-	}*/	
+>>>>>>> 1a90545489d25ef3c468569862e4b23e5e212393
+	}
 
 	// Load Individual Mesh Groups to Categorize Geometry.
 	unsigned int objectCount = mlModel3DGetObjectCount(objModel);
@@ -355,7 +355,7 @@ Model* AssetManager::CreateAndStoreModel(string filePath, string name)
 				float shininess = mlMaterial->shininess;
 				faceMaterial = new Material(XMFLOAT4(ambient[0], ambient[1], ambient[2], ambient[3]),
 											XMFLOAT4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]),
-											XMFLOAT4(specular[0], specular[1], specular[2], specular[3]),
+											specular[0],
 											shininess);
 				StoreMaterial(faceMaterial, materialName, model);
 			}
@@ -454,30 +454,6 @@ vector<MeshGroup*>* AssetManager::GetMeshGroupsWithMaterial(vector<MeshGroup*>* 
 	}
 
 	return meshGroupsOut;
-}
-
-Entity* AssetManager::EntifyMeshGroup(Entity* entityOut, Model* sourceModel, MeshGroup* meshGroup)
-{
-	if (!sourceModel || !meshGroup)
-	{
-		return NULL;
-	}
-
-	if (!entityOut)
-	{
-		entityOut = new Entity();
-	}
-
-	int meshCount = sourceModel->meshes.size();
-	for (int i = meshGroup->firstFace; i < meshGroup->lastFace && i < meshCount; i++)
-	{
-		UINT* indices = sourceModel->meshes[i].GetIndices();
-		Vertex vertices[3] = {sourceModel->vertices[indices[0]], sourceModel->vertices[indices[1]], sourceModel->vertices[indices[2]]};
-		entityOut->AddTriangle(vertices, indices, false);
-	}
-	entityOut->Finalize();
-
-	return entityOut;
 }
 
 SoundManager* AssetManager::GetSoundManager()

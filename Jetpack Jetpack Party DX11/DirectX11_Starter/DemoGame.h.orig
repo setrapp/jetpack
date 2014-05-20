@@ -11,9 +11,13 @@
 #include "Mesh.h"
 #include "Entity.h"
 #include "Camera.h"
+#include "FuelStation.h"
+#include "NavMeshSegment.h"
 #include "ControllableCamera.h"
 #include "GameState.h"
 #include "Menu.h"
+#include "LoginScreen.h"
+#include "LobbyScreen.h"
 #include "Sfx.h"
 #include "Camera.h"
 #include "AssetManager.h"
@@ -23,12 +27,13 @@
 #include "InputManager.h"
 #include <queue>
 #include "XNew.h"
-<<<<<<< HEAD
-#include "InputManager.h"
-#include "DeferredRenderer.h"
-=======
 #include <dinput.h>
->>>>>>> 7f51578d4ea53aa49c00303e416e601af83d4ab0
+#include "DeferredRenderer.h"
+#include "NetworkManager.h"
+#include "Skybox.h"
+#include "HUD.h"
+
+#define PLAYER_COUNT 1
 
 using namespace DirectX;
 
@@ -66,7 +71,9 @@ private:
 	void CreateGeometryBuffers();
 	void LoadShadersAndInputLayout();
 	void LoadSoundAssets();
+	void CreatePlayers();
 	void AttachCameraToPlayer();
+	void LocateNearestFuelStations();
 
 private:
 
@@ -84,11 +91,14 @@ private:
 	VertexShaderModelConstantBuffer vsModelConstantBufferData;
 	ID3D11Buffer* materialsAndLightsConstantBuffer;
 	MaterialsAndLightsConstantBuffer materialsAndLightsConstantBufferData;
+	XMFLOAT4 projectionInfo;
 	DeferredRenderer* deferredRenderer;
 	XMFLOAT4X4 deferredView;
 	XMFLOAT4X4 deferredProjection;
 	Entity* deferredPlane;
 	ID3D11DepthStencilState* deferredDepthlessState;
+	ID3D11RenderTargetView* nullRenderTargets[TARGET_COUNT];
+	ID3D11ShaderResourceView* nullShaderResources[TARGET_COUNT];
 
 
 	// Keeps track of the old mouse position.  Useful for 
@@ -106,10 +116,22 @@ private:
 	Camera* camera;
 	GameState currentState;
 	Menu* menu;
+	LoginScreen* loginScreen;
+	LobbyScreen* lobbyScreen;
 	MouseLook* mouseLook;
-
+	HUD* m_hud;
 	bool mouseCursorVisibility;
 	bool flag;
+	Player* players[PLAYER_COUNT];
+<<<<<<< HEAD
+	NetworkManager* networkManager;
+
+	float farPlaneDistance;
+=======
+	vector<FuelStation*> fuelStations;
+	vector<FuelStation*> checkpoints;
+	vector<NavMeshSegment*> navMeshSegments;
+>>>>>>> 1a90545489d25ef3c468569862e4b23e5e212393
 };
 
 #endif

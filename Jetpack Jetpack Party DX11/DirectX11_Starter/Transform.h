@@ -93,7 +93,7 @@ public:
 
 	XMFLOAT3 ClampVector(XMFLOAT3* vector, float maxMagnitude, float minMagnitude) const;
 
-	XMFLOAT3 RotationToEuler(XMFLOAT3X3 const* rotationMatrix) const;
+	XMFLOAT3 RotationToEuler(XMFLOAT3X3 const* rotationMatrix, XMFLOAT3 expectedForward = XMFLOAT3(0, 0, 1)) const;
 
 	// Get world translation.
 	XMFLOAT3 GetTranslation() const;

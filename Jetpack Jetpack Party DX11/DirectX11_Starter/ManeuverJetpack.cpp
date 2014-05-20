@@ -17,7 +17,7 @@ ManeuverJetpack::ManeuverJetpack(Entity* player) : Jetpack(player)
 	frontSpin = 30 * (PI / 180);
 	sideSpin = 0 * (PI / 180);
 	bottomSpin = 10 * (PI / 180);
-	actionsPerSecond = 1.9f;
+	//actionsPerSecond = 1.9f;
 	
 	// Thrusters
 	thrusterCount = 8;
@@ -53,16 +53,17 @@ void ManeuverJetpack::Update(float dt, XMFLOAT3* velocity, XMFLOAT3* angularVelo
 	// Estimate the propultion direction of each thruster.
 	XMFLOAT3 transformRight = player->transform.GetRight(), transformUp = player->transform.GetUp(), transformForward = player->transform.GetForward();
 	XMVECTOR right = XMLoadFloat3(&transformRight), up = XMLoadFloat3(&transformUp), forward = XMLoadFloat3(&transformForward);
-	XMStoreFloat3(&thrusterDirections[Thruster::BOTTOM_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(up, 10), right)));
+	XMStoreFloat3(&thrusterDirections[Thruster::BOTTOM_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(up, 10), XMLoadFloat3(&XMFLOAT3(0, 0, 0))/*right*/)));
 	thrusterDirections[Thruster::BOTTOM_RIGHT] = thrusterDirections[Thruster::BOTTOM_LEFT];
 	thrusterDirections[Thruster::BOTTOM_RIGHT].x *= -1;
 	XMStoreFloat3(&thrusterDirections[Thruster::BACK_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(forward, 2), right)));
 	thrusterDirections[Thruster::BACK_RIGHT] = thrusterDirections[Thruster::BACK_LEFT];
 	thrusterDirections[Thruster::BACK_RIGHT].x *= -1;
-	XMStoreFloat3(&thrusterDirections[Thruster::FRONT_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(-forward, 2), right)));
+	XMStoreFloat3(&thrusterDirections[Thruster::FRONT_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(-forward, 2), -right)));
 	thrusterDirections[Thruster::FRONT_RIGHT] = thrusterDirections[Thruster::FRONT_LEFT];
 	thrusterDirections[Thruster::FRONT_RIGHT].x *= -1;
-	XMStoreFloat3(&thrusterDirections[Thruster::SIDE_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(right, 3), -up)));
+	//XMStoreFloat3(&thrusterDirections[Thruster::SIDE_LEFT], XMVector3Normalize(XMVectorAdd(XMVectorScale(right, 5), -up)));
+	thrusterDirections[Thruster::SIDE_LEFT] = XMFLOAT3(0, 0, 0);
 	thrusterDirections[Thruster::SIDE_RIGHT] = thrusterDirections[Thruster::SIDE_LEFT];
 	thrusterDirections[Thruster::SIDE_RIGHT].x *= -1;
 
@@ -113,49 +114,64 @@ void ManeuverJetpack::ApproachTarget(float dt, XMFLOAT3* velocity, XMFLOAT3* ang
 {
 	XMVECTOR desiredAcceleration = XMLoadFloat3(&targetAcceleration);
 	XMFLOAT3 thrustDotDir;
-	float minDot = 0.7f;
+	float minDot = 0.3f;//0.7f;
+
 
 	// Left Side
 	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::FRONT_LEFT])));
-	if(thrustDotDir.x >= minDot)
+	if(thrustDotDir.x > minDot)
 	{
 		thrusterActives[Thruster::FRONT_LEFT] = true;
 	}
 	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::SIDE_LEFT])));
-	if(thrustDotDir.x >= minDot)
+	if(thrustDotDir.x > minDot)
 	{
 		thrusterActives[Thruster::SIDE_LEFT] = true;
 	}
 	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::BACK_LEFT])));
-	if(thrustDotDir.x >= minDot)
+	if(thrustDotDir.x > minDot)
 	{
 		thrusterActives[Thruster::BACK_LEFT] = true;
 	}
 	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::BOTTOM_LEFT])));
-	if(thrustDotDir.x >= minDot)
+	if(thrustDotDir.x > minDot)
 	{
 		thrusterActives[Thruster::BOTTOM_LEFT] = true;
 	}
 	// Right Side
 	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::BOTTOM_RIGHT])));
-	if(thrustDotDir.x >= minDot)
+	if(thrustDotDir.x > minDot)
 	{
 		thrusterActives[Thruster::BOTTOM_RIGHT] = true;
 	}
 	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::BACK_RIGHT])));
-	if(thrustDotDir.x >= minDot)
+	if(thrustDotDir.x > minDot)
 	{
 		thrusterActives[Thruster::BACK_RIGHT] = true;
 	}
 	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::SIDE_RIGHT])));
-	if(thrustDotDir.x >= minDot)
+	if(thrustDotDir.x > minDot)
 	{
 		thrusterActives[Thruster::SIDE_RIGHT] = true;
 	}
 	XMStoreFloat3(&thrustDotDir, XMVector3Dot(desiredAcceleration, XMLoadFloat3(&thrusterDirections[Thruster::FRONT_RIGHT])));
-	if(thrustDotDir.x >= minDot)
+	if(thrustDotDir.x > minDot)
 	{
 		thrusterActives[Thruster::FRONT_RIGHT] = true;
+	}
+
+	// Rotation
+	if (targetAngularAcceleration.z > 0)
+	{
+		thrusterActives[Thruster::BOTTOM_RIGHT] = true;
+		thrusterActives[Thruster::BOTTOM_LEFT] = false;
+		thrusterActives[Thruster::SIDE_LEFT] = false;
+	}
+	else if (targetAngularAcceleration.z < 0)
+	{
+		thrusterActives[Thruster::BOTTOM_LEFT] = true;
+		thrusterActives[Thruster::BOTTOM_RIGHT] = false;
+		thrusterActives[Thruster::SIDE_RIGHT] = false;
 	}
 }
 

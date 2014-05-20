@@ -87,9 +87,9 @@ void Transform::LookAt(XMFLOAT3 eye, XMFLOAT3 lookAt, XMFLOAT3 up)
 
 	if (parent)
 	{
-		eye = parent->TransformPoint(eye);
-		lookAt = parent->TransformPoint(lookAt);
-		up = parent->TransformDirection(up);
+		eye = parent->InverseTransformPoint(eye);
+		lookAt = parent->InverseTransformPoint(lookAt);
+		up = parent->InverseTransformDirection(up);
 	}
 	
 	XMFLOAT4X4 lookAtMatrix;
@@ -177,14 +177,14 @@ void Transform::SetParent(Transform* parent)
 // Transform point from local space to world space.
 XMFLOAT3 Transform::TransformPoint(XMFLOAT3 localPoint) const
 {
-	XMStoreFloat3(&localPoint, XMVector3Transform(XMLoadFloat3(&localPoint), XMMatrixTranspose(XMMatrixInverse(nullptr, XMLoadFloat4x4(&worldMatrix)))));
+	XMStoreFloat3(&localPoint, XMVector3Transform(XMLoadFloat3(&localPoint), XMMatrixTranspose(XMLoadFloat4x4(&worldMatrix))));
 	return localPoint;
 }
 
 // Transform point from world space to local space.
 XMFLOAT3 Transform::InverseTransformPoint(XMFLOAT3 worldPoint) const
 {
-	XMStoreFloat3(&worldPoint, XMVector3Transform(XMLoadFloat3(&worldPoint), XMLoadFloat4x4(&worldMatrix)));
+	XMStoreFloat3(&worldPoint, XMVector3Transform(XMLoadFloat3(&worldPoint), XMMatrixInverse(nullptr, XMMatrixTranspose(XMLoadFloat4x4(&worldMatrix)))));
 	return worldPoint;
 }
 
@@ -193,9 +193,10 @@ XMFLOAT3 Transform::TransformDirection(XMFLOAT3 localDirection) const
 {
 	XMFLOAT3X3 sansTranslationAndScale;
 	XMStoreFloat3x3(&sansTranslationAndScale, XMLoadFloat4x4(&worldMatrix));
-	sansTranslationAndScale._11 /= scale.x;
-	sansTranslationAndScale._22 /= scale.y;
-	sansTranslationAndScale._33 /= scale.z;
+	XMFLOAT3 worldScale = GetScale();
+	sansTranslationAndScale._11 /= worldScale.x;
+	sansTranslationAndScale._22 /= worldScale.y;
+	sansTranslationAndScale._33 /= worldScale.z;
 	XMStoreFloat3(&localDirection, XMVector3Transform(XMLoadFloat3(&localDirection), XMMatrixTranspose(XMLoadFloat3x3(&sansTranslationAndScale))));
 	return localDirection;
 }
@@ -233,7 +234,7 @@ XMFLOAT3 Transform::ClampVector(XMFLOAT3* vector, float maxMagnitude, float minM
 	}
 }
 
-XMFLOAT3 Transform::RotationToEuler(XMFLOAT3X3 const* rotationMatrix) const
+XMFLOAT3 Transform::RotationToEuler(XMFLOAT3X3 const* rotationMatrix, XMFLOAT3 expectedForward) const
 {
 	XMFLOAT3 eulerAngles(0, 0, 0);
 	if (!rotationMatrix)
@@ -256,6 +257,20 @@ XMFLOAT3 Transform::RotationToEuler(XMFLOAT3X3 const* rotationMatrix) const
 	else
 	{
 		eulerAngles.y = asin(rotationMatrix->_31);
+
+		// Determine which of the possible angles to use testing against the rotations matrix's effects.
+		XMFLOAT3 expectedForward = XMFLOAT3(0, 0, 1), testForward1 = XMFLOAT3(0, 0, 1), testForward2 = XMFLOAT3(0, 0, 1);
+		float test1DotForward, test2DotForward;
+		XMStoreFloat3(&expectedForward, XMVector3Transform(XMLoadFloat3(&expectedForward), XMLoadFloat3x3(rotationMatrix)));
+		XMStoreFloat3(&testForward1, XMVector3Transform(XMLoadFloat3(&testForward1), XMMatrixRotationY(eulerAngles.y)));
+		XMStoreFloat3(&testForward2, XMVector3Transform(XMLoadFloat3(&testForward2), XMMatrixRotationY(PI - eulerAngles.y)));
+		XMStoreFloat(&test1DotForward, XMVector3Dot(XMLoadFloat3(&expectedForward), XMLoadFloat3(&testForward1)));
+		XMStoreFloat(&test2DotForward, XMVector3Dot(XMLoadFloat3(&expectedForward), XMLoadFloat3(&testForward2)));
+		if (test2DotForward > test1DotForward)
+		{
+			eulerAngles.y = PI - eulerAngles.y;
+		}
+
 		float cosY = cos(eulerAngles.y);
 		eulerAngles.x = -atan2(rotationMatrix->_32 / cosY, rotationMatrix->_33 / cosY);
 		eulerAngles.z = -atan2(rotationMatrix->_21 / cosY, rotationMatrix->_11 / cosY);
@@ -310,7 +325,7 @@ XMFLOAT3X3 Transform::GetRotation() const
 
 XMFLOAT3 Transform::GetEulerAngles() const
 {
-	return RotationToEuler(&GetRotation());
+	return RotationToEuler(&GetRotation(), forward);
 }
 
 XMFLOAT3X3 Transform::GetLocalRotation() const
@@ -320,7 +335,9 @@ XMFLOAT3X3 Transform::GetLocalRotation() const
 
 XMFLOAT3 Transform::GetLocalEulerAngles() const
 {
-	return RotationToEuler(&rotation);
+	XMFLOAT3 expectedForward;
+	XMStoreFloat3(&expectedForward, XMVector3Transform(XMLoadFloat3(&XMFLOAT3(0, 0, 1)), XMLoadFloat3x3(&rotation)));
+	return RotationToEuler(&rotation, expectedForward);
 }
 
 void Transform::SetLocalRotation(XMFLOAT3 newEulerAngles)

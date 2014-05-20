@@ -39,6 +39,7 @@ public:
 	bool playerControllable;
 	bool playerAI;
 	XMFLOAT3 targetAcceleration; 
+	XMFLOAT3 targetAngularAcceleration; 
 	float actionsPerSecond;
 	float timeSinceAction;
 };
