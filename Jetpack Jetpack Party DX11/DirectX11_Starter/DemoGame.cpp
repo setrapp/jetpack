@@ -519,11 +519,11 @@ void DemoGame::UpdateScene(float dt)
 	if(currentState == GameState::MenuState)
 	{
 		
-		/*if(!AssetManager::Instance()->GetSoundManager()->menuJukeBox->Playing())
+		if(!AssetManager::Instance()->GetSoundManager()->menuJukeBox->Playing())
 			AssetManager::Instance()->GetSoundManager()->PlayMenuJukeBox();
 
 		if(AssetManager::Instance()->GetSoundManager()->jukebox->Playing())
-			AssetManager::Instance()->GetSoundManager()->PauseJukeBox();*/
+			AssetManager::Instance()->GetSoundManager()->PauseJukeBox();
 
 
 		GameState newState = menu->Update(dt);

@@ -39,7 +39,7 @@ public:
 		transform.Scale(XMFLOAT3(currentScale, currentScale, currentScale));
 		SetBaseMaterial("skybox");
 		GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");	
-		__super::LoadTexture(L"../Assets/Textures/Skyboxnew1.png");
+		__super::LoadTexture(L"../Assets/Textures/Skyboxnewer.png");
 
 		transform.SetLocalRotation(XMFLOAT3(PI / 2, 0, 0));
 

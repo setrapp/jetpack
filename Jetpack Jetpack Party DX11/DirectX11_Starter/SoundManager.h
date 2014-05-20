@@ -9,7 +9,7 @@
 #include "AudioWaveManager.h"
 #include "Jukebox.h"
 
-#define FORCE_MUTE
+//#define FORCE_MUTE 0
 
 using namespace DirectX;
 using namespace JetpackAudio;
@@ -51,10 +51,11 @@ public:
 		jukebox->AddTrack(L"../Assets/Sounds/JukeBox/4.wav", engineSfx);
 
 		menuJukeBox = new JukeBox();
-		menuJukeBox->AddTrack(L"../Assets/Sounds/JukeBox/1.wav", engineSfx);
+		menuJukeBox->AddTrack(L"../Assets/Sounds/JetPack GPP Main Menu Theme.wav", engineSfx);
+		/*menuJukeBox->AddTrack(L"../Assets/Sounds/JukeBox/1.wav", engineSfx);
 		menuJukeBox->AddTrack(L"../Assets/Sounds/JukeBox/2.wav", engineSfx);
 		menuJukeBox->AddTrack(L"../Assets/Sounds/JukeBox/3.wav", engineSfx);
-		menuJukeBox->AddTrack(L"../Assets/Sounds/JukeBox/4.wav", engineSfx);
+		menuJukeBox->AddTrack(L"../Assets/Sounds/JukeBox/4.wav", engineSfx);*/
 	}
 
 	~SoundManager(void)
