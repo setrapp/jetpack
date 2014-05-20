@@ -80,6 +80,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
 	mouseCursorVisibility = true;
 	mouseLook = NULL;
+	includeAI = false;
 }
 
 DemoGame::~DemoGame()
@@ -211,8 +212,8 @@ void DemoGame::CreateGeometryBuffers()
 
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/cube.obj");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/Fireball.obj", "fireball");
-	//AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/VR_Track.obj", "terrain");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrack.obj", "terrain");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/VR_Track.obj", "terrain");
+	//AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrack.obj", "terrain");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrackNav.obj", "terrain_nav");			
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/skybox.obj", "skybox");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/JetDude.obj","jetdude");
@@ -237,6 +238,33 @@ void DemoGame::CreateGeometryBuffers()
 	deferredPlane->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("deferred");
 	deferredPlane->Finalize();
 	
+	Model* terrainModel = AssetManager::Instance()->GetModel("terrain");
+	
+	vector<MeshGroup*> checkpointMeshGroups;
+	AssetManager::Instance()->GetMeshGroupsWithMaterial(&checkpointMeshGroups, terrainModel, "Checkpoint");
+	for (int i = 0; i < checkpointMeshGroups.size(); i++)
+	{
+		FuelStation* checkpoint = new FuelStation(10, i);
+		checkpoint->AddMeshGroup(terrainModel, checkpointMeshGroups[i], true);
+		fuelStations.push_back(checkpoint);
+		checkpoints.push_back(checkpoint);
+		entities.push_back(checkpoint);
+		//checkpoint->transform.SetParent(&floor->transform);
+		//checkpoint->transform.Scale(XMFLOAT3(500, 500, 500));
+		checkpoint->RecenterGeometry();
+		checkpoint->transform.Translate(XMFLOAT3(0, -0.4, 0)); // TODO make RecenterGeometry do this automatically, does parenting work?
+		checkpoint->SetBaseMaterial("Checkpoint", terrainModel);
+		checkpoint->Finalize();
+	}
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 1, 1), 0, 128), "targetCheckpoint");
+	// TODO add fuel stations. 
+
+	// Disable AI if no checkpoints exist.
+	if (checkpoints.size() < 1)
+	{
+		includeAI = false;
+	}
+
 	CreatePlayers();
 	
 	Vertex vertices[] = 
@@ -272,100 +300,81 @@ void DemoGame::CreateGeometryBuffers()
 	gift->LoadTexture(L"../Assets/Textures/RedGift.png");
 	gift->Finalize();*/
 
-	Model* terrainModel = AssetManager::Instance()->GetModel("terrain");
-	
-	/*vector<MeshGroup*> checkpointMeshGroups;
-	AssetManager::Instance()->GetMeshGroupsWithMaterial(&checkpointMeshGroups, terrainModel, "Checkpoint");
-	for (int i = 0; i < checkpointMeshGroups.size(); i++)
-	{
-		FuelStation* checkpoint = new FuelStation(10, i);
-		checkpoint->AddMeshGroup(terrainModel, checkpointMeshGroups[i], true);
-		fuelStations.push_back(checkpoint);
-		checkpoints.push_back(checkpoint);
-		entities.push_back(checkpoint);
-		//checkpoint->transform.SetParent(&floor->transform);
-		checkpoint->transform.Scale(XMFLOAT3(500, 500, 500));
-		checkpoint->RecenterGeometry();
-		checkpoint->transform.Translate(XMFLOAT3(0, -400, 0)); // TODO make RecenterGeometry do this automatically, does parenting work?
-		checkpoint->SetBaseMaterial("Checkpoint", terrainModel);
-		checkpoint->Finalize();
-	}
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 1, 1), 0, 128), "targetCheckpoint");*/
-	// TODO add fuel stations. 
-
 	Entity* floor = new Entity();
 	floor->AddModel(terrainModel);
-	// Load jetman texture.
 	Material* terrianMat = AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 0.3f), XMFLOAT4(1, 1, 1, 1), 0, 1), "terrain");
 	terrianMat->ApplyTexture(L"../Assets/Textures/Track_Canyon_Texture.png");
 	terrianMat->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 	floor->SetBaseMaterial("terrain");
 	floor->transform.Translate(XMFLOAT3(0, -0.4f, 0));
-	floor->transform.Scale(XMFLOAT3(10, 10, 10));
+	//floor->transform.Scale(XMFLOAT3(10, 10, 10));
 	entities.push_back(floor);
 	floor->Finalize();
 
-	/*Model* navMeshModel = AssetManager::Instance()->GetModel("terrain_nav");
-	vector<MeshGroup*> navMeshGroups;
-	AssetManager::Instance()->GetMeshGroupsWithMaterial(&navMeshGroups, navMeshModel, "Nav_Space");
-	//TODO figure out a good proximity. Does not seem to be making correct connections. Is this even splitting correctly?
-	for (int i = 0; i < navMeshGroups.size(); i++)
+	if (includeAI)
 	{
-		NavMeshSegment* navMeshSegment = new NavMeshSegment(i);
-		navMeshSegment->AddMeshGroup(navMeshModel, navMeshGroups[i], true);
-		navMeshSegments.push_back(navMeshSegment);
-		//entities.push_back(navMeshSegment);
-		//navMeshSegment->SetBaseMaterial("Nav_Space", navMeshModel);
-		navMeshSegment->Finalize();
-	}
-	for (int i = 0; i < navMeshSegments.size(); i++)
-	{
-		navMeshSegments[i]->FindConnections(&navMeshSegments);
-	}
-	/*for (int i = 0; i < navMeshSegments.size(); i++)dont use???
-	{
-		navMeshSegments[i]->ComputeConnectionDistances();
-	}*/
-	/*for (int i = 0; i < navMeshSegments.size(); i++)
-	{
-		navMeshSegments[i]->transform.Scale(XMFLOAT3(500, 500, 500));
-		navMeshSegments[i]->transform.Translate(XMFLOAT3(0, -400, 0));
-	}*/
+		Model* navMeshModel = AssetManager::Instance()->GetModel("terrain_nav");
+		vector<MeshGroup*> navMeshGroups;
+		AssetManager::Instance()->GetMeshGroupsWithMaterial(&navMeshGroups, navMeshModel, "Nav_Space");
+		//TODO figure out a good proximity. Does not seem to be making correct connections. Is this even splitting correctly?
+		for (int i = 0; i < navMeshGroups.size(); i++)
+		{
+			NavMeshSegment* navMeshSegment = new NavMeshSegment(i);
+			navMeshSegment->AddMeshGroup(navMeshModel, navMeshGroups[i], true);
+			navMeshSegments.push_back(navMeshSegment);
+			//entities.push_back(navMeshSegment);
+			//navMeshSegment->SetBaseMaterial("Nav_Space", navMeshModel);
+			navMeshSegment->Finalize();
+		}
+		for (int i = 0; i < navMeshSegments.size(); i++)
+		{
+			navMeshSegments[i]->FindConnections(&navMeshSegments);
+		}
+		/*for (int i = 0; i < navMeshSegments.size(); i++)dont use???
+		{
+			navMeshSegments[i]->ComputeConnectionDistances();
+		}*/
+		for (int i = 0; i < navMeshSegments.size(); i++)
+		{
+			//navMeshSegments[i]->transform.Scale(XMFLOAT3(10, 10, 10));
+			navMeshSegments[i]->transform.Translate(XMFLOAT3(0, -0.4, 0));
+		}
 
 
-	// TODO actually determine which navmesh segment the players and goals are in.
-	/*for (int i = 0; i < PLAYER_COUNT; i++)
-	{
-		for (int j = 0; j < navMeshSegments.size(); j++)
+		// TODO actually determine which navmesh segment the players and goals are in.
+		/*for (int i = 0; i < PLAYER_COUNT; i++)
 		{
-			if (navMeshSegments[j]->EntityInside(players[i]))
+			for (int j = 0; j < navMeshSegments.size(); j++)
 			{
-				players[i]->navMeshSegment = navMeshSegments[j];
+				if (navMeshSegments[j]->EntityInside(players[i]))
+				{
+					players[i]->navMeshSegment = navMeshSegments[j];
+				}
 			}
-		}
-	}*/
-	/*for (int i = 0; i < checkpoints.size(); i++)
-	{
-		for (int j = 0; j < navMeshSegments.size(); j++)
+		}*/
+		/*for (int i = 0; i < checkpoints.size(); i++)
 		{
-			if (navMeshSegments[j]->EntityInside(checkpoints[i]))
+			for (int j = 0; j < navMeshSegments.size(); j++)
 			{
-				checkpoints[i]->navMeshSegment = navMeshSegments[j];
+				if (navMeshSegments[j]->EntityInside(checkpoints[i]))
+				{
+					checkpoints[i]->navMeshSegment = navMeshSegments[j];
+				}
 			}
+		}*/
+		for (int i = 0; i < PLAYER_COUNT; i++)
+		{
+			players[i]->navMeshSegment = navMeshSegments[32];
 		}
-	}*/
-	/*for (int i = 0; i < PLAYER_COUNT; i++)
-	{
-		players[i]->navMeshSegment = navMeshSegments[32];
+		checkpoints[0]->navMeshSegment = navMeshSegments[32];
+		checkpoints[1]->navMeshSegment = navMeshSegments[28];
+		checkpoints[2]->navMeshSegment = navMeshSegments[24];
+		checkpoints[3]->navMeshSegment = navMeshSegments[20];
+		checkpoints[4]->navMeshSegment = navMeshSegments[15];
+		checkpoints[5]->navMeshSegment = navMeshSegments[11];
+		checkpoints[6]->navMeshSegment = navMeshSegments[0];
+		checkpoints[7]->navMeshSegment = navMeshSegments[3];
 	}
-	checkpoints[0]->navMeshSegment = navMeshSegments[32];
-	checkpoints[1]->navMeshSegment = navMeshSegments[28];
-	checkpoints[2]->navMeshSegment = navMeshSegments[24];
-	checkpoints[3]->navMeshSegment = navMeshSegments[20];
-	checkpoints[4]->navMeshSegment = navMeshSegments[15];
-	checkpoints[5]->navMeshSegment = navMeshSegments[11];
-	checkpoints[6]->navMeshSegment = navMeshSegments[0];
-	checkpoints[7]->navMeshSegment = navMeshSegments[3];*/
 }
 
 #pragma endregion
@@ -822,7 +831,8 @@ void DemoGame::CreatePlayers()
 	jetpackMat->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 
 	// Create players
-	for (int i = 0; i < PLAYER_COUNT; i++)
+	int playerCount = (includeAI ? PLAYER_COUNT : 1);
+	for (int i = 0; i < playerCount; i++)
 	{
 		Player* newPlayer = new Player();
 		entities.push_back(newPlayer);
@@ -880,67 +890,104 @@ void DemoGame::AttachCameraToPlayer()
 
 void DemoGame::LocateNearestFuelStations()
 {
-	return;
+	if (checkpoints.size() < 1)
+	{
+		return;
+	}
 	// TODO track checkpoint and fuel station
 	// TODO only rotate the controllable player's target
 
-	FuelStation* oldPlayerTarget = player->targetCheckpoint;
+	float triggerDist = 5.0f;
 
-	for (int i = 0; i < PLAYER_COUNT; i++)
+	FuelStation* oldPlayerTarget = player->targetCheckpoint;
+	FuelStation* targetCheckpoint = NULL;
+
+	if (includeAI)
 	{
-		FuelStation* targetCheckpoint = NULL;
-		if (!players[i]->targetCheckpoint)
+		for (int i = 0; i < PLAYER_COUNT; i++)
 		{
-			targetCheckpoint = checkpoints[0];
+			targetCheckpoint = NULL;
+			if (!players[i]->targetCheckpoint)
+			{
+				targetCheckpoint = checkpoints[0];
+			}
+			else
+			{
+				float distSqr;
+				XMStoreFloat(&distSqr, XMVector3LengthSq(XMVectorSubtract(XMLoadFloat3(&players[i]->targetPosition), XMLoadFloat3(&players[i]->transform.GetTranslation()))));
+				if (distSqr < triggerDist * triggerDist)
+				{
+					// If reaching the target checkpoint, pick a new checkpoint.
+					if (players[i]->navMeshSegment == players[i]->targetCheckpoint->navMeshSegment)
+					{
+						if (players[i]->targetCheckpoint->GetCheckpointNum() < checkpoints.size() - 1)
+						{
+							players[i]->respawnPosition = players[i]->targetCheckpoint->transform.GetTranslation();
+							players[i]->respawnLocalRotation = players[i]->transform.GetLocalEulerAngles();
+							targetCheckpoint = checkpoints[players[i]->targetCheckpoint->GetCheckpointNum() + 1];
+						}
+						else
+						{
+
+							players[i]->targetCheckpoint = NULL;
+							players[i]->targetPosition = XMFLOAT3(0, 0, 0);
+						}
+					}
+					// Else, target the next path point.
+					else
+					{
+						// If the player is not near the target checkpoint or but has no path, find a path to the target checkpoint.
+						if (players[i]->navMeshToTarget.size() < 2 || players[i]->pathToTarget.size() < 2)
+						{
+							targetCheckpoint = players[i]->targetCheckpoint;
+						}
+						else
+						{
+							players[i]->navMeshToTarget.erase(players[i]->navMeshToTarget.begin());
+							players[i]->navMeshSegment = *players[i]->navMeshToTarget.begin();
+							players[i]->pathToTarget.erase(players[i]->pathToTarget.begin());
+							players[i]->targetPosition = *players[i]->pathToTarget.begin();
+						}
+					}
+				}
+			}
+			if (targetCheckpoint)
+			{
+				players[i]->targetCheckpoint = targetCheckpoint;
+				players[i]->navMeshToTarget.clear();
+				players[i]->navMeshSegment->FindPathTo(players[i]->targetCheckpoint->navMeshSegment, players[i]->transform.GetTranslation(), players[i]->targetCheckpoint->transform.GetTranslation(), &players[i]->navMeshToTarget);
+				players[i]->pathToTarget.clear();
+				players[i]->navMeshSegment->FindPathPositions(&players[i]->navMeshToTarget, players[i]->transform.GetTranslation(), players[i]->targetCheckpoint->transform.GetTranslation(), &players[i]->pathToTarget);
+				players[i]->targetPosition = *players[i]->pathToTarget.begin();
+			}
+		}
+	}
+	else
+	{
+		if (!player->targetCheckpoint)
+		{
+			player->targetCheckpoint = checkpoints[0];
+			player->targetPosition = player->targetCheckpoint->transform.GetTranslation();
 		}
 		else
 		{
 			float distSqr;
-			XMStoreFloat(&distSqr, XMVector3LengthSq(XMVectorSubtract(XMLoadFloat3(&players[i]->targetPosition), XMLoadFloat3(&players[i]->transform.GetTranslation()))));
-			if (distSqr < 500 * 500)
+			XMStoreFloat(&distSqr, XMVector3LengthSq(XMVectorSubtract(XMLoadFloat3(&player->targetPosition), XMLoadFloat3(&player->transform.GetTranslation()))));
+			if (distSqr < triggerDist * triggerDist)
 			{
-				// If reaching the target checkpoint, pick a new checkpoint.
-				if (players[i]->navMeshSegment == players[i]->targetCheckpoint->navMeshSegment)
+				if (player->targetCheckpoint->GetCheckpointNum() < checkpoints.size() - 1)
 				{
-					if (players[i]->targetCheckpoint->GetCheckpointNum() < checkpoints.size() - 1)
-					{
-						players[i]->respawnPosition = players[i]->targetCheckpoint->transform.GetTranslation();
-						players[i]->respawnLocalRotation = players[i]->transform.GetLocalEulerAngles();
-						targetCheckpoint = checkpoints[players[i]->targetCheckpoint->GetCheckpointNum() + 1];
-					}
-					else
-					{
-
-						players[i]->targetCheckpoint = NULL;
-						players[i]->targetPosition = XMFLOAT3(0, 0, 0);
-					}
+					player->respawnPosition = player->targetCheckpoint->transform.GetTranslation();
+					player->respawnLocalRotation = player->transform.GetLocalEulerAngles();
+					player->targetCheckpoint = checkpoints[player->targetCheckpoint->GetCheckpointNum() + 1];
+					player->targetPosition = player->targetCheckpoint->transform.GetTranslation();
 				}
-				// Else, target the next path point.
 				else
 				{
-					// If the player is not near the target checkpoint or but has no path, find a path to the target checkpoint.
-					if (players[i]->navMeshToTarget.size() < 2 || players[i]->pathToTarget.size() < 2)
-					{
-						targetCheckpoint = players[i]->targetCheckpoint;
-					}
-					else
-					{
-						players[i]->navMeshToTarget.erase(players[i]->navMeshToTarget.begin());
-						players[i]->navMeshSegment = *players[i]->navMeshToTarget.begin();
-						players[i]->pathToTarget.erase(players[i]->pathToTarget.begin());
-						players[i]->targetPosition = *players[i]->pathToTarget.begin();
-					}
+					player->targetCheckpoint = NULL;
+					player->targetPosition = XMFLOAT3(0, 0, 0);
 				}
 			}
-		}
-		if (targetCheckpoint)
-		{
-			players[i]->targetCheckpoint = targetCheckpoint;
-			players[i]->navMeshToTarget.clear();
-			players[i]->navMeshSegment->FindPathTo(players[i]->targetCheckpoint->navMeshSegment, players[i]->transform.GetTranslation(), players[i]->targetCheckpoint->transform.GetTranslation(), &players[i]->navMeshToTarget);
-			players[i]->pathToTarget.clear();
-			players[i]->navMeshSegment->FindPathPositions(&players[i]->navMeshToTarget, players[i]->transform.GetTranslation(), players[i]->targetCheckpoint->transform.GetTranslation(), &players[i]->pathToTarget);
-			players[i]->targetPosition = *players[i]->pathToTarget.begin();
 		}
 	}
 
