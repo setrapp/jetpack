@@ -472,7 +472,7 @@ void DemoGame::OnFocus(bool givenFocus)
 void DemoGame::OnResize()
 {
 	float nearPlane = 0.001f;
-	farPlaneDistance = 150.0f;
+	farPlaneDistance = 15000.0f;
 	DXGame::OnResize();
 	XMMATRIX P = XMMatrixPerspectiveFovLH(
 		0.25f * 3.1415926535f,
@@ -672,7 +672,8 @@ void DemoGame::DrawScene()
 		1, 
 		&vsModelConstantBuffer);
 
-	if (currentState == GameState::Playing) {		
+	if (currentState == GameState::Playing) {	
+		
 		if(mouseCursorVisibility)
 		{
 			mouseCursorVisibility = false;
@@ -692,6 +693,9 @@ void DemoGame::DrawScene()
 		entityDrawArgs.vsModelConstantBufferData = &vsModelConstantBufferData;
 		entityDrawArgs.materialsAndLightsConstantBuffer = materialsAndLightsConstantBuffer;
 		entityDrawArgs.materialsAndLightsConstantBufferData = &materialsAndLightsConstantBufferData;
+		
+		// Draw skybox.
+		skybox->Draw(&entityDrawArgs);
 
 		// Draw entities.
 		for(Entity* e :entities)  
@@ -699,8 +703,6 @@ void DemoGame::DrawScene()
 			e->Draw(&entityDrawArgs);
 		}
 
-		// Draw skybox.
-		skybox->Draw(&entityDrawArgs);
 		
 	}
 	flag = true;
