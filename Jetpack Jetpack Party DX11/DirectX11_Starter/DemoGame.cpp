@@ -229,7 +229,7 @@ void DemoGame::CreateGeometryBuffers()
 		{ XMFLOAT3(-halfWindowWidth, +halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 0) },
 	};
 	UINT deferredIndices[] = { 0, 2, 1, 3, 0, 1 };
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.0f, 0.0f, 0.0f, 1), XMFLOAT4(0, 0, 0, 0), XMFLOAT4(0, 0, 0, 0), 16), "deferred");
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.0f, 0.0f, 0.0f, 1), XMFLOAT4(0, 0, 0, 0), 0, 16), "deferred");
 	deferredPlane = new Entity();
 	deferredPlane->AddQuad(deferredVertices, deferredIndices);
 	deferredPlane->SetBaseMaterial("deferred");
@@ -265,7 +265,7 @@ void DemoGame::CreateGeometryBuffers()
 	
 	//gift->transform.SetTranslation(player->targetPosition);
 	entities.push_back(gift);
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), 1, 16), "gift");
 	gift->SetBaseMaterial("gift");
 	gift->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 	gift->LoadTexture(L"../Assets/Textures/test.png");
@@ -296,7 +296,7 @@ void DemoGame::CreateGeometryBuffers()
 	navMesh->Finalize();
 
 	
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "skybox");
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), 0, 128), "skybox");
 	Entity* skybox = new Skybox(farPlaneDistance, player);	
 	entities.push_back(skybox);
 }
@@ -562,7 +562,7 @@ void DemoGame::DrawScene()
 		entityDrawArgs.materialsAndLightsConstantBufferData = &materialsAndLightsConstantBufferData;
 
 		// Draw entities.
-		for(Entity* e :entities) 
+		for(Entity* e :entities)  
 		{			
 			e->Draw(&entityDrawArgs);
 		}
@@ -694,12 +694,12 @@ void DemoGame::OnMouseWheel(WPARAM btnState, int x, int y)
 void DemoGame::CreatePlayers()
 {
 	// Load jetman texture.
-	Material* jetmanMat = AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 1), "jetman");
+	Material* jetmanMat = AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), 0, 1), "jetman");
 	jetmanMat->ApplyTexture(L"../Assets/Textures/JetDudeUV_In_Flip.png");
 	jetmanMat->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 
 	// Load jetpack texture.
-	Material* jetpackMat = AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 1), "jetpack");
+	Material* jetpackMat = AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), 0, 1), "jetpack");
 	jetpackMat->ApplyTexture(L"../Assets/Textures/BluepackTexture_Flip.png");
 	jetpackMat->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 

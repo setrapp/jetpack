@@ -34,7 +34,8 @@ struct VertexToPixel
 Texture2D ambient : register(t0);
 Texture2D diffuse : register(t1);
 Texture2D normals : register(t2);
-Texture2D depth : register(t3);
+Texture2D extras : register(t3);
+Texture2D toEyes : register(t4); //TODO remove when deferred lights work
 SamplerState mySampler : register(s0);
 
 // Entry point for this pixel shader
@@ -44,7 +45,12 @@ float4 main(VertexToPixel input) : SV_TARGET
 	float4 sampleAmbient = ambient.Sample(mySampler, input.uv);
 	float4 sampleDiffuse = diffuse.Sample(mySampler, input.uv);
 	float4 sampleNormal = normals.Sample(mySampler, input.uv);
-	float4 sampleDepth = depth.Sample(mySampler, input.uv);
+	float4 sampleExtras = extras.Sample(mySampler, input.uv);
+
+	// TODO remove when deferred lights work.
+	float4 toEye = toEyes.Sample(mySampler, input.uv);
+	float4 toLight = float4(sampleAmbient.w, sampleDiffuse.w, sampleNormal.w, 0);
+	sampleAmbient.w = sampleDiffuse.w = sampleNormal.w = 1;
 
 	// Ambient
 	float4 finalAmbient = sampleAmbient * light.ambient;

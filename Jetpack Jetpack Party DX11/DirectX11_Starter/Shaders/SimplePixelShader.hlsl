@@ -2,8 +2,7 @@ struct Material
 {
 	float4 ambient;
 	float4 diffuse;
-	float4 specular;
-	uint4 shininess;
+	float4 extras;
 };
 
 struct Light
@@ -36,7 +35,9 @@ struct PixelOutput
 	float4 ambient	: SV_TARGET0;
 	float4 diffuse	: SV_TARGET1;
 	float4 normal	: SV_TARGET2;
-	float4 depth	: SV_TARGET3;
+	//float4 extras	: SV_TARGET3;
+	//TODO remove when deferred lights work
+	//float4 toEye	: SV_TARGET4;
 };
 
 PixelOutput main(VertexToPixel input) : SV_TARGET
@@ -44,8 +45,8 @@ PixelOutput main(VertexToPixel input) : SV_TARGET
 	// Extract color data.
 	float4 inAmbient = material.ambient;
 	float4 inDiffuse = material.diffuse;
-	float4 inSpecular = material.specular;
-	uint inShininess = material.shininess.r;
+	float inSpecular = material.extras.x;
+	int inShininess = material.extras.y;
 	
 	// Interpolation may have resulted in a non-unit directions, so re-normalize.
 	input.normal = normalize(input.normal);
@@ -79,6 +80,12 @@ PixelOutput main(VertexToPixel input) : SV_TARGET
 	output.ambient = inAmbient;
 	output.diffuse = inDiffuse;
 	output.normal = float4(input.normal, 0);
-	output.depth = float4(depth, depth, depth, 1);
+	//output.extras = float4(inSpecular, inShininess, depth, 0);
+	//TODO remove when deferred lights work
+	/*output.toEye = float4(input.toEye, 0);
+	output.ambient.w = input.toLight.x;
+	output.diffuse.w = input.toLight.y;
+	output.normal.w = input.toLight.z;*/
+
 	return output;
 }
