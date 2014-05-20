@@ -87,9 +87,9 @@ void Transform::LookAt(XMFLOAT3 eye, XMFLOAT3 lookAt, XMFLOAT3 up)
 
 	if (parent)
 	{
-		eye = parent->TransformPoint(eye);
-		lookAt = parent->TransformPoint(lookAt);
-		up = parent->TransformDirection(up);
+		eye = parent->InverseTransformPoint(eye);
+		lookAt = parent->InverseTransformPoint(lookAt);
+		up = parent->InverseTransformDirection(up);
 	}
 	
 	XMFLOAT4X4 lookAtMatrix;
@@ -177,14 +177,14 @@ void Transform::SetParent(Transform* parent)
 // Transform point from local space to world space.
 XMFLOAT3 Transform::TransformPoint(XMFLOAT3 localPoint) const
 {
-	XMStoreFloat3(&localPoint, XMVector3Transform(XMLoadFloat3(&localPoint), XMMatrixTranspose(XMMatrixInverse(nullptr, XMLoadFloat4x4(&worldMatrix)))));
+	XMStoreFloat3(&localPoint, XMVector3Transform(XMLoadFloat3(&localPoint), XMMatrixTranspose(XMLoadFloat4x4(&worldMatrix))));
 	return localPoint;
 }
 
 // Transform point from world space to local space.
 XMFLOAT3 Transform::InverseTransformPoint(XMFLOAT3 worldPoint) const
 {
-	XMStoreFloat3(&worldPoint, XMVector3Transform(XMLoadFloat3(&worldPoint), XMLoadFloat4x4(&worldMatrix)));
+	XMStoreFloat3(&worldPoint, XMVector3Transform(XMLoadFloat3(&worldPoint), XMMatrixInverse(nullptr, XMMatrixTranspose(XMLoadFloat4x4(&worldMatrix)))));
 	return worldPoint;
 }
 
@@ -193,9 +193,10 @@ XMFLOAT3 Transform::TransformDirection(XMFLOAT3 localDirection) const
 {
 	XMFLOAT3X3 sansTranslationAndScale;
 	XMStoreFloat3x3(&sansTranslationAndScale, XMLoadFloat4x4(&worldMatrix));
-	sansTranslationAndScale._11 /= scale.x;
-	sansTranslationAndScale._22 /= scale.y;
-	sansTranslationAndScale._33 /= scale.z;
+	XMFLOAT3 worldScale = GetScale();
+	sansTranslationAndScale._11 /= worldScale.x;
+	sansTranslationAndScale._22 /= worldScale.y;
+	sansTranslationAndScale._33 /= worldScale.z;
 	XMStoreFloat3(&localDirection, XMVector3Transform(XMLoadFloat3(&localDirection), XMMatrixTranspose(XMLoadFloat3x3(&sansTranslationAndScale))));
 	return localDirection;
 }

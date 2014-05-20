@@ -80,7 +80,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	light = new Light(XMFLOAT3(0, -1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), true);
 	mouseCursorVisibility = true;
 	mouseLook = NULL;
-	includeAI = true;
+	includeAI = false;
 }
 
 DemoGame::~DemoGame()
@@ -95,6 +95,11 @@ DemoGame::~DemoGame()
 	for(int i = 0 ; i < entities.size(); i++)
 	{
 		delete entities.at(i);
+	}
+
+	for(int i = 0 ; i < navMeshSegments.size(); i++)
+	{
+		delete navMeshSegments.at(i);
 	}
 
 	delete IPMan::GetIPMan();
@@ -207,6 +212,7 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicJetMan.obj", "jetman");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/Fireball.obj", "fireball");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrack.obj", "terrain");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrackNav.obj", "terrain_nav");
 
 	// Create orthographic and projection plane for deferred rendering.
 	float halfWindowWidth = windowWidth / 2, halfWindowHieght= windowHeight / 2;
@@ -281,8 +287,7 @@ void DemoGame::CreateGeometryBuffers()
 		checkpoint->Finalize();
 	}
 	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 1, 1), XMFLOAT4(0, 0, 0, 0), 128), "targetCheckpoint");
-
-	// TODO add fuel stations.
+	// TODO add fuel stations. 
 
 	Entity* floor = new Entity();
 	floor->AddModel(terrainModel);
@@ -293,14 +298,13 @@ void DemoGame::CreateGeometryBuffers()
 
 	if (includeAI)
 	{
-		AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrackNav.obj", "terrain_nav");
 		Model* navMeshModel = AssetManager::Instance()->GetModel("terrain_nav");
 		vector<MeshGroup*> navMeshGroups;
 		AssetManager::Instance()->GetMeshGroupsWithMaterial(&navMeshGroups, navMeshModel, "Nav_Space");
 		for (int i = 0; i < navMeshGroups.size(); i++)
 		{
 			NavMeshSegment* navMeshSegment = new NavMeshSegment(i);
-			navMeshSegment->AddMeshGroup(terrainModel, navMeshGroups[i], true);
+			navMeshSegment->AddMeshGroup(navMeshModel, navMeshGroups[i], true);
 			navMeshSegments.push_back(navMeshSegment);
 			//entities.push_back(navMeshSegment);
 			navMeshSegment->Finalize();
@@ -309,12 +313,49 @@ void DemoGame::CreateGeometryBuffers()
 		{
 			navMeshSegments[i]->FindConnections(&navMeshSegments);
 		}
+		/*for (int i = 0; i < navMeshSegments.size(); i++)
+		{
+			navMeshSegments[i]->ComputeConnectionDistances();
+		}*/
 		for (int i = 0; i < navMeshSegments.size(); i++)
 		{
 			navMeshSegments[i]->transform.Scale(XMFLOAT3(500, 500, 500));
-			navMeshSegments[i]->RecenterGeometry();
 			navMeshSegments[i]->transform.Translate(XMFLOAT3(0, -400, 0));
 		}
+
+		// TODO actually determine which navmesh segment the players and goals are in.
+		/*for (int i = 0; i < PLAYER_COUNT; i++)
+		{
+			for (int j = 0; j < navMeshSegments.size(); j++)
+			{
+				if (navMeshSegments[j]->EntityInside(players[i]))
+				{
+					players[i]->navMeshSegment = navMeshSegments[j];
+				}
+			}
+		}*/
+		/*for (int i = 0; i < checkpoints.size(); i++)
+		{
+			for (int j = 0; j < navMeshSegments.size(); j++)
+			{
+				if (navMeshSegments[j]->EntityInside(checkpoints[i]))
+				{
+					checkpoints[i]->navMeshSegment = navMeshSegments[j];
+				}
+			}
+		}*/
+		for (int i = 0; i < PLAYER_COUNT; i++)
+		{
+			players[i]->navMeshSegment = navMeshSegments[32];
+		}
+		checkpoints[0]->navMeshSegment = navMeshSegments[32];
+		checkpoints[1]->navMeshSegment = navMeshSegments[28];
+		checkpoints[2]->navMeshSegment = navMeshSegments[24];
+		checkpoints[3]->navMeshSegment = navMeshSegments[20];
+		checkpoints[4]->navMeshSegment = navMeshSegments[15];
+		checkpoints[5]->navMeshSegment = navMeshSegments[11];
+		checkpoints[6]->navMeshSegment = navMeshSegments[0];
+		checkpoints[7]->navMeshSegment = navMeshSegments[3];
 	}
 }
 
@@ -468,6 +509,14 @@ void DemoGame::UpdateScene(float dt)
 		}
 
 		LocateNearestFuelStations();
+		//temp
+		/*for (int i = 0; i < navMeshSegments.size(); i++)
+		{
+			if (navMeshSegments[32]->EntityInside(player))
+			{
+				int a = 0;
+			}
+		}*/
 
 		for(Entity* e: entities)
 		{
@@ -670,7 +719,8 @@ void DemoGame::OnMouseWheel(WPARAM btnState, int x, int y)
 
 void DemoGame::CreatePlayers()
 {
-	for (int i = 0; i < PLAYER_COUNT; i++)
+	int playerCount = (includeAI ? PLAYER_COUNT : 1);
+	for (int i = 0; i < playerCount; i++)
 	{
 		Player* newPlayer = new Player();
 		newPlayer->AddModel(AssetManager::Instance()->GetModel());
@@ -699,12 +749,10 @@ void DemoGame::CreatePlayers()
 				}
 			}
 		}
-
-		// TODO actually determine which navmesh segment the players are in.
 	}
 
 	player = players[0];
-	//player->controllable = true;
+	player->controllable = true;
 	AttachCameraToPlayer();
 }
 
@@ -724,32 +772,95 @@ void DemoGame::LocateNearestFuelStations()
 	// TODO track checkpoint and fuel station
 	// TODO only rotate the controllable player's target
 
-	FuelStation* oldPlayerTarget = player->targetCheckpoint;
+	float triggerDist = 5.0f;
 
-	for (int i = 0; i < PLAYER_COUNT; i++)
+	FuelStation* oldPlayerTarget = player->targetCheckpoint;
+	FuelStation* targetCheckpoint = NULL;
+
+	if (includeAI)
 	{
-		if (!players[i]->targetCheckpoint)
+		for (int i = 0; i < PLAYER_COUNT; i++)
 		{
-			players[i]->targetCheckpoint = checkpoints[0];
-			players[i]->targetPosition = players[i]->targetCheckpoint->transform.GetTranslation();
+			targetCheckpoint = NULL;
+			if (!players[i]->targetCheckpoint)
+			{
+				targetCheckpoint = checkpoints[0];
+			}
+			else
+			{
+				float distSqr;
+				XMStoreFloat(&distSqr, XMVector3LengthSq(XMVectorSubtract(XMLoadFloat3(&players[i]->targetPosition), XMLoadFloat3(&players[i]->transform.GetTranslation()))));
+				if (distSqr < triggerDist * triggerDist)
+				{
+					// If reaching the target checkpoint, pick a new checkpoint.
+					if (players[i]->navMeshSegment == players[i]->targetCheckpoint->navMeshSegment)
+					{
+						if (players[i]->targetCheckpoint->GetCheckpointNum() < checkpoints.size() - 1)
+						{
+							players[i]->respawnPosition = players[i]->targetCheckpoint->transform.GetTranslation();
+							players[i]->respawnLocalRotation = players[i]->transform.GetLocalEulerAngles();
+							targetCheckpoint = checkpoints[players[i]->targetCheckpoint->GetCheckpointNum() + 1];
+						}
+						else
+						{
+
+							players[i]->targetCheckpoint = NULL;
+							players[i]->targetPosition = XMFLOAT3(0, 0, 0);
+						}
+					}
+					// Else, target the next path point.
+					else
+					{
+						// If the player is not near the target checkpoint or but has no path, find a path to the target checkpoint.
+						if (players[i]->navMeshToTarget.size() < 2 || players[i]->pathToTarget.size() < 2)
+						{
+							targetCheckpoint = players[i]->targetCheckpoint;
+						}
+						else
+						{
+							players[i]->navMeshToTarget.erase(players[i]->navMeshToTarget.begin());
+							players[i]->navMeshSegment = *players[i]->navMeshToTarget.begin();
+							players[i]->pathToTarget.erase(players[i]->pathToTarget.begin());
+							players[i]->targetPosition = *players[i]->pathToTarget.begin();
+						}
+					}
+				}
+			}
+			if (targetCheckpoint)
+			{
+				players[i]->targetCheckpoint = targetCheckpoint;
+				players[i]->navMeshToTarget.clear();
+				players[i]->navMeshSegment->FindPathTo(players[i]->targetCheckpoint->navMeshSegment, players[i]->transform.GetTranslation(), players[i]->targetCheckpoint->transform.GetTranslation(), &players[i]->navMeshToTarget);
+				players[i]->pathToTarget.clear();
+				players[i]->navMeshSegment->FindPathPositions(&players[i]->navMeshToTarget, players[i]->transform.GetTranslation(), players[i]->targetCheckpoint->transform.GetTranslation(), &players[i]->pathToTarget);
+				players[i]->targetPosition = *players[i]->pathToTarget.begin();
+			}
+		}
+	}
+	else
+	{
+		if (!player->targetCheckpoint)
+		{
+			player->targetCheckpoint = checkpoints[0];
+			player->targetPosition = player->targetCheckpoint->transform.GetTranslation();
 		}
 		else
 		{
 			float distSqr;
-			XMStoreFloat(&distSqr, XMVector3LengthSq(XMVectorSubtract(XMLoadFloat3(&players[i]->targetCheckpoint->transform.GetTranslation()), XMLoadFloat3(&players[i]->transform.GetTranslation()))));
-			if (distSqr < 500 * 500)
+			XMStoreFloat(&distSqr, XMVector3LengthSq(XMVectorSubtract(XMLoadFloat3(&player->targetPosition), XMLoadFloat3(&player->transform.GetTranslation()))));
+			if (distSqr < triggerDist * triggerDist)
 			{
-				if (players[i]->targetCheckpoint->GetCheckpointNum() < checkpoints.size() - 1)
+				if (player->targetCheckpoint->GetCheckpointNum() < checkpoints.size() - 1)
 				{
-					players[i]->respawnPosition = players[i]->targetCheckpoint->transform.GetTranslation();
-					players[i]->respawnLocalRotation = players[i]->transform.GetLocalEulerAngles();
-					players[i]->targetCheckpoint = checkpoints[players[i]->targetCheckpoint->GetCheckpointNum() + 1];
-					players[i]->targetPosition = players[i]->targetCheckpoint->transform.GetTranslation();
+					player->respawnPosition = player->targetCheckpoint->transform.GetTranslation();
+					player->respawnLocalRotation = player->transform.GetLocalEulerAngles();
+					player->targetCheckpoint = checkpoints[player->targetCheckpoint->GetCheckpointNum() + 1];
+					player->targetPosition = player->targetCheckpoint->transform.GetTranslation();
 				}
 				else
 				{
-					players[i]->targetCheckpoint = NULL;
-					players[i]->targetPosition = XMFLOAT3(0, 0, 0);
+					player->targetCheckpoint = NULL;
+					player->targetPosition = XMFLOAT3(0, 0, 0);
 				}
 			}
 		}

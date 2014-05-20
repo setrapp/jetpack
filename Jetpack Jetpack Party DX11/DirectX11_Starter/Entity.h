@@ -28,6 +28,7 @@ public:
 	void AddMeshGroup(Model* sourceModel, MeshGroup* meshGroup, bool removeFacesFromModel = false);
 	void AddModel(Model* model);
 	void RecenterGeometry();
+	XMFLOAT3 ProjectPointOnMesh(Mesh* mesh, XMFLOAT3 point, bool pointInEntitySpace = false, XMFLOAT3* normalOut = NULL);
 	virtual void Update(float dt);
 	void Draw(EntityDrawArgs const* drawArgs, XMFLOAT4X4 const* view = NULL, XMFLOAT4X4 const* projection = NULL);
 	void LoadTexture(wchar_t* path);
@@ -38,11 +39,14 @@ public:
 	string getNetworkString();
 	Transform transform;
 	int socketNumber;
-	void Finalize();
+	virtual void Finalize();
 	bool GetVisible();
 	void SetVisible(bool visibility);
 	int GetVertexCount(); 
 	Vertex* GetVertex(int index); 
+	int GetMeshCount(); 
+	Mesh* GetMesh(int index);
+	int GetModelCount(); 
 	Model* GetModel(int index); 
 
 protected:

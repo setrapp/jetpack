@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "NavMeshSegment.h"
 
 class FuelStation : public Entity
 {
@@ -12,6 +13,7 @@ public:
 
 public:
 	bool spin;
+	NavMeshSegment* navMeshSegment;
 
 protected:
 	float refuelRate;

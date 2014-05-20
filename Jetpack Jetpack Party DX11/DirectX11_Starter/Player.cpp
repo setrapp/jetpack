@@ -25,6 +25,7 @@ Player::Player()
 	targetFuelStation = NULL;
 	desiredMinAltitude = 500;
 	keepHeightMaxWeight = 10;
+	navMeshSegment = NULL;
 }
 
 Player::~Player()
