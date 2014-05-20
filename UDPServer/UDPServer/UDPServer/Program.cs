@@ -35,6 +35,7 @@ namespace UDPServer
             public static Dictionary<IPEndPoint, int> userList = new Dictionary<IPEndPoint, int>();
             public static Dictionary<IPEndPoint, string> sentValues = new Dictionary<IPEndPoint, string>();
             public static Dictionary<int, string> nameMap = new Dictionary<int, string>();
+            public static Dictionary<int, bool> readyUp = new Dictionary<int, bool>();
             public static int userCounter = 0;
             static IPEndPoint ipep;
             static UdpClient newsock;
@@ -95,6 +96,7 @@ namespace UDPServer
                                     nameMap.Add(userCounter, newPlayerName);
                                     userList.Add(endpoint, userCounter);
                                     sentValues.Add(endpoint, "0,0,0,0,0,0,1,0,0,0,1,0,0,0,1");
+                                    readyUp.Add(userCounter, false);
 
                                     //to the players already in the game, just send the id of the new player
                                     string toAlreadyAdded = userList[endpoint].ToString() + "\n" + newPlayerName;
@@ -125,6 +127,47 @@ namespace UDPServer
                             case MessageTypes.Client.MovementUpdate:
                                 sentValues[endpoint] = splitContent[1];
                                 break;
+
+                            case MessageTypes.Client.ReadyUpdate:
+                                if(int.Parse(splitContent[2])== 1){
+                                    readyUp[userList[endpoint]]= true;
+                                }else{
+                                    readyUp[userList[endpoint]]= false;
+                                }
+
+                                bool canStart = true;
+                                
+                                foreach (KeyValuePair<int, bool> entry in readyUp)
+                                {
+                                    if (!entry.Value)
+                                    {
+                                        canStart = false;
+                                    }
+
+                                }
+
+                                if (canStart)
+                                {
+                                    Console.WriteLine("GAME START");
+                                    foreach (KeyValuePair<IPEndPoint, int> entry in userList)
+                                    {
+                                            Send(entry.Key, MessageTypes.Server.StartGame, "");
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Ready Up");
+                                    foreach (KeyValuePair<IPEndPoint, int> entry in userList)
+                                    {
+                                        if (!entry.Key.Equals(endpoint))
+                                        {
+                                            Send(entry.Key, MessageTypes.Server.ReadyUpdate, splitContent[1] + "\n" + splitContent[2]);
+                                        }
+                                    }
+                                }
+
+                                break;
+
                         }
                         newsock.BeginReceive(new AsyncCallback(recv), null);
                     }
@@ -167,7 +210,7 @@ namespace UDPServer
                 StateObject sentTo = (StateObject)ar.AsyncState;
                 try
                 {
-                    Console.WriteLine("What was sent: " + sentTo.whatWasSent);
+                    //Console.WriteLine("What was sent: " + sentTo.whatWasSent);
                 }
                 catch (Exception e)
                 {

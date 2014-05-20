@@ -466,6 +466,16 @@ void DemoGame::UpdateScene(float dt)
 			networkManager->Update(dt);
 	}
 
+
+	if(lobbyScreen){
+		while(!lobbyScreen->readyOutputQueue.empty()){
+			string output= lobbyScreen->readyOutputQueue.front();
+			networkManager->clientEntity->sendMessage(MessageTypes::Client::ReadyUpdate, output);
+			lobbyScreen->readyOutputQueue.pop();
+		}
+	}
+
+
 	while(!networkManager->outputValues.empty()){
 		string curString= networkManager->outputValues.front();
 		std::vector<std::string> stringParts;
@@ -483,6 +493,13 @@ void DemoGame::UpdateScene(float dt)
 			else
 				lobbyScreen->playerAdditionQueue.push(stringParts.at(2) + "\n0");
 			
+			break;
+
+		case MessageTypes::MainClass::ReadyUp:
+			lobbyScreen->readyToggleQueue.push(stringParts.at(1) + "\n" + stringParts.at(2));
+			break;
+		case MessageTypes::MainClass::StartGame:
+			currentState= GameState::Playing;
 			break;
 		}
 		networkManager->outputValues.pop();

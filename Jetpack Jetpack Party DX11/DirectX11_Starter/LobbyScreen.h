@@ -39,17 +39,26 @@ public:
 	void WindowResize();
 	GameState KeyboardInputProcess();
 	queue<string> playerAdditionQueue;
+	queue<string> readyToggleQueue;
+	queue<string> readyOutputQueue;
 	vector<string*> nameHoldingVector;
 	RECT* GetRECTFromRect(Rect* rect);
 	string playerNames[4];
 	wstring longPlayerNames[4];
 	int additionCount;
+	SpriteRenderer* checkboxRenderer;
+	int playerIndex;
+	float sendTimer;
 private:
 	FontRenderer* fontRenderer;
 	GUIManager* guiMan;
 	GameState currstate;
 	GUITextBox* b ;	
-	RECT* r;	
+	bool check1,check2,check3,check0;
+
+	bool readyChecks[4];
+	RECT* r;
+	RECT* checkBoxArray[4];
 	bool multiplayerClicked;
 	MENU_OPTIONS menuOptions;
 	vector<string> addedNameVector;

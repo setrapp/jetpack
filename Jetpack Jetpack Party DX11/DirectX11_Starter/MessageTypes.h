@@ -5,16 +5,16 @@ class MessageTypes {
 public:
 	enum class Server
 	{
-		AddExistingUsers,MovementUpdate, AddNewUser
+		AddExistingUsers,MovementUpdate, AddNewUser, ReadyUpdate, StartGame
 	};
 	enum class Client
 	{
-		Login, MovementUpdate
+		Login, MovementUpdate, ReadyUpdate
 	};
 
 	enum class MainClass
 	{
-		PlayerAdd
+		PlayerAdd, ReadyUp, StartGame
 	};
 
 };

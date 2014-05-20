@@ -19,7 +19,6 @@ public :
 protected :
 	XMFLOAT2 scale;
 	FontRenderer* fontRenderer;
-	XMFLOAT4 color;
 	float rotation;
 	DirectX::SpriteEffects spriteFX;
 	float depth;
@@ -31,9 +30,11 @@ protected :
 	float offset;
 	AnimationType animation;
 	float animationSpeed;
-	Rect* rect;
+	XMFLOAT4 color;
 
 public :
+		
+		Rect* rect;
 		virtual const bool IsMouseHovering() const = 0;
 		virtual void Update (LPPOINT point, float dt)
 		{

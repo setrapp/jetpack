@@ -34,14 +34,24 @@ LobbyScreen::LobbyScreen(FontRenderer* renderer, SpriteRenderer* spRenderer, con
 	playerNames[1]= "1";
 	playerNames[2]= "2";
 	playerNames[3]= "3";
+	playerIndex=-1;
+	readyChecks[0]=false;
+	readyChecks[1]=false;
+	readyChecks[2]=false;
+	readyChecks[3]=false;
 	longPlayerNames[0] = L" ";
 	longPlayerNames[1] = L" ";
 	longPlayerNames[2] = L" ";
 	longPlayerNames[3] = L" ";
-
+	check0=false;
+	check1=false;
+	check2=false;
+	check3=false;
+	this->checkboxRenderer = spRenderer;
 	additionCount=0;
 	multiplayerClicked=false;
 	guiMan = new GUIManager();	
+	sendTimer=0.0f;
 
 	GUIText* sp = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, -100 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"SINGLEPLAYER", 1, AnimationType::BOTTOMTOTOP, renderer, 4000, Colors::White);
 	guiMan->Add("SINGLEPLAYER", sp);
@@ -54,17 +64,43 @@ LobbyScreen::LobbyScreen(FontRenderer* renderer, SpriteRenderer* spRenderer, con
 
 	for(int i=0; i<4; i++){
 		
-		guiMan->Add((char*)playerNames[i].c_str(), new GUIText(&Rect(0, (screenHeight * -0.75)+100+ (100* i) + MENUBUTTONS_TOP_OFFSET, 0 ,0),(wchar_t*)longPlayerNames[i].c_str(), 1, AnimationType::BOTTOMTOTOP, renderer, 4000, Colors::Green));
+		guiMan->Add((char*)playerNames[i].c_str(), new GUIText(&Rect(50, (screenHeight * -0.75)+100+ (100* i) + MENUBUTTONS_TOP_OFFSET, 0 ,0),(wchar_t*)longPlayerNames[i].c_str(), 1, AnimationType::BOTTOMTOTOP, renderer, 4000, Colors::Green));
 		guiMan->_guiElements[(char*)playerNames[i].c_str()]->SetDepth(0.5f);
 	}
 
-	if(!r)
-		r = new RECT();
+		checkBoxArray[0]= new RECT();
+		checkBoxArray[0]->left		= -50;
+		checkBoxArray[0]->top		= 30;
+		checkBoxArray[0]->right		= 0;			//End it where the text starts
+		checkBoxArray[0]->bottom	= 80;
+		guiMan->Add("cb0", new GUITexture(checkBoxArray[0], L"../Assets/Textures/checkself1.png", spRenderer));
+		guiMan->_guiElements["cb0"]->SetDepth(0.1f);
 
-	r->left		= sp->GetRect().x	-	TICKER_WIDTH;
-	r->top		= sp->GetRect().y	+	TICKER_TOP_OFFSET;
-	r->right	= sp->GetRect().x;						//End it where the text starts
-	r->bottom	= sp->GetRect().y	+	TICKER_HEIGHT; //End its y where the 
+		checkBoxArray[1]= new RECT();
+		checkBoxArray[1]->left		= -50;
+		checkBoxArray[1]->top		= 130;
+		checkBoxArray[1]->right		= 0;			//End it where the text starts
+		checkBoxArray[1]->bottom	= 180;
+		guiMan->Add("cb1", new GUITexture(checkBoxArray[1], L"../Assets/Textures/checkself1.png", spRenderer));
+		guiMan->_guiElements["cb1"]->SetDepth(0.1f);
+
+		checkBoxArray[2]= new RECT();
+		checkBoxArray[2]->left		= -50;
+		checkBoxArray[2]->top		= 230;
+		checkBoxArray[2]->right		= 0;			//End it where the text starts
+		checkBoxArray[2]->bottom	= 280;
+		guiMan->Add("cb2", new GUITexture(checkBoxArray[2], L"../Assets/Textures/checkself1.png", spRenderer));
+		guiMan->_guiElements["cb2"]->SetDepth(0.1f);
+
+		checkBoxArray[3]= new RECT();
+		checkBoxArray[3]->left		= -50;
+		checkBoxArray[3]->top		= 330;
+		checkBoxArray[3]->right		= 0;			//End it where the text starts
+		checkBoxArray[3]->bottom	= 380;
+		guiMan->Add("cb3", new GUITexture(checkBoxArray[3], L"../Assets/Textures/checkself1.png", spRenderer));
+		guiMan->_guiElements["cb3"]->SetDepth(0.1f);
+
+	//guiMan->Add("Texture", new GUITexture(r, L"../Assets/Textures/checkself1.png", spRenderer));
 
 
 	guiMan->_guiElements["SINGLEPLAYER"]->SetDepth(0.5f);
@@ -83,7 +119,7 @@ void LobbyScreen::OnClickNewGame()
 }
 
 GameState LobbyScreen::Update(const float dt)
-{	
+{	sendTimer-=dt;
 	guiMan->Update(dt);
 	if(guiMan->_guiElements["SINGLEPLAYER"]->Clicked())
 		return GameState::Playing;	
@@ -96,6 +132,108 @@ GameState LobbyScreen::Update(const float dt)
 	else{
 		multiplayerClicked=false;
 	}
+
+	if(guiMan->_guiElements["cb0"]->Clicked() && sendTimer<0.0f){
+		if(playerIndex==0 && !check0){
+			sendTimer=2.0f;
+			guiMan->Remove("cb0");
+				if(!readyChecks[0])
+					guiMan->Add("cb0", new GUITexture(checkBoxArray[0], L"../Assets/Textures/checkself2.png", checkboxRenderer));
+				else
+					guiMan->Add("cb0", new GUITexture(checkBoxArray[0], L"../Assets/Textures/checkself1.png", checkboxRenderer));
+				readyChecks[0]= !readyChecks[0];
+				guiMan->_guiElements["cb0"]->SetDepth(0.1f);
+			check0=true;
+
+			string toPush1;
+			toPush1.assign(longPlayerNames[0].begin(), longPlayerNames[0].end());
+				if(readyChecks[0])
+					readyOutputQueue.push(toPush1+ "\n1");
+				else
+					readyOutputQueue.push(toPush1+ "\n0");
+		}
+	}
+	else{
+		check0=false;
+	}
+
+	if(guiMan->_guiElements["cb1"]->Clicked()&& sendTimer<0.0f){
+		if(playerIndex==1 && !check1){
+			sendTimer=2.0f;
+		guiMan->Remove("cb1");
+			if(!readyChecks[1])
+				guiMan->Add("cb1", new GUITexture(checkBoxArray[1], L"../Assets/Textures/checkself2.png", checkboxRenderer));
+			else
+				guiMan->Add("cb1", new GUITexture(checkBoxArray[1], L"../Assets/Textures/checkself1.png", checkboxRenderer));
+			readyChecks[1]= !readyChecks[1];
+			guiMan->_guiElements["cb1"]->SetDepth(0.1f);
+		check1=true;
+
+		string toPush2;
+		toPush2.assign(longPlayerNames[1].begin(), longPlayerNames[1].end());
+			if(readyChecks[1])
+				readyOutputQueue.push(toPush2+ "\n1");
+			else
+				readyOutputQueue.push(toPush2+ "\n0");
+		}
+	}
+	else{
+		check1=false;
+	}
+
+
+	if(guiMan->_guiElements["cb2"]->Clicked()&& sendTimer<0.0f){ 
+		if(playerIndex==2 && !check2){
+			sendTimer=2.0f;
+		guiMan->Remove("cb2");
+			if(!readyChecks[2])
+				guiMan->Add("cb2", new GUITexture(checkBoxArray[2], L"../Assets/Textures/checkself2.png", checkboxRenderer));
+			else
+				guiMan->Add("cb2", new GUITexture(checkBoxArray[2], L"../Assets/Textures/checkself1.png", checkboxRenderer));
+			readyChecks[2]= !readyChecks[2];
+			guiMan->_guiElements["cb2"]->SetDepth(0.1f);
+			check2=true;
+			std::stringstream ss;
+			ss <<longPlayerNames[2].c_str();
+			string toPush3;
+			toPush3.assign(longPlayerNames[2].begin(), longPlayerNames[2].end());
+			
+			if(readyChecks[2])
+				readyOutputQueue.push(toPush3+ "\n1");
+			else
+				readyOutputQueue.push(toPush3+ "\n0");
+		}
+	}
+	else{
+		check2=false;
+	}
+
+	if(guiMan->_guiElements["cb3"]->Clicked()&& sendTimer<0.0f) {
+		if(playerIndex==3 && !check3){
+			sendTimer=2.0f;
+			guiMan->Remove("cb3");
+				if(!readyChecks[3])
+					guiMan->Add("cb3", new GUITexture(checkBoxArray[3], L"../Assets/Textures/checkself2.png", checkboxRenderer));
+				else
+					guiMan->Add("cb3", new GUITexture(checkBoxArray[3], L"../Assets/Textures/checkself1.png", checkboxRenderer));
+				readyChecks[3]= !readyChecks[3];
+				guiMan->_guiElements["cb3"]->SetDepth(0.1f);
+				check3=true;
+
+				string toPush4;
+				toPush4.assign(longPlayerNames[3].begin(), longPlayerNames[3].end());
+				if(readyChecks[3])
+					readyOutputQueue.push(toPush4+ "\n1");
+				else
+					readyOutputQueue.push(toPush4+ "\n0");
+		}
+	}
+	else{
+		check3=false;
+	}
+
+
+
 
 	if(guiMan->_guiElements["EXIT"]->Clicked())
 		PostQuitMessage(0);
@@ -125,6 +263,78 @@ GameState LobbyScreen::Update(const float dt)
 
 		playerAdditionQueue.pop();
 	}
+
+	while(!readyToggleQueue.empty()){
+		string curString2= readyToggleQueue.front();
+		std::vector<std::string> stringParts;
+		std::istringstream stringsplitter(curString2);
+		while(std::getline(stringsplitter,curString2, '\n')){
+			stringParts.push_back(curString2);
+		}
+		std::wstring wideName;
+		wideName.assign(stringParts.at(0).begin(),stringParts.at(0).end());
+		int isReady = atoi(stringParts.at(1).c_str());
+		for(int i=0; i<4; i++){
+			if(wideName == longPlayerNames[i]){
+				switch(i){
+				case 0:
+					guiMan->Remove("cb0");
+					if(isReady==1){
+						readyChecks[0]= true;
+						guiMan->Add("cb0", new GUITexture(checkBoxArray[0], L"../Assets/Textures/checkother2.png", checkboxRenderer));
+					}
+					else{
+						guiMan->Add("cb0", new GUITexture(checkBoxArray[0], L"../Assets/Textures/checkother1.png", checkboxRenderer));
+						readyChecks[0]= false;
+					}
+					guiMan->_guiElements["cb0"]->SetDepth(0.1f);
+					break;
+				case 1:
+					guiMan->Remove("cb1");
+					if(isReady==1){
+						readyChecks[1]= true;
+						guiMan->Add("cb1", new GUITexture(checkBoxArray[1], L"../Assets/Textures/checkother2.png", checkboxRenderer));
+					}
+					else{
+						guiMan->Add("cb1", new GUITexture(checkBoxArray[1], L"../Assets/Textures/checkother1.png", checkboxRenderer));
+						readyChecks[1]= false;
+					}
+					guiMan->_guiElements["cb1"]->SetDepth(0.1f);
+					break;
+				case 2:
+					guiMan->Remove("cb2");
+					if(isReady==1){
+						readyChecks[2]= true;
+						guiMan->Add("cb2", new GUITexture(checkBoxArray[2], L"../Assets/Textures/checkother2.png", checkboxRenderer));
+					}
+					else{
+						guiMan->Add("cb2", new GUITexture(checkBoxArray[2], L"../Assets/Textures/checkother1.png", checkboxRenderer));
+						readyChecks[2]= false;
+					}
+					guiMan->_guiElements["cb2"]->SetDepth(0.1f);
+					break;
+				case 3:
+					guiMan->Remove("cb3");
+					if(isReady==1){
+						readyChecks[3]= true;
+						guiMan->Add("cb3", new GUITexture(checkBoxArray[3], L"../Assets/Textures/checkother2.png", checkboxRenderer));
+					}
+					else{
+						guiMan->Add("cb3", new GUITexture(checkBoxArray[3], L"../Assets/Textures/checkother1.png", checkboxRenderer));
+						readyChecks[3]= false;
+					}
+					guiMan->_guiElements["cb3"]->SetDepth(0.1f);
+					break;
+				}
+			}
+		}
+
+		readyToggleQueue.pop();
+	}
+
+
+
+
 
 	/*if(guiMan->_guiElements["SINGLEPLAYER"]->IsMouseHovering() || menuOptions == MENU_OPTIONS::SINGLEPLAYER)
 	{
@@ -239,10 +449,50 @@ void LobbyScreen::AddPlayer(string player, bool isUs)
 		((GUIText*)guiMan->_guiElements[(char*)playerNames[additionCount].c_str()])->str = (wchar_t*)longPlayerNames[additionCount].c_str();
 		if(!isUs)
 			guiMan->_guiElements[(char*)playerNames[additionCount].c_str()]->SetColor(XMFLOAT4(1,0,0,1));
-		else
+		else{
 			guiMan->_guiElements[(char*)playerNames[additionCount].c_str()]->SetColor(XMFLOAT4(0,1,0,1));
+			playerIndex=additionCount;
+		}
+
+		checkBoxArray[additionCount]->left = 0;
+		checkBoxArray[additionCount]->right = 50;
+
+		if(additionCount==0){
+			guiMan->Remove("cb0");
+			if(isUs)
+			guiMan->Add("cb0", new GUITexture(checkBoxArray[0], L"../Assets/Textures/checkself1.png", checkboxRenderer));
+			else
+			guiMan->Add("cb0", new GUITexture(checkBoxArray[0], L"../Assets/Textures/checkother1.png", checkboxRenderer));
+			guiMan->_guiElements["cb0"]->SetDepth(0.1f);
+		}
+		if(additionCount==1){
+			guiMan->Remove("cb1");
+			if(isUs)
+			guiMan->Add("cb1", new GUITexture(checkBoxArray[1], L"../Assets/Textures/checkself1.png", checkboxRenderer));
+			else
+			guiMan->Add("cb1", new GUITexture(checkBoxArray[1], L"../Assets/Textures/checkother1.png", checkboxRenderer));
+			guiMan->_guiElements["cb1"]->SetDepth(0.1f);
+		}
+		if(additionCount==2){
+			guiMan->Remove("cb2");
+			if(isUs)
+			guiMan->Add("cb2", new GUITexture(checkBoxArray[2], L"../Assets/Textures/checkself1.png", checkboxRenderer));
+			else
+			guiMan->Add("cb2", new GUITexture(checkBoxArray[2], L"../Assets/Textures/checkother1.png", checkboxRenderer));
+			guiMan->_guiElements["cb2"]->SetDepth(0.1f);
+		}
+		if(additionCount==3){
+			guiMan->Remove("cb3");
+			if(isUs)
+			guiMan->Add("cb3", new GUITexture(checkBoxArray[3], L"../Assets/Textures/checkself1.png", checkboxRenderer));
+			else
+			guiMan->Add("cb3", new GUITexture(checkBoxArray[3], L"../Assets/Textures/checkother1.png", checkboxRenderer));
+			guiMan->_guiElements["cb3"]->SetDepth(0.1f);
+		}
+
+
 		/*
-	
+
 		addedLongNameVector.push_back(wsTmp);
 		addedNameVector.push_back(player);
 		if(isUs)

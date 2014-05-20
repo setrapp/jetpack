@@ -107,6 +107,13 @@ void NetworkManager::Update(float dt){
 					networkedEntities[targetSocket]->transform.SetLocalRotation(newRotMatrix);
 				}
 			}
+			break;
+		case MessageTypes::Server::ReadyUpdate:
+			outputValues.push(to_string((int)MessageTypes::MainClass::ReadyUp) +"\n" + stringParts.at(0) + "\n" + stringParts.at(1));
+			break;
+		case MessageTypes::Server::StartGame:
+			outputValues.push(to_string((int)MessageTypes::MainClass::StartGame)+ "\n");
+			break;
 		}
 		clientEntity->networkMessages.pop();
 			
