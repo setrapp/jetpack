@@ -32,6 +32,7 @@ public:
 	bool loggedIn;
 
 	bool controllable;
+	bool ai;
 	Jetpack* jetpack;
 	XMFLOAT3 respawnPosition;
 	XMFLOAT3 respawnLocalRotation;

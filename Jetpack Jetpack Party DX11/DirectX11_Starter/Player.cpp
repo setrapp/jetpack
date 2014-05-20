@@ -42,7 +42,7 @@ void Player::Update(float dt)
 {
 	//TODO account for networked players.
 	jetpack->playerControllable = controllable;
-	jetpack->playerAI = !controllable;
+	jetpack->playerAI = ai;
 
 	XMFLOAT3 velocity = transform.InverseTransformDirection(worldVelocity);
 
