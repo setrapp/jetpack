@@ -9,6 +9,7 @@
 #include "AudioWaveManager.h"
 #include "Jukebox.h"
 
+#define FORCE_MUTE
 
 using namespace DirectX;
 using namespace JetpackAudio;
