@@ -227,7 +227,7 @@ inline vector<Mesh*> Entity::GetMeshes() const
 	return meshes;
 }
 
-void Entity::Finalize()
+void Entity::Finalize(bool initPhysics)
 {
 	
 	if (meshes.size() < 1 || vertices.size() < 1)
@@ -237,10 +237,14 @@ void Entity::Finalize()
 	Vertex first = vertices.at(0);
 
 	//MANAGE THIS!!!!!!!!
-	phys_entityPhysicsData = new EntityPhysicsData();
+	EntityPhysicsData* newPhysicsData = phys_entityPhysicsData;
+	if (!phys_entityPhysicsData && initPhysics)
+	{
+		newPhysicsData = new EntityPhysicsData();
 
-	phys_entityPhysicsData->aabbMin= btVector3(first.Position.x,first.Position.y,first.Position.z);
-	phys_entityPhysicsData->aabbMax= btVector3(first.Position.x,first.Position.y,first.Position.z);
+		newPhysicsData->aabbMin= btVector3(first.Position.x,first.Position.y,first.Position.z);
+		newPhysicsData->aabbMax= btVector3(first.Position.x,first.Position.y,first.Position.z);
+	}
 
 	map<Material*, vector<UINT>*> indicesAll;
 	long totalMeshes = meshes.size();
@@ -267,20 +271,21 @@ void Entity::Finalize()
 		}
 	}
 
-
 	//Physics
-	
-	phys_entityPhysicsData->entityIndices = new int[numOfIndices];
-	phys_entityPhysicsData->entityNumOfTriangles = 0;
-
-	for(int i = 0; i < totalMeshes; i++)
+	if (!phys_entityPhysicsData && initPhysics)
 	{
-		UINT* indices = meshes.at(i)->GetIndices();
-		for(short j= 0; j < 3; j++)
+		newPhysicsData->entityIndices = new int[numOfIndices];
+		newPhysicsData->entityNumOfTriangles = 0;
+
+		for(int i = 0; i < totalMeshes; i++)
 		{
-			phys_entityPhysicsData->entityIndices[i*3 + j] = indices[j];
+			UINT* indices = meshes.at(i)->GetIndices();
+			for(short j= 0; j < 3; j++)
+			{
+				newPhysicsData->entityIndices[i*3 + j] = indices[j];
+			}
+			newPhysicsData->entityNumOfTriangles++;
 		}
-		phys_entityPhysicsData->entityNumOfTriangles++;
 	}
 	
 	//
@@ -329,44 +334,51 @@ void Entity::Finalize()
 
 	//Physics
 	//Calculating AABB-Max and Min
-	phys_entityPhysicsData->entityVertices = new btVector3[vertices.size()];
-	for (int i=0; i<vertices.size(); i++)
+	if (!phys_entityPhysicsData && initPhysics)
 	{
-		Vertex temp = vertices.at(i);
-		phys_entityPhysicsData->entityVertices[i].setX((btScalar)temp.Position.x);
-		phys_entityPhysicsData->entityVertices[i].setY((btScalar)temp.Position.y);
-		phys_entityPhysicsData->entityVertices[i].setZ((btScalar)temp.Position.z);
-		//aabbMax
-		if (temp.Position.x > (float)phys_entityPhysicsData->aabbMax.x())
-			phys_entityPhysicsData->aabbMax.setX((btScalar)temp.Position.x);
-		if (temp.Position.y > (float)phys_entityPhysicsData->aabbMax.y())
-			phys_entityPhysicsData->aabbMax.setY((btScalar)temp.Position.y);
-		if (temp.Position.z > (float)phys_entityPhysicsData->aabbMax.z())
-			phys_entityPhysicsData->aabbMax.setZ((btScalar)temp.Position.z);
-		//aabbMin
-		if (temp.Position.x < (float)phys_entityPhysicsData->aabbMin.x())
-			phys_entityPhysicsData->aabbMin.setX((btScalar)temp.Position.x);
-		if (temp.Position.y < (float)phys_entityPhysicsData->aabbMin.y())
-			phys_entityPhysicsData->aabbMin.setY((btScalar)temp.Position.y);
-		if (temp.Position.z < (float)phys_entityPhysicsData->aabbMin.z())
-			phys_entityPhysicsData->aabbMin.setZ((btScalar)temp.Position.z);
+		newPhysicsData->entityVertices = new btVector3[vertices.size()];
+		for (int i=0; i<vertices.size(); i++)
+		{
+			Vertex temp = vertices.at(i);
+			newPhysicsData->entityVertices[i].setX((btScalar)temp.Position.x);
+			newPhysicsData->entityVertices[i].setY((btScalar)temp.Position.y);
+			newPhysicsData->entityVertices[i].setZ((btScalar)temp.Position.z);
+			//aabbMax
+			if (temp.Position.x > (float)newPhysicsData->aabbMax.x())
+				newPhysicsData->aabbMax.setX((btScalar)temp.Position.x);
+			if (temp.Position.y > (float)newPhysicsData->aabbMax.y())
+				newPhysicsData->aabbMax.setY((btScalar)temp.Position.y);
+			if (temp.Position.z > (float)newPhysicsData->aabbMax.z())
+				newPhysicsData->aabbMax.setZ((btScalar)temp.Position.z);
+			//aabbMin
+			if (temp.Position.x < (float)newPhysicsData->aabbMin.x())
+				newPhysicsData->aabbMin.setX((btScalar)temp.Position.x);
+			if (temp.Position.y < (float)newPhysicsData->aabbMin.y())
+				newPhysicsData->aabbMin.setY((btScalar)temp.Position.y);
+			if (temp.Position.z < (float)newPhysicsData->aabbMin.z())
+				newPhysicsData->aabbMin.setZ((btScalar)temp.Position.z);
+		}
+
+		//Creatng index vertex arrays	
+		newPhysicsData->entityIndexVertexArray = new btTriangleIndexVertexArray(
+			newPhysicsData->entityNumOfTriangles,
+			newPhysicsData->entityIndices,
+			0,
+			vertices.size(),
+			(btScalar*)&newPhysicsData->entityVertices[0].x(),
+			0);
+
+		newPhysicsData->entityMeshShape = new btBvhTriangleMeshShape(
+			newPhysicsData->entityIndexVertexArray,
+			true,
+			newPhysicsData->aabbMin,
+			newPhysicsData->aabbMax);
+
+		phys_entityPhysicsData = newPhysicsData;
 	}
-
-	//Creatng index vertex arrays	
-	phys_entityPhysicsData->entityIndexVertexArray = new btTriangleIndexVertexArray(
-		phys_entityPhysicsData->entityNumOfTriangles,
-		phys_entityPhysicsData->entityIndices,
-		0,
-		vertices.size(),
-		(btScalar*)&phys_entityPhysicsData->entityVertices[0].x(),
-		0);
-
-	phys_entityPhysicsData->entityMeshShape = new btBvhTriangleMeshShape(
-		phys_entityPhysicsData->entityIndexVertexArray,
-		true,
-		phys_entityPhysicsData->aabbMin,
-		phys_entityPhysicsData->aabbMax);
-	//
+	
+	//Setting the shape
+	//phys_entityPhysicsData->finalShape = phys_entityPhysicsData->entityMeshShape;
 
 	for(map<Material*, vector<UINT>*>::iterator it = indicesAll.begin(); it != indicesAll.end(); it++)
 	{
@@ -430,4 +442,14 @@ string Entity::getNetworkString(){
 	string s1= ss1.str();
 	
 	return s1;
+}
+
+void Entity::SetCollisionShape(btCollisionShape** type)
+{
+	if (type && phys_entityPhysicsData)
+	{
+		*type = phys_entityPhysicsData->entityMeshShape;
+	}
+	else
+		throw "Plz call Finalize first! ";
 }

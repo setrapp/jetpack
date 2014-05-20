@@ -9,6 +9,7 @@
 #include "Material.h"
 #include "Transform.h"
 #include "Rigidbody.h"
+#include "BulletManager.h"
 
 struct EntityDrawArgs
 {
@@ -26,6 +27,7 @@ struct EntityPhysicsData
 	btVector3 aabbMin , aabbMax;
 	btTriangleIndexVertexArray* entityIndexVertexArray;
 	btBvhTriangleMeshShape* entityMeshShape;
+	//btCollisionShape* finalShape;
 };
 
 class Entity
@@ -47,13 +49,15 @@ public:
 	string getNetworkString();
 	Transform transform;
 	int socketNumber;
-	void Finalize();
+	void Finalize(bool initPhysics = false);
 	bool GetVisible();
 	void SetVisible(bool visibility);
 	//Also has a rigid Body
 	btRigidBody* rigidBody;
 	//Struct containing data to create entity mesh collider
 	EntityPhysicsData* phys_entityPhysicsData;
+	//Setting its shape in Bullet Manager
+	void SetCollisionShape(btCollisionShape** type);
 
 protected:
 	map<Material*, pair<ID3D11Buffer*, LONG>> indexBuffers;

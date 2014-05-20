@@ -86,7 +86,7 @@ BulletManager::~BulletManager()
 	delete dispatcher;
 	delete overlappingPairCache;
 	delete solver;
-	delete dynamicsWorld;
+	//delete dynamicsWorld;
 
 	//Rigid Bodies' Info
 	delete playerConstructionInfo;
@@ -95,7 +95,7 @@ BulletManager::~BulletManager()
 	delete trackCollisionShape;
 }
 
-btCollisionShape* BulletManager::CreateAndAssignCollisionShape(Model* model)
-{
-
-}
+//btCollisionShape* BulletManager::CreateAndAssignCollisionShape(Model* model)
+//{
+//
+//}

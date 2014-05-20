@@ -132,7 +132,7 @@
     <ClCompile Include="ManeuverJetpack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Arun%27s Stuff\Jetpacks\Jetpack Jetpack Party DX11\DirectX11_Starter\BulletManager.cpp">
+    <ClCompile Include="BulletManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

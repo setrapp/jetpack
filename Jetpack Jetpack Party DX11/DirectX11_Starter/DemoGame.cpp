@@ -246,12 +246,16 @@ void DemoGame::CreateGeometryBuffers()
 	
 	Entity* jetman = new Entity();
 	jetman->AddModel(AssetManager::Instance()->GetModel("jetman"));
-	jetman->Finalize();
+	jetman->Finalize(true);
 	jetman->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
 	entities.push_back(jetman);
 	jetman->transform.SetParent(&player->transform);
 	jetman->transform.SetLocalTranslation(XMFLOAT3(0, 0, 0));
 	jetman->transform.Translate(XMFLOAT3(0, -5, 0));
+	//jetman->SetCollisionShape(&bullet->playerCollisionShape);
+	player->phys_entityPhysicsData = jetman->phys_entityPhysicsData;
+	player->phys_entityPhysicsData;
+	bullet->playerCollisionShape = player->phys_entityPhysicsData->entityMeshShape;
 	
 
 	for (int i = 0; i < player->jetpack->thrusterCount; i++)
@@ -286,7 +290,10 @@ void DemoGame::CreateGeometryBuffers()
 	floor->transform.Translate(XMFLOAT3(0, -400, 0));
 	floor->transform.Scale(XMFLOAT3(1000, 1000, 1000));
 	entities.push_back(floor);
-	floor->Finalize();
+	floor->Finalize(true);
+	//floor->SetCollisionShape(&bullet->trackCollisionShape);
+	bullet->trackCollisionShape = floor->phys_entityPhysicsData->entityMeshShape;
+	bullet->trackCollisionShape->setLocalScaling(btVector3(1000,1000,1000));
 
 	//Physics
 	{
