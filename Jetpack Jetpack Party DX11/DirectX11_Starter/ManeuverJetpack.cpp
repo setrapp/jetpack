@@ -23,28 +23,28 @@ ManeuverJetpack::ManeuverJetpack(Entity* player) : Jetpack(player)
 	thrusterCount = 8;
 	CreateThrusters();
 	// Bottom Left
-	thrusters[Thruster::BOTTOM_LEFT]->transform.SetLocalTranslation(XMFLOAT3(-0.02f, -0.02f, -0.025f));
+	thrusters[Thruster::BOTTOM_LEFT]->transform.SetLocalTranslation(XMFLOAT3(-0.022f, 0.025f, -0.0215f));
 	thrusters[Thruster::BOTTOM_LEFT]->transform.SetLocalRotation(XMFLOAT3(0, 0, PI));
 	// Bottom Right
-	thrusters[Thruster::BOTTOM_RIGHT]->transform.SetLocalTranslation(XMFLOAT3(0.02f, -0.02, -0.025f));
+	thrusters[Thruster::BOTTOM_RIGHT]->transform.SetLocalTranslation(XMFLOAT3(0.022f, 0.025f, -0.0215f));
 	thrusters[Thruster::BOTTOM_RIGHT]->transform.SetLocalRotation(XMFLOAT3(0, 0, PI));
 	// Back Left
-	thrusters[Thruster::BACK_LEFT]->transform.SetLocalTranslation(XMFLOAT3(-0.01f, 0.02, -0.03f));
+	thrusters[Thruster::BACK_LEFT]->transform.SetLocalTranslation(XMFLOAT3(-0.013f, 0.082f, -0.05f));
 	thrusters[Thruster::BACK_LEFT]->transform.SetLocalRotation(XMFLOAT3(-PI / 2, 0, 0));
 	// Back Right
-	thrusters[Thruster::BACK_RIGHT]->transform.SetLocalTranslation(XMFLOAT3(0.01f, 0.02, -0.03f));
+	thrusters[Thruster::BACK_RIGHT]->transform.SetLocalTranslation(XMFLOAT3(0.013f, 0.082f, -0.05f));
 	thrusters[Thruster::BACK_RIGHT]->transform.SetLocalRotation(XMFLOAT3(-PI / 2, 0, 0));
 	// Front Left
-	thrusters[Thruster::FRONT_LEFT]->transform.SetLocalTranslation(XMFLOAT3(-0.02f, 0, 0.03f));
+	thrusters[Thruster::FRONT_LEFT]->transform.SetLocalTranslation(XMFLOAT3(-0.028f, 0.103f, -0.005f));
 	thrusters[Thruster::FRONT_LEFT]->transform.SetLocalRotation(XMFLOAT3(PI / 2, 0, 0));
 	// Front Right
-	thrusters[Thruster::FRONT_RIGHT]->transform.SetLocalTranslation(XMFLOAT3(0.02f, 0, 0.03f));
+	thrusters[Thruster::FRONT_RIGHT]->transform.SetLocalTranslation(XMFLOAT3(0.028f, 0.103f, 0.005f));
 	thrusters[Thruster::FRONT_RIGHT]->transform.SetLocalRotation(XMFLOAT3(PI / 2, 0, 0));
 	// Side Left
-	thrusters[Thruster::SIDE_LEFT]->transform.SetLocalTranslation(XMFLOAT3(-0.03f, 0.02f, -0.01f));
+	thrusters[Thruster::SIDE_LEFT]->transform.SetLocalTranslation(XMFLOAT3(-0.047f, 0.084f, -0.021f));
 	thrusters[Thruster::SIDE_LEFT]->transform.SetLocalRotation(XMFLOAT3(0, 0, PI / 2));
 	// Side Right
-	thrusters[Thruster::SIDE_RIGHT]->transform.SetLocalTranslation(XMFLOAT3(0.03f, 0.02f, -0.01f));
+	thrusters[Thruster::SIDE_RIGHT]->transform.SetLocalTranslation(XMFLOAT3(0.047f, 0.084f, -0.021f));
 	thrusters[Thruster::SIDE_RIGHT]->transform.SetLocalRotation(XMFLOAT3(0, 0, -PI / 2));
 }
 

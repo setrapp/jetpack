@@ -209,8 +209,8 @@ void DemoGame::CreateGeometryBuffers()
 
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/cube.obj");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/Fireball.obj", "fireball");
-	//AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/VR_Track.obj", "terrain");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrack.obj", "terrain");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/VR_Track.obj", "terrain");
+	//AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrack.obj", "terrain");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrackNav.obj", "terrain_nav");			
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/skybox.obj", "skybox");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/JetDude.obj","jetdude");
@@ -278,7 +278,7 @@ void DemoGame::CreateGeometryBuffers()
 	terrianMat->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 	floor->SetBaseMaterial("terrain");
 	floor->transform.Translate(XMFLOAT3(0, -0.4f, 0));
-	floor->transform.Scale(XMFLOAT3(10, 10, 10));
+	//floor->transform.Scale(XMFLOAT3(10, 10, 10));
 	entities.push_back(floor);
 	floor->Finalize();
 
