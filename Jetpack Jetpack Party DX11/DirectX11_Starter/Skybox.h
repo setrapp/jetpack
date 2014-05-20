@@ -34,7 +34,7 @@ public:
 		DXConnection::Instance()->device->CreateRasterizerState(&rastDesc, &noCull);
 		AddModel(AssetManager::Instance()->GetModel("skybox"));
 
-		currentScale = farPlane * 20;
+		currentScale = farPlane / 2;
 
 		transform.Scale(XMFLOAT3(currentScale, currentScale, currentScale));
 		SetBaseMaterial("skybox");

@@ -8,13 +8,13 @@ Player::Player()
 	respawnLocalRotation = XMFLOAT3(0, 0, 0);
 	worldVelocity = XMFLOAT3(0, 0, 0);
 	angularVelocity = XMFLOAT3(0, 0, 0);
-	maxSpeed = 200;
+	maxSpeed = 2;
 	playerName="";
-	forwardAcceleration = 100.0f;
-	backwardAcceleration = 100.0f;
-	strafeAcceleration = 100.0f;
-	gravityAcceleration = 600.0f;
-	terminalVelocity = 500000;
+	forwardAcceleration = 1.0f;
+	backwardAcceleration = 1.0f;
+	strafeAcceleration = 1.0f;
+	gravityAcceleration = 6.0f;
+	terminalVelocity = 5000;
 	groundSpeedDampening = 0.1f;
 	airSpeedDampening = 0.3f;
 
@@ -23,7 +23,7 @@ Player::Player()
 	grounded = true;
 	jetpack = new ManeuverJetpack(this);
 	controllable = false;
-	targetPosition = XMFLOAT3(400, 200, 5000);
+	targetPosition = XMFLOAT3(0, 0, 0);
 }
 
 Player::~Player()
@@ -35,7 +35,7 @@ void Player::Update(float dt)
 {
 	//TODO account for networked players.
 	jetpack->playerControllable = controllable;
-	jetpack->playerAI = !controllable;
+	jetpack->playerAI = ai;
 
 	XMFLOAT3 velocity = transform.InverseTransformDirection(worldVelocity);
 

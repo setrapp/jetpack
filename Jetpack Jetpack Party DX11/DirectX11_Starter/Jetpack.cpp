@@ -8,11 +8,11 @@ Jetpack::Jetpack(Entity* player)
 	this->player = player;
 	active = false;
 	allowInputForces = false;
-	maxSpeed = 1000;
-	forwardAcceleration = 100.0f;
-	backwardAcceleration = 100.0f;
-	strafeAcceleration = 100.0f;
-	ascentAcceleration = 200.0f;
+	maxSpeed = 10;
+	forwardAcceleration = 1.0f;
+	backwardAcceleration = 1.0f;
+	strafeAcceleration = 1.0f;
+	ascentAcceleration = 2.0f;
 	thrusterCount = 0;
 	thrusters = NULL;
 	thrusterActives = NULL;

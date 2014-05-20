@@ -4,7 +4,7 @@
 ControllableCamera::ControllableCamera()
 {
 	velocity = XMFLOAT3(0, 0, 0);
-	maxSpeed = 1000000000000000;
+	maxSpeed = 1000;
 	groundSpeedDampening = 0.95f;
 	controllable = false;
 }
@@ -25,30 +25,39 @@ void ControllableCamera::Update(float dt, VertexShaderModelConstantBuffer* vsCon
 
 void ControllableCamera::CheckInput(float dt)
 {
-	
+	float speedModifier = 1.0f;
+	if (GetAsyncKeyState(VK_SPACE))
+	{
+		speedModifier = 0.1f;
+	}
+	else if (GetAsyncKeyState(VK_SHIFT))
+	{
+		speedModifier = 10.0f;
+	}
+
 	if(IPMan::GetIPMan()->GetKey('S'))
 	{
-		velocity.z -= 100000 * dt;
+		velocity.z -= 10 * speedModifier * dt;
 	}
 	if(IPMan::GetIPMan()->GetKey('W'))
 	{
-		velocity.z += 100000 * dt;
+		velocity.z += 10 * speedModifier * dt;
 	}
 	if(IPMan::GetIPMan()->GetKey('D'))
 	{
-		velocity.x += 100000 * dt;
+		velocity.x += 10 * speedModifier * dt;
 	}
 	if(IPMan::GetIPMan()->GetKey('A'))
 	{
-		velocity.x -= 100000 * dt;
+		velocity.x -= 10 * speedModifier * dt;
 	}
 	if(IPMan::GetIPMan()->GetKey('Q'))
 	{
-		velocity.y -= 100000 * dt;
+		velocity.y -= 10 * speedModifier * dt;
 	}
 	if(IPMan::GetIPMan()->GetKey('E'))
 	{
-		velocity.y += 100000 * dt;
+		velocity.y += 10 * speedModifier * dt;
 	}
 
 	// Clamp to max speed.

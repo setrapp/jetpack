@@ -136,7 +136,7 @@ bool DemoGame::Init()
 	else
 	{
 		ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
-		rasterizerDesc.CullMode = D3D11_CULL_BACK;
+		rasterizerDesc.CullMode = D3D11_CULL_FRONT;
 		rasterizerDesc.FillMode = D3D11_FILL_SOLID;
 	}
 	HR (device->CreateRasterizerState(&rasterizerDesc, &rasterizerState));
@@ -168,7 +168,7 @@ bool DemoGame::Init()
 	AssetManager::Instance()->StoreMaterial(new Material());
 
 	XMFLOAT3 cameraPosition;
-	XMStoreFloat3(&cameraPosition, XMVectorSet(0, 0, -50, 0));
+	XMStoreFloat3(&cameraPosition, XMVectorSet(0, 0, -0.05f, 0));
 	XMFLOAT3 cameraTarget;
 	XMStoreFloat3(&cameraTarget, XMVectorSet(0, 0, 0, 0));
 	XMFLOAT3 cameraUp;
@@ -180,7 +180,7 @@ bool DemoGame::Init()
 	// Set up buffers and such
 	CreateGeometryBuffers();
 	this->deltaTime = 0;
-	
+
 	LoadSoundAssets();
 
 	input = new IPMan(INPUTMODES::KEYBOARD);
@@ -208,15 +208,13 @@ void DemoGame::CreateGeometryBuffers()
 	XMFLOAT4 mid	= XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/cube.obj");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicJetMan.obj", "jetman");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/Fireball.obj", "fireball");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrack.obj", "terrain");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/VR_Track.obj", "terrain");
+	//AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrack.obj", "terrain");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrackNav.obj", "terrain_nav");			
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/skybox.obj", "skybox");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/JetDude.obj","jetdude");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/test1.obj","jetdude2");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/JetFlip.obj","jetdude3");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/blenderTri.obj","jetdude4");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/Jetpack.obj","jetpack");
 
 	// Create orthographic and projection plane for deferred rendering.
 	float halfWindowWidth = windowWidth / 2, halfWindowHieght= windowHeight / 2;
@@ -230,7 +228,7 @@ void DemoGame::CreateGeometryBuffers()
 		{ XMFLOAT3(-halfWindowWidth, +halfWindowHieght, +0.0f), XMFLOAT3(0, 0, -1), XMFLOAT2(0, 0) },
 	};
 	UINT deferredIndices[] = { 0, 2, 1, 3, 0, 1 };
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.0f, 0.0f, 0.0f, 1), XMFLOAT4(0, 0, 0, 0), XMFLOAT4(0, 0, 0, 0), 16), "deferred");
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.0f, 0.0f, 0.0f, 1), XMFLOAT4(0, 0, 0, 0), 0, 16), "deferred");
 	deferredPlane = new Entity();
 	deferredPlane->AddQuad(deferredVertices, deferredIndices);
 	deferredPlane->SetBaseMaterial("deferred");
@@ -265,28 +263,24 @@ void DemoGame::CreateGeometryBuffers()
 	gift->AddQuad(vertices, indices);
 	
 	//gift->transform.SetTranslation(player->targetPosition);
-	entities.push_back(gift);
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), XMFLOAT4(1, 1, 1, 1), 16), "gift");
+	/*entities.push_back(gift);
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 1), XMFLOAT4(1, 1, 1, 1), 1, 16), "gift");
 	gift->SetBaseMaterial("gift");
 	gift->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
 	gift->LoadTexture(L"../Assets/Textures/test.png");
-	gift->Finalize();
+	gift->Finalize();*/
 
 	Entity* floor = new Entity();
 	floor->AddModel(AssetManager::Instance()->GetModel("terrain"));
-	floor->transform.Translate(XMFLOAT3(0, -400, 0));
-	floor->transform.Scale(XMFLOAT3(1000, 1000, 1000));
+	// Load jetman texture.
+	Material* terrianMat = AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 0.3f), XMFLOAT4(1, 1, 1, 1), 0, 1), "terrain");
+	terrianMat->ApplyTexture(L"../Assets/Textures/Track_Canyon_Texture.png");
+	terrianMat->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
+	floor->SetBaseMaterial("terrain");
+	floor->transform.Translate(XMFLOAT3(0, -0.4f, 0));
+	//floor->transform.Scale(XMFLOAT3(10, 10, 10));
 	entities.push_back(floor);
 	floor->Finalize();
-
-	// TEMP
-	Material* temp = AssetManager::Instance()->GetMaterial("Checkpoint", floor->GetModel(0));
-	temp->diffuse = XMFLOAT4(1, 0, 0, 1);
-	vector<MeshGroup*> checkpoints;
-	AssetManager::Instance()->GetMeshGroupsWithMaterial(&checkpoints, floor->GetModel(0), "Checkpoint");
-	Entity* checkpoint = AssetManager::Instance()->EntifyMeshGroup(NULL, floor->GetModel(0), checkpoints[7]);
-	entities.push_back(checkpoint);
-	checkpoint->transform.Translate(XMFLOAT3(0, 200, 0));
 
 	Entity* navMesh = new Entity();
 	navMesh->AddModel(AssetManager::Instance()->GetModel("terrain_nav"));
@@ -297,28 +291,9 @@ void DemoGame::CreateGeometryBuffers()
 	navMesh->Finalize();
 
 	
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "skybox");
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), 0, 128), "skybox");
 	Entity* skybox = new Skybox(farPlaneDistance, player);	
 	entities.push_back(skybox);
-
-	//All you have to do.
-	//AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 128), "jetdude");
-	Entity* jetDude = new Entity();
-	//jetDude->AddQuad(vertices, indices);
-	//jetDude->AddModel(AssetManager::Instance()->GetModel("jetdude"));
-	jetDude->AddModel(AssetManager::Instance()->GetModel("jetdude4"));
-
-	entities.push_back(jetDude);
-
-
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 1), "cake");
-	jetDude->SetBaseMaterial("cake");
-	//Material* temp2 = AssetManager::Instance()->GetMaterial("cake", jetDude->GetModel(0));
-	//temp2->diffuse = XMFLOAT4(1, 0, 0, 1);
-	jetDude->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
-	jetDude->LoadTexture(L"../Assets/Textures/JetDudeUV_In.png");
-
-	jetDude->Finalize();
 }
 
 #pragma endregion
@@ -412,8 +387,8 @@ void DemoGame::OnFocus(bool givenFocus)
 // Handles resizing the window and updating our projection matrix to match
 void DemoGame::OnResize()
 {
-	float nearPlane = 0.1f;
-	farPlaneDistance = 15000;//10.0f;
+	float nearPlane = 0.001f;
+	farPlaneDistance = 150.0f;
 	DXGame::OnResize();
 	XMMATRIX P = XMMatrixPerspectiveFovLH(
 		0.25f * 3.1415926535f,
@@ -510,13 +485,13 @@ void DemoGame::UpdateScene(float dt)
 	if(currentState == GameState::Playing)
 	{
 		this->deltaTime = dt;
-
+#ifndef FORCE_MUTE
 		if(!AssetManager::Instance()->GetSoundManager()->jukebox->Playing())
 			AssetManager::Instance()->GetSoundManager()->PlayJukeBox();
 
 		if(AssetManager::Instance()->GetSoundManager()->menuJukeBox->Playing())
 			AssetManager::Instance()->GetSoundManager()->PauseMenuJukeBox();
-
+#endif
 		while (!AssetManager::Instance()->addedEntities.empty())
 		{
 			entities.push_back(AssetManager::Instance()->addedEntities.front());
@@ -630,7 +605,7 @@ void DemoGame::DrawScene()
 		entityDrawArgs.materialsAndLightsConstantBufferData = &materialsAndLightsConstantBufferData;
 
 		// Draw entities.
-		for(Entity* e :entities) 
+		for(Entity* e :entities)  
 		{			
 			e->Draw(&entityDrawArgs);
 		}
@@ -761,26 +736,41 @@ void DemoGame::OnMouseWheel(WPARAM btnState, int x, int y)
 
 void DemoGame::CreatePlayers()
 {
+	// Load jetman texture.
+	Material* jetmanMat = AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 0.3f), XMFLOAT4(1, 1, 1, 1), 0, 1), "jetman");
+	jetmanMat->ApplyTexture(L"../Assets/Textures/JetDudeUV_In_Flip.png");
+	jetmanMat->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
+
+	// Load jetpack texture.
+	Material* jetpackMat = AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(0.3f, 0.3f, 0.3f, 0.3f), XMFLOAT4(1, 1, 1, 1), 128, 1), "jetpack");
+	jetpackMat->ApplyTexture(L"../Assets/Textures/BluepackTexture_Flip.png");
+	jetpackMat->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
+
+	// Create players
 	for (int i = 0; i < PLAYER_COUNT; i++)
 	{
 		Player* newPlayer = new Player();
-
-		newPlayer->AddModel(AssetManager::Instance()->GetModel());
-		newPlayer->Finalize();
 		entities.push_back(newPlayer);
-
 		players[i] = newPlayer;
-		newPlayer->transform.Translate(XMFLOAT3(50 * (i % 2), 1000, 50 * (i / 2)));
+		newPlayer->transform.Translate(XMFLOAT3(0.5f * (i % 2), 0, 0.5f * (i / 2)));
 		newPlayer->respawnPosition = newPlayer->transform.GetTranslation();
+		newPlayer->ai = true;
 	
 		Entity* jetman = new Entity();
-		jetman->AddModel(AssetManager::Instance()->GetModel("jetman"));
+		jetman->AddModel(AssetManager::Instance()->GetModel("jetdude"));
+		jetman->SetBaseMaterial("jetman");
 		jetman->Finalize();
-		jetman->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
 		entities.push_back(jetman);
 		jetman->transform.SetParent(&newPlayer->transform);
 		jetman->transform.SetLocalTranslation(XMFLOAT3(0, 0, 0));
-		jetman->transform.Translate(XMFLOAT3(0, -5, 0));
+
+		Entity* jetpack = new Entity();
+		jetpack->AddModel(AssetManager::Instance()->GetModel("jetpack"));
+		jetpack->SetBaseMaterial("jetpack");
+		jetpack->Finalize();
+		entities.push_back(jetpack);
+		jetpack->transform.SetParent(&newPlayer->transform);
+		jetpack->transform.SetLocalTranslation(XMFLOAT3(0, 0, 0));
 	
 		if (newPlayer->jetpack->thrusterActives)
 		{
@@ -793,9 +783,12 @@ void DemoGame::CreatePlayers()
 			}
 		}
 	}
+
+	// Setup controlled character.
 	player = players[0];
 	networkManager = new NetworkManager(&player);
 	player->controllable = true;
+	player->ai = false;
 	AttachCameraToPlayer();
 }
 
@@ -803,9 +796,9 @@ void DemoGame::AttachCameraToPlayer()
 {
 	playerCamera->transform.SetParent(&player->transform);
 	XMFLOAT3 eye;
-	XMStoreFloat3(&eye, XMVectorAdd(XMVectorSubtract(XMLoadFloat3(&player->transform.GetTranslation()), (50 * XMLoadFloat3(&player->transform.GetForward()))), (10 * XMLoadFloat3(&player->transform.GetUp()))));
+	XMStoreFloat3(&eye, XMVectorAdd(XMVectorSubtract(XMLoadFloat3(&player->transform.GetTranslation()), (0.5f * XMLoadFloat3(&player->transform.GetForward()))), (0.1f * XMLoadFloat3(&player->transform.GetUp()))));
 	XMFLOAT3 target;
-	XMStoreFloat3(&target, XMVectorAdd(XMLoadFloat3(&player->transform.GetTranslation()), (3 * XMLoadFloat3(&player->transform.GetForward()))));
+	XMStoreFloat3(&target, XMVectorAdd(XMLoadFloat3(&player->transform.GetTranslation()), (0.03f * XMLoadFloat3(&player->transform.GetForward()))));
 	XMFLOAT3 up = player->transform.GetUp();
 	playerCamera->LookAt(eye, target, up);
 }
