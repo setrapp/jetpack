@@ -14,8 +14,7 @@ struct Material
 {
 	float4 ambient;
 	float4 diffuse;
-	float4 specular;
-	uint4 shininess;
+	float4 extras;
 };
 
 struct Light

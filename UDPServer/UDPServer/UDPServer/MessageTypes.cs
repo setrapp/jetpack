@@ -10,12 +10,12 @@ namespace UDPServer
     {
         public enum Server
         {
-            AddExistingUsers, MovementUpdate, AddNewUser
+            AddExistingUsers, MovementUpdate, AddNewUser,ReadyUpdate, StartGame
         }
 
         public enum Client
         {
-            Login, MovementUpdate
+            Login, MovementUpdate,ReadyUpdate
         }
     }
 }

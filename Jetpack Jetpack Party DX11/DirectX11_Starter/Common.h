@@ -44,8 +44,7 @@ struct ShaderMaterial
 {
 	XMFLOAT4 ambient;
 	XMFLOAT4 diffuse;
-	XMFLOAT4 specular;
-	XMUINT4 shininess;
+	XMFLOAT4 extras;
 };
 
 struct ShaderLight

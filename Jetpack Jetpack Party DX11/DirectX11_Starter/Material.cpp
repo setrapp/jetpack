@@ -14,7 +14,7 @@ Material::Material()
 	Init();
 }
 
-Material::Material(XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT4 specular, UINT shininess)
+Material::Material(XMFLOAT4 ambient, XMFLOAT4 diffuse, float specular, UINT shininess)
 {	
 	Init();
 	this->ambient = ambient;
@@ -35,7 +35,7 @@ void Material::Init()
 	pixelShader = AssetManager::Instance()->GetPixelShader();
 	this->ambient = XMFLOAT4(0.3, 0.3f, 0.3f, 1);
 	this->diffuse = XMFLOAT4(0.3, 0.3f, 0.3f, 1);
-	this->specular = XMFLOAT4(0, 0, 0, 1);
+	this->specular = 0;
 	this->shininess = 0;
 }
 
@@ -90,8 +90,7 @@ ShaderMaterial Material::GetShaderMaterial()
 	ShaderMaterial shaderMat;
 	shaderMat.ambient = ambient;
 	shaderMat.diffuse = diffuse;
-	shaderMat.specular = specular;
-	shaderMat.shininess = XMUINT4(shininess, shininess, shininess, shininess);
+	shaderMat.extras = XMFLOAT4(specular, shininess / 256.0f, 0, 1.0f);
 	return shaderMat;
 }
 

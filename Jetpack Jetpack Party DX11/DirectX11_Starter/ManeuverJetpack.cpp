@@ -7,15 +7,15 @@
 
 ManeuverJetpack::ManeuverJetpack(Entity* player) : Jetpack(player)
 {
-	maxSpeed = 1000;
-	fuelUseRate = 10;
-	forwardAcceleration = 400.0f;
-	backwardAcceleration = 400.0f;
-	strafeAcceleration = 400.0f;
-	ascentAcceleration = 600.0f;
+	maxSpeed = 10;
+	fuelUseRate = 0;//10;
+	forwardAcceleration = 4.0f;
+	backwardAcceleration = 4.0f;
+	strafeAcceleration = 4.0f;
+	ascentAcceleration = 6.0f;
 	backSpin = 30 * (PI / 180);
 	frontSpin = 30 * (PI / 180);
-	sideSpin = 15 * (PI / 180);
+	sideSpin = 0 * (PI / 180);
 	bottomSpin = 10 * (PI / 180);
 	actionsPerSecond = 1.9f;
 	
@@ -23,28 +23,28 @@ ManeuverJetpack::ManeuverJetpack(Entity* player) : Jetpack(player)
 	thrusterCount = 8;
 	CreateThrusters();
 	// Bottom Left
-	thrusters[Thruster::BOTTOM_LEFT]->transform.SetLocalTranslation(XMFLOAT3(-2, -2, -2.5));
+	thrusters[Thruster::BOTTOM_LEFT]->transform.SetLocalTranslation(XMFLOAT3(-0.022f, 0.025f, -0.0215f));
 	thrusters[Thruster::BOTTOM_LEFT]->transform.SetLocalRotation(XMFLOAT3(0, 0, PI));
 	// Bottom Right
-	thrusters[Thruster::BOTTOM_RIGHT]->transform.SetLocalTranslation(XMFLOAT3(2, -2, -2.5));
+	thrusters[Thruster::BOTTOM_RIGHT]->transform.SetLocalTranslation(XMFLOAT3(0.022f, 0.025f, -0.0215f));
 	thrusters[Thruster::BOTTOM_RIGHT]->transform.SetLocalRotation(XMFLOAT3(0, 0, PI));
 	// Back Left
-	thrusters[Thruster::BACK_LEFT]->transform.SetLocalTranslation(XMFLOAT3(-1, 2, -3));
+	thrusters[Thruster::BACK_LEFT]->transform.SetLocalTranslation(XMFLOAT3(-0.013f, 0.082f, -0.05f));
 	thrusters[Thruster::BACK_LEFT]->transform.SetLocalRotation(XMFLOAT3(-PI / 2, 0, 0));
 	// Back Right
-	thrusters[Thruster::BACK_RIGHT]->transform.SetLocalTranslation(XMFLOAT3(1, 2, -3));
+	thrusters[Thruster::BACK_RIGHT]->transform.SetLocalTranslation(XMFLOAT3(0.013f, 0.082f, -0.05f));
 	thrusters[Thruster::BACK_RIGHT]->transform.SetLocalRotation(XMFLOAT3(-PI / 2, 0, 0));
 	// Front Left
-	thrusters[Thruster::FRONT_LEFT]->transform.SetLocalTranslation(XMFLOAT3(-2, 0, 3));
+	thrusters[Thruster::FRONT_LEFT]->transform.SetLocalTranslation(XMFLOAT3(-0.028f, 0.103f, -0.005f));
 	thrusters[Thruster::FRONT_LEFT]->transform.SetLocalRotation(XMFLOAT3(PI / 2, 0, 0));
 	// Front Right
-	thrusters[Thruster::FRONT_RIGHT]->transform.SetLocalTranslation(XMFLOAT3(2, 0, 3));
+	thrusters[Thruster::FRONT_RIGHT]->transform.SetLocalTranslation(XMFLOAT3(0.028f, 0.103f, 0.005f));
 	thrusters[Thruster::FRONT_RIGHT]->transform.SetLocalRotation(XMFLOAT3(PI / 2, 0, 0));
 	// Side Left
-	thrusters[Thruster::SIDE_LEFT]->transform.SetLocalTranslation(XMFLOAT3(-3, 2, -1));
+	thrusters[Thruster::SIDE_LEFT]->transform.SetLocalTranslation(XMFLOAT3(-0.047f, 0.084f, -0.021f));
 	thrusters[Thruster::SIDE_LEFT]->transform.SetLocalRotation(XMFLOAT3(0, 0, PI / 2));
 	// Side Right
-	thrusters[Thruster::SIDE_RIGHT]->transform.SetLocalTranslation(XMFLOAT3(3, 2, -1));
+	thrusters[Thruster::SIDE_RIGHT]->transform.SetLocalTranslation(XMFLOAT3(0.047f, 0.084f, -0.021f));
 	thrusters[Thruster::SIDE_RIGHT]->transform.SetLocalRotation(XMFLOAT3(0, 0, -PI / 2));
 }
 
@@ -222,10 +222,12 @@ void ManeuverJetpack::ApplyForces(float dt, XMFLOAT3* velocity, XMFLOAT3* angula
 		active = true;
 	}
 	
+#ifndef FORCE_MUTE
 	if(active)
 		AssetManager::Instance()->GetSoundManager()->PlaySoundInstance(SoundId::THRUSTER, false, true, 0.5);
 	else
 		AssetManager::Instance()->GetSoundManager()->StopSoundInstance(SoundId::THRUSTER);
+#endif
 }
 
 void ManeuverJetpack::updateThrusters(int thrusterData){
