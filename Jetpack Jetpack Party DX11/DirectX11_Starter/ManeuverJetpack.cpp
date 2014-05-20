@@ -7,16 +7,16 @@
 
 ManeuverJetpack::ManeuverJetpack(Entity* player) : Jetpack(player)
 {
-	maxSpeed = 10;
+	maxSpeed = 30;
 	fuelUseRate = 0;//10;
-	forwardAcceleration = 4.0f;
-	backwardAcceleration = 4.0f;
-	strafeAcceleration = 4.0f;
-	ascentAcceleration = 6.0f;
-	backSpin = 30 * (PI / 180);
-	frontSpin = 30 * (PI / 180);
+	forwardAcceleration = 16.0f;
+	backwardAcceleration = 16.0f;
+	strafeAcceleration = 16.0f;
+	ascentAcceleration = 24.0f;
+	backSpin = 45 * (PI / 180);
+	frontSpin = 45 * (PI / 180);
 	sideSpin = 0 * (PI / 180);
-	bottomSpin = 10 * (PI / 180);
+	bottomSpin = 15 * (PI / 180);
 	//actionsPerSecond = 1.9f;
 	
 	// Thrusters

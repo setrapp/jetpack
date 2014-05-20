@@ -848,7 +848,8 @@ void DemoGame::CreatePlayers()
 		Player* newPlayer = new Player();
 		entities.push_back(newPlayer);
 		players[i] = newPlayer;
-		newPlayer->transform.Translate(XMFLOAT3(0.5f * (i % 2), 0, 0.5f * (i / 2)));
+		//newPlayer->transform.Translate(XMFLOAT3(2.0f * (i % 2), 0, 0.5f * (i / 2)));
+		newPlayer->transform.Translate(XMFLOAT3(-10.0f, 0, -5));
 		newPlayer->respawnPosition = newPlayer->transform.GetTranslation();
 		newPlayer->ai = true;
 	

@@ -11,8 +11,8 @@ Player::Player()
 	playerName="";
 	gravityAcceleration = 6.0f;
 	terminalVelocity = 5000;
-	groundSpeedDampening = 0.1f;
-	airSpeedDampening = 0.3f;
+	groundSpeedDampening = 0.0f;
+	airSpeedDampening = 0.1f;
 
 	groundSpeedDampening = 0.0f;
 	airSpeedDampening = 0.0f;
@@ -120,15 +120,6 @@ void Player::Update(float dt)
 	XMStoreFloat3(&dtAngularVelocity, XMVectorScale(XMLoadFloat3(&angularVelocity), dt));
 	transform.Rotate(dtAngularVelocity);
 
-	// Slow the character a bit so that it comes to a nice stop over time. (friction)
-	if (grounded) {
-		XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), (1 - ((1 - groundSpeedDampening) * dt))));
-		XMStoreFloat3(&angularVelocity, XMVectorScale(XMLoadFloat3(&angularVelocity), (1 - ((1 - groundSpeedDampening) * dt))));
-	} else {
-		XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), (1 - ((1 - airSpeedDampening) * dt))));
-		XMStoreFloat3(&angularVelocity, XMVectorScale(XMLoadFloat3(&angularVelocity), (1 - ((1 - airSpeedDampening) * dt))));
-	}
-
 	// Stop character if not moving much.
 	XMFLOAT3 velMag;
 	XMStoreFloat3(&velMag, XMVector3LengthSq(XMLoadFloat3(&velocity)));
@@ -144,6 +135,14 @@ void Player::Update(float dt)
 		angularVelocity.x = angularVelocity.y = angularVelocity.z = 0;
 	}
 
+	// Slow the character a bit so that it comes to a nice stop over time. (friction)
+	if (grounded) {
+		XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), (1 - ((1 - groundSpeedDampening) * dt))));
+		XMStoreFloat3(&angularVelocity, XMVectorScale(XMLoadFloat3(&angularVelocity), (1 - ((1 - groundSpeedDampening) * dt))));
+	} else {
+		XMStoreFloat3(&velocity, XMVectorScale(XMLoadFloat3(&velocity), (1 - ((1 - airSpeedDampening) * dt))));
+		XMStoreFloat3(&angularVelocity, XMVectorScale(XMLoadFloat3(&angularVelocity), (1 - ((1 - airSpeedDampening) * dt))));
+	}
 
 	Entity::Update(dt);
 }
