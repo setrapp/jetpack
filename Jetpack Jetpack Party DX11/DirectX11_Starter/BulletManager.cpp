@@ -22,15 +22,15 @@ BulletManager::BulletManager()
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,overlappingPairCache,solver,collisionConfiguration);
 	//Set default forces in the world
 	dynamicsWorld->setGravity(btVector3(0,-10,0));
-	
+
 	//Temporary Sphere Shape collider for player rigid body
-	btCollisionShape* sphericalBody = new btSphereShape(btScalar(1.));
+	/*btCollisionShape* sphericalBody = new btSphereShape(btScalar(1.));
 	btTransform startTransform;
 	startTransform.setOrigin(btVector3(0,0,0));
 	btScalar mass=1.0;
 	btVector3 localInertia(0,0,0);
 	sphericalBody->calculateLocalInertia(mass,localInertia);
-	this->SetPlayerConstructionInfo(sphericalBody,startTransform,mass,localInertia);
+	this->SetPlayerConstructionInfo(sphericalBody,startTransform,mass,localInertia);*/
 }
 
 //Get instance
@@ -95,7 +95,9 @@ BulletManager::~BulletManager()
 	delete trackCollisionShape;
 }
 
-//btCollisionShape* BulletManager::CreateAndAssignCollisionShape(Model* model)
-//{
-//
-//}
+// Non-class functions
+bool CollisionProcessed(btManifoldPoint& collisionPoint, void* body0, void* body1)
+{
+	int a = 0;
+	return true;
+}

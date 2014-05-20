@@ -35,13 +35,17 @@
 #include "InputManager.h"
 #include "SoundManager.h"
 #include "SpriteRenderer.h"
+
 #define DIRECTINPUT_VERSION 0x0800
 
 using namespace std;
 InputManager* IPMan::inputManager = NULL;
 Player* player = NULL;
+Entity* terrain = NULL;
 //Physics
 btTransform trans;
+btTransform terrainTrans;
+
 
 #pragma region Win32 Entry Point (WinMain)
 
@@ -82,7 +86,7 @@ DemoGame::DemoGame(HINSTANCE hInstance) : DXGame(hInstance)
 	mouseCursorVisibility = true;
 	mouseLook = NULL;
 	bullet = new BulletManager();
-
+	gContactProcessedCallback = &CollisionProcessed;
 }
 
 		
@@ -236,7 +240,7 @@ void DemoGame::CreateGeometryBuffers()
 	deferredPlane->Finalize();
 	
 	// Attempt to load model
-	player = new Player(*bullet->playerConstructionInfo);
+	player = new Player();
 	player->AddModel(AssetManager::Instance()->GetModel());
 	player->Finalize();
 	entities.push_back(player);
@@ -256,7 +260,10 @@ void DemoGame::CreateGeometryBuffers()
 	player->phys_entityPhysicsData = jetman->phys_entityPhysicsData;
 	player->phys_entityPhysicsData;
 	bullet->playerCollisionShape = player->phys_entityPhysicsData->entityMeshShape;
-	
+	//Rigid Bodies, now:
+	btDefaultMotionState* playerMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
+	btRigidBody::btRigidBodyConstructionInfo playerRigidBodyCI(0, playerMotionState,player->phys_entityPhysicsData->entityMeshShape,btVector3(0,0,0));
+    player->rigidBody = new btRigidBody(playerRigidBodyCI);
 
 	for (int i = 0; i < player->jetpack->thrusterCount; i++)
 	{
@@ -285,21 +292,28 @@ void DemoGame::CreateGeometryBuffers()
 	gift->LoadTexture(L"../Assets/RedGift.png");
 	gift->Finalize();
 
-	Entity* floor = new Entity();
-	floor->AddModel(AssetManager::Instance()->GetModel("terrain"));
-	floor->transform.Translate(XMFLOAT3(0, -400, 0));
-	floor->transform.Scale(XMFLOAT3(1000, 1000, 1000));
-	entities.push_back(floor);
-	floor->Finalize(true);
-	//floor->SetCollisionShape(&bullet->trackCollisionShape);
-	bullet->trackCollisionShape = floor->phys_entityPhysicsData->entityMeshShape;
-	bullet->trackCollisionShape->setLocalScaling(btVector3(1000,1000,1000));
+	terrain = new Entity();
+	terrain->AddModel(AssetManager::Instance()->GetModel("terrain"));
+	//terrain->transform.Translate(XMFLOAT3(0, -400, 0));
+	//terrain->transform.Scale(XMFLOAT3(1000, 1000, 1000));
+	entities.push_back(terrain);
+	terrain->Finalize(true);
+	//terrain->SetCollisionShape(&bullet->trackCollisionShape);
+	bullet->trackCollisionShape = terrain->phys_entityPhysicsData->entityMeshShape;
+	//bullet->trackCollisionShape->setLocalScaling(btVector3(1000,1000,1000));
+
+	btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
+	btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState,terrain->phys_entityPhysicsData->entityMeshShape,btVector3(0,0,0));
+    terrain->rigidBody = new btRigidBody(groundRigidBodyCI);
 
 	//Physics
-	{
+	
 		//Add all rigid bodies to dynamics world
 		bullet->dynamicsWorld->addRigidBody(player->rigidBody);
-	}
+		player->rigidBody->setCollisionFlags(player->rigidBody->getCollisionFlags()  | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
+		bullet->dynamicsWorld->addRigidBody(terrain->rigidBody);
+		terrain->rigidBody->setCollisionFlags(terrain->rigidBody->getCollisionFlags()  | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
+	
 }
 
 #pragma endregion
@@ -483,10 +497,16 @@ void DemoGame::UpdateScene(float dt)
 	//Physics Update
 	{
 		bullet->dynamicsWorld->stepSimulation(dt,10);
+		
 		bullet->MoveRigidBodyWithEntity(player->transform.GetTranslation(), player->rigidBody);
 		player->rigidBody->getMotionState()->getWorldTransform(trans);
 		btVector3 rigidOrigin = trans.getOrigin();
 		Debug::Log(Debug::ToString(player->transform.GetTranslation().y) + " " +  Debug::ToString(rigidOrigin.getY()));
+		bullet->MoveRigidBodyWithEntity(terrain->transform.GetTranslation(), terrain->rigidBody);
+
+		terrain->rigidBody->getMotionState()->getWorldTransform(terrainTrans);
+		btVector3 rigidOrigin2 = terrainTrans.getOrigin();
+		Debug::Log(Debug::ToString(terrain->transform.GetTranslation().y) + " " +  Debug::ToString(rigidOrigin2.getY()));
 		Debug::Log("--------");
 	}
 }
@@ -534,6 +554,9 @@ void DemoGame::DrawScene()
 		{			
 			e->Draw(&entityDrawArgs);
 		}
+
+		// Draw physics debug
+		bullet->dynamicsWorld->debugDrawWorld();
 	}
 	flag = true;
 

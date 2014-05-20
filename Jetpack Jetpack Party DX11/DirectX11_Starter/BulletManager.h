@@ -5,6 +5,8 @@
 #include "Entity.h"
 #include "Mesh.h"
 
+//typedef bool (*ContactProcessedCallback)(btManifoldPoint& collisionPoint, void* body0, void* body1);
+
 class BulletManager
 {
 private:
@@ -63,5 +65,11 @@ void MoveRigidBodyWithEntity(XMFLOAT3& playerTranslation, btRigidBody* entityBod
 
 //Create rigid body from entity and model.
 btCollisionShape* CreateAndAssignCollisionShape(Model* model);
+
 };
+
 #endif // !_BULLETINIT_H_
+
+#pragma once
+//Callback for processing collisions.
+bool CollisionProcessed(btManifoldPoint& collisionPoint, void* body0, void* body1);

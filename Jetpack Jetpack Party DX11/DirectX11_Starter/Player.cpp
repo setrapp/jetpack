@@ -84,7 +84,7 @@ void Player::Update(float dt)
 
 	// TODO gravity should be handled by rigid body.
 	XMFLOAT3 position = transform.GetTranslation();
-	if (position.y > 0)
+	if (true)//position.y > 0)
 	{
 		grounded = false;
 		if (worldVelocity.y > -terminalVelocity)
