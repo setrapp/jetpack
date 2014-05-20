@@ -36,6 +36,7 @@ public:
 
 		currentScale = farPlane / 2;
 
+		AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), 0, 128), "skybox");
 		transform.Scale(XMFLOAT3(currentScale, currentScale, currentScale));
 		SetBaseMaterial("skybox");
 		GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");	
@@ -53,7 +54,7 @@ public:
 	}
 
 public:
-	FORCEINLINE void Draw(EntityDrawArgs const* drawArgs, XMFLOAT4X4 const* view = NULL, XMFLOAT4X4 const* projection = NULL)
+	void Draw(EntityDrawArgs const* drawArgs, XMFLOAT4X4 const* view = NULL, XMFLOAT4X4 const* projection = NULL)
 	{				
 		//D3D11_DEPTH_STENCIL_DESC desc;
 		D3D11_DEPTH_STENCIL_DESC dssDesc;

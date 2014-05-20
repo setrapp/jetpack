@@ -30,7 +30,7 @@ public:
 	void RecenterGeometry();
 	XMFLOAT3 ProjectPointOnMesh(Mesh* mesh, XMFLOAT3 point, bool pointInEntitySpace = false, XMFLOAT3* normalOut = NULL);
 	virtual void Update(float dt);
-	void Draw(EntityDrawArgs const* drawArgs, XMFLOAT4X4 const* view = NULL, XMFLOAT4X4 const* projection = NULL);
+	virtual void Draw(EntityDrawArgs const* drawArgs, XMFLOAT4X4 const* view = NULL, XMFLOAT4X4 const* projection = NULL);
 	void LoadTexture(wchar_t* path, bool isDDS = false);
 	Material* GetBaseMaterial();
 	inline Material GetBaseMaterialSafe() const;
@@ -48,9 +48,6 @@ public:
 	Mesh* GetMesh(int index);
 	int GetModelCount(); 
 	Model* GetModel(int index); 
-
-	//virtual void Update(float dt);
-	//virtual void Draw(EntityDrawArgs const* drawArgs, XMFLOAT4X4 const* view = NULL, XMFLOAT4X4 const* projection = NULL);
 
 protected:
 	map<Material*, pair<ID3D11Buffer*, LONG>> indexBuffers;

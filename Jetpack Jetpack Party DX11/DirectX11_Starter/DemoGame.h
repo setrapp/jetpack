@@ -126,6 +126,7 @@ private:
 	NetworkManager* networkManager;
 
 	float farPlaneDistance;
+	Skybox* skybox;
 	vector<FuelStation*> fuelStations;
 	vector<FuelStation*> checkpoints;
 	vector<NavMeshSegment*> navMeshSegments;

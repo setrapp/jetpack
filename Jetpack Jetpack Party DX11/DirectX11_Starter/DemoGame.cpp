@@ -114,6 +114,7 @@ DemoGame::~DemoGame()
 	delete lobbyScreen;
 	delete mouseLook;
 	delete spriteRenderer;
+	delete skybox;
 }
 
 #pragma endregion
@@ -310,6 +311,8 @@ void DemoGame::CreateGeometryBuffers()
 	//floor->transform.Scale(XMFLOAT3(10, 10, 10));
 	entities.push_back(floor);
 	floor->Finalize();
+
+	skybox = new Skybox(farPlaneDistance, player);
 
 	if (includeAI)
 	{
@@ -585,6 +588,10 @@ void DemoGame::UpdateScene(float dt)
 		{
 			e->Update(dt);
 		}
+
+		//XMFLOAT3 skyboxTrans;
+		//XMStoreFloat3(&skyboxTrans, XMVectorDivide(XMVectorMultiply(XMLoadFloat3(&camera->transform.GetTranslation()), XMLoadFloat3(&camera->transform.GetScale())), XMLoadFloat3(&skybox->transform.GetScale())));
+		//skybox->transform.SetTranslation(skyboxTrans);
 	}
 
 	if(camera != debugCamera)
@@ -609,8 +616,6 @@ void DemoGame::UpdateScene(float dt)
 
 
 		GameState newState = menu->Update(dt);
-
-
 
 		if (currentState != newState)
 		{
@@ -693,6 +698,9 @@ void DemoGame::DrawScene()
 		{			
 			e->Draw(&entityDrawArgs);
 		}
+
+		// Draw skybox.
+		skybox->Draw(&entityDrawArgs);
 		
 	}
 	flag = true;
