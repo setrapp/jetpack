@@ -471,8 +471,8 @@ void DemoGame::OnFocus(bool givenFocus)
 // Handles resizing the window and updating our projection matrix to match
 void DemoGame::OnResize()
 {
-	float nearPlane = 0.001f;
-	farPlaneDistance = 150.0f;
+	float nearPlane = 0.01f;
+	farPlaneDistance = 2000.0f;
 	DXGame::OnResize();
 	XMMATRIX P = XMMatrixPerspectiveFovLH(
 		0.25f * 3.1415926535f,
@@ -693,14 +693,14 @@ void DemoGame::DrawScene()
 		entityDrawArgs.materialsAndLightsConstantBuffer = materialsAndLightsConstantBuffer;
 		entityDrawArgs.materialsAndLightsConstantBufferData = &materialsAndLightsConstantBufferData;
 
+		// Draw skybox.
+		skybox->Draw(&entityDrawArgs);
+
 		// Draw entities.
 		for(Entity* e :entities)  
 		{			
 			e->Draw(&entityDrawArgs);
 		}
-
-		// Draw skybox.
-		skybox->Draw(&entityDrawArgs);
 		
 	}
 	flag = true;

@@ -359,6 +359,11 @@ GameState LobbyScreen::Update(const float dt)
 
 GameState LobbyScreen::KeyboardInputProcess()
 {
+	if (!r)
+	{
+		return currstate;
+	}
+
 	if(IPMan::GetIPMan()->GetKeyDown(KeyType::BACKWARD))
 	{
 		//Because the height of the fonts is 100
