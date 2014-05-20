@@ -37,7 +37,6 @@
 #include "SpriteRenderer.h"
 #include "HUD.h"
 #include "Skybox.h"
-#include "Jukebox.h"
 
 using namespace std;
 InputManager* IPMan::inputManager = NULL;
@@ -442,6 +441,10 @@ void DemoGame::UpdateScene(float dt)
 #endif
 	}
 
+	if(networkManager){
+			networkManager->Update(dt);
+	}
+
 	assetManager->Instance()->GetSoundManager()->Update(dt);
 	if(currentState == GameState::Playing)
 	{
@@ -480,11 +483,11 @@ void DemoGame::UpdateScene(float dt)
 	if(currentState == GameState::MenuState)
 	{
 		
-		if(!AssetManager::Instance()->GetSoundManager()->menuJukeBox->Playing())
+		/*if(!AssetManager::Instance()->GetSoundManager()->menuJukeBox->Playing())
 			AssetManager::Instance()->GetSoundManager()->PlayMenuJukeBox();
 
 		if(AssetManager::Instance()->GetSoundManager()->jukebox->Playing())
-			AssetManager::Instance()->GetSoundManager()->PauseJukeBox();
+			AssetManager::Instance()->GetSoundManager()->PauseJukeBox();*/
 
 
 		GameState newState = menu->Update(dt);
@@ -495,6 +498,9 @@ void DemoGame::UpdateScene(float dt)
 		{
 			mouseLook->ResetCursor();
 			currentState = newState;
+			if(currentState ==GameState::GameLobby){
+				networkManager->clientEntity->sendMessage(MessageTypes::Client::Login, "");
+			}
 		}
 	}
 	else if(currentState == GameState::GameLobby)
@@ -746,6 +752,7 @@ void DemoGame::CreatePlayers()
 
 	// Setup controlled character.
 	player = players[0];
+	networkManager = new NetworkManager(&player);
 	player->controllable = true;
 	player->ai = false;
 	AttachCameraToPlayer();

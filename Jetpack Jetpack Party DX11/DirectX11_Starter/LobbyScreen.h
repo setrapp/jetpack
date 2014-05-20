@@ -33,6 +33,7 @@ public:
 	~LobbyScreen(void);
 	GameState Update(float dt);
 	void Render();
+	void AddPlayer(string player);
 	void OnClickNewGame();
 	void WindowResize();
 	GameState KeyboardInputProcess();

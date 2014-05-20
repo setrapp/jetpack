@@ -18,18 +18,8 @@ public:
 	~Player();
 	void Update(float dt);
 	void Respawn();
-	vector<string>* breakIntoParts(string s);
 
 public:
-	//ClientConnectionEntity* clientEntity;
-	UDPClientConnectionEntity* clientEntity;
-	std::map<int,NetworkedPlayer*> networkedEntities;
-	std::map<int,XMFLOAT3> networkedEntityVelocities;
-	std::map<int,PositionLerp> networkedEntityLerps;
-	float networkSendTimer;
-	void AddNewUser(int playerIndex);
-
-	bool loggedIn;
 
 	bool controllable;
 	bool ai;
@@ -37,7 +27,8 @@ public:
 	XMFLOAT3 respawnPosition;
 	XMFLOAT3 respawnLocalRotation;
 	XMFLOAT3 targetPosition; 
-	float updateTimer;
+	string playerName;
+	
 
 private:
 	void CheckInput(float dt);
@@ -55,6 +46,7 @@ private:
 	float groundSpeedDampening;
 	float airSpeedDampening;
 	bool grounded;
+	
 
 	enum Thruster
 	{

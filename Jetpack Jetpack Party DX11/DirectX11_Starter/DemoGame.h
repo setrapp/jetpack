@@ -27,8 +27,9 @@
 #include "XNew.h"
 #include <dinput.h>
 #include "DeferredRenderer.h"
-#include "HUD.h"
+#include "NetworkManager.h"
 #include "Skybox.h"
+#include "HUD.h"
 
 #define PLAYER_COUNT 1
 
@@ -96,12 +97,15 @@ private:
 	ID3D11RenderTargetView* nullRenderTargets[TARGET_COUNT];
 	ID3D11ShaderResourceView* nullShaderResources[TARGET_COUNT];
 
+
 	// Keeps track of the old mouse position.  Useful for 
 	// determining how far the mouse moved in a single frame.
 	POINT prevMousePos;
+
 	Light* light;
 
 	std::vector<Entity*> entities;
+
 	SpriteRenderer* spriteRenderer;
 
 	Camera* playerCamera;
@@ -116,7 +120,8 @@ private:
 	bool mouseCursorVisibility;
 	bool flag;
 	Player* players[PLAYER_COUNT];
-	
+	NetworkManager* networkManager;
+
 	float farPlaneDistance;
 };
 
