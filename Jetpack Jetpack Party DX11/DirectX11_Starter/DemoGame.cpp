@@ -214,10 +214,7 @@ void DemoGame::CreateGeometryBuffers()
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrack.obj", "terrain");
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/BasicTrackNav.obj", "terrain_nav");			
 	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/skybox.obj", "skybox");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/JetDude.obj","jetdude");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/test1.obj","jetdude2");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/JetFlip.obj","jetdude3");
-	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/blenderTri.obj","jetdude4");
+	AssetManager::Instance()->CreateAndStoreModel("../Assets/Models/JetFlip.obj","jetdude");
 
 	// Create orthographic and projection plane for deferred rendering.
 	float halfWindowWidth = windowWidth / 2, halfWindowHieght= windowHeight / 2;
@@ -307,16 +304,19 @@ void DemoGame::CreateGeometryBuffers()
 	Entity* jetDude = new Entity();
 	//jetDude->AddQuad(vertices, indices);
 	//jetDude->AddModel(AssetManager::Instance()->GetModel("jetdude"));
-	jetDude->AddModel(AssetManager::Instance()->GetModel("jetdude4"));
+	
 	entities.push_back(jetDude);
-	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 1), "cake");
-	jetDude->SetBaseMaterial("cake");
+	
 	//Material* temp2 = AssetManager::Instance()->GetMaterial("cake", jetDude->GetModel(0));
 	//temp2->diffuse = XMFLOAT4(1, 0, 0, 1);
-	jetDude->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
+	
 	//jetDude->LoadTexture(L"../Assets/Textures/JetDudeUV_In.png");
-	jetDude->LoadTexture(L"../Assets/Textures/JetDudeUV_In_Opposite.png");
-	jetDude->Finalize();
+	/*jetDude->AddModel(AssetManager::Instance()->GetModel("jetdude"));
+	jetDude->LoadTexture(L"../Assets/Textures/JetDudeUV_In_Flip.png");
+	jetDude->GetBaseMaterial()->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
+	AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 1), "cake");
+	jetDude->SetBaseMaterial("cake");
+	jetDude->Finalize();*/
 }
 
 #pragma endregion
@@ -711,6 +711,12 @@ void DemoGame::OnMouseWheel(WPARAM btnState, int x, int y)
 
 void DemoGame::CreatePlayers()
 {
+	// Load jet man texture.
+	Material* jetmanMat = AssetManager::Instance()->StoreMaterial(new Material(XMFLOAT4(1, 1, 1, 1), XMFLOAT4(0, 0, 0, 1), XMFLOAT4(0, 0, 0, 1), 1), "jetman");
+	jetmanMat->ApplyTexture(L"../Assets/Textures/JetDudeUV_In_Flip.png");
+	jetmanMat->pixelShader = AssetManager::Instance()->GetPixelShader("texture");
+
+	// create players
 	for (int i = 0; i < PLAYER_COUNT; i++)
 	{
 		Player* newPlayer = new Player();
@@ -724,13 +730,12 @@ void DemoGame::CreatePlayers()
 		newPlayer->respawnPosition = newPlayer->transform.GetTranslation();
 	
 		Entity* jetman = new Entity();
-		jetman->AddModel(AssetManager::Instance()->GetModel("jetman"));
+		jetman->AddModel(AssetManager::Instance()->GetModel("jetdude"));
+		jetman->SetBaseMaterial("jetman");
 		jetman->Finalize();
-		jetman->transform.Rotate(XMFLOAT3(0, PI / 2, 0));
 		entities.push_back(jetman);
 		jetman->transform.SetParent(&newPlayer->transform);
 		jetman->transform.SetLocalTranslation(XMFLOAT3(0, 0, 0));
-		jetman->transform.Translate(XMFLOAT3(0, -5, 0));
 	
 		if (newPlayer->jetpack->thrusterActives)
 		{
