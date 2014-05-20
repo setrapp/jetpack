@@ -30,6 +30,15 @@
 
 LobbyScreen::LobbyScreen(FontRenderer* renderer, SpriteRenderer* spRenderer, const short ScreenWidth, const short ScreenHeight) 
 {
+	playerNames[0]= "0";
+	playerNames[1]= "1";
+	playerNames[2]= "2";
+	playerNames[3]= "3";
+	longPlayerNames[0] = L" ";
+	longPlayerNames[1] = L" ";
+	longPlayerNames[2] = L" ";
+	longPlayerNames[3] = L" ";
+
 	additionCount=0;
 	multiplayerClicked=false;
 	guiMan = new GUIManager();	
@@ -42,6 +51,12 @@ LobbyScreen::LobbyScreen(FontRenderer* renderer, SpriteRenderer* spRenderer, con
 	guiMan->Add("SETTINGS", settings);
 	GUIText* exit = new GUIText(&Rect(80 + MENUBUTTONS_LEFT_OFFSET, 200 + MENUBUTTONS_TOP_OFFSET, 0 ,0), L"EXIT", 7, AnimationType::BOTTOMTOTOP, renderer, 4000, Colors::White);
 	guiMan->Add("EXIT", exit);	
+
+	for(int i=0; i<4; i++){
+		
+		guiMan->Add((char*)playerNames[i].c_str(), new GUIText(&Rect(0, (screenHeight * -0.75)+100+ (100* i) + MENUBUTTONS_TOP_OFFSET, 0 ,0),(wchar_t*)longPlayerNames[i].c_str(), 1, AnimationType::BOTTOMTOTOP, renderer, 4000, Colors::Green));
+		guiMan->_guiElements[(char*)playerNames[i].c_str()]->SetDepth(0.5f);
+	}
 
 	if(!r)
 		r = new RECT();
@@ -75,7 +90,7 @@ GameState LobbyScreen::Update(const float dt)
 
 	if(guiMan->_guiElements["MULTIPLAYER"]->Clicked()){
 		if(!multiplayerClicked){
-			AddPlayer("Player " + to_string(additionCount));
+			AddPlayer("Player " + to_string(additionCount), false);
 		}
 	}
 	else{
@@ -84,6 +99,32 @@ GameState LobbyScreen::Update(const float dt)
 
 	if(guiMan->_guiElements["EXIT"]->Clicked())
 		PostQuitMessage(0);
+
+
+
+	while(!playerAdditionQueue.empty()){
+		string curString= playerAdditionQueue.front();
+		
+		std::vector<std::string> stringParts;
+		std::istringstream stringsplitter(curString);
+		while(std::getline(stringsplitter,curString, '\n')){
+			stringParts.push_back(curString);
+		}
+
+		nameHoldingVector.push_back(new string());
+		nameHoldingVector.at(nameHoldingVector.size()-1)->append(stringParts.at(0));
+		int isCurPlayer= atoi(stringParts.at(1).c_str());
+
+		if(isCurPlayer==1){
+
+			AddPlayer(*nameHoldingVector.at(nameHoldingVector.size()-1), true);
+		}
+		else{
+			AddPlayer(*nameHoldingVector.at(nameHoldingVector.size()-1), false);
+		}
+
+		playerAdditionQueue.pop();
+	}
 
 	/*if(guiMan->_guiElements["SINGLEPLAYER"]->IsMouseHovering() || menuOptions == MENU_OPTIONS::SINGLEPLAYER)
 	{
@@ -188,16 +229,30 @@ void LobbyScreen::WindowResize()
 	}
 }
 
-void LobbyScreen::AddPlayer(string player)
+void LobbyScreen::AddPlayer(string player, bool isUs)
 {
+	if (additionCount < 4)
+	{
+		std::wstring wsTmp(player.begin(), player.end());
+		playerNames[additionCount]= player.c_str();
+		longPlayerNames[additionCount]= (wchar_t*)wsTmp.c_str();
+		((GUIText*)guiMan->_guiElements[(char*)playerNames[additionCount].c_str()])->str = (wchar_t*)longPlayerNames[additionCount].c_str();
+		if(!isUs)
+			guiMan->_guiElements[(char*)playerNames[additionCount].c_str()]->SetColor(XMFLOAT4(1,0,0,1));
+		else
+			guiMan->_guiElements[(char*)playerNames[additionCount].c_str()]->SetColor(XMFLOAT4(0,1,0,1));
+		/*
 	
-	std::wstring wsTmp(player.begin(), player.end());
-	additionCount++;
-	addedLongNameVector.push_back(wsTmp);
-	addedNameVector.push_back(player);
-	guiMan->Add((char*)addedNameVector.at(addedNameVector.size()-1).c_str(), new GUIText(&Rect(0, (screenHeight * -0.75)+ (100* additionCount) + MENUBUTTONS_TOP_OFFSET, 0 ,0),(wchar_t*)addedLongNameVector.at(addedLongNameVector.size()-1).c_str(), 1, AnimationType::BOTTOMTOTOP, this->fontRenderer, 4000, Colors::White));
-	guiMan->_guiElements[(char*)addedNameVector.at(addedNameVector.size()-1).c_str()]->SetDepth(0.5f);
-	multiplayerClicked=true;
+		addedLongNameVector.push_back(wsTmp);
+		addedNameVector.push_back(player);
+		if(isUs)
+			guiMan->Add((char*)addedNameVector.at(addedNameVector.size()-1).c_str(), new GUIText(&Rect(0, (screenHeight * -0.75)+ (100* additionCount) + MENUBUTTONS_TOP_OFFSET, 0 ,0),(wchar_t*)addedLongNameVector.at(addedLongNameVector.size()-1).c_str(), 1, AnimationType::BOTTOMTOTOP, this->fontRenderer, 4000, Colors::Green));
+		else
+			guiMan->Add((char*)addedNameVector.at(addedNameVector.size()-1).c_str(), new GUIText(&Rect(0, (screenHeight * -0.75)+ (100* additionCount) + MENUBUTTONS_TOP_OFFSET, 0 ,0),(wchar_t*)addedLongNameVector.at(addedLongNameVector.size()-1).c_str(), 1, AnimationType::BOTTOMTOTOP, this->fontRenderer, 4000, Colors::Red));
+		guiMan->_guiElements[(char*)addedNameVector.at(addedNameVector.size()-1).c_str()]->SetDepth(0.5f);*/
+		multiplayerClicked=true;
+		additionCount++;
+	}
 }
 
 

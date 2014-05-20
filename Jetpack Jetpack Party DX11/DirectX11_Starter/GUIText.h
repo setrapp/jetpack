@@ -141,10 +141,10 @@ public :
 		 {
 			 return *rect;
 		 }
-
+		 wchar_t* str;
 private :
 	
-	wchar_t* str;
+	
 	inline void Animate(float dt)
 	{
 		if(animation == AnimationType::LEFTTORIGHT || animation == AnimationType::RIGHTTOLEFT)

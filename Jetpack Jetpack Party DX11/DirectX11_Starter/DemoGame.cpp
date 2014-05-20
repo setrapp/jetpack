@@ -441,6 +441,29 @@ void DemoGame::UpdateScene(float dt)
 			networkManager->Update(dt);
 	}
 
+	while(!networkManager->outputValues.empty()){
+		string curString= networkManager->outputValues.front();
+		std::vector<std::string> stringParts;
+		std::istringstream stringsplitter(curString);
+		while(std::getline(stringsplitter,curString, '\n')){
+			stringParts.push_back(curString);
+		}
+
+		int toSwitch= atoi(stringParts.at(0).c_str());
+		MessageTypes::MainClass msgType= (MessageTypes::MainClass)toSwitch;
+		switch(msgType){
+		case MessageTypes::MainClass::PlayerAdd:
+			if(player->playerName == stringParts.at(2))
+				lobbyScreen->playerAdditionQueue.push(stringParts.at(2) + "\n1");
+			else
+				lobbyScreen->playerAdditionQueue.push(stringParts.at(2) + "\n0");
+			
+			break;
+		}
+		networkManager->outputValues.pop();
+	}
+
+
 	assetManager->Instance()->GetSoundManager()->Update(dt);
 	if(currentState == GameState::Playing)
 	{
@@ -496,6 +519,7 @@ void DemoGame::UpdateScene(float dt)
 			currentState = newState;
 			if(currentState ==GameState::GameLobby){
 				networkManager->clientEntity->sendMessage(MessageTypes::Client::Login, "");
+				networkManager->loggedIn=true;
 			}
 		}
 	}

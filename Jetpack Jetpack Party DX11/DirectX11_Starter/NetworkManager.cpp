@@ -9,7 +9,7 @@ NetworkManager::NetworkManager(Player** p)
 	clientEntity = new UDPClientConnectionEntity();
 	clientEntity->connectClient("127.0.0.1");
 	networkSendTimer=0.0f;
-	loggedIn=true;
+	loggedIn=false;
 }
 
 
@@ -51,7 +51,8 @@ void NetworkManager::Update(float dt){
 			playerSocketNumber= atoi(stringParts.at(0).c_str());
 			player->socketNumber=playerSocketNumber;
 			player->playerName= stringParts.at(1);
-			
+			outputValues.push((int)MessageTypes::MainClass::PlayerAdd +"\n" + to_string(player->socketNumber) + "\n" + player->playerName);
+
 			for(int i=2; i<(int)stringParts.size()-1; i+=3){
 				int targetSocket= atoi(stringParts.at(i).c_str());
 				AddNewUser(targetSocket,stringParts.at(i+1));
@@ -161,6 +162,8 @@ vector<string>* NetworkManager::breakIntoParts(string s){
 
 void NetworkManager::AddNewUser(int playerIndex, string name){
 
+
+	outputValues.push((int)MessageTypes::MainClass::PlayerAdd +"\n" + to_string(playerIndex) + "\n" + name);
 	NetworkedPlayer* newPlayer = new NetworkedPlayer();
 	newPlayer->AddModel(AssetManager::Instance()->GetModel());
 	newPlayer->Finalize();

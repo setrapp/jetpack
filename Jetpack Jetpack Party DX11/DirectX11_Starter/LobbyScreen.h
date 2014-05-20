@@ -11,6 +11,7 @@
 #include "GUIManager.h"
 #include "GUITextBox.h"
 #include "SpriteRenderer.h"
+#include <queue>
 
 
 using namespace std;
@@ -33,11 +34,15 @@ public:
 	~LobbyScreen(void);
 	GameState Update(float dt);
 	void Render();
-	void AddPlayer(string player);
+	void AddPlayer(string player, bool isUs);
 	void OnClickNewGame();
 	void WindowResize();
 	GameState KeyboardInputProcess();
+	queue<string> playerAdditionQueue;
+	vector<string*> nameHoldingVector;
 	RECT* GetRECTFromRect(Rect* rect);
+	string playerNames[4];
+	wstring longPlayerNames[4];
 	int additionCount;
 private:
 	FontRenderer* fontRenderer;
