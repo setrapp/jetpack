@@ -137,7 +137,7 @@ bool DemoGame::Init()
 	else
 	{
 		ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
-		rasterizerDesc.CullMode = D3D11_CULL_BACK;
+		rasterizerDesc.CullMode = D3D11_CULL_FRONT;
 		rasterizerDesc.FillMode = D3D11_FILL_SOLID;
 	}
 	HR (device->CreateRasterizerState(&rasterizerDesc, &rasterizerState));
